@@ -1,0 +1,1506 @@
+[
+  {
+    "pattern": "可能形",
+    "level": "N4",
+    "meaning": "potential form: can do ~",
+    "example": "私はひらがなが書けます。",
+    "exampleReading": "わたしは ひらがなが かけます。",
+    "exampleEnglish": "I can write hiragana."
+  },
+  {
+    "pattern": "意向形",
+    "level": "N4",
+    "meaning": "plain volitional form: let's / I will do ~",
+    "example": "今度の日曜日、映画でも見よう。",
+    "exampleReading": "こんどの にちようび、えいがでも みよう。",
+    "exampleEnglish": "Let's watch a movie or something this coming Sunday."
+  },
+  {
+    "pattern": "〜（よ）うと思う",
+    "level": "N4",
+    "meaning": "intend to do ~, thinking of doing",
+    "example": "来年、日本へ留学しようと思います。",
+    "exampleReading": "らいねん、にほんへ りゅうがく しようと おもいます。",
+    "exampleEnglish": "I'm thinking of studying abroad in Japan next year."
+  },
+  {
+    "pattern": "受身形",
+    "level": "N4",
+    "meaning": "passive form: to be done to/by",
+    "example": "弟に大切な時計を壊されました。",
+    "exampleReading": "おとうとに たいせつな とけいを こわされました。",
+    "exampleEnglish": "My precious watch was broken by my younger brother."
+  },
+  {
+    "pattern": "使役形",
+    "level": "N4",
+    "meaning": "causative form: to make/let someone do ~",
+    "example": "母は妹に部屋を掃除させました。",
+    "exampleReading": "ははは いもうとに へやを そうじ させました。",
+    "exampleEnglish": "My mother made my younger sister clean the room."
+  },
+  {
+    "pattern": "使役受身形",
+    "level": "N4",
+    "meaning": "causative-passive form: to be made to do ~ (against one's will)",
+    "example": "私は子供のとき、嫌いな野菜を食べさせられました。",
+    "exampleReading": "わたしは こどもの とき、きらいな やさいを たべさせられました。",
+    "exampleEnglish": "When I was a child, I was made to eat vegetables I disliked."
+  },
+  {
+    "pattern": "命令形",
+    "level": "N4",
+    "meaning": "plain imperative form: a rough command, do ~!",
+    "example": "危ない、止まれ！",
+    "exampleReading": "あぶない、とまれ！",
+    "exampleEnglish": "Watch out, stop!"
+  },
+  {
+    "pattern": "〜な（禁止）",
+    "level": "N4",
+    "meaning": "prohibitive: don't do ~! (dictionary form + な)",
+    "example": "そこに入るな。",
+    "exampleReading": "そこに はいるな。",
+    "exampleEnglish": "Don't go in there."
+  },
+  {
+    "pattern": "〜と（条件）",
+    "level": "N4",
+    "meaning": "conditional: if/when ~, always leads to a natural result",
+    "example": "春になると、桜が咲きます。",
+    "exampleReading": "はるに なると、さくらが さきます。",
+    "exampleEnglish": "When spring comes, the cherry blossoms bloom."
+  },
+  {
+    "pattern": "〜ば（条件）",
+    "level": "N4",
+    "meaning": "conditional: if ~ (hypothetical condition)",
+    "example": "天気がよければ、公園へ行きましょう。",
+    "exampleReading": "てんきが よければ、こうえんへ いきましょう。",
+    "exampleEnglish": "If the weather is good, let's go to the park."
+  },
+  {
+    "pattern": "〜たら（条件）",
+    "level": "N4",
+    "meaning": "conditional: if/when ~ (sequential, specific occasion)",
+    "example": "駅に着いたら、電話してください。",
+    "exampleReading": "えきに ついたら、でんわ してください。",
+    "exampleEnglish": "When you arrive at the station, please call me."
+  },
+  {
+    "pattern": "〜なら（条件）",
+    "level": "N4",
+    "meaning": "conditional: if it's the case that ~",
+    "example": "東京へ行くなら、新幹線が便利です。",
+    "exampleReading": "とうきょうへ いくなら、しんかんせんが べんりです。",
+    "exampleEnglish": "If you're going to Tokyo, the shinkansen is convenient."
+  },
+  {
+    "pattern": "〜てもいい",
+    "level": "N4",
+    "meaning": "permission: it's okay to do ~, may do ~",
+    "example": "ここで写真を撮ってもいいです。",
+    "exampleReading": "ここで しゃしんを とっても いいです。",
+    "exampleEnglish": "It's okay to take photos here."
+  },
+  {
+    "pattern": "〜てはいけない",
+    "level": "N4",
+    "meaning": "prohibition: must not do ~",
+    "example": "図書館で大きい声で話してはいけません。",
+    "exampleReading": "としょかんで おおきい こえで はなしては いけません。",
+    "exampleEnglish": "You must not talk loudly in the library."
+  },
+  {
+    "pattern": "〜なければならない",
+    "level": "N4",
+    "meaning": "obligation: must do ~",
+    "example": "明日までにレポートを出さなければなりません。",
+    "exampleReading": "あしたまでに れぽーとを ださなければ なりません。",
+    "exampleEnglish": "I must submit the report by tomorrow."
+  },
+  {
+    "pattern": "〜なくてもいい",
+    "level": "N4",
+    "meaning": "no obligation: don't have to do ~",
+    "example": "今日は残業しなくてもいいです。",
+    "exampleReading": "きょうは ざんぎょう しなくても いいです。",
+    "exampleEnglish": "I don't have to work overtime today."
+  },
+  {
+    "pattern": "〜なきゃ（いけない）",
+    "level": "N4",
+    "meaning": "colloquial contraction: have to, gotta do ~",
+    "example": "もう帰らなきゃ。",
+    "exampleReading": "もう かえらなきゃ。",
+    "exampleEnglish": "I've got to go home already."
+  },
+  {
+    "pattern": "〜たことがある",
+    "level": "N4",
+    "meaning": "experience: have done ~ before",
+    "example": "富士山に登ったことがあります。",
+    "exampleReading": "ふじさんに のぼった ことが あります。",
+    "exampleEnglish": "I have climbed Mt. Fuji before."
+  },
+  {
+    "pattern": "〜ことがある（時々）",
+    "level": "N4",
+    "meaning": "occasional occurrence: sometimes ~ happens",
+    "example": "たまに電車の中で寝ることがあります。",
+    "exampleReading": "たまに でんしゃの なかで ねる ことが あります。",
+    "exampleEnglish": "I sometimes fall asleep on the train."
+  },
+  {
+    "pattern": "〜ておく",
+    "level": "N4",
+    "meaning": "do ~ in advance, or leave things as they are for later",
+    "example": "パーティーの前に部屋を片付けておきます。",
+    "exampleReading": "ぱーてぃーの まえに へやを かたづけて おきます。",
+    "exampleEnglish": "I'll clean up the room in advance before the party."
+  },
+  {
+    "pattern": "〜てある",
+    "level": "N4",
+    "meaning": "resulting state: has been done (with purpose), is prepared",
+    "example": "テーブルの上に花が飾ってあります。",
+    "exampleReading": "てーぶるの うえに はなが かざって あります。",
+    "exampleEnglish": "Flowers have been arranged on the table."
+  },
+  {
+    "pattern": "〜てしまう",
+    "level": "N4",
+    "meaning": "completion or regret: end up doing ~, finish completely",
+    "example": "おもしろくて、一晩でその本を読んでしまいました。",
+    "exampleReading": "おもしろくて、ひとばんで その ほんを よんで しまいました。",
+    "exampleEnglish": "It was so interesting that I ended up reading the whole book in one night."
+  },
+  {
+    "pattern": "〜てみる",
+    "level": "N4",
+    "meaning": "try doing ~",
+    "example": "新しいレストランに行ってみました。",
+    "exampleReading": "あたらしい れすとらんに いってみました。",
+    "exampleEnglish": "I tried going to a new restaurant."
+  },
+  {
+    "pattern": "〜ていく",
+    "level": "N4",
+    "meaning": "aspect: a change or action continuing on from now, moving away from the speaker",
+    "example": "これからも日本語を勉強していきます。",
+    "exampleReading": "これからも にほんごを べんきょう していきます。",
+    "exampleEnglish": "I will continue studying Japanese from now on."
+  },
+  {
+    "pattern": "〜てくる",
+    "level": "N4",
+    "meaning": "aspect: a change or action approaching now, or continuing up to the present",
+    "example": "最近、日本語が上手になってきました。",
+    "exampleReading": "さいきん、にほんごが じょうずに なってきました。",
+    "exampleEnglish": "My Japanese has been getting better recently."
+  },
+  {
+    "pattern": "〜始める",
+    "level": "N4",
+    "meaning": "start doing ~",
+    "example": "三月から新しい仕事を始めます。",
+    "exampleReading": "さんがつから あたらしい しごとを はじめます。",
+    "exampleEnglish": "I will start a new job in March."
+  },
+  {
+    "pattern": "〜終わる",
+    "level": "N4",
+    "meaning": "finish doing ~",
+    "example": "この本を読み終わりました。",
+    "exampleReading": "この ほんを よみおわりました。",
+    "exampleEnglish": "I finished reading this book."
+  },
+  {
+    "pattern": "〜続ける",
+    "level": "N4",
+    "meaning": "continue doing ~",
+    "example": "十年間、日本語を勉強し続けています。",
+    "exampleReading": "じゅうねんかん、にほんごを べんきょう しつづけています。",
+    "exampleEnglish": "I have continued studying Japanese for ten years."
+  },
+  {
+    "pattern": "〜出す",
+    "level": "N4",
+    "meaning": "start doing ~ suddenly",
+    "example": "空が暗くなって、雨が降り出しました。",
+    "exampleReading": "そらが くらく なって、あめが ふりだしました。",
+    "exampleEnglish": "The sky got dark and it suddenly started to rain."
+  },
+  {
+    "pattern": "〜てばかりいる",
+    "level": "N4",
+    "meaning": "always/only doing ~",
+    "example": "弟はゲームをしてばかりいます。",
+    "exampleReading": "おとうとは げーむを してばかり います。",
+    "exampleEnglish": "My younger brother is always just playing games."
+  },
+  {
+    "pattern": "あげる",
+    "level": "N4",
+    "meaning": "give (to an equal or someone outside one's in-group)",
+    "example": "友達に誕生日のプレゼントをあげました。",
+    "exampleReading": "ともだちに たんじょうびの ぷれぜんとを あげました。",
+    "exampleEnglish": "I gave my friend a birthday present."
+  },
+  {
+    "pattern": "くれる",
+    "level": "N4",
+    "meaning": "give (to me or someone in my in-group)",
+    "example": "友達が私に本をくれました。",
+    "exampleReading": "ともだちが わたしに ほんを くれました。",
+    "exampleEnglish": "My friend gave me a book."
+  },
+  {
+    "pattern": "もらう",
+    "level": "N4",
+    "meaning": "receive",
+    "example": "誕生日に父から時計をもらいました。",
+    "exampleReading": "たんじょうびに ちちから とけいを もらいました。",
+    "exampleEnglish": "I received a watch from my father for my birthday."
+  },
+  {
+    "pattern": "〜てあげる",
+    "level": "N4",
+    "meaning": "do a favor for someone (to an equal or outsider)",
+    "example": "友達に日本語を教えてあげました。",
+    "exampleReading": "ともだちに にほんごを おしえて あげました。",
+    "exampleEnglish": "I taught my friend Japanese (as a favor)."
+  },
+  {
+    "pattern": "〜てくれる",
+    "level": "N4",
+    "meaning": "someone does a favor for me/my in-group",
+    "example": "友達が駅まで送ってくれました。",
+    "exampleReading": "ともだちが えきまで おくって くれました。",
+    "exampleEnglish": "My friend took me to the station (as a favor to me)."
+  },
+  {
+    "pattern": "〜てもらう",
+    "level": "N4",
+    "meaning": "have someone do a favor for me, receive the favor of ~",
+    "example": "先生に漢字を教えてもらいました。",
+    "exampleReading": "せんせいに かんじを おしえて もらいました。",
+    "exampleEnglish": "I had my teacher teach me kanji."
+  },
+  {
+    "pattern": "〜そうだ（伝聞）",
+    "level": "N4",
+    "meaning": "hearsay: I heard that ~",
+    "example": "天気予報によると、明日は雪が降るそうです。",
+    "exampleReading": "てんきよほうに よると、あしたは ゆきが ふるそうです。",
+    "exampleEnglish": "According to the weather forecast, I heard it will snow tomorrow."
+  },
+  {
+    "pattern": "〜そうだ（様態）",
+    "level": "N4",
+    "meaning": "appearance: looks like ~, seems ~",
+    "example": "このケーキはおいしそうです。",
+    "exampleReading": "この けーきは おいしそうです。",
+    "exampleEnglish": "This cake looks delicious."
+  },
+  {
+    "pattern": "〜ようだ",
+    "level": "N4",
+    "meaning": "inference/resemblance: seems like, appears that ~",
+    "example": "道が濡れています。夜、雨が降ったようです。",
+    "exampleReading": "みちが ぬれています。よる、あめが ふった ようです。",
+    "exampleEnglish": "The road is wet. It seems it rained during the night."
+  },
+  {
+    "pattern": "〜みたいだ",
+    "level": "N4",
+    "meaning": "casual inference/resemblance: seems like ~ (spoken equivalent of ようだ)",
+    "example": "山田さんは今日、元気がないみたいです。",
+    "exampleReading": "やまださんは きょう、げんきが ない みたいです。",
+    "exampleEnglish": "Ms. Yamada seems to have no energy today."
+  },
+  {
+    "pattern": "〜らしい",
+    "level": "N4",
+    "meaning": "hearsay based on evidence: apparently, I heard ~",
+    "example": "隣の店は来月閉まるらしいです。",
+    "exampleReading": "となりの みせは らいげつ しまる らしいです。",
+    "exampleEnglish": "I heard the store next door is closing next month."
+  },
+  {
+    "pattern": "〜かもしれない",
+    "level": "N4",
+    "meaning": "possibility: might, may",
+    "example": "明日は忙しいかもしれません。",
+    "exampleReading": "あしたは いそがしい かもしれません。",
+    "exampleEnglish": "I might be busy tomorrow."
+  },
+  {
+    "pattern": "〜はずだ",
+    "level": "N4",
+    "meaning": "expectation: should be, is supposed to be",
+    "example": "山田さんはもう着いているはずです。",
+    "exampleReading": "やまださんは もう ついている はずです。",
+    "exampleEnglish": "Mr. Yamada should have already arrived."
+  },
+  {
+    "pattern": "〜はずがない",
+    "level": "N4",
+    "meaning": "strong negative expectation: there's no way that ~",
+    "example": "あの忙しい人が暇なはずがありません。",
+    "exampleReading": "あの いそがしい ひとが ひまな はずが ありません。",
+    "exampleEnglish": "There's no way that busy person is free."
+  },
+  {
+    "pattern": "〜のに",
+    "level": "N4",
+    "meaning": "contrary to expectation: even though, despite",
+    "example": "たくさん勉強したのに、テストができませんでした。",
+    "exampleReading": "たくさん べんきょう したのに、てすとが できませんでした。",
+    "exampleEnglish": "Even though I studied a lot, I couldn't do well on the test."
+  },
+  {
+    "pattern": "〜ため（に）［目的］",
+    "level": "N4",
+    "meaning": "purpose: in order to ~",
+    "example": "日本語が上手になるために、毎日練習しています。",
+    "exampleReading": "にほんごが じょうずに なる ために、まいにち れんしゅう しています。",
+    "exampleEnglish": "In order to become good at Japanese, I practice every day."
+  },
+  {
+    "pattern": "〜ため（に）［理由］",
+    "level": "N4",
+    "meaning": "reason/cause: because of ~",
+    "example": "台風のため、電車が止まっています。",
+    "exampleReading": "たいふうの ため、でんしゃが とまっています。",
+    "exampleEnglish": "Because of the typhoon, the trains have stopped."
+  },
+  {
+    "pattern": "〜し",
+    "level": "N4",
+    "meaning": "listing reasons: and, moreover, on top of that",
+    "example": "この店は安いし、おいしいです。",
+    "exampleReading": "この みせは やすいし、おいしいです。",
+    "exampleEnglish": "This restaurant is cheap, and moreover it's delicious."
+  },
+  {
+    "pattern": "〜ても",
+    "level": "N4",
+    "meaning": "concessive: even if ~",
+    "example": "雨が降っても、試合をします。",
+    "exampleReading": "あめが ふっても、しあいを します。",
+    "exampleEnglish": "Even if it rains, we will play the game."
+  },
+  {
+    "pattern": "〜ながら（逆接）",
+    "level": "N4",
+    "meaning": "concessive: although, while (contrary to what one might expect)",
+    "example": "彼は知っていながら、教えてくれませんでした。",
+    "exampleReading": "かれは しっていながら、おしえて くれませんでした。",
+    "exampleEnglish": "Although he knew, he didn't tell me."
+  },
+  {
+    "pattern": "〜こと（名詞化）",
+    "level": "N4",
+    "meaning": "nominalizer: turns a verb/clause into a noun, 'the act/fact of ~ing'",
+    "example": "私の趣味は写真を撮ることです。",
+    "exampleReading": "わたしの しゅみは しゃしんを とる ことです。",
+    "exampleEnglish": "My hobby is taking photos."
+  },
+  {
+    "pattern": "〜の（名詞化）",
+    "level": "N4",
+    "meaning": "nominalizer: ~ing (used especially before verbs of perception like 見る/聞く)",
+    "example": "子供が遊んでいるのを見ました。",
+    "exampleReading": "こどもが あそんでいるのを みました。",
+    "exampleEnglish": "I saw the children playing."
+  },
+  {
+    "pattern": "〜さ（名詞化）",
+    "level": "N4",
+    "meaning": "nominalizer: turns an adjective into a noun expressing degree, '-ness'",
+    "example": "この山の高さはどのくらいですか。",
+    "exampleReading": "この やまの たかさは どのくらいですか。",
+    "exampleEnglish": "About how much is the height of this mountain?"
+  },
+  {
+    "pattern": "〜方（かた）",
+    "level": "N4",
+    "meaning": "how to do ~, the method of ~",
+    "example": "この漢字の読み方を教えてください。",
+    "exampleReading": "この かんじの よみかたを おしえてください。",
+    "exampleEnglish": "Please teach me how to read this kanji."
+  },
+  {
+    "pattern": "〜やすい",
+    "level": "N4",
+    "meaning": "easy to do ~",
+    "example": "このペンは書きやすいです。",
+    "exampleReading": "この ぺんは かきやすいです。",
+    "exampleEnglish": "This pen is easy to write with."
+  },
+  {
+    "pattern": "〜にくい",
+    "level": "N4",
+    "meaning": "hard/difficult to do ~",
+    "example": "この靴は歩きにくいです。",
+    "exampleReading": "この くつは あるきにくいです。",
+    "exampleEnglish": "These shoes are hard to walk in."
+  },
+  {
+    "pattern": "〜ずに",
+    "level": "N4",
+    "meaning": "without doing ~ (formal, equivalent to 〜ないで)",
+    "example": "朝ご飯を食べずに家を出ました。",
+    "exampleReading": "あさごはんを たべずに いえを でました。",
+    "exampleEnglish": "I left home without eating breakfast."
+  },
+  {
+    "pattern": "〜ないで",
+    "level": "N4",
+    "meaning": "without doing ~, do ... instead",
+    "example": "傘を持たないで出かけました。",
+    "exampleReading": "かさを もたないで でかけました。",
+    "exampleEnglish": "I went out without bringing an umbrella."
+  },
+  {
+    "pattern": "〜がる／〜たがる",
+    "level": "N4",
+    "meaning": "suffix showing a third person's outward desire or feeling",
+    "example": "妹は新しいスマホをほしがっています。",
+    "exampleReading": "いもうとは あたらしい すまほを ほしがっています。",
+    "exampleEnglish": "My younger sister wants a new smartphone."
+  },
+  {
+    "pattern": "お〜になる",
+    "level": "N4",
+    "meaning": "honorific construction: shows respect for the listener's/another's action",
+    "example": "先生はもうお帰りになりました。",
+    "exampleReading": "せんせいは もう おかえりに なりました。",
+    "exampleEnglish": "The teacher has already gone home."
+  },
+  {
+    "pattern": "お〜する",
+    "level": "N4",
+    "meaning": "humble construction: lowers the speaker's action to show respect",
+    "example": "私が荷物をお持ちします。",
+    "exampleReading": "わたしが にもつを おもちします。",
+    "exampleEnglish": "I will carry your luggage."
+  },
+  {
+    "pattern": "尊敬語の特別な動詞",
+    "level": "N4",
+    "meaning": "special honorific verbs (いらっしゃる・おっしゃる・召し上がる・なさる・くださる) used for another person's actions",
+    "example": "社長は今、会議室にいらっしゃいます。",
+    "exampleReading": "しゃちょうは いま、かいぎしつに いらっしゃいます。",
+    "exampleEnglish": "The company president is in the meeting room right now."
+  },
+  {
+    "pattern": "謙譲語の特別な動詞",
+    "level": "N4",
+    "meaning": "special humble verbs (いたす・参る・申す・いただく・伺う) used for the speaker's own actions",
+    "example": "明日、そちらへ伺います。",
+    "exampleReading": "あした、そちらへ うかがいます。",
+    "exampleEnglish": "I will visit you there tomorrow."
+  },
+  {
+    "pattern": "お〜ください",
+    "level": "N4",
+    "meaning": "polite request: please do ~ (more formal than 〜てください)",
+    "example": "こちらでお待ちください。",
+    "exampleReading": "こちらで おまちください。",
+    "exampleEnglish": "Please wait here."
+  },
+  {
+    "pattern": "〜るところだ",
+    "level": "N4",
+    "meaning": "about to do ~",
+    "example": "これから晩ご飯を食べるところです。",
+    "exampleReading": "これから ばんごはんを たべる ところです。",
+    "exampleEnglish": "I'm just about to eat dinner now."
+  },
+  {
+    "pattern": "〜ているところだ",
+    "level": "N4",
+    "meaning": "in the middle of doing ~",
+    "example": "今、レポートを書いているところです。",
+    "exampleReading": "いま、れぽーとを かいている ところです。",
+    "exampleEnglish": "I'm in the middle of writing a report right now."
+  },
+  {
+    "pattern": "〜たところだ",
+    "level": "N4",
+    "meaning": "just finished doing ~",
+    "example": "今、駅に着いたところです。",
+    "exampleReading": "いま、えきに ついた ところです。",
+    "exampleEnglish": "I just arrived at the station now."
+  },
+  {
+    "pattern": "〜ばかり",
+    "level": "N4",
+    "meaning": "limiting: only, nothing but (in terms of quantity/frequency)",
+    "example": "彼はお菓子ばかり食べています。",
+    "exampleReading": "かれは おかしばかり たべています。",
+    "exampleEnglish": "He eats nothing but sweets."
+  },
+  {
+    "pattern": "〜たばかり",
+    "level": "N4",
+    "meaning": "just did ~, recently finished",
+    "example": "日本に来たばかりで、まだ何もわかりません。",
+    "exampleReading": "にほんに きたばかりで、まだ なにも わかりません。",
+    "exampleEnglish": "I just came to Japan, so I don't understand anything yet."
+  },
+  {
+    "pattern": "〜まま",
+    "level": "N4",
+    "meaning": "as is, without change, leaving a state unchanged",
+    "example": "靴を履いたまま部屋に入らないでください。",
+    "exampleReading": "くつを はいた まま へやに はいらないでください。",
+    "exampleEnglish": "Please don't enter the room with your shoes still on."
+  },
+  {
+    "pattern": "〜しか〜ない",
+    "level": "N4",
+    "meaning": "nothing but, only ~ (emphatic limiting, with negative verb)",
+    "example": "財布に千円しかありません。",
+    "exampleReading": "さいふに せんえん しか ありません。",
+    "exampleEnglish": "I have only a thousand yen in my wallet."
+  },
+  {
+    "pattern": "〜ように［目的］",
+    "level": "N4",
+    "meaning": "so that ~, expressing a hope or purpose",
+    "example": "忘れないように、メモしておきます。",
+    "exampleReading": "わすれないように、めもして おきます。",
+    "exampleEnglish": "I'll write a memo so that I don't forget."
+  },
+  {
+    "pattern": "〜ようになる",
+    "level": "N4",
+    "meaning": "change: come to do ~, reach a point where one can/does",
+    "example": "ひらがなが読めるようになりました。",
+    "exampleReading": "ひらがなが よめるように なりました。",
+    "exampleEnglish": "I have become able to read hiragana."
+  },
+  {
+    "pattern": "〜ようにする",
+    "level": "N4",
+    "meaning": "make an effort to do ~, try to make it a habit",
+    "example": "毎日野菜を食べるようにしています。",
+    "exampleReading": "まいにち やさいを たべるように しています。",
+    "exampleEnglish": "I make an effort to eat vegetables every day."
+  },
+  {
+    "pattern": "〜させてください",
+    "level": "N4",
+    "meaning": "request: let me do ~",
+    "example": "すみません、ここに座らせてください。",
+    "exampleReading": "すみません、ここに すわらせて ください。",
+    "exampleEnglish": "Excuse me, please let me sit here."
+  },
+  {
+    "pattern": "〜させてもらう",
+    "level": "N4",
+    "meaning": "receive permission to do ~, humbly state that one will do",
+    "example": "今日は早く帰らせてもらいます。",
+    "exampleReading": "きょうは はやく かえらせて もらいます。",
+    "exampleEnglish": "I will go home early today (with your permission)."
+  },
+  {
+    "pattern": "〜させてあげる",
+    "level": "N4",
+    "meaning": "do the favor of letting someone do ~",
+    "example": "子供を公園で遊ばせてあげました。",
+    "exampleReading": "こどもを こうえんで あそばせて あげました。",
+    "exampleEnglish": "I let the child play in the park (as a kindness)."
+  },
+  {
+    "pattern": "〜かどうか",
+    "level": "N4",
+    "meaning": "whether or not ~",
+    "example": "明日晴れるかどうかわかりません。",
+    "exampleReading": "あした はれるか どうか わかりません。",
+    "exampleEnglish": "I don't know whether it will be sunny tomorrow or not."
+  },
+  {
+    "pattern": "疑問詞＋か",
+    "level": "N4",
+    "meaning": "indefinite pronoun: something/someone/somewhere (question word + か)",
+    "example": "誰か窓を閉めてください。",
+    "exampleReading": "だれか まどを しめてください。",
+    "exampleEnglish": "Someone please close the window."
+  },
+  {
+    "pattern": "疑問詞＋でも",
+    "level": "N4",
+    "meaning": "no matter what/who/where: whatever, whoever, wherever",
+    "example": "このアイスは誰でも好きです。",
+    "exampleReading": "この あいすは だれでも すきです。",
+    "exampleEnglish": "Anyone likes this ice cream."
+  },
+  {
+    "pattern": "疑問詞＋も＋否定",
+    "level": "N4",
+    "meaning": "nothing/nobody/nowhere (question word + も + negative)",
+    "example": "今朝は何も食べませんでした。",
+    "exampleReading": "けさは なにも たべませんでした。",
+    "exampleEnglish": "I didn't eat anything this morning."
+  },
+  {
+    "pattern": "自動詞・他動詞のペア",
+    "level": "N4",
+    "meaning": "transitivity pairs: matching intransitive and transitive verbs",
+    "example": "ドアが開きました。誰かがドアを開けました。",
+    "exampleReading": "どあが あきました。だれかが どあを あけました。",
+    "exampleEnglish": "The door opened. Someone opened the door."
+  },
+  {
+    "pattern": "それで",
+    "level": "N4",
+    "meaning": "conjunction: so, and so, therefore",
+    "example": "電車が止まりました。それで、遅刻しました。",
+    "exampleReading": "でんしゃが とまりました。それで、ちこく しました。",
+    "exampleEnglish": "The train stopped. So, I was late."
+  },
+  {
+    "pattern": "そのため",
+    "level": "N4",
+    "meaning": "conjunction: therefore, as a result of that",
+    "example": "雪がたくさん降りました。そのため、学校が休みになりました。",
+    "exampleReading": "ゆきが たくさん ふりました。そのため、がっこうが やすみに なりました。",
+    "exampleEnglish": "It snowed a lot. As a result, school was cancelled."
+  },
+  {
+    "pattern": "しかし",
+    "level": "N4",
+    "meaning": "conjunction: however (more formal than でも)",
+    "example": "一生懸命練習しました。しかし、試合に負けました。",
+    "exampleReading": "いっしょうけんめい れんしゅう しました。しかし、しあいに まけました。",
+    "exampleEnglish": "I practiced very hard. However, I lost the match."
+  },
+  {
+    "pattern": "それに",
+    "level": "N4",
+    "meaning": "conjunction: moreover, in addition",
+    "example": "この部屋は静かです。それに、駅から近いです。",
+    "exampleReading": "この へやは しずかです。それに、えきから ちかいです。",
+    "exampleEnglish": "This room is quiet. Moreover, it's close to the station."
+  },
+  {
+    "pattern": "それとも",
+    "level": "N4",
+    "meaning": "conjunction: or (used between alternative questions)",
+    "example": "コーヒーにしますか。それとも、紅茶にしますか。",
+    "exampleReading": "こーひーに しますか。それとも、こうちゃに しますか。",
+    "exampleEnglish": "Will you have coffee? Or will you have tea?"
+  },
+  {
+    "pattern": "という",
+    "level": "N4",
+    "meaning": "called ~, quotative used to introduce a name or description",
+    "example": "「まる」というカフェを知っていますか。",
+    "exampleReading": "「まる」という かふぇを しっていますか。",
+    "exampleEnglish": "Do you know a cafe called 'Maru'?"
+  },
+  {
+    "pattern": "について",
+    "level": "N4",
+    "meaning": "about, regarding ~",
+    "example": "日本の歴史について勉強しています。",
+    "exampleReading": "にほんの れきしに ついて べんきょう しています。",
+    "exampleEnglish": "I am studying about Japanese history."
+  },
+  {
+    "pattern": "〜たほうがいい",
+    "level": "N4",
+    "meaning": "advice: it's better to do ~, should do",
+    "example": "疲れているなら、休んだほうがいいです。",
+    "exampleReading": "つかれているなら、やすんだ ほうが いいです。",
+    "exampleEnglish": "If you're tired, you should rest."
+  },
+  {
+    "pattern": "〜ないほうがいい",
+    "level": "N4",
+    "meaning": "advice: it's better not to do ~, shouldn't do",
+    "example": "夜遅くコーヒーを飲まないほうがいいです。",
+    "exampleReading": "よる おそく こーひーを のまない ほうが いいです。",
+    "exampleEnglish": "You shouldn't drink coffee late at night."
+  },
+  {
+    "pattern": "〜たらどうですか",
+    "level": "N4",
+    "meaning": "suggestion: why don't you do ~?",
+    "example": "疲れているなら、少し休んだらどうですか。",
+    "exampleReading": "つかれているなら、すこし やすんだら どうですか。",
+    "exampleEnglish": "If you're tired, why don't you rest a little?"
+  },
+  {
+    "pattern": "つもりだ",
+    "level": "N4",
+    "meaning": "intend to do ~, plan to",
+    "example": "来年、大学院に進むつもりです。",
+    "exampleReading": "らいねん、だいがくいんに すすむ つもりです。",
+    "exampleEnglish": "I intend to go on to graduate school next year."
+  },
+  {
+    "pattern": "予定だ",
+    "level": "N4",
+    "meaning": "scheduled/planned to do ~",
+    "example": "来週、大阪へ出張する予定です。",
+    "exampleReading": "らいしゅう、おおさかへ しゅっちょう する よていです。",
+    "exampleEnglish": "I am scheduled to go on a business trip to Osaka next week."
+  },
+  {
+    "pattern": "普通形＋と言う／と思う",
+    "level": "N4",
+    "meaning": "quotation: to say/think that ~ (plain form + と)",
+    "example": "天気予報は明日雨が降ると言っていました。",
+    "exampleReading": "てんきよほうは あした あめが ふると いっていました。",
+    "exampleEnglish": "The weather forecast said that it will rain tomorrow."
+  },
+  {
+    "pattern": "〜てほしい",
+    "level": "N4",
+    "meaning": "want someone to do ~",
+    "example": "もっとゆっくり話してほしいです。",
+    "exampleReading": "もっと ゆっくり はなして ほしいです。",
+    "exampleEnglish": "I want you to speak more slowly."
+  },
+  {
+    "pattern": "〜てよかった",
+    "level": "N4",
+    "meaning": "glad that ~ happened, relief",
+    "example": "天気がよくてよかったです。",
+    "exampleReading": "てんきが よくて よかったです。",
+    "exampleEnglish": "I'm glad the weather was good."
+  },
+  {
+    "pattern": "そんなに〜ない",
+    "level": "N4",
+    "meaning": "not that much, not to that extent",
+    "example": "このかばんはそんなに高くないです。",
+    "exampleReading": "この かばんは そんなに たかくないです。",
+    "exampleEnglish": "This bag is not that expensive."
+  },
+  {
+    "pattern": "〜間に",
+    "level": "N4",
+    "meaning": "while, during (something happens within an interval)",
+    "example": "子供が寝ている間に、掃除をしました。",
+    "exampleReading": "こどもが ねている あいだに、そうじを しました。",
+    "exampleEnglish": "I cleaned while the child was sleeping."
+  },
+  {
+    "pattern": "〜間",
+    "level": "N4",
+    "meaning": "the whole time, throughout the duration of ~",
+    "example": "夏休みの間、ずっと海の近くにいました。",
+    "exampleReading": "なつやすみの あいだ、ずっと うみの ちかくに いました。",
+    "exampleEnglish": "I was near the sea the whole time during summer vacation."
+  },
+  {
+    "pattern": "〜（よ）うとする",
+    "level": "N4",
+    "meaning": "try to do ~ / be about to do ~",
+    "example": "電車のドアが閉まろうとしたとき、走って乗りました。",
+    "exampleReading": "でんしゃの どあが しまろうと したとき、はしって のりました。",
+    "exampleEnglish": "Just as the train door was about to close, I ran and got on."
+  },
+  {
+    "pattern": "〜べきだ",
+    "level": "N4",
+    "meaning": "should, ought to (moral obligation)",
+    "example": "約束は守るべきです。",
+    "exampleReading": "やくそくは まもるべきです。",
+    "exampleEnglish": "You should keep your promises."
+  },
+  {
+    "pattern": "〜てもらえますか",
+    "level": "N4",
+    "meaning": "polite request: could you do ~ for me?",
+    "example": "すみません、写真を撮ってもらえますか。",
+    "exampleReading": "すみません、しゃしんを とってもらえますか。",
+    "exampleEnglish": "Excuse me, could you take a photo for me?"
+  },
+  {
+    "pattern": "〜ていただけますか",
+    "level": "N4",
+    "meaning": "more formal polite request: could you possibly do ~ for me?",
+    "example": "もう少し詳しく説明していただけますか。",
+    "exampleReading": "もう すこし くわしく せつめい していただけますか。",
+    "exampleEnglish": "Could you possibly explain in a bit more detail?"
+  },
+  {
+    "pattern": "んだ／のだ（口語）",
+    "level": "N4",
+    "meaning": "casual contraction of の＋だ, giving an explanatory nuance",
+    "example": "どうしたの？　頭が痛いんだ。",
+    "exampleReading": "どうしたの？　あたまが いたいんだ。",
+    "exampleEnglish": "What's wrong? It's just that my head hurts."
+  },
+  {
+    "pattern": "って（口語）",
+    "level": "N4",
+    "meaning": "casual particle: contraction of と/は, used for quotation or topic",
+    "example": "田中さんって、いつも元気だね。",
+    "exampleReading": "たなかさんって、いつも げんきだね。",
+    "exampleEnglish": "Tanaka is always so energetic, isn't he."
+  },
+  {
+    "pattern": "〜ことにする",
+    "level": "N4",
+    "meaning": "decide to do ~, make it a rule to",
+    "example": "来月から毎朝走ることにしました。",
+    "exampleReading": "らいげつから まいあさ はしる ことに しました。",
+    "exampleEnglish": "I've decided to run every morning starting next month."
+  },
+  {
+    "pattern": "〜ことになる",
+    "level": "N4",
+    "meaning": "it has been decided that ~ / it turns out that ~",
+    "example": "来月、大阪に転勤することになりました。",
+    "exampleReading": "らいげつ、おおさかに てんきん することに なりました。",
+    "exampleEnglish": "It has been decided that I will be transferred to Osaka next month."
+  },
+  {
+    "pattern": "〜ずつ",
+    "level": "N4",
+    "meaning": "each, apiece (equal distribution)",
+    "example": "一人に二枚ずつ紙を配ってください。",
+    "exampleReading": "ひとりに にまいずつ かみを くばってください。",
+    "exampleEnglish": "Please hand out two sheets of paper to each person."
+  },
+  {
+    "pattern": "も（強調）",
+    "level": "N4",
+    "meaning": "emphatic quantity: as many/much as ~, even",
+    "example": "昨日は三時間も待ちました。",
+    "exampleReading": "きのうは さんじかんも まちました。",
+    "exampleEnglish": "Yesterday I waited for as long as three hours."
+  },
+  {
+    "pattern": "です",
+    "level": "N5",
+    "meaning": "polite copula: is/am/are (non-past affirmative)",
+    "example": "私は学生です。",
+    "exampleReading": "わたしは がくせいです。",
+    "exampleEnglish": "I am a student."
+  },
+  {
+    "pattern": "だ",
+    "level": "N5",
+    "meaning": "plain copula: is/am/are (non-past affirmative, casual)",
+    "example": "これは本だ。",
+    "exampleReading": "これは ほんだ。",
+    "exampleEnglish": "This is a book."
+  },
+  {
+    "pattern": "〜じゃありません／〜ではありません",
+    "level": "N5",
+    "meaning": "copula negative: is not (polite non-past)",
+    "example": "田中さんは先生じゃありません。",
+    "exampleReading": "たなかさんは せんせい じゃありません。",
+    "exampleEnglish": "Mr. Tanaka is not a teacher."
+  },
+  {
+    "pattern": "〜でした／〜だった",
+    "level": "N5",
+    "meaning": "copula past: was/were",
+    "example": "昨日は休みでした。",
+    "exampleReading": "きのうは やすみでした。",
+    "exampleEnglish": "Yesterday was a day off."
+  },
+  {
+    "pattern": "〜じゃありませんでした／〜ではありませんでした",
+    "level": "N5",
+    "meaning": "copula past negative: was not",
+    "example": "テストは簡単じゃありませんでした。",
+    "exampleReading": "てすとは かんたん じゃありませんでした。",
+    "exampleEnglish": "The test was not easy."
+  },
+  {
+    "pattern": "は",
+    "level": "N5",
+    "meaning": "topic particle: marks the sentence topic",
+    "example": "今日は暑いです。",
+    "exampleReading": "きょうは あついです。",
+    "exampleEnglish": "As for today, it's hot."
+  },
+  {
+    "pattern": "が",
+    "level": "N5",
+    "meaning": "subject particle: marks the grammatical subject",
+    "example": "猫がいます。",
+    "exampleReading": "ねこが います。",
+    "exampleEnglish": "There is a cat."
+  },
+  {
+    "pattern": "を",
+    "level": "N5",
+    "meaning": "object particle: marks the direct object",
+    "example": "毎朝コーヒーを飲みます。",
+    "exampleReading": "まいあさ こーひーを のみます。",
+    "exampleEnglish": "I drink coffee every morning."
+  },
+  {
+    "pattern": "に",
+    "level": "N5",
+    "meaning": "particle: marks time, target/location of existence, direction, or indirect object",
+    "example": "七時に起きます。",
+    "exampleReading": "しちじに おきます。",
+    "exampleEnglish": "I get up at seven o'clock."
+  },
+  {
+    "pattern": "で",
+    "level": "N5",
+    "meaning": "particle: marks the location of an action or the means/instrument used",
+    "example": "図書館で勉強します。",
+    "exampleReading": "としょかんで べんきょうします。",
+    "exampleEnglish": "I study at the library."
+  },
+  {
+    "pattern": "へ",
+    "level": "N5",
+    "meaning": "particle: marks direction, 'toward'",
+    "example": "明日、東京へ行きます。",
+    "exampleReading": "あした、とうきょうへ いきます。",
+    "exampleEnglish": "Tomorrow I will go to Tokyo."
+  },
+  {
+    "pattern": "と",
+    "level": "N5",
+    "meaning": "particle: 'and' (exhaustive listing) or 'with' (accompaniment)",
+    "example": "友達と映画を見ました。",
+    "exampleReading": "ともだちと えいがを みました。",
+    "exampleEnglish": "I watched a movie with a friend."
+  },
+  {
+    "pattern": "も",
+    "level": "N5",
+    "meaning": "particle: also, too",
+    "example": "私も日本人です。",
+    "exampleReading": "わたしも にほんじんです。",
+    "exampleEnglish": "I am also Japanese."
+  },
+  {
+    "pattern": "の",
+    "level": "N5",
+    "meaning": "particle: connects two nouns, showing possession or description",
+    "example": "これは私の傘です。",
+    "exampleReading": "これは わたしの かさです。",
+    "exampleEnglish": "This is my umbrella."
+  },
+  {
+    "pattern": "か",
+    "level": "N5",
+    "meaning": "particle: marks a question",
+    "example": "これは何ですか。",
+    "exampleReading": "これは なんですか。",
+    "exampleEnglish": "What is this?"
+  },
+  {
+    "pattern": "から（起点）",
+    "level": "N5",
+    "meaning": "particle: starting point, 'from'",
+    "example": "銀行は九時から開きます。",
+    "exampleReading": "ぎんこうは くじから ひらきます。",
+    "exampleEnglish": "The bank opens from nine o'clock."
+  },
+  {
+    "pattern": "まで",
+    "level": "N5",
+    "meaning": "particle: ending point, 'until/to'",
+    "example": "会社は六時まで働きます。",
+    "exampleReading": "かいしゃは ろくじまで はたらきます。",
+    "exampleEnglish": "I work at the company until six o'clock."
+  },
+  {
+    "pattern": "や",
+    "level": "N5",
+    "meaning": "particle: partial listing, 'and (among other things)'",
+    "example": "机の上に本やノートがあります。",
+    "exampleReading": "つくえの うえに ほんや のーとが あります。",
+    "exampleEnglish": "There are things like books and notebooks on the desk."
+  },
+  {
+    "pattern": "ます",
+    "level": "N5",
+    "meaning": "polite verb ending: non-past affirmative",
+    "example": "毎日日本語を勉強します。",
+    "exampleReading": "まいにち にほんごを べんきょうします。",
+    "exampleEnglish": "I study Japanese every day."
+  },
+  {
+    "pattern": "ません",
+    "level": "N5",
+    "meaning": "polite verb ending: non-past negative",
+    "example": "肉を食べません。",
+    "exampleReading": "にくを たべません。",
+    "exampleEnglish": "I don't eat meat."
+  },
+  {
+    "pattern": "ました",
+    "level": "N5",
+    "meaning": "polite verb ending: past affirmative",
+    "example": "昨日映画を見ました。",
+    "exampleReading": "きのう えいがを みました。",
+    "exampleEnglish": "I watched a movie yesterday."
+  },
+  {
+    "pattern": "ませんでした",
+    "level": "N5",
+    "meaning": "polite verb ending: past negative",
+    "example": "昨日は雨が降りませんでした。",
+    "exampleReading": "きのうは あめが ふりませんでした。",
+    "exampleEnglish": "It didn't rain yesterday."
+  },
+  {
+    "pattern": "動詞の辞書形",
+    "level": "N5",
+    "meaning": "plain non-past form of a verb, the dictionary/base form",
+    "example": "私は毎朝走る。",
+    "exampleReading": "わたしは まいあさ はしる。",
+    "exampleEnglish": "I run every morning."
+  },
+  {
+    "pattern": "動詞のない形",
+    "level": "N5",
+    "meaning": "plain non-past negative form of a verb",
+    "example": "今日は学校に行かない。",
+    "exampleReading": "きょうは がっこうに いかない。",
+    "exampleEnglish": "I'm not going to school today."
+  },
+  {
+    "pattern": "動詞のた形",
+    "level": "N5",
+    "meaning": "plain past affirmative form of a verb",
+    "example": "昨日友達に会った。",
+    "exampleReading": "きのう ともだちに あった。",
+    "exampleEnglish": "I met a friend yesterday."
+  },
+  {
+    "pattern": "動詞のなかった形",
+    "level": "N5",
+    "meaning": "plain past negative form of a verb",
+    "example": "朝ご飯を食べなかった。",
+    "exampleReading": "あさごはんを たべなかった。",
+    "exampleEnglish": "I didn't eat breakfast."
+  },
+  {
+    "pattern": "〜てください",
+    "level": "N5",
+    "meaning": "request: please do ~",
+    "example": "ここに名前を書いてください。",
+    "exampleReading": "ここに なまえを かいてください。",
+    "exampleEnglish": "Please write your name here."
+  },
+  {
+    "pattern": "〜ている（進行）",
+    "level": "N5",
+    "meaning": "progressive aspect: is doing ~ right now",
+    "example": "今、雨が降っています。",
+    "exampleReading": "いま、あめが ふっています。",
+    "exampleEnglish": "It is raining right now."
+  },
+  {
+    "pattern": "〜ている（結果の状態）",
+    "level": "N5",
+    "meaning": "resulting state: has been done / is in a state of",
+    "example": "窓が開いています。",
+    "exampleReading": "まどが あいています。",
+    "exampleEnglish": "The window is open."
+  },
+  {
+    "pattern": "〜てから",
+    "level": "N5",
+    "meaning": "sequence: after doing ~",
+    "example": "手を洗ってから食べます。",
+    "exampleReading": "てを あらってから たべます。",
+    "exampleEnglish": "I eat after washing my hands."
+  },
+  {
+    "pattern": "〜ないでください",
+    "level": "N5",
+    "meaning": "negative request: please don't do ~",
+    "example": "ここで写真を撮らないでください。",
+    "exampleReading": "ここで しゃしんを とらないでください。",
+    "exampleEnglish": "Please don't take photos here."
+  },
+  {
+    "pattern": "〜たい",
+    "level": "N5",
+    "meaning": "desire: want to do ~",
+    "example": "沖縄に行きたいです。",
+    "exampleReading": "おきなわに いきたいです。",
+    "exampleEnglish": "I want to go to Okinawa."
+  },
+  {
+    "pattern": "〜ましょう",
+    "level": "N5",
+    "meaning": "volitional invitation: let's do ~",
+    "example": "一緒に昼ご飯を食べましょう。",
+    "exampleReading": "いっしょに ひるごはんを たべましょう。",
+    "exampleEnglish": "Let's eat lunch together."
+  },
+  {
+    "pattern": "〜ましょうか",
+    "level": "N5",
+    "meaning": "offer: shall I/we do ~?",
+    "example": "荷物を持ちましょうか。",
+    "exampleReading": "にもつを もちましょうか。",
+    "exampleEnglish": "Shall I carry your luggage?"
+  },
+  {
+    "pattern": "〜ませんか",
+    "level": "N5",
+    "meaning": "invitation: won't you do ~?",
+    "example": "週末、映画を見ませんか。",
+    "exampleReading": "しゅうまつ、えいがを みませんか。",
+    "exampleEnglish": "Won't you watch a movie this weekend?"
+  },
+  {
+    "pattern": "い形容詞のない形",
+    "level": "N5",
+    "meaning": "i-adjective negative: not ~",
+    "example": "このかばんは高くないです。",
+    "exampleReading": "この かばんは たかくないです。",
+    "exampleEnglish": "This bag is not expensive."
+  },
+  {
+    "pattern": "い形容詞の過去形",
+    "level": "N5",
+    "meaning": "i-adjective past: was ~",
+    "example": "昨日のテストは難しかったです。",
+    "exampleReading": "きのうの てすとは むずかしかったです。",
+    "exampleEnglish": "Yesterday's test was difficult."
+  },
+  {
+    "pattern": "い形容詞の過去否定形",
+    "level": "N5",
+    "meaning": "i-adjective past negative: was not ~",
+    "example": "先週は忙しくなかったです。",
+    "exampleReading": "せんしゅうは いそがしくなかったです。",
+    "exampleEnglish": "Last week was not busy."
+  },
+  {
+    "pattern": "〜くて",
+    "level": "N5",
+    "meaning": "i-adjective te-form: connects adjectives or gives a reason",
+    "example": "この部屋は広くて明るいです。",
+    "exampleReading": "この へやは ひろくて あかるいです。",
+    "exampleEnglish": "This room is spacious and bright."
+  },
+  {
+    "pattern": "な形容詞の〜で",
+    "level": "N5",
+    "meaning": "na-adjective linking form: connects to the next clause",
+    "example": "この町は静かで、いいところです。",
+    "exampleReading": "この まちは しずかで、いい ところです。",
+    "exampleEnglish": "This town is quiet and a nice place."
+  },
+  {
+    "pattern": "動詞（普通形）＋名詞",
+    "level": "N5",
+    "meaning": "verb in plain form modifying a noun (relative clause)",
+    "example": "昨日買った本はおもしろいです。",
+    "exampleReading": "きのう かった ほんは おもしろいです。",
+    "exampleEnglish": "The book I bought yesterday is interesting."
+  },
+  {
+    "pattern": "い形容詞＋名詞",
+    "level": "N5",
+    "meaning": "i-adjective directly modifying a noun",
+    "example": "大きい家に住んでいます。",
+    "exampleReading": "おおきい いえに すんでいます。",
+    "exampleEnglish": "I live in a big house."
+  },
+  {
+    "pattern": "な形容詞＋な＋名詞",
+    "level": "N5",
+    "meaning": "na-adjective modifying a noun with な",
+    "example": "有名なレストランへ行きました。",
+    "exampleReading": "ゆうめいな れすとらんへ いきました。",
+    "exampleEnglish": "I went to a famous restaurant."
+  },
+  {
+    "pattern": "〜より",
+    "level": "N5",
+    "meaning": "comparison: more than ~",
+    "example": "電車はバスより速いです。",
+    "exampleReading": "でんしゃは ばすより はやいです。",
+    "exampleEnglish": "The train is faster than the bus."
+  },
+  {
+    "pattern": "〜のほうが",
+    "level": "N5",
+    "meaning": "comparison: ~ is more/prefer this one",
+    "example": "紅茶よりコーヒーのほうが好きです。",
+    "exampleReading": "こうちゃより こーひーの ほうが すきです。",
+    "exampleEnglish": "I like coffee more than tea."
+  },
+  {
+    "pattern": "〜が一番",
+    "level": "N5",
+    "meaning": "superlative: ~ is the most/best",
+    "example": "果物の中でりんごが一番好きです。",
+    "exampleReading": "くだものの なかで りんごが いちばん すきです。",
+    "exampleEnglish": "Among fruits, I like apples the most."
+  },
+  {
+    "pattern": "〜だけ",
+    "level": "N5",
+    "meaning": "limiting: only, just",
+    "example": "教室に学生が一人だけいます。",
+    "exampleReading": "きょうしつに がくせいが ひとりだけ います。",
+    "exampleEnglish": "There is only one student in the classroom."
+  },
+  {
+    "pattern": "〜ぐらい／〜くらい",
+    "level": "N5",
+    "meaning": "approximation: about, around",
+    "example": "駅まで十分ぐらいかかります。",
+    "exampleReading": "えきまで じゅっぷん ぐらい かかります。",
+    "exampleEnglish": "It takes about ten minutes to the station."
+  },
+  {
+    "pattern": "〜たり〜たりする",
+    "level": "N5",
+    "meaning": "listing representative actions: do things like ~ and ~",
+    "example": "週末は本を読んだり音楽を聞いたりします。",
+    "exampleReading": "しゅうまつは ほんを よんだり おんがくを きいたり します。",
+    "exampleEnglish": "On weekends I do things like read books and listen to music."
+  },
+  {
+    "pattern": "〜まえに",
+    "level": "N5",
+    "meaning": "before doing ~",
+    "example": "寝るまえに歯を磨きます。",
+    "exampleReading": "ねる まえに はを みがきます。",
+    "exampleEnglish": "I brush my teeth before sleeping."
+  },
+  {
+    "pattern": "〜あとで",
+    "level": "N5",
+    "meaning": "after doing ~",
+    "example": "仕事のあとで買い物に行きます。",
+    "exampleReading": "しごとの あとで かいものに いきます。",
+    "exampleEnglish": "I go shopping after work."
+  },
+  {
+    "pattern": "もう（肯定）",
+    "level": "N5",
+    "meaning": "already (with affirmative/past)",
+    "example": "もう昼ご飯を食べました。",
+    "exampleReading": "もう ひるごはんを たべました。",
+    "exampleEnglish": "I already ate lunch."
+  },
+  {
+    "pattern": "まだ（肯定）",
+    "level": "N5",
+    "meaning": "still (with an ongoing state)",
+    "example": "兄はまだ寝ています。",
+    "exampleReading": "あには まだ ねています。",
+    "exampleEnglish": "My older brother is still sleeping."
+  },
+  {
+    "pattern": "もう（否定）",
+    "level": "N5",
+    "meaning": "not anymore, no longer (with negative)",
+    "example": "もうお酒は飲みません。",
+    "exampleReading": "もう おさけは のみません。",
+    "exampleEnglish": "I don't drink alcohol anymore."
+  },
+  {
+    "pattern": "まだ（否定）",
+    "level": "N5",
+    "meaning": "not yet (with negative)",
+    "example": "宿題はまだ終わっていません。",
+    "exampleReading": "しゅくだいは まだ おわっていません。",
+    "exampleEnglish": "I haven't finished my homework yet."
+  },
+  {
+    "pattern": "〜がほしい",
+    "level": "N5",
+    "meaning": "want (a thing)",
+    "example": "新しいパソコンがほしいです。",
+    "exampleReading": "あたらしい ぱそこんが ほしいです。",
+    "exampleEnglish": "I want a new computer."
+  },
+  {
+    "pattern": "〜すぎる",
+    "level": "N5",
+    "meaning": "too much, excessively ~",
+    "example": "このラーメンは辛すぎます。",
+    "exampleReading": "この らーめんは からすぎます。",
+    "exampleEnglish": "This ramen is too spicy."
+  },
+  {
+    "pattern": "います",
+    "level": "N5",
+    "meaning": "existence of animate things: there is/are (people, animals)",
+    "example": "公園に子供が三人います。",
+    "exampleReading": "こうえんに こどもが さんにん います。",
+    "exampleEnglish": "There are three children in the park."
+  },
+  {
+    "pattern": "あります",
+    "level": "N5",
+    "meaning": "existence of inanimate things: there is/are (objects)",
+    "example": "机の上に辞書があります。",
+    "exampleReading": "つくえの うえに じしょが あります。",
+    "exampleEnglish": "There is a dictionary on the desk."
+  },
+  {
+    "pattern": "〜ながら",
+    "level": "N5",
+    "meaning": "while doing ~ (simultaneous actions)",
+    "example": "音楽を聞きながら勉強します。",
+    "exampleReading": "おんがくを ききながら べんきょうします。",
+    "exampleEnglish": "I study while listening to music."
+  },
+  {
+    "pattern": "〜ことができる",
+    "level": "N5",
+    "meaning": "can do ~, ability or possibility",
+    "example": "私は漢字を読むことができます。",
+    "exampleReading": "わたしは かんじを よむ ことが できます。",
+    "exampleEnglish": "I can read kanji."
+  },
+  {
+    "pattern": "〜に行く／〜に来る",
+    "level": "N5",
+    "meaning": "go/come in order to do ~ (verb stem + purpose)",
+    "example": "デパートへ買い物に行きます。",
+    "exampleReading": "でぱーとへ かいものに いきます。",
+    "exampleEnglish": "I'm going to the department store to shop."
+  },
+  {
+    "pattern": "〜くなる",
+    "level": "N5",
+    "meaning": "change of state: become ~ (i-adjective)",
+    "example": "最近、寒くなりました。",
+    "exampleReading": "さいきん、さむく なりました。",
+    "exampleEnglish": "It has become cold recently."
+  },
+  {
+    "pattern": "〜になる",
+    "level": "N5",
+    "meaning": "change of state: become ~ (na-adjective/noun)",
+    "example": "弟は医者になりました。",
+    "exampleReading": "おとうとは いしゃに なりました。",
+    "exampleEnglish": "My younger brother became a doctor."
+  },
+  {
+    "pattern": "あまり〜ない",
+    "level": "N5",
+    "meaning": "not very, not much",
+    "example": "この映画はあまりおもしろくないです。",
+    "exampleReading": "この えいがは あまり おもしろくないです。",
+    "exampleEnglish": "This movie is not very interesting."
+  },
+  {
+    "pattern": "ぜんぜん〜ない",
+    "level": "N5",
+    "meaning": "not at all",
+    "example": "漢字がぜんぜんわかりません。",
+    "exampleReading": "かんじが ぜんぜん わかりません。",
+    "exampleEnglish": "I don't understand kanji at all."
+  },
+  {
+    "pattern": "でしょう",
+    "level": "N5",
+    "meaning": "probably ~, seeking confirmation: right?",
+    "example": "明日は晴れるでしょう。",
+    "exampleReading": "あしたは はれるでしょう。",
+    "exampleEnglish": "It will probably be sunny tomorrow."
+  },
+  {
+    "pattern": "〜んです／〜のです",
+    "level": "N5",
+    "meaning": "explanatory: it's that ~, giving a reason or explanation",
+    "example": "頭が痛いんです。",
+    "exampleReading": "あたまが いたいんです。",
+    "exampleEnglish": "It's just that my head hurts."
+  },
+  {
+    "pattern": "とき（時）",
+    "level": "N5",
+    "meaning": "when ~, at the time of ~",
+    "example": "子供のとき、よく公園で遊びました。",
+    "exampleReading": "こどもの とき、よく こうえんで あそびました。",
+    "exampleEnglish": "When I was a child, I often played in the park."
+  },
+  {
+    "pattern": "〜をください",
+    "level": "N5",
+    "meaning": "please give me ~",
+    "example": "この赤いりんごをください。",
+    "exampleReading": "この あかい りんごを ください。",
+    "exampleEnglish": "Please give me this red apple."
+  },
+  {
+    "pattern": "でも",
+    "level": "N5",
+    "meaning": "but, however",
+    "example": "日本語は難しいです。でも、おもしろいです。",
+    "exampleReading": "にほんごは むずかしいです。でも、おもしろいです。",
+    "exampleEnglish": "Japanese is difficult. But it's interesting."
+  },
+  {
+    "pattern": "そして",
+    "level": "N5",
+    "meaning": "and, and then (sequential connector)",
+    "example": "朝ご飯を食べました。そして、学校へ行きました。",
+    "exampleReading": "あさごはんを たべました。そして、がっこうへ いきました。",
+    "exampleEnglish": "I ate breakfast. And then I went to school."
+  },
+  {
+    "pattern": "それから",
+    "level": "N5",
+    "meaning": "after that, and then",
+    "example": "宿題をします。それから、寝ます。",
+    "exampleReading": "しゅくだいを します。それから、ねます。",
+    "exampleEnglish": "I'll do my homework. After that, I'll sleep."
+  },
+  {
+    "pattern": "〜なさい",
+    "level": "N5",
+    "meaning": "soft command: do ~ (used by parents/teachers)",
+    "example": "早く寝なさい。",
+    "exampleReading": "はやく ねなさい。",
+    "exampleEnglish": "Go to sleep early."
+  },
+  {
+    "pattern": "い形容詞の副詞形〜く",
+    "level": "N5",
+    "meaning": "i-adjective adverbial form: ~ly, in a ~ way",
+    "example": "毎朝早く起きます。",
+    "exampleReading": "まいあさ はやく おきます。",
+    "exampleEnglish": "I get up early every morning."
+  },
+  {
+    "pattern": "な形容詞の副詞形〜に",
+    "level": "N5",
+    "meaning": "na-adjective adverbial form: ~ly, in a ~ way",
+    "example": "部屋をきれいに掃除しました。",
+    "exampleReading": "へやを きれいに そうじしました。",
+    "exampleEnglish": "I cleaned the room nicely."
+  },
+  {
+    "pattern": "〜にする",
+    "level": "N5",
+    "meaning": "decide on, choose ~",
+    "example": "飲み物はコーヒーにします。",
+    "exampleReading": "のみものは こーひーに します。",
+    "exampleEnglish": "For a drink, I'll have coffee."
+  },
+  {
+    "pattern": "から（理由）",
+    "level": "N5",
+    "meaning": "because, reason (conjunction after plain/polite form)",
+    "example": "眠いから、早く寝ます。",
+    "exampleReading": "ねむいから、はやく ねます。",
+    "exampleEnglish": "Because I'm sleepy, I'll sleep early."
+  }
+]
