@@ -1,0 +1,44 @@
+export type JlptLevel = "N5" | "N4" | "N3" | "N2" | "N1";
+export type VocabLevel = JlptLevel | "other";
+
+export interface VocabItem {
+  word: string;
+  reading: string;
+  meaning: string;
+  level: VocabLevel;
+}
+
+export interface GrammarItem {
+  pattern: string;
+  level: JlptLevel;
+  note: string;
+}
+
+/** The structured object Claude returns for one English input. */
+export interface GeneratedSentence {
+  /** A version rewritten to stay within JLPT N4 (which includes all N5). */
+  n4: {
+    japanese: string;
+    /** Full hiragana reading of the N4 sentence (no kanji). */
+    reading: string;
+    /** Literal English of the N4 version, so the learner sees what the simpler Japanese says. */
+    gloss: string;
+  };
+  /** True if the N4 version fully captures the input using only N4-level language. */
+  withinLevel: boolean;
+  /** The most natural Japanese that faithfully expresses the original English, even if it exceeds N4. */
+  faithful: {
+    japanese: string;
+    reading: string;
+    /** Approximate highest JLPT level of grammar/vocab used (model's best estimate). */
+    levelTag: JlptLevel;
+    /** True when this meaningfully differs from the N4 version. */
+    differsFromN4: boolean;
+  };
+  /** Content words in the N4 sentence, with level tags. */
+  vocab: VocabItem[];
+  /** Grammar patterns in the N4 sentence, with level tags. */
+  grammar: GrammarItem[];
+  /** 1-3 sentence plain-English note on what was simplified / what the faithful version needs. */
+  notes: string;
+}
