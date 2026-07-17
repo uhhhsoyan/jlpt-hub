@@ -23,6 +23,9 @@
 # mined audio clips (generated locally, not source)
 /public/mined
 
+# practice session photos (local-only, uploaded per session; don't survive Vercel anyway)
+/public/practice
+
 # misc
 .DS_Store
 *.pem

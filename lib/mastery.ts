@@ -11,7 +11,7 @@ export interface MasteryEntry {
 }
 
 /** Recency half-life for graded answers: an answer 30 days old counts half as much. */
-const HALF_LIFE_DAYS = 30;
+export const HALF_LIFE_DAYS = 30;
 
 export function masteryStatus(score: number, observationCount: number): MasteryStatus {
   if (observationCount === 0) return "unseen";
