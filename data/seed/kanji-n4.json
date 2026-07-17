@@ -1,0 +1,1269 @@
+[
+  {
+    "kanji": "不",
+    "onyomi": "FU, BU",
+    "kunyomi": null,
+    "meaning": "not",
+    "unicode": "4E0D"
+  },
+  {
+    "kanji": "世",
+    "onyomi": "SEI, SE",
+    "kunyomi": "yo",
+    "meaning": "world, age",
+    "unicode": "4E16"
+  },
+  {
+    "kanji": "主",
+    "onyomi": "SHU",
+    "kunyomi": "nushi",
+    "meaning": "owner, main-",
+    "unicode": "4E3B"
+  },
+  {
+    "kanji": "乗",
+    "onyomi": "JOU",
+    "kunyomi": "no(ru), no(seru)",
+    "meaning": "to drive, to ride, to fool",
+    "unicode": "4E57"
+  },
+  {
+    "kanji": "事",
+    "onyomi": "JI",
+    "kunyomi": "koto",
+    "meaning": "thing, matter",
+    "unicode": "4E8B"
+  },
+  {
+    "kanji": "京",
+    "onyomi": "KYOU, KEI",
+    "kunyomi": null,
+    "meaning": "capital",
+    "unicode": "4EAC"
+  },
+  {
+    "kanji": "仕",
+    "onyomi": "SHI, JI",
+    "kunyomi": "tsuka(eru)",
+    "meaning": "to serve",
+    "unicode": "4ED5"
+  },
+  {
+    "kanji": "代",
+    "onyomi": "DAI, TAI",
+    "kunyomi": "ka(waru), ka(eru), yo, shiro",
+    "meaning": "generation, age, replace",
+    "unicode": "4EE3"
+  },
+  {
+    "kanji": "以",
+    "onyomi": "I",
+    "kunyomi": null,
+    "meaning": "prefix",
+    "unicode": "4EE5"
+  },
+  {
+    "kanji": "低",
+    "onyomi": "TEI",
+    "kunyomi": "hiku(i), hiku(meru/maru)",
+    "meaning": "low, to lower",
+    "unicode": "4F4E"
+  },
+  {
+    "kanji": "住",
+    "onyomi": "JUU",
+    "kunyomi": "su(mu), su(mau)",
+    "meaning": "to live in, to reside",
+    "unicode": "4F4F"
+  },
+  {
+    "kanji": "体",
+    "onyomi": "TAI, TEI",
+    "kunyomi": "karada",
+    "meaning": "body",
+    "unicode": "4F53"
+  },
+  {
+    "kanji": "作",
+    "onyomi": "SAKU, SA",
+    "kunyomi": "tsuku(ru)",
+    "meaning": "to make, to build",
+    "unicode": "4F5C"
+  },
+  {
+    "kanji": "使",
+    "onyomi": "SHI",
+    "kunyomi": "tsuka(u)",
+    "meaning": "use, messenger",
+    "unicode": "4F7F"
+  },
+  {
+    "kanji": "便",
+    "onyomi": "BEN, BIN",
+    "kunyomi": "tayo(ri)",
+    "meaning": "comfort, excrement, message",
+    "unicode": "4FBF"
+  },
+  {
+    "kanji": "借",
+    "onyomi": "SHAKU",
+    "kunyomi": "ka(riru)",
+    "meaning": "to rent, to borrow",
+    "unicode": "501F"
+  },
+  {
+    "kanji": "働",
+    "onyomi": "DOU",
+    "kunyomi": "hatara(ku)",
+    "meaning": "to work",
+    "unicode": "50CD"
+  },
+  {
+    "kanji": "元",
+    "onyomi": "GEN, GAN",
+    "kunyomi": "moto",
+    "meaning": "reason, original",
+    "unicode": "5143"
+  },
+  {
+    "kanji": "兄",
+    "onyomi": "KEI, KYOU",
+    "kunyomi": "ani",
+    "meaning": "older brother",
+    "unicode": "5144"
+  },
+  {
+    "kanji": "光",
+    "onyomi": "KOU",
+    "kunyomi": "hikari, hika(ru)",
+    "meaning": "light, to shine",
+    "unicode": "5149"
+  },
+  {
+    "kanji": "写",
+    "onyomi": "SHA",
+    "kunyomi": "utsu(su), utsu(ru)",
+    "meaning": "copy, photograph",
+    "unicode": "5199"
+  },
+  {
+    "kanji": "冬",
+    "onyomi": "TOU",
+    "kunyomi": "fuyu",
+    "meaning": "winter",
+    "unicode": "51AC"
+  },
+  {
+    "kanji": "切",
+    "onyomi": "SETSU, SAI",
+    "kunyomi": "ki(ru), ki(reru)",
+    "meaning": "to cut, come to an end",
+    "unicode": "5207"
+  },
+  {
+    "kanji": "別",
+    "onyomi": "BETSU",
+    "kunyomi": "waka(reru)",
+    "meaning": "difference, to part",
+    "unicode": "5225"
+  },
+  {
+    "kanji": "力",
+    "onyomi": "RYOKU, RIKI",
+    "kunyomi": "chikara",
+    "meaning": "power, force",
+    "unicode": "529B"
+  },
+  {
+    "kanji": "勉",
+    "onyomi": "BEN",
+    "kunyomi": null,
+    "meaning": "hard work, effort",
+    "unicode": "52C9"
+  },
+  {
+    "kanji": "動",
+    "onyomi": "DOU",
+    "kunyomi": "ugo(ku), ugo(kasu)",
+    "meaning": "to move",
+    "unicode": "52D5"
+  },
+  {
+    "kanji": "区",
+    "onyomi": "KU",
+    "kunyomi": null,
+    "meaning": "city district",
+    "unicode": "533A"
+  },
+  {
+    "kanji": "医",
+    "onyomi": "I",
+    "kunyomi": null,
+    "meaning": "medicine",
+    "unicode": "533B"
+  },
+  {
+    "kanji": "去",
+    "onyomi": "KYO, KO",
+    "kunyomi": "sa(ru)",
+    "meaning": "to pass by",
+    "unicode": "53BB"
+  },
+  {
+    "kanji": "台",
+    "onyomi": "DAI, TAI",
+    "kunyomi": null,
+    "meaning": "frame, basis, pedestal",
+    "unicode": "53F0"
+  },
+  {
+    "kanji": "合",
+    "onyomi": "GOU, GA",
+    "kunyomi": "a(waseru), a(u)",
+    "meaning": "to fit, to connect",
+    "unicode": "5408"
+  },
+  {
+    "kanji": "同",
+    "onyomi": "DOU",
+    "kunyomi": "ona(ji)",
+    "meaning": "same",
+    "unicode": "540C"
+  },
+  {
+    "kanji": "味",
+    "onyomi": "MI",
+    "kunyomi": "aji, aji(waru)",
+    "meaning": "taste, to savor, to enjoy",
+    "unicode": "5473"
+  },
+  {
+    "kanji": "品",
+    "onyomi": "HIN",
+    "kunyomi": "shina",
+    "meaning": "product, quality",
+    "unicode": "54C1"
+  },
+  {
+    "kanji": "員",
+    "onyomi": "IN",
+    "kunyomi": null,
+    "meaning": "member",
+    "unicode": "54E1"
+  },
+  {
+    "kanji": "問",
+    "onyomi": "MON",
+    "kunyomi": "to(i), to(u)",
+    "meaning": "question, take care of",
+    "unicode": "554F"
+  },
+  {
+    "kanji": "回",
+    "onyomi": "KAI",
+    "kunyomi": "mawa(su)",
+    "meaning": "times, occurrences",
+    "unicode": "56DE"
+  },
+  {
+    "kanji": "図",
+    "onyomi": "ZU, TO",
+    "kunyomi": "haka(ru)",
+    "meaning": "drawing, plan",
+    "unicode": "56F3"
+  },
+  {
+    "kanji": "地",
+    "onyomi": "CHI, JI",
+    "kunyomi": null,
+    "meaning": "earth, land",
+    "unicode": "5730"
+  },
+  {
+    "kanji": "堂",
+    "onyomi": "DOU",
+    "kunyomi": null,
+    "meaning": "room, hall, temple",
+    "unicode": "5802"
+  },
+  {
+    "kanji": "場",
+    "onyomi": "JOU",
+    "kunyomi": "ba",
+    "meaning": "a place",
+    "unicode": "5834"
+  },
+  {
+    "kanji": "声",
+    "onyomi": "SEI",
+    "kunyomi": "koe",
+    "meaning": "voice",
+    "unicode": "58F0"
+  },
+  {
+    "kanji": "売",
+    "onyomi": "BAI",
+    "kunyomi": "u(ru), u(reru)",
+    "meaning": "to sell",
+    "unicode": "58F2"
+  },
+  {
+    "kanji": "夏",
+    "onyomi": "KA",
+    "kunyomi": "natsu",
+    "meaning": "summer",
+    "unicode": "590F"
+  },
+  {
+    "kanji": "夕",
+    "onyomi": "SEKI",
+    "kunyomi": "yuu",
+    "meaning": "evening",
+    "unicode": "5915"
+  },
+  {
+    "kanji": "夜",
+    "onyomi": "YA",
+    "kunyomi": "yoro, yo~",
+    "meaning": "night",
+    "unicode": "591C"
+  },
+  {
+    "kanji": "太",
+    "onyomi": "TAI, TA",
+    "kunyomi": "futo(i), futo(ru)",
+    "meaning": "bold, thick",
+    "unicode": "592A"
+  },
+  {
+    "kanji": "好",
+    "onyomi": "KOU",
+    "kunyomi": "kono(mu), su(ku)",
+    "meaning": "to like",
+    "unicode": "597D"
+  },
+  {
+    "kanji": "妹",
+    "onyomi": "MAI",
+    "kunyomi": "imouto",
+    "meaning": "younger sister",
+    "unicode": "59B9"
+  },
+  {
+    "kanji": "姉",
+    "onyomi": "SHI",
+    "kunyomi": "ane",
+    "meaning": "older sister",
+    "unicode": "59C9"
+  },
+  {
+    "kanji": "始",
+    "onyomi": "SHI",
+    "kunyomi": "haji(meru/maru)",
+    "meaning": "start, to begin",
+    "unicode": "59CB"
+  },
+  {
+    "kanji": "字",
+    "onyomi": "JI",
+    "kunyomi": "aza",
+    "meaning": "character, sector of a village",
+    "unicode": "5B57"
+  },
+  {
+    "kanji": "室",
+    "onyomi": "SHITSU",
+    "kunyomi": "muro",
+    "meaning": "room, cellar",
+    "unicode": "5BA4"
+  },
+  {
+    "kanji": "家",
+    "onyomi": "KA, KE",
+    "kunyomi": "ie, ya",
+    "meaning": "house, home",
+    "unicode": "5BB6"
+  },
+  {
+    "kanji": "寒",
+    "onyomi": "KAN",
+    "kunyomi": "samu(i)",
+    "meaning": "cold temperature",
+    "unicode": "5BD2"
+  },
+  {
+    "kanji": "屋",
+    "onyomi": "OKU",
+    "kunyomi": "ya",
+    "meaning": "room, house",
+    "unicode": "5C4B"
+  },
+  {
+    "kanji": "工",
+    "onyomi": "KOU, KU",
+    "kunyomi": null,
+    "meaning": "to construct",
+    "unicode": "5DE5"
+  },
+  {
+    "kanji": "市",
+    "onyomi": "SHI",
+    "kunyomi": "ichi",
+    "meaning": "city, market",
+    "unicode": "5E02"
+  },
+  {
+    "kanji": "帰",
+    "onyomi": "KI",
+    "kunyomi": "kae(ru), kae(su)",
+    "meaning": "return home, return",
+    "unicode": "5E30"
+  },
+  {
+    "kanji": "広",
+    "onyomi": "KOU",
+    "kunyomi": "hiro(i), hiro(geru)",
+    "meaning": "broad, wide, to widen, to expand",
+    "unicode": "5E83"
+  },
+  {
+    "kanji": "度",
+    "onyomi": "DO",
+    "kunyomi": "tabi",
+    "meaning": "measure, degree",
+    "unicode": "5EA6"
+  },
+  {
+    "kanji": "建",
+    "onyomi": "KEN",
+    "kunyomi": "ta(teru), ta(su)",
+    "meaning": "to construct, build",
+    "unicode": "5EFA"
+  },
+  {
+    "kanji": "引",
+    "onyomi": "IN",
+    "kunyomi": "hi(ku), hi(keru)",
+    "meaning": "to pull, make cheaper",
+    "unicode": "5F15"
+  },
+  {
+    "kanji": "弟",
+    "onyomi": "TEI",
+    "kunyomi": "otouto",
+    "meaning": "younger brother",
+    "unicode": "5F1F"
+  },
+  {
+    "kanji": "弱",
+    "onyomi": "JAKU",
+    "kunyomi": "yowa(i), yowa(ru), yowa(meru)",
+    "meaning": "weak, to weaken",
+    "unicode": "5F31"
+  },
+  {
+    "kanji": "強",
+    "onyomi": "KYOU, GOU",
+    "kunyomi": "tsuyo(i), tsuyo(maru), shi(iru)",
+    "meaning": "strong, make stronger, to force",
+    "unicode": "5F37"
+  },
+  {
+    "kanji": "待",
+    "onyomi": "TAI",
+    "kunyomi": "ma(tsu)",
+    "meaning": "to wait",
+    "unicode": "5F85"
+  },
+  {
+    "kanji": "心",
+    "onyomi": "SHIN",
+    "kunyomi": "kokoro",
+    "meaning": "heart, mind",
+    "unicode": "5FC3"
+  },
+  {
+    "kanji": "思",
+    "onyomi": "SHI",
+    "kunyomi": "omo(u)",
+    "meaning": "to think, to believe",
+    "unicode": "601D"
+  },
+  {
+    "kanji": "急",
+    "onyomi": "KYUU",
+    "kunyomi": "iso(gu)",
+    "meaning": "urgent, quick, sudden, to hurry",
+    "unicode": "6025"
+  },
+  {
+    "kanji": "悪",
+    "onyomi": "AKU, O",
+    "kunyomi": "waru(i)",
+    "meaning": "bad, mean",
+    "unicode": "60AA"
+  },
+  {
+    "kanji": "意",
+    "onyomi": "I",
+    "kunyomi": null,
+    "meaning": "will, heart, meaning",
+    "unicode": "610F"
+  },
+  {
+    "kanji": "所",
+    "onyomi": "SHO",
+    "kunyomi": "tokoro",
+    "meaning": "a place",
+    "unicode": "6240"
+  },
+  {
+    "kanji": "持",
+    "onyomi": "JI",
+    "kunyomi": "mo(tsu)",
+    "meaning": "to own, to carry",
+    "unicode": "6301"
+  },
+  {
+    "kanji": "教",
+    "onyomi": "KYOU",
+    "kunyomi": "oshi(eru), oso(waru)",
+    "meaning": "to teach, to learn",
+    "unicode": "6559"
+  },
+  {
+    "kanji": "文",
+    "onyomi": "BUN, MON",
+    "kunyomi": "fumi",
+    "meaning": "literature, sentence, letter",
+    "unicode": "6587"
+  },
+  {
+    "kanji": "料",
+    "onyomi": "RYOU",
+    "kunyomi": null,
+    "meaning": "material, charge",
+    "unicode": "6599"
+  },
+  {
+    "kanji": "方",
+    "onyomi": "HOU",
+    "kunyomi": "kata",
+    "meaning": "direction, person",
+    "unicode": "65B9"
+  },
+  {
+    "kanji": "旅",
+    "onyomi": "RYO",
+    "kunyomi": "tabi",
+    "meaning": "trip, travel",
+    "unicode": "65C5"
+  },
+  {
+    "kanji": "族",
+    "onyomi": "ZOKU",
+    "kunyomi": null,
+    "meaning": "family, tribe",
+    "unicode": "65CF"
+  },
+  {
+    "kanji": "早",
+    "onyomi": "SOU, SA",
+    "kunyomi": "haya(i), haya(meru/maru)",
+    "meaning": "fast, early, to speed up",
+    "unicode": "65E9"
+  },
+  {
+    "kanji": "明",
+    "onyomi": "MEI",
+    "kunyomi": "a(kari), aka(rui)",
+    "meaning": "light, brightness, to be open",
+    "unicode": "660E"
+  },
+  {
+    "kanji": "映",
+    "onyomi": "EI",
+    "kunyomi": "utsu(su), he(eru)",
+    "meaning": "to project, to glint",
+    "unicode": "6620"
+  },
+  {
+    "kanji": "春",
+    "onyomi": "SHUN",
+    "kunyomi": "haru",
+    "meaning": "spring",
+    "unicode": "6625"
+  },
+  {
+    "kanji": "昼",
+    "onyomi": "CHUU",
+    "kunyomi": "hiru",
+    "meaning": "noon",
+    "unicode": "663C"
+  },
+  {
+    "kanji": "暑",
+    "onyomi": "SHO",
+    "kunyomi": "atsu(i)",
+    "meaning": "hot (temperature)",
+    "unicode": "6691"
+  },
+  {
+    "kanji": "暗",
+    "onyomi": "AN",
+    "kunyomi": "kura(i)",
+    "meaning": "dark",
+    "unicode": "6697"
+  },
+  {
+    "kanji": "曜",
+    "onyomi": "YOU",
+    "kunyomi": null,
+    "meaning": "weekday",
+    "unicode": "66DC"
+  },
+  {
+    "kanji": "有",
+    "onyomi": "YUU, U",
+    "kunyomi": "a(ru)",
+    "meaning": "to exist, to be, to have",
+    "unicode": "6709"
+  },
+  {
+    "kanji": "服",
+    "onyomi": "FUKU",
+    "kunyomi": null,
+    "meaning": "clothing",
+    "unicode": "670D"
+  },
+  {
+    "kanji": "朝",
+    "onyomi": "CHOU",
+    "kunyomi": "asa",
+    "meaning": "morning",
+    "unicode": "671D"
+  },
+  {
+    "kanji": "村",
+    "onyomi": "SON",
+    "kunyomi": "mura",
+    "meaning": "village",
+    "unicode": "6751"
+  },
+  {
+    "kanji": "林",
+    "onyomi": "RIN",
+    "kunyomi": "hayashi",
+    "meaning": "woods",
+    "unicode": "6797"
+  },
+  {
+    "kanji": "森",
+    "onyomi": "SHIN",
+    "kunyomi": "mori",
+    "meaning": "forest",
+    "unicode": "68EE"
+  },
+  {
+    "kanji": "業",
+    "onyomi": "GYOU, GOU",
+    "kunyomi": "waza",
+    "meaning": "company, business, profession, art",
+    "unicode": "696D"
+  },
+  {
+    "kanji": "楽",
+    "onyomi": "GAKU, RAKU",
+    "kunyomi": "tano(shii), tano(shimu)",
+    "meaning": "music, comfort, ease, joyful",
+    "unicode": "697D"
+  },
+  {
+    "kanji": "歌",
+    "onyomi": "KA",
+    "kunyomi": "uta, uta(u)",
+    "meaning": "song, poem, to sing",
+    "unicode": "6B4C"
+  },
+  {
+    "kanji": "止",
+    "onyomi": "SHI",
+    "kunyomi": "to(maru), to(meru)",
+    "meaning": "to stop",
+    "unicode": "6B62"
+  },
+  {
+    "kanji": "正",
+    "onyomi": "SEI, SHOU",
+    "kunyomi": "tada(shii), tada(su), masa",
+    "meaning": "correct, right",
+    "unicode": "6B63"
+  },
+  {
+    "kanji": "歩",
+    "onyomi": "HO, BU",
+    "kunyomi": "aru(ku), ayu(mu)",
+    "meaning": "to walk",
+    "unicode": "6B69"
+  },
+  {
+    "kanji": "死",
+    "onyomi": "SHI",
+    "kunyomi": "shi(nu)",
+    "meaning": "death, to die",
+    "unicode": "6B7B"
+  },
+  {
+    "kanji": "民",
+    "onyomi": "MIN",
+    "kunyomi": "tami",
+    "meaning": "nation, people",
+    "unicode": "6C11"
+  },
+  {
+    "kanji": "池",
+    "onyomi": "CHI",
+    "kunyomi": "ike",
+    "meaning": "pond",
+    "unicode": "6C60"
+  },
+  {
+    "kanji": "注",
+    "onyomi": "CHUU",
+    "kunyomi": "soso(gu)",
+    "meaning": "notice, attention, flow",
+    "unicode": "6CE8"
+  },
+  {
+    "kanji": "洋",
+    "onyomi": "YOU",
+    "kunyomi": null,
+    "meaning": "ocean, western, foreign",
+    "unicode": "6D0B"
+  },
+  {
+    "kanji": "洗",
+    "onyomi": "SEN",
+    "kunyomi": "ara(u)",
+    "meaning": "to wash",
+    "unicode": "6D17"
+  },
+  {
+    "kanji": "海",
+    "onyomi": "KAI",
+    "kunyomi": "umi",
+    "meaning": "sea, ocean",
+    "unicode": "6D77"
+  },
+  {
+    "kanji": "漢",
+    "onyomi": "KAN",
+    "kunyomi": null,
+    "meaning": "China, man",
+    "unicode": "6F22"
+  },
+  {
+    "kanji": "牛",
+    "onyomi": "GYUU",
+    "kunyomi": "ushi",
+    "meaning": "cow",
+    "unicode": "725B"
+  },
+  {
+    "kanji": "物",
+    "onyomi": "BUTSU, MOTSU",
+    "kunyomi": "mono",
+    "meaning": "thing",
+    "unicode": "7269"
+  },
+  {
+    "kanji": "特",
+    "onyomi": "TOKU",
+    "kunyomi": null,
+    "meaning": "special",
+    "unicode": "7279"
+  },
+  {
+    "kanji": "犬",
+    "onyomi": "KEN",
+    "kunyomi": "inu",
+    "meaning": "dog",
+    "unicode": "72AC"
+  },
+  {
+    "kanji": "理",
+    "onyomi": "RI",
+    "kunyomi": null,
+    "meaning": "reason, principle",
+    "unicode": "7406"
+  },
+  {
+    "kanji": "産",
+    "onyomi": "SAN",
+    "kunyomi": "u(mu), u(mareru)",
+    "meaning": "birth, production",
+    "unicode": "7523"
+  },
+  {
+    "kanji": "用",
+    "onyomi": "YOU",
+    "kunyomi": "mochi(iru)",
+    "meaning": "issue, to use",
+    "unicode": "7528"
+  },
+  {
+    "kanji": "田",
+    "onyomi": "DEN",
+    "kunyomi": "ta",
+    "meaning": "rice field",
+    "unicode": "7530"
+  },
+  {
+    "kanji": "町",
+    "onyomi": "CHOU",
+    "kunyomi": "machi",
+    "meaning": "city, quarter, district",
+    "unicode": "753A"
+  },
+  {
+    "kanji": "画",
+    "onyomi": "GA, KAKU",
+    "kunyomi": null,
+    "meaning": "picture, line of a character",
+    "unicode": "753B"
+  },
+  {
+    "kanji": "界",
+    "onyomi": "KAI",
+    "kunyomi": null,
+    "meaning": "world",
+    "unicode": "754C"
+  },
+  {
+    "kanji": "病",
+    "onyomi": "BYOU",
+    "kunyomi": "ya(mu), yamai",
+    "meaning": "sickness, illness",
+    "unicode": "75C5"
+  },
+  {
+    "kanji": "発",
+    "onyomi": "HATSU, HOTSU",
+    "kunyomi": null,
+    "meaning": "start, to leave, issue",
+    "unicode": "767A"
+  },
+  {
+    "kanji": "県",
+    "onyomi": "KEN",
+    "kunyomi": null,
+    "meaning": "prefecture",
+    "unicode": "770C"
+  },
+  {
+    "kanji": "真",
+    "onyomi": "SHIN",
+    "kunyomi": "ma-",
+    "meaning": "truth, reality, purity",
+    "unicode": "771F"
+  },
+  {
+    "kanji": "着",
+    "onyomi": "CHAKU",
+    "kunyomi": "ki(ru), tsu(keru), ki(seru), tsu(ku)",
+    "meaning": "arrival, clothes",
+    "unicode": "7740"
+  },
+  {
+    "kanji": "知",
+    "onyomi": "CHI",
+    "kunyomi": "shi(ru)",
+    "meaning": "to know",
+    "unicode": "77E5"
+  },
+  {
+    "kanji": "短",
+    "onyomi": "TAN",
+    "kunyomi": "mijika(i)",
+    "meaning": "short",
+    "unicode": "77ED"
+  },
+  {
+    "kanji": "研",
+    "onyomi": "KEN",
+    "kunyomi": "to(gu)",
+    "meaning": "to polish, sharpen, wash rice",
+    "unicode": "7814"
+  },
+  {
+    "kanji": "私",
+    "onyomi": "SHI",
+    "kunyomi": "watashi",
+    "meaning": "I, me, private",
+    "unicode": "79C1"
+  },
+  {
+    "kanji": "秋",
+    "onyomi": "SHUU",
+    "kunyomi": "aki",
+    "meaning": "autumn, fall",
+    "unicode": "79CB"
+  },
+  {
+    "kanji": "究",
+    "onyomi": "KYUU",
+    "kunyomi": "kiwa(meru)",
+    "meaning": "to explore, investigate",
+    "unicode": "7A76"
+  },
+  {
+    "kanji": "答",
+    "onyomi": "TOU",
+    "kunyomi": "kota(e), kota(eru)",
+    "meaning": "answer",
+    "unicode": "7B54"
+  },
+  {
+    "kanji": "紙",
+    "onyomi": "SHI",
+    "kunyomi": "kami",
+    "meaning": "paper",
+    "unicode": "7D19"
+  },
+  {
+    "kanji": "終",
+    "onyomi": "SHUU",
+    "kunyomi": "o(waru), o(eru)",
+    "meaning": "end",
+    "unicode": "7D42"
+  },
+  {
+    "kanji": "習",
+    "onyomi": "SHUU",
+    "kunyomi": "nara(u)",
+    "meaning": "to learn",
+    "unicode": "7FD2"
+  },
+  {
+    "kanji": "考",
+    "onyomi": "KOU",
+    "kunyomi": "kanga(eru)",
+    "meaning": "to think, thought",
+    "unicode": "8003"
+  },
+  {
+    "kanji": "者",
+    "onyomi": "SHA",
+    "kunyomi": "mono",
+    "meaning": "person",
+    "unicode": "8005"
+  },
+  {
+    "kanji": "肉",
+    "onyomi": "NIKU",
+    "kunyomi": null,
+    "meaning": "meat",
+    "unicode": "8089"
+  },
+  {
+    "kanji": "自",
+    "onyomi": "JI, SHI",
+    "kunyomi": "mizuka(ra)",
+    "meaning": "self",
+    "unicode": "81EA"
+  },
+  {
+    "kanji": "色",
+    "onyomi": "SHOKU",
+    "kunyomi": "iro",
+    "meaning": "color, sensuality",
+    "unicode": "8272"
+  },
+  {
+    "kanji": "英",
+    "onyomi": "EI",
+    "kunyomi": null,
+    "meaning": "brilliant, talented",
+    "unicode": "82F1"
+  },
+  {
+    "kanji": "茶",
+    "onyomi": "CHA, SA",
+    "kunyomi": null,
+    "meaning": "tea",
+    "unicode": "8336"
+  },
+  {
+    "kanji": "菜",
+    "onyomi": "SAI",
+    "kunyomi": "na",
+    "meaning": "vegetable, rape",
+    "unicode": "83DC"
+  },
+  {
+    "kanji": "薬",
+    "onyomi": "YAKU",
+    "kunyomi": "kusuri",
+    "meaning": "drug, medicine, chemical",
+    "unicode": "85AC"
+  },
+  {
+    "kanji": "親",
+    "onyomi": "SHIN",
+    "kunyomi": "oya, shita(shii), shita(shimu)",
+    "meaning": "parents, to be close, to be friends",
+    "unicode": "89AA"
+  },
+  {
+    "kanji": "計",
+    "onyomi": "KEI",
+    "kunyomi": "haka(ru), haka(rau)",
+    "meaning": "to measure, to proceed",
+    "unicode": "8A08"
+  },
+  {
+    "kanji": "試",
+    "onyomi": "SHI",
+    "kunyomi": "kokoro(miru), tame(su)",
+    "meaning": "to try",
+    "unicode": "8A66"
+  },
+  {
+    "kanji": "説",
+    "onyomi": "SETSU",
+    "kunyomi": "to(ku)",
+    "meaning": "opinion, theory, explain",
+    "unicode": "8AAC"
+  },
+  {
+    "kanji": "貸",
+    "onyomi": "TAI",
+    "kunyomi": "ka(su)",
+    "meaning": "to lend",
+    "unicode": "8CB8"
+  },
+  {
+    "kanji": "質",
+    "onyomi": "SHITSU, SHICHI",
+    "kunyomi": null,
+    "meaning": "quality, nature",
+    "unicode": "8CEA"
+  },
+  {
+    "kanji": "赤",
+    "onyomi": "SEKI, SHAKU",
+    "kunyomi": "aka(i), aka(maru), aka(rameru)",
+    "meaning": "red, to flush",
+    "unicode": "8D64"
+  },
+  {
+    "kanji": "走",
+    "onyomi": "SOU",
+    "kunyomi": "hashi(ru)",
+    "meaning": "to run",
+    "unicode": "8D70"
+  },
+  {
+    "kanji": "起",
+    "onyomi": "KI",
+    "kunyomi": "o(kiru), o(kuro)",
+    "meaning": "stand up, start, cause",
+    "unicode": "8D77"
+  },
+  {
+    "kanji": "転",
+    "onyomi": "TEN",
+    "kunyomi": "koro(bu), koro(garu/geru), koro(gasu)",
+    "meaning": "to roll, to turn",
+    "unicode": "8EE2"
+  },
+  {
+    "kanji": "軽",
+    "onyomi": "KEI",
+    "kunyomi": "karu(i), karo(yaka)",
+    "meaning": "light (weight)",
+    "unicode": "8EFD"
+  },
+  {
+    "kanji": "近",
+    "onyomi": "KIN",
+    "kunyomi": "chika(i)",
+    "meaning": "near",
+    "unicode": "8FD1"
+  },
+  {
+    "kanji": "送",
+    "onyomi": "SOU",
+    "kunyomi": "oku(ru)",
+    "meaning": "to send",
+    "unicode": "9001"
+  },
+  {
+    "kanji": "通",
+    "onyomi": "TSUU",
+    "kunyomi": "tou(ru), tou(su), kayo(u)",
+    "meaning": "to pass",
+    "unicode": "901A"
+  },
+  {
+    "kanji": "進",
+    "onyomi": "SHIN",
+    "kunyomi": "susu(mu), susu(meru)",
+    "meaning": "continue, proceed, promote",
+    "unicode": "9032"
+  },
+  {
+    "kanji": "運",
+    "onyomi": "UN",
+    "kunyomi": "hako(bu)",
+    "meaning": "destiny, transport, carry",
+    "unicode": "904B"
+  },
+  {
+    "kanji": "遠",
+    "onyomi": "EN",
+    "kunyomi": "too(i)",
+    "meaning": "far away",
+    "unicode": "9060"
+  },
+  {
+    "kanji": "都",
+    "onyomi": "TO, TSU",
+    "kunyomi": "miyako",
+    "meaning": "capital",
+    "unicode": "90FD"
+  },
+  {
+    "kanji": "重",
+    "onyomi": "JUU, CHOU",
+    "kunyomi": "omo(i), kasa(naru), -e",
+    "meaning": "heavy, serious, -fold",
+    "unicode": "91CD"
+  },
+  {
+    "kanji": "野",
+    "onyomi": "YA",
+    "kunyomi": "no",
+    "meaning": "field",
+    "unicode": "91CE"
+  },
+  {
+    "kanji": "銀",
+    "onyomi": "GIN",
+    "kunyomi": null,
+    "meaning": "silver",
+    "unicode": "9280"
+  },
+  {
+    "kanji": "門",
+    "onyomi": "MON",
+    "kunyomi": "kado",
+    "meaning": "gate",
+    "unicode": "9580"
+  },
+  {
+    "kanji": "開",
+    "onyomi": "KAI",
+    "kunyomi": "a(keru), Hira(ku)",
+    "meaning": "to open, vent, develop",
+    "unicode": "958B"
+  },
+  {
+    "kanji": "院",
+    "onyomi": "IN",
+    "kunyomi": null,
+    "meaning": "institute, establishment",
+    "unicode": "9662"
+  },
+  {
+    "kanji": "集",
+    "onyomi": "SHUU",
+    "kunyomi": "atsu(maru/meru)",
+    "meaning": "to meet, to gather",
+    "unicode": "96C6"
+  },
+  {
+    "kanji": "青",
+    "onyomi": "SEI",
+    "kunyomi": "ao(i), ao",
+    "meaning": "blue, green, unripe",
+    "unicode": "9752"
+  },
+  {
+    "kanji": "音",
+    "onyomi": "ON, IN",
+    "kunyomi": "oto, ne",
+    "meaning": "sound",
+    "unicode": "97F3"
+  },
+  {
+    "kanji": "頭",
+    "onyomi": "TOU, ZU",
+    "kunyomi": "atama, kashira",
+    "meaning": "head, master540C",
+    "unicode": "982D"
+  },
+  {
+    "kanji": "題",
+    "onyomi": "DAI",
+    "kunyomi": null,
+    "meaning": "title, theme, subject",
+    "unicode": "984C"
+  },
+  {
+    "kanji": "顔",
+    "onyomi": "GAN",
+    "kunyomi": "kao",
+    "meaning": "face",
+    "unicode": "9854"
+  },
+  {
+    "kanji": "風",
+    "onyomi": "FUU",
+    "kunyomi": "kaze",
+    "meaning": "wind, style",
+    "unicode": "98A8"
+  },
+  {
+    "kanji": "飯",
+    "onyomi": "HAN",
+    "kunyomi": "meshi",
+    "meaning": "meal, cooked rice",
+    "unicode": "98EF"
+  },
+  {
+    "kanji": "館",
+    "onyomi": "KAN",
+    "kunyomi": null,
+    "meaning": "big hall, building",
+    "unicode": "9928"
+  },
+  {
+    "kanji": "首",
+    "onyomi": "SHU",
+    "kunyomi": "kubi",
+    "meaning": "neck, head",
+    "unicode": "9996"
+  },
+  {
+    "kanji": "験",
+    "onyomi": "KEN",
+    "kunyomi": null,
+    "meaning": "test, effect",
+    "unicode": "9A13"
+  },
+  {
+    "kanji": "鳥",
+    "onyomi": "CHOU",
+    "kunyomi": "tori",
+    "meaning": "bird",
+    "unicode": "9CE5"
+  },
+  {
+    "kanji": "黒",
+    "onyomi": "KOKU",
+    "kunyomi": "kuro(i), kuro",
+    "meaning": "black",
+    "unicode": "9ED2"
+  }
+]

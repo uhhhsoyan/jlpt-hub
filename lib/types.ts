@@ -14,6 +14,24 @@ export interface GrammarItem {
   note: string;
 }
 
+/** Canonical study-item node: one row per N5/N4 vocab word, kanji, or grammar point. */
+export type ItemKind = "vocab" | "kanji" | "grammar";
+
+export type ItemRelation = "contains_kanji" | "related" | "prerequisite";
+
+export type PartOfSpeech = "verb" | "i-adjective" | "na-adjective";
+
+export interface ItemDetail {
+  /** Vocab only; from the source's POS lists where available. */
+  pos?: PartOfSpeech | null;
+  /** Kanji only. */
+  onyomi?: string | null;
+  kunyomi?: string | null;
+  unicode?: string;
+  /** Set by the WaniKani sync once a subject is mapped to this item. */
+  wkSubjectId?: number;
+}
+
 /** The structured object Claude returns for one English input. */
 export interface GeneratedSentence {
   /** A version rewritten to stay within JLPT N4 (which includes all N5). */

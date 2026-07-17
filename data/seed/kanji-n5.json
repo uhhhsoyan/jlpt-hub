@@ -1,0 +1,723 @@
+[
+  {
+    "kanji": "一",
+    "onyomi": "ICHI, ITSU",
+    "kunyomi": "hito(tsu), hito-",
+    "meaning": "one",
+    "unicode": "4E00"
+  },
+  {
+    "kanji": "七",
+    "onyomi": "SHICHI",
+    "kunyomi": "nana(tsu), nana-, nano-",
+    "meaning": "seven",
+    "unicode": "4E03"
+  },
+  {
+    "kanji": "万",
+    "onyomi": "MAN, BAN",
+    "kunyomi": null,
+    "meaning": "ten thousand, all, many",
+    "unicode": "4E07"
+  },
+  {
+    "kanji": "三",
+    "onyomi": "SAN",
+    "kunyomi": "mit(tsu), mi-",
+    "meaning": "three",
+    "unicode": "4E09"
+  },
+  {
+    "kanji": "上",
+    "onyomi": "SHOU, JOU",
+    "kunyomi": "ue, kami, a(geru), a(garu)",
+    "meaning": "above, upper",
+    "unicode": "4E0A"
+  },
+  {
+    "kanji": "下",
+    "onyomi": "KA, GE",
+    "kunyomi": "shimo, sa(geru), o(rosu), ku(daru)",
+    "meaning": "below, down",
+    "unicode": "4E0B"
+  },
+  {
+    "kanji": "中",
+    "onyomi": "CHUU",
+    "kunyomi": "naka",
+    "meaning": "inner, center, between",
+    "unicode": "4E2D"
+  },
+  {
+    "kanji": "九",
+    "onyomi": "KYUU, KU",
+    "kunyomi": "kokono(tsu), kokono-",
+    "meaning": "nine",
+    "unicode": "4E5D"
+  },
+  {
+    "kanji": "二",
+    "onyomi": "NI",
+    "kunyomi": "futa(tsu), futa-",
+    "meaning": "two",
+    "unicode": "4E8C"
+  },
+  {
+    "kanji": "五",
+    "onyomi": "GO",
+    "kunyomi": "itsu(tsu), itsu-",
+    "meaning": "five",
+    "unicode": "4E94"
+  },
+  {
+    "kanji": "人",
+    "onyomi": "JIN, NIN",
+    "kunyomi": "hito",
+    "meaning": "person",
+    "unicode": "4EBA"
+  },
+  {
+    "kanji": "今",
+    "onyomi": "KON, KIN",
+    "kunyomi": "ima",
+    "meaning": "now",
+    "unicode": "4ECA"
+  },
+  {
+    "kanji": "休",
+    "onyomi": "KYUU",
+    "kunyomi": "yasu(mu)",
+    "meaning": "to rest",
+    "unicode": "4F11"
+  },
+  {
+    "kanji": "会",
+    "onyomi": "KAI, E",
+    "kunyomi": "a(u)",
+    "meaning": "to meet, to come together, society",
+    "unicode": "4F1A"
+  },
+  {
+    "kanji": "何",
+    "onyomi": "KA",
+    "kunyomi": "nani",
+    "meaning": "what, how many, which",
+    "unicode": "4F55"
+  },
+  {
+    "kanji": "先",
+    "onyomi": "SEN",
+    "kunyomi": "saki",
+    "meaning": "before, in future",
+    "unicode": "5148"
+  },
+  {
+    "kanji": "入",
+    "onyomi": "NYUU",
+    "kunyomi": "hai(ru), i(ru), i(reru)",
+    "meaning": "to enter, to insert",
+    "unicode": "5165"
+  },
+  {
+    "kanji": "八",
+    "onyomi": "HACHI",
+    "kunyomi": "yat(tsu), ya(tsu), ya-, you-",
+    "meaning": "eight",
+    "unicode": "516B"
+  },
+  {
+    "kanji": "六",
+    "onyomi": "ROKU",
+    "kunyomi": "mutt(su), mu(tsu), mu, mui",
+    "meaning": "six",
+    "unicode": "516D"
+  },
+  {
+    "kanji": "円",
+    "onyomi": "EN",
+    "kunyomi": "maru(i)",
+    "meaning": "circle, Yen, round",
+    "unicode": "5186"
+  },
+  {
+    "kanji": "出",
+    "onyomi": "SHUTSU",
+    "kunyomi": "da(su), de(ru)",
+    "meaning": "to leave, to get out. to take out",
+    "unicode": "51FA"
+  },
+  {
+    "kanji": "分",
+    "onyomi": "BUN, BU, FUN",
+    "kunyomi": "wa(keru), wa(kareru), wa(karu)",
+    "meaning": "part, minute, to divide, to understand",
+    "unicode": "5206"
+  },
+  {
+    "kanji": "前",
+    "onyomi": "ZEN",
+    "kunyomi": "mae",
+    "meaning": "before",
+    "unicode": "524D"
+  },
+  {
+    "kanji": "北",
+    "onyomi": "HOKU",
+    "kunyomi": "kita",
+    "meaning": "north",
+    "unicode": "5317"
+  },
+  {
+    "kanji": "十",
+    "onyomi": "JUU, JI",
+    "kunyomi": "too, to-",
+    "meaning": "ten, cross",
+    "unicode": "5341"
+  },
+  {
+    "kanji": "千",
+    "onyomi": "SEN",
+    "kunyomi": "chi",
+    "meaning": "thousand",
+    "unicode": "5343"
+  },
+  {
+    "kanji": "午",
+    "onyomi": "GO",
+    "kunyomi": null,
+    "meaning": "noon",
+    "unicode": "5348"
+  },
+  {
+    "kanji": "半",
+    "onyomi": "HAN",
+    "kunyomi": "naka(ba)",
+    "meaning": "half, middle, semi-",
+    "unicode": "534A"
+  },
+  {
+    "kanji": "南",
+    "onyomi": "NAN",
+    "kunyomi": "minami",
+    "meaning": "south",
+    "unicode": "5357"
+  },
+  {
+    "kanji": "友",
+    "onyomi": "YUU",
+    "kunyomi": "tomo",
+    "meaning": "friend",
+    "unicode": "53CB"
+  },
+  {
+    "kanji": "口",
+    "onyomi": "KOU, KU",
+    "kunyomi": "kuchi",
+    "meaning": "mouth",
+    "unicode": "53E3"
+  },
+  {
+    "kanji": "古",
+    "onyomi": "KO",
+    "kunyomi": "furu(i)",
+    "meaning": "old, used",
+    "unicode": "53E4"
+  },
+  {
+    "kanji": "右",
+    "onyomi": "U, YUU",
+    "kunyomi": "migi",
+    "meaning": "right",
+    "unicode": "53F3"
+  },
+  {
+    "kanji": "名",
+    "onyomi": "MEI, MYOU",
+    "kunyomi": "na",
+    "meaning": "name, reputation",
+    "unicode": "540D"
+  },
+  {
+    "kanji": "四",
+    "onyomi": "SHI",
+    "kunyomi": "yo(ttsu), yu(tsu), yo-, yon-",
+    "meaning": "four",
+    "unicode": "56DB"
+  },
+  {
+    "kanji": "国",
+    "onyomi": "KOKU",
+    "kunyomi": "kuni",
+    "meaning": "country",
+    "unicode": "56FD"
+  },
+  {
+    "kanji": "土",
+    "onyomi": "DO, TO",
+    "kunyomi": "tsuchi",
+    "meaning": "earth, ground",
+    "unicode": "571F"
+  },
+  {
+    "kanji": "外",
+    "onyomi": "GAI, GE",
+    "kunyomi": "soto, hoka, hazu(reru), hazu(su)",
+    "meaning": "outside, other, disconnect",
+    "unicode": "5916"
+  },
+  {
+    "kanji": "多",
+    "onyomi": "TA",
+    "kunyomi": "oo(i)",
+    "meaning": "many",
+    "unicode": "591A"
+  },
+  {
+    "kanji": "大",
+    "onyomi": "DAI, TAI",
+    "kunyomi": "ou(kii), oo(i)",
+    "meaning": "big, a lot",
+    "unicode": "5927"
+  },
+  {
+    "kanji": "天",
+    "onyomi": "TEN",
+    "kunyomi": "ame, ama",
+    "meaning": "sky",
+    "unicode": "5929"
+  },
+  {
+    "kanji": "女",
+    "onyomi": "JO, NYO",
+    "kunyomi": "onna, me",
+    "meaning": "woman, female",
+    "unicode": "5973"
+  },
+  {
+    "kanji": "子",
+    "onyomi": "SHI, SU",
+    "kunyomi": "ko",
+    "meaning": "child",
+    "unicode": "5B50"
+  },
+  {
+    "kanji": "学",
+    "onyomi": "GAKU",
+    "kunyomi": "mana(bu)",
+    "meaning": "school, science, learning",
+    "unicode": "5B66"
+  },
+  {
+    "kanji": "安",
+    "onyomi": "AN",
+    "kunyomi": "yasu(i)",
+    "meaning": "peace, cheap, safety",
+    "unicode": "5B89"
+  },
+  {
+    "kanji": "小",
+    "onyomi": "SHOU",
+    "kunyomi": "chii(sai), ko-, o-",
+    "meaning": "small",
+    "unicode": "5C0F"
+  },
+  {
+    "kanji": "少",
+    "onyomi": "SHOU",
+    "kunyomi": "suko(shi), suku(nai)",
+    "meaning": "a little",
+    "unicode": "5C11"
+  },
+  {
+    "kanji": "山",
+    "onyomi": "SAN",
+    "kunyomi": "yama",
+    "meaning": "mountain",
+    "unicode": "5C71"
+  },
+  {
+    "kanji": "川",
+    "onyomi": "SEN",
+    "kunyomi": "kawa",
+    "meaning": "river",
+    "unicode": "5DDD"
+  },
+  {
+    "kanji": "左",
+    "onyomi": "SA",
+    "kunyomi": "hidari",
+    "meaning": "left",
+    "unicode": "5DE6"
+  },
+  {
+    "kanji": "年",
+    "onyomi": "NEN",
+    "kunyomi": "toshi",
+    "meaning": "year",
+    "unicode": "5E74"
+  },
+  {
+    "kanji": "店",
+    "onyomi": "TEN",
+    "kunyomi": "mise",
+    "meaning": "shop",
+    "unicode": "5E97"
+  },
+  {
+    "kanji": "後",
+    "onyomi": "GO, KOU",
+    "kunyomi": "ato, oku(reru), nochi",
+    "meaning": "after, later, back, to stay behind",
+    "unicode": "5F8C"
+  },
+  {
+    "kanji": "手",
+    "onyomi": "SHU",
+    "kunyomi": "te",
+    "meaning": "hand",
+    "unicode": "624B"
+  },
+  {
+    "kanji": "新",
+    "onyomi": "SHIN",
+    "kunyomi": "atara(shii), ara(ta), nii-",
+    "meaning": "new",
+    "unicode": "65B0"
+  },
+  {
+    "kanji": "日",
+    "onyomi": "NICHI, JITSU",
+    "kunyomi": "hi, -ka",
+    "meaning": "day, sun",
+    "unicode": "65E5"
+  },
+  {
+    "kanji": "時",
+    "onyomi": "JI",
+    "kunyomi": "toki",
+    "meaning": "time, hour",
+    "unicode": "6642"
+  },
+  {
+    "kanji": "書",
+    "onyomi": "SHO",
+    "kunyomi": "ka(ku)",
+    "meaning": "to write",
+    "unicode": "66F8"
+  },
+  {
+    "kanji": "月",
+    "onyomi": "GETSU, GATSU",
+    "kunyomi": "tsuki",
+    "meaning": "month, moon",
+    "unicode": "6708"
+  },
+  {
+    "kanji": "木",
+    "onyomi": "BOKU, MOKU",
+    "kunyomi": "ki, ko",
+    "meaning": "tree, wood",
+    "unicode": "6728"
+  },
+  {
+    "kanji": "本",
+    "onyomi": "HON",
+    "kunyomi": "moto",
+    "meaning": "book, source, main-",
+    "unicode": "672C"
+  },
+  {
+    "kanji": "来",
+    "onyomi": "RAI",
+    "kunyomi": "ku(ru), kita(ru), kita(su)",
+    "meaning": "to come",
+    "unicode": "6765"
+  },
+  {
+    "kanji": "東",
+    "onyomi": "TOU",
+    "kunyomi": "higashi",
+    "meaning": "east",
+    "unicode": "6771"
+  },
+  {
+    "kanji": "校",
+    "onyomi": "KOU",
+    "kunyomi": null,
+    "meaning": "school",
+    "unicode": "6821"
+  },
+  {
+    "kanji": "母",
+    "onyomi": "BO",
+    "kunyomi": "haha",
+    "meaning": "mother",
+    "unicode": "6BCD"
+  },
+  {
+    "kanji": "毎",
+    "onyomi": "MAI",
+    "kunyomi": null,
+    "meaning": "each, every",
+    "unicode": "6BCE"
+  },
+  {
+    "kanji": "気",
+    "onyomi": "KI, KE",
+    "kunyomi": null,
+    "meaning": "soul, spirit",
+    "unicode": "6C17"
+  },
+  {
+    "kanji": "水",
+    "onyomi": "SUI",
+    "kunyomi": "mizu",
+    "meaning": "water",
+    "unicode": "6C34"
+  },
+  {
+    "kanji": "火",
+    "onyomi": "KA",
+    "kunyomi": "hi",
+    "meaning": "fire",
+    "unicode": "706B"
+  },
+  {
+    "kanji": "父",
+    "onyomi": "FU",
+    "kunyomi": "chichi",
+    "meaning": "father",
+    "unicode": "7236"
+  },
+  {
+    "kanji": "生",
+    "onyomi": "SEI, SHOU",
+    "kunyomi": "i(kiru), u(mu), ha(yasu), nama, ki",
+    "meaning": "to live, to grow, to be born, raw",
+    "unicode": "751F"
+  },
+  {
+    "kanji": "男",
+    "onyomi": "DAN, NAN",
+    "kunyomi": "otoko",
+    "meaning": "man, male",
+    "unicode": "7537"
+  },
+  {
+    "kanji": "白",
+    "onyomi": "HAKU, BYAKU",
+    "kunyomi": "shiro(i), shiro",
+    "meaning": "white",
+    "unicode": "767D"
+  },
+  {
+    "kanji": "百",
+    "onyomi": "HYAKU",
+    "kunyomi": null,
+    "meaning": "hundred",
+    "unicode": "767E"
+  },
+  {
+    "kanji": "目",
+    "onyomi": "MOKU",
+    "kunyomi": "me",
+    "meaning": "eye",
+    "unicode": "76EE"
+  },
+  {
+    "kanji": "社",
+    "onyomi": "SHA",
+    "kunyomi": "yashiro",
+    "meaning": "shinto shrine, society",
+    "unicode": "793E"
+  },
+  {
+    "kanji": "空",
+    "onyomi": "KUU",
+    "kunyomi": "sora, a(keru), kara",
+    "meaning": "sky, to become free, empty",
+    "unicode": "7A7A"
+  },
+  {
+    "kanji": "立",
+    "onyomi": "RITSU",
+    "kunyomi": "ta(tsu), ta(teru)",
+    "meaning": "to stand, to establish",
+    "unicode": "7ACB"
+  },
+  {
+    "kanji": "耳",
+    "onyomi": "JI",
+    "kunyomi": "mimi",
+    "meaning": "ear",
+    "unicode": "8033"
+  },
+  {
+    "kanji": "聞",
+    "onyomi": "BUN, MON",
+    "kunyomi": "ki(ku), ki(koeru)",
+    "meaning": "to hear, to listen, to ask",
+    "unicode": "805E"
+  },
+  {
+    "kanji": "花",
+    "onyomi": "KA",
+    "kunyomi": "hana",
+    "meaning": "flower, blossom",
+    "unicode": "82B1"
+  },
+  {
+    "kanji": "行",
+    "onyomi": "KOU",
+    "kunyomi": "i(ku), yu(ku), okona(u)",
+    "meaning": "to walk. to go, to do, to carry out",
+    "unicode": "884C"
+  },
+  {
+    "kanji": "西",
+    "onyomi": "SEI, SAI",
+    "kunyomi": "nishi",
+    "meaning": "west",
+    "unicode": "897F"
+  },
+  {
+    "kanji": "見",
+    "onyomi": "KEN",
+    "kunyomi": "mi(ru), mi(eru), mi(seru)",
+    "meaning": "to see, to be visible, to show",
+    "unicode": "898B"
+  },
+  {
+    "kanji": "言",
+    "onyomi": "GEN, GON",
+    "kunyomi": "i(u)",
+    "meaning": "word, to talk",
+    "unicode": "8A00"
+  },
+  {
+    "kanji": "話",
+    "onyomi": "WA",
+    "kunyomi": "hanashi, hana(su)",
+    "meaning": "speech, to talk, story, conversation",
+    "unicode": "8A71"
+  },
+  {
+    "kanji": "語",
+    "onyomi": "GO",
+    "kunyomi": "kata(ru), kata(rau)",
+    "meaning": "word, to talk",
+    "unicode": "8A9E"
+  },
+  {
+    "kanji": "読",
+    "onyomi": "DOKU",
+    "kunyomi": "yo(mu)",
+    "meaning": "to read",
+    "unicode": "8AAD"
+  },
+  {
+    "kanji": "買",
+    "onyomi": "BAI",
+    "kunyomi": "ka(u)",
+    "meaning": "to buy",
+    "unicode": "8CB7"
+  },
+  {
+    "kanji": "足",
+    "onyomi": "SOKU",
+    "kunyomi": "ashi, ta(riru), ta(su)",
+    "meaning": "foot, to be sufficient, to add",
+    "unicode": "8DB3"
+  },
+  {
+    "kanji": "車",
+    "onyomi": "SHA",
+    "kunyomi": "kuruma",
+    "meaning": "car, wheel",
+    "unicode": "8ECA"
+  },
+  {
+    "kanji": "週",
+    "onyomi": "SHUU",
+    "kunyomi": null,
+    "meaning": "week",
+    "unicode": "9031"
+  },
+  {
+    "kanji": "道",
+    "onyomi": "DOU",
+    "kunyomi": "michi",
+    "meaning": "street, path",
+    "unicode": "9053"
+  },
+  {
+    "kanji": "金",
+    "onyomi": "KIN, KON",
+    "kunyomi": "kane",
+    "meaning": "gold, metal, money",
+    "unicode": "91D1"
+  },
+  {
+    "kanji": "長",
+    "onyomi": "CHOU",
+    "kunyomi": "naga(i)",
+    "meaning": "long, leader",
+    "unicode": "9577"
+  },
+  {
+    "kanji": "間",
+    "onyomi": "KAN, KEN",
+    "kunyomi": "aida",
+    "meaning": "time, time span",
+    "unicode": "9593"
+  },
+  {
+    "kanji": "雨",
+    "onyomi": "U",
+    "kunyomi": "ame",
+    "meaning": "rain",
+    "unicode": "96E8"
+  },
+  {
+    "kanji": "電",
+    "onyomi": "DEN",
+    "kunyomi": null,
+    "meaning": "electricity",
+    "unicode": "96FB"
+  },
+  {
+    "kanji": "食",
+    "onyomi": "SHOKU",
+    "kunyomi": "ta(beru), ku(ru), ku(rau)",
+    "meaning": "to eat",
+    "unicode": "98DF"
+  },
+  {
+    "kanji": "飲",
+    "onyomi": "IN",
+    "kunyomi": "no(mu)",
+    "meaning": "to drink",
+    "unicode": "98F2"
+  },
+  {
+    "kanji": "駅",
+    "onyomi": "EKI",
+    "kunyomi": null,
+    "meaning": "station",
+    "unicode": "99C5"
+  },
+  {
+    "kanji": "高",
+    "onyomi": "KOU",
+    "kunyomi": "taka(i), taka(maru), taka(meru)",
+    "meaning": "high, expensive, increase, quantity",
+    "unicode": "9AD8"
+  },
+  {
+    "kanji": "魚",
+    "onyomi": "GYO",
+    "kunyomi": "sakana, uo",
+    "meaning": "fish",
+    "unicode": "9B5A"
+  }
+]
