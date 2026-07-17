@@ -28,9 +28,19 @@ export interface ItemDetail {
   onyomi?: string | null;
   kunyomi?: string | null;
   unicode?: string;
+  /** Grammar only: one curated example sentence. */
+  example?: string;
+  exampleReading?: string;
+  exampleEnglish?: string;
   /** Set by the WaniKani sync once a subject is mapped to this item. */
   wkSubjectId?: number;
 }
+
+/** Evidence ledger: where a study signal came from and what it says. */
+export type ObservationSource = "wanikani" | "practice" | "workshop" | "sprint" | "anki" | "manual";
+export type ObservationKind = "answer" | "srs_state" | "exposure";
+
+export type MasteryStatus = "unseen" | "learning" | "solid" | "mastered";
 
 /** The structured object Claude returns for one English input. */
 export interface GeneratedSentence {

@@ -63,7 +63,11 @@ export function VocabTab({ items }: { items: LibraryItem[] }) {
                       </span>
                     </div>
                     <LevelBadge level={item.level} />
-                    <MasteryDot />
+                    <MasteryDot
+                      status={item.mastery}
+                      score={item.masteryScore}
+                      observationCount={item.masteryCount}
+                    />
                   </li>
                 ))}
               </ul>

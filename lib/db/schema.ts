@@ -8,6 +8,7 @@ import {
   doublePrecision,
   uniqueIndex,
   index,
+  integer,
 } from "drizzle-orm/pg-core";
 import type {
   VocabItem,
@@ -16,6 +17,8 @@ import type {
   ItemKind,
   ItemRelation,
   ItemDetail,
+  ObservationSource,
+  ObservationKind,
 } from "@/lib/types";
 
 export const sentences = pgTable("sentences", {
@@ -96,3 +99,28 @@ export const itemEdges = pgTable(
 );
 
 export type ItemEdgeRow = typeof itemEdges.$inferSelect;
+
+// Append-only evidence ledger: every study signal attaches to an item. Mastery is
+// computed at read time from this table (see lib/mastery.ts) — no materialized score.
+export const observations = pgTable(
+  "observations",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    itemId: uuid("item_id")
+      .notNull()
+      .references(() => items.id, { onDelete: "cascade" }),
+    source: text("source").$type<ObservationSource>().notNull(),
+    kind: text("kind").$type<ObservationKind>().notNull(),
+    correct: boolean("correct"), // answer only
+    srsStage: integer("srs_stage"), // srs_state only (WaniKani stages 0–9)
+    meta: jsonb("meta").$type<Record<string, unknown>>(),
+    occurredAt: timestamp("occurred_at", { withTimezone: true }).notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+  },
+  (t) => [
+    index("observations_item").on(t.itemId, t.occurredAt),
+    index("observations_source").on(t.source, t.kind),
+  ],
+);
+
+export type ObservationRow = typeof observations.$inferSelect;
