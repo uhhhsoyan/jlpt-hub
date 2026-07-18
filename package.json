@@ -11,7 +11,9 @@
     "db:seed": "node --env-file=.env.local scripts/seed-items.mjs",
     "db:backfill-workshop": "node --env-file=.env.local scripts/backfill-workshop.mjs",
     "db:generate": "drizzle-kit generate",
-    "db:studio": "drizzle-kit studio"
+    "db:studio": "drizzle-kit studio",
+    "sprint:generate": "node --env-file=.env.local scripts/generate-sprint.mjs",
+    "sprint:tts": "node --env-file=.env.local scripts/tts-sprint.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.111.0",
