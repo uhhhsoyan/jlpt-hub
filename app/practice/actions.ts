@@ -1,7 +1,7 @@
 "use server";
 
 import { randomUUID } from "node:crypto";
-import { mkdir, writeFile, rm } from "node:fs/promises";
+import { rm } from "node:fs/promises";
 import path from "node:path";
 import { revalidatePath } from "next/cache";
 import { eq, inArray, sql } from "drizzle-orm";
@@ -9,6 +9,7 @@ import { getDb } from "@/lib/db";
 import { practiceSessions, practiceQuestions, questionItems, observations } from "@/lib/db/schema";
 import { extractQuestions, type PracticeImage } from "@/lib/practice-extract";
 import { resolveTags } from "@/lib/resolve-items";
+import { deleteStoredFiles, storeFile } from "@/lib/storage";
 import type { QuestionTag } from "@/lib/types";
 import { errChain, firstLine } from "@/app/workshop/db-error";
 
@@ -24,10 +25,10 @@ const EXT_BY_MIME: Record<string, string> = {
 export type CreateSessionResult = { ok: true; sessionId: string } | { ok: false; error: string };
 
 /**
- * NOTE: local-only persistence, like the Mine feature (lib/mine.ts) — images are written
- * under public/practice/<sessionId>/, and public/ writes don't survive a Vercel deploy
- * (the filesystem is read-only/ephemeral there). Fine for local use; would need blob
- * storage to work in production.
+ * NOTE: with BLOB_READ_WRITE_TOKEN set, images are uploaded to Vercel Blob and this
+ * feature works when deployed. Without it, images fall back to public/practice/<sessionId>/
+ * like before — fine for local use, but public/ writes don't survive a Vercel deploy (the
+ * filesystem is read-only/ephemeral there). See lib/storage.ts.
  */
 export async function createSession(formData: FormData): Promise<CreateSessionResult> {
   const label = String(formData.get("label") ?? "").trim();
@@ -72,17 +73,15 @@ export async function createSession(formData: FormData): Promise<CreateSessionRe
   const sessionId = randomUUID();
   const dir = path.join(process.cwd(), "public", "practice", sessionId);
 
+  const imagePaths: string[] = [];
   try {
-    await mkdir(dir, { recursive: true });
-
     const images: PracticeImage[] = [];
-    const imagePaths: string[] = [];
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
       const buf = Buffer.from(await file.arrayBuffer());
       const filename = `page-${i + 1}.${exts[i]}`;
-      await writeFile(path.join(dir, filename), buf);
-      imagePaths.push(`/practice/${sessionId}/${filename}`);
+      const storedPath = await storeFile(`practice/${sessionId}/${filename}`, buf, file.type);
+      imagePaths.push(storedPath);
       images.push({ mediaType: file.type, base64: buf.toString("base64") });
     }
 
@@ -147,6 +146,7 @@ export async function createSession(formData: FormData): Promise<CreateSessionRe
     revalidatePath("/practice");
     return { ok: true, sessionId };
   } catch (e) {
+    await deleteStoredFiles(imagePaths);
     await rm(dir, { recursive: true, force: true }).catch(() => {});
     return { ok: false, error: humanize(e) };
   }
@@ -243,10 +243,17 @@ export async function confirmSession(sessionId: string): Promise<ConfirmSessionR
 export async function deleteSession(sessionId: string): Promise<void> {
   try {
     const db = getDb();
+    const [session] = await db
+      .select({ imagePaths: practiceSessions.imagePaths })
+      .from(practiceSessions)
+      .where(eq(practiceSessions.id, sessionId));
+
     await db.delete(practiceSessions).where(eq(practiceSessions.id, sessionId));
     await db.execute(
       sql`DELETE FROM observations WHERE source = 'practice' AND meta->>'sessionId' = ${sessionId}`,
     );
+    if (session) await deleteStoredFiles(session.imagePaths);
+    // Harmless leftover for pre-Blob sessions whose images were never uploaded.
     await rm(path.join(process.cwd(), "public", "practice", sessionId), { recursive: true, force: true }).catch(
       () => {},
     );
