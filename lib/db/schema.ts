@@ -8,6 +8,7 @@ import {
   doublePrecision,
   uniqueIndex,
   index,
+  integer,
 } from "drizzle-orm/pg-core";
 import type {
   VocabItem,
@@ -16,6 +17,11 @@ import type {
   ItemKind,
   ItemRelation,
   ItemDetail,
+  ObservationSource,
+  ObservationKind,
+  PracticeSessionStatus,
+  PracticeSection,
+  QuestionTag,
 } from "@/lib/types";
 
 export const sentences = pgTable("sentences", {
@@ -96,3 +102,84 @@ export const itemEdges = pgTable(
 );
 
 export type ItemEdgeRow = typeof itemEdges.$inferSelect;
+
+// Append-only evidence ledger: every study signal attaches to an item. Mastery is
+// computed at read time from this table (see lib/mastery.ts) — no materialized score.
+export const observations = pgTable(
+  "observations",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    itemId: uuid("item_id")
+      .notNull()
+      .references(() => items.id, { onDelete: "cascade" }),
+    source: text("source").$type<ObservationSource>().notNull(),
+    kind: text("kind").$type<ObservationKind>().notNull(),
+    correct: boolean("correct"), // answer only
+    srsStage: integer("srs_stage"), // srs_state only (WaniKani stages 0–9)
+    meta: jsonb("meta").$type<Record<string, unknown>>(),
+    occurredAt: timestamp("occurred_at", { withTimezone: true }).notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+  },
+  (t) => [
+    index("observations_item").on(t.itemId, t.occurredAt),
+    index("observations_source").on(t.source, t.kind),
+  ],
+);
+
+export type ObservationRow = typeof observations.$inferSelect;
+
+// One uploaded batch of completed practice-book / past-exam pages. Questions are staged
+// in `review` status for a human confirm/edit pass; observations are written only when
+// the session is confirmed (bad evidence is worse than a 10-second review step).
+export const practiceSessions = pgTable("practice_sessions", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  label: text("label").notNull(), // e.g. "500問 Week 2 Day 3"
+  sourceName: text("source_name"), // e.g. "Shin Nihongo 500 Mon N4-N5"
+  status: text("status").$type<PracticeSessionStatus>().notNull().default("review"),
+  imagePaths: jsonb("image_paths").$type<string[]>().notNull(),
+  takenAt: timestamp("taken_at", { withTimezone: true }).notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+});
+
+export type PracticeSessionRow = typeof practiceSessions.$inferSelect;
+
+export const practiceQuestions = pgTable(
+  "practice_questions",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    sessionId: uuid("session_id")
+      .notNull()
+      .references(() => practiceSessions.id, { onDelete: "cascade" }),
+    number: integer("number").notNull(), // order within the session
+    section: text("section").$type<PracticeSection>().notNull(),
+    stem: text("stem").notNull(),
+    choices: jsonb("choices").$type<string[]>().notNull(),
+    correctChoice: integer("correct_choice"), // index into choices; null if unknown
+    userChoice: integer("user_choice"), // null if the mark couldn't be read
+    isCorrect: boolean("is_correct"), // null until both choices are known
+    explanation: text("explanation"),
+    tags: jsonb("tags").$type<QuestionTag[]>().notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+  },
+  (t) => [index("practice_questions_session").on(t.sessionId, t.number)],
+);
+
+export type PracticeQuestionRow = typeof practiceQuestions.$inferSelect;
+
+// Resolved question→item links (the graph edges practice evidence flows through).
+export const questionItems = pgTable(
+  "question_items",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    questionId: uuid("question_id")
+      .notNull()
+      .references(() => practiceQuestions.id, { onDelete: "cascade" }),
+    itemId: uuid("item_id")
+      .notNull()
+      .references(() => items.id, { onDelete: "cascade" }),
+    role: text("role").$type<"tested" | "context">().notNull(),
+  },
+  (t) => [uniqueIndex("question_items_identity").on(t.questionId, t.itemId)],
+);
+
+export type QuestionItemRow = typeof questionItems.$inferSelect;

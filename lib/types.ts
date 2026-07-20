@@ -28,8 +28,49 @@ export interface ItemDetail {
   onyomi?: string | null;
   kunyomi?: string | null;
   unicode?: string;
+  /** Grammar only: one curated example sentence. */
+  example?: string;
+  exampleReading?: string;
+  exampleEnglish?: string;
   /** Set by the WaniKani sync once a subject is mapped to this item. */
   wkSubjectId?: number;
+}
+
+/** Evidence ledger: where a study signal came from and what it says. */
+export type ObservationSource = "wanikani" | "practice" | "workshop" | "sprint" | "anki" | "manual";
+export type ObservationKind = "answer" | "srs_state" | "exposure";
+
+export type MasteryStatus = "unseen" | "learning" | "solid" | "mastered";
+
+/** Practice sessions: photos of completed workbook/exam pages, extracted and graded. */
+export type PracticeSessionStatus = "review" | "confirmed";
+export type PracticeSection = "kanji" | "vocab" | "grammar" | "reading" | "listening" | "other";
+
+/** A raw item tag proposed by extraction; itemId is set once resolved against `items`. */
+export interface QuestionTag {
+  kind: ItemKind;
+  text: string;
+  itemId: string | null;
+}
+
+/** A tag as proposed by extraction, before resolution against the items table. */
+export interface ExtractedTag {
+  kind: ItemKind;
+  text: string;
+}
+
+/** One question as read off a photographed practice page, before item-tag resolution. */
+export interface ExtractedQuestion {
+  number: number;
+  section: PracticeSection;
+  stem: string;
+  choices: string[];
+  /** Index into choices; null if the answer key wasn't visible/legible. */
+  correctChoice: number | null;
+  /** Index into choices; null if the learner's mark wasn't visible/legible. */
+  userChoice: number | null;
+  explanation: string;
+  tags: ExtractedTag[];
 }
 
 /** The structured object Claude returns for one English input. */

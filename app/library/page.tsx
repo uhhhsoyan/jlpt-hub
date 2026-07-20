@@ -1,6 +1,7 @@
 import { asc, inArray } from "drizzle-orm";
 import { getDb } from "@/lib/db";
 import { items, type ItemRow } from "@/lib/db/schema";
+import { getMasteryMap, type MasteryEntry } from "@/lib/mastery";
 import { errChain, firstLine } from "@/app/workshop/db-error";
 import { LibraryView } from "./library-view";
 import type { LibraryItem } from "./types";
@@ -13,7 +14,7 @@ type DbState =
   | { status: "missing_table" }
   | { status: "error"; detail: string };
 
-function toLibraryItem(row: ItemRow): LibraryItem {
+function toLibraryItem(row: ItemRow, mastery: MasteryEntry | undefined): LibraryItem {
   const detail = row.detail;
   return {
     id: row.id,
@@ -26,17 +27,23 @@ function toLibraryItem(row: ItemRow): LibraryItem {
     pos: detail?.pos ?? null,
     onyomi: detail?.onyomi ?? null,
     kunyomi: detail?.kunyomi ?? null,
+    mastery: mastery?.status ?? "unseen",
+    masteryScore: mastery?.score ?? 0,
+    masteryCount: mastery?.observationCount ?? 0,
   };
 }
 
 async function loadItems(): Promise<DbState> {
   try {
-    const rows = await getDb()
-      .select()
-      .from(items)
-      .where(inArray(items.kind, ["vocab", "kanji"]))
-      .orderBy(asc(items.reading), asc(items.headword));
-    return { status: "ok", items: rows.map(toLibraryItem) };
+    const [rows, masteryMap] = await Promise.all([
+      getDb()
+        .select()
+        .from(items)
+        .where(inArray(items.kind, ["vocab", "kanji"]))
+        .orderBy(asc(items.reading), asc(items.headword)),
+      getMasteryMap(),
+    ]);
+    return { status: "ok", items: rows.map((r) => toLibraryItem(r, masteryMap.get(r.id))) };
   } catch (e) {
     const s = errChain(e);
     if (/DATABASE_URL/i.test(s)) return { status: "missing_url" };

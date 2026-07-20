@@ -9,6 +9,7 @@
     "lint": "eslint",
     "db:push": "drizzle-kit push",
     "db:seed": "node --env-file=.env.local scripts/seed-items.mjs",
+    "db:backfill-workshop": "node --env-file=.env.local scripts/backfill-workshop.mjs",
     "db:generate": "drizzle-kit generate",
     "db:studio": "drizzle-kit studio"
   },

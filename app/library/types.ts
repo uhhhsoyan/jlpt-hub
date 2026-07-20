@@ -1,4 +1,4 @@
-import type { JlptLevel, PartOfSpeech } from "@/lib/types";
+import type { JlptLevel, MasteryStatus, PartOfSpeech } from "@/lib/types";
 
 /** The only two item kinds this page shows (grammar isn't part of the library view). */
 export type LibraryKind = "vocab" | "kanji";
@@ -22,4 +22,8 @@ export interface LibraryItem {
   /** Kanji only, from detail.onyomi / detail.kunyomi. */
   onyomi: string | null;
   kunyomi: string | null;
+  /** Derived from the observations ledger at render time (lib/mastery.ts). */
+  mastery: MasteryStatus;
+  masteryScore: number;
+  masteryCount: number;
 }
