@@ -33,6 +33,10 @@ export function SandwichTab({ rows, clips }: { rows: SprintRow[]; clips: ClipRow
   const [paused, setPaused] = useState(false);
   const [easyIdx, setEasyIdx] = useState(0);
   const [hardIdx, setHardIdx] = useState(0);
+  // True once several tracks in a row failed to load (e.g. deployed builds don't have the
+  // local MP3s) — pause instead of spinning through the queue.
+  const [audioDead, setAudioDead] = useState(false);
+  const errorStreak = useRef(0);
 
   const audioRef = useRef<HTMLAudioElement>(null);
 
@@ -93,6 +97,29 @@ export function SandwichTab({ rows, clips }: { rows: SprintRow[]; clips: ClipRow
     }
   }
 
+  function handleEnded() {
+    errorStreak.current = 0;
+    advance();
+  }
+
+  function handleError() {
+    if (paused) return;
+    errorStreak.current += 1;
+    const queueLength = phase === "easy" ? easyQueue.length : hardQueue.length;
+    if (errorStreak.current >= Math.min(Math.max(queueLength, 1), 5)) {
+      setPaused(true);
+      setAudioDead(true);
+      return;
+    }
+    advance();
+  }
+
+  function resume() {
+    setAudioDead(false);
+    errorStreak.current = 0;
+    setPaused(false);
+  }
+
   function backToEasy() {
     setPhase("easy");
     setRemaining(intervalMin * 60);
@@ -108,7 +135,14 @@ export function SandwichTab({ rows, clips }: { rows: SprintRow[]; clips: ClipRow
 
   return (
     <div className="flex flex-col gap-5">
-      <audio ref={audioRef} onEnded={advance} onError={advance} className="hidden" />
+      <audio ref={audioRef} onEnded={handleEnded} onError={handleError} className="hidden" />
+
+      {audioDead && (
+        <p className="text-center text-xs text-amber-600 dark:text-amber-400">
+          Audio isn&apos;t loading here — the deck MP3s and mined clips only exist on the machine
+          that generated them. Use the app locally, or wait for the cloud-storage upgrade.
+        </p>
+      )}
 
       <div
         className={`flex flex-col items-center gap-3 rounded-2xl border p-8 text-center transition-colors duration-500 ${
@@ -142,7 +176,7 @@ export function SandwichTab({ rows, clips }: { rows: SprintRow[]; clips: ClipRow
         <div className="mt-2 flex gap-3">
           <button
             type="button"
-            onClick={() => setPaused((p) => !p)}
+            onClick={() => (paused ? resume() : setPaused(true))}
             className="rounded-lg bg-white/70 px-4 py-2 text-sm font-semibold text-neutral-700 transition hover:bg-white dark:bg-black/20 dark:text-neutral-200 dark:hover:bg-black/30"
           >
             {paused ? "Resume" : "Pause"}
