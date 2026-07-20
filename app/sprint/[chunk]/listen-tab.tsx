@@ -28,6 +28,11 @@ export function ListenTab({ rows, chunk }: { rows: SprintRow[]; chunk: number })
   const [queue, setQueue] = useState<number[]>(playable);
   const [qPos, setQPos] = useState(0);
   const [playing, setPlaying] = useState(false);
+  // True once several tracks in a row failed to load — e.g. on a deployed build, where the
+  // locally generated MP3s under public/sprint/ don't exist even though audioPath is set.
+  const [audioDead, setAudioDead] = useState(false);
+  const errorStreak = useRef(0);
+  const completedThisPass = useRef(0);
   const audioRef = useRef<HTMLAudioElement>(null);
   const [, startTransition] = useTransition();
 
@@ -75,8 +80,12 @@ export function ListenTab({ rows, chunk }: { rows: SprintRow[]; chunk: number })
       return;
     }
 
-    // A full pass just completed. Only unshuffled passes count toward listenCount.
-    if (!shuffle) startTransition(() => void markChunkListened(chunk));
+    // A full pass just completed. Only unshuffled passes where audio actually finished
+    // playing count toward listenCount — a walk of load errors is not a listen.
+    if (!shuffle && completedThisPass.current > 0) {
+      startTransition(() => void markChunkListened(chunk));
+    }
+    completedThisPass.current = 0;
 
     if (!loop) {
       setPlaying(false);
@@ -86,6 +95,26 @@ export function ListenTab({ rows, chunk }: { rows: SprintRow[]; chunk: number })
     setQPos(0);
   }
 
+  function handleEnded() {
+    errorStreak.current = 0;
+    completedThisPass.current += 1;
+    advance();
+  }
+
+  function handleError() {
+    // A load failure before the user ever hits Play must not start the playlist walking
+    // on its own; and repeated failures while playing mean the files aren't reachable —
+    // stop and say so instead of spinning through the whole deck.
+    if (!playing) return;
+    errorStreak.current += 1;
+    if (errorStreak.current >= Math.min(queue.length, 5)) {
+      setPlaying(false);
+      setAudioDead(true);
+      return;
+    }
+    advance();
+  }
+
   function togglePlay() {
     const audio = audioRef.current;
     if (!audio) return;
@@ -93,6 +122,9 @@ export function ListenTab({ rows, chunk }: { rows: SprintRow[]; chunk: number })
       audio.pause();
       setPlaying(false);
     } else {
+      setAudioDead(false);
+      errorStreak.current = 0;
+      if (audio.error) audio.load(); // retry the current src after a failed load
       audio.play().catch(() => {});
       setPlaying(true);
     }
@@ -123,10 +155,18 @@ export function ListenTab({ rows, chunk }: { rows: SprintRow[]; chunk: number })
     <div className="flex flex-col items-center gap-6 rounded-2xl border border-neutral-200 bg-white p-8 dark:border-neutral-800 dark:bg-neutral-900">
       <audio
         ref={audioRef}
-        onEnded={advance}
-        onError={advance}
+        onEnded={handleEnded}
+        onError={handleError}
         className="hidden"
       />
+
+      {audioDead && (
+        <p className="max-w-md text-center text-xs text-amber-600 dark:text-amber-400">
+          Audio isn&apos;t loading here. The MP3s live on the machine that generated them
+          (<code>public/sprint/</code> isn&apos;t deployed) — use the app locally, or wait for
+          the cloud-storage upgrade.
+        </p>
+      )}
 
       {missingCount > 0 && (
         <p className="text-xs text-amber-600 dark:text-amber-400">
