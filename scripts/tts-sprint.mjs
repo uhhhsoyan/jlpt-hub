@@ -1,7 +1,8 @@
 // Synthesizes audio for sprint_sentences rows that don't have one yet (audio_path IS
 // NULL), using macOS `say` (voice Kyoko, reading straight from kana to avoid kanji
-// misreadings) piped through ffmpeg to mp3. Writes files to public/sprint/<id>.mp3 and
-// batches the audio_path UPDATEs.
+// misreadings) piped through ffmpeg to mp3. Writes files to public/sprint/<id>.mp3 (kept
+// as a local cache either way) and, when BLOB_READ_WRITE_TOKEN is set, also uploads each
+// to Vercel Blob and stores that URL instead. Batches the audio_path UPDATEs.
 //
 // Usage: npm run sprint:tts -- [--chunk N] [--force]
 //   (node --env-file=.env.local scripts/tts-sprint.mjs)
@@ -12,6 +13,7 @@ import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { promisify } from "node:util";
+import { blobEnabled, uploadLocalFile } from "./blob-util.mjs";
 
 const execFileAsync = promisify(execFile);
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
@@ -47,6 +49,8 @@ if (!url) {
   process.exit(1);
 }
 const sql = neon(url);
+
+console.log(`storage: ${blobEnabled() ? "Vercel Blob" : "local public/ (no BLOB_READ_WRITE_TOKEN)"}`);
 
 // --- Load rows needing audio ---
 const where = [];
@@ -111,9 +115,13 @@ let processed = 0;
 
 for (const row of rows) {
   processed++;
-  const audioPath = `/sprint/${row.id}.mp3`;
   try {
     await synthesizeOne(row);
+    let audioPath = `/sprint/${row.id}.mp3`;
+    if (blobEnabled()) {
+      const mp3Path = join(publicDir, `${row.id}.mp3`);
+      audioPath = await uploadLocalFile(mp3Path, `sprint/${row.id}.mp3`, "audio/mpeg");
+    }
     pendingUpdates.push({ id: row.id, audioPath });
     synthesized++;
   } catch (err) {
