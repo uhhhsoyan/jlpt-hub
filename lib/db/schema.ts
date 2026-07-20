@@ -1,5 +1,22 @@
-import { pgTable, uuid, text, boolean, jsonb, timestamp, doublePrecision } from "drizzle-orm/pg-core";
-import type { VocabItem, GrammarItem, JlptLevel } from "@/lib/types";
+import {
+  pgTable,
+  uuid,
+  text,
+  boolean,
+  jsonb,
+  timestamp,
+  doublePrecision,
+  uniqueIndex,
+  index,
+} from "drizzle-orm/pg-core";
+import type {
+  VocabItem,
+  GrammarItem,
+  JlptLevel,
+  ItemKind,
+  ItemRelation,
+  ItemDetail,
+} from "@/lib/types";
 
 export const sentences = pgTable("sentences", {
   id: uuid("id").defaultRandom().primaryKey(),
@@ -33,3 +50,49 @@ export const clips = pgTable("clips", {
 });
 
 export type ClipRow = typeof clips.$inferSelect;
+
+// Canonical JLPT study items (vocab / kanji / grammar) — the knowledge-graph node set.
+// Seeded from data/seed/*.json via `npm run db:seed`. Single-user app: no userId columns
+// anywhere yet; adding multi-user support would be a schema migration across the board.
+export const items = pgTable(
+  "items",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    kind: text("kind").$type<ItemKind>().notNull(),
+    // Lowest JLPT level at which the item is required (the N4 source list is cumulative).
+    level: text("level").$type<JlptLevel>().notNull(),
+    headword: text("headword").notNull(), // 会う / 安 / 〜てもいい
+    // Kana reading; empty string (not null) for grammar so the identity index stays simple.
+    reading: text("reading").notNull().default(""),
+    romaji: text("romaji"),
+    meaning: text("meaning").notNull(),
+    detail: jsonb("detail").$type<ItemDetail>(),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+  },
+  (t) => [
+    uniqueIndex("items_identity").on(t.kind, t.headword, t.reading),
+    index("items_kind_level").on(t.kind, t.level),
+  ],
+);
+
+export type ItemRow = typeof items.$inferSelect;
+
+export const itemEdges = pgTable(
+  "item_edges",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    fromId: uuid("from_id")
+      .notNull()
+      .references(() => items.id, { onDelete: "cascade" }),
+    toId: uuid("to_id")
+      .notNull()
+      .references(() => items.id, { onDelete: "cascade" }),
+    relation: text("relation").$type<ItemRelation>().notNull(),
+  },
+  (t) => [
+    uniqueIndex("item_edges_identity").on(t.fromId, t.toId, t.relation),
+    index("item_edges_to").on(t.toId),
+  ],
+);
+
+export type ItemEdgeRow = typeof itemEdges.$inferSelect;
