@@ -1,4 +1,4 @@
-import { eq, inArray, sql } from "drizzle-orm";
+import { eq, inArray } from "drizzle-orm";
 import { getDb } from "@/lib/db";
 import { items, observations } from "@/lib/db/schema";
 import type { ItemKind, ItemDetail } from "@/lib/types";
@@ -170,14 +170,19 @@ async function persistMapping(
   for (const batch of chunk(pairs, BATCH_SIZE)) {
     const ids = batch.map((p) => p.itemId);
     const subjectIds = batch.map((p) => p.subjectId);
-    await db.execute(sql`
-      UPDATE items AS i
-      SET detail = coalesce(i.detail, '{}'::jsonb) || jsonb_build_object('wkSubjectId', v.wk_subject_id)
-      FROM (
-        SELECT * FROM unnest(${ids}::uuid[], ${subjectIds}::int[]) AS v(id, wk_subject_id)
-      ) AS v
-      WHERE i.id = v.id
-    `);
+    // Drizzle's sql template expands a JS array into "($1, $2, …)" — an IN-list, not a
+    // Postgres array — so unnest(${ids}::uuid[]) produced invalid SQL. Go through the raw
+    // Neon client, which binds a JS array as ONE array parameter (the same pattern the
+    // seed scripts use against this driver).
+    await db.$client.query(
+      `UPDATE items AS i
+       SET detail = coalesce(i.detail, '{}'::jsonb) || jsonb_build_object('wkSubjectId', v.wk_subject_id)
+       FROM (
+         SELECT * FROM unnest($1::uuid[], $2::int[]) AS v(id, wk_subject_id)
+       ) AS v
+       WHERE i.id = v.id`,
+      [ids, subjectIds],
+    );
   }
 }
 
@@ -192,7 +197,9 @@ function humanizeError(e: unknown): string {
     if (/DATABASE_URL/.test(e.message)) {
       return "Database not configured — set DATABASE_URL in .env.local.";
     }
-    return e.message;
+    // Driver errors can embed the full query text + parameters; keep the UI readable.
+    const firstLine = e.message.split("\n")[0];
+    return firstLine.length > 200 ? `${firstLine.slice(0, 200)}…` : firstLine;
   }
   return String(e);
 }
