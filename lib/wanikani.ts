@@ -1,6 +1,6 @@
 import { eq, inArray } from "drizzle-orm";
 import { getDb } from "@/lib/db";
-import { items, observations } from "@/lib/db/schema";
+import { items, observations, wkSnapshot } from "@/lib/db/schema";
 import type { ItemKind, ItemDetail } from "@/lib/types";
 
 const WK_BASE = "https://api.wanikani.com/v2";
@@ -33,7 +33,13 @@ interface WkSubject {
     // Present for kanji/vocabulary only; kana_vocabulary has no separate reading
     // because the headword itself is the reading.
     readings?: WkSubjectReading[];
+    // WaniKani level (1-60) the subject belongs to; used for level-up progress.
+    level: number;
   };
+}
+
+interface WkUser {
+  data: { level: number };
 }
 
 interface WkAssignment {
@@ -62,6 +68,9 @@ export type WkSyncResult =
         assignmentsSeen: number;
         observationsWritten: number;
         unmatchedSubjects: number;
+        level: number;
+        kanjiPassed: number;
+        kanjiRequired: number;
       };
     }
   | { ok: false; error: string };
@@ -93,6 +102,23 @@ async function fetchAllPages<T>(url: string, token: string): Promise<T[]> {
     next = page.pages.next_url;
   }
   return out;
+}
+
+/** Fetch a single (non-collection) WK resource like /user. */
+async function fetchOne<T>(url: string, token: string): Promise<T> {
+  const res = await fetch(url, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Wanikani-Revision": WK_REVISION,
+    },
+    cache: "no-store",
+  });
+  if (res.status === 401) throw new Error(WK_UNAUTHORIZED);
+  if (res.status === 429) throw new Error(WK_RATE_LIMITED);
+  if (!res.ok) {
+    throw new Error(`WaniKani request failed: ${res.status} ${res.statusText}`);
+  }
+  return (await res.json()) as T;
 }
 
 function chunk<T>(arr: T[], size: number): T[][] {
@@ -226,6 +252,9 @@ export async function syncWanikani(): Promise<WkSyncResult> {
   }
 
   try {
+    // Fetched first: cheap, and fails fast on a bad token before the big paginated pulls.
+    const user = await fetchOne<WkUser>(`${WK_BASE}/user`, token);
+
     const subjects = await fetchAllPages<WkSubject>(
       `${WK_BASE}/subjects?types=kanji,vocabulary,kana_vocabulary&hidden=false`,
       token,
@@ -321,6 +350,30 @@ export async function syncWanikani(): Promise<WkSyncResult> {
       await db.insert(observations).values(batch);
     }
 
+    // Level snapshot for the schedule: WK levels up once 90% of the current level's
+    // kanji reach guru (srs_stage >= 5, i.e. "passed").
+    const levelKanjiIds = new Set(
+      subjects
+        .filter((s) => s.object === "kanji" && s.data.level === user.data.level)
+        .map((s) => s.id),
+    );
+    const kanjiTotal = levelKanjiIds.size;
+    const kanjiPassed = assignments.filter(
+      (a) => levelKanjiIds.has(a.data.subject_id) && (a.data.srs_stage ?? 0) >= 5,
+    ).length;
+    const kanjiRequired = Math.ceil(kanjiTotal * 0.9);
+    const snapshotValues = {
+      level: user.data.level,
+      kanjiPassed,
+      kanjiTotal,
+      kanjiRequired,
+      syncedAt: new Date(),
+    };
+    await db
+      .insert(wkSnapshot)
+      .values({ id: 1, ...snapshotValues })
+      .onConflictDoUpdate({ target: wkSnapshot.id, set: snapshotValues });
+
     return {
       ok: true,
       summary: {
@@ -330,6 +383,9 @@ export async function syncWanikani(): Promise<WkSyncResult> {
         assignmentsSeen: assignments.length,
         observationsWritten: toInsert.length,
         unmatchedSubjects,
+        level: user.data.level,
+        kanjiPassed,
+        kanjiRequired,
       },
     };
   } catch (e) {

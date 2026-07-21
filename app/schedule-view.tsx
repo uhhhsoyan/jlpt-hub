@@ -1,6 +1,14 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import type { WkLevelSnapshot } from "@/lib/types";
+
+export interface ScheduleWk {
+  /** WANIKANI_TOKEN is set on the server. */
+  configured: boolean;
+  /** null until the first successful sync. */
+  snapshot: WkLevelSnapshot | null;
+}
 
 const STORE_KEY = "n4-schedule-v2";
 const START = new Date(2026, 6, 13); // Mon Jul 13, 2026 (local)
@@ -120,7 +128,45 @@ const PHASE_META: Record<Phase, { label: string; note: string }> = {
   exam: { label: "Exam", note: "Week 21" },
 };
 
-export function ScheduleView() {
+function clamp(v: number, min: number, max: number): number {
+  return Math.min(max, Math.max(min, v));
+}
+
+/** "just now" / "{n}m ago" / "{n}h ago" / "{n}d ago", relative to `now`. */
+function relativeTime(iso: string, now: Date): string {
+  const diffMs = Math.max(0, now.getTime() - new Date(iso).getTime());
+  const minutes = Math.floor(diffMs / 60_000);
+  if (minutes < 1) return "just now";
+  if (minutes < 60) return `${minutes}m ago`;
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) return `${hours}h ago`;
+  const days = Math.floor(hours / 24);
+  return `${days}d ago`;
+}
+
+type WkRowState = "reached" | "inProgress" | "target";
+
+/**
+ * Where a week's target `level` stands against the current WK snapshot.
+ * No snapshot means nothing is confirmed reached yet — everything is a "target".
+ */
+function wkRowState(level: number, snapshot: WkLevelSnapshot | null): WkRowState {
+  if (!snapshot) return "target";
+  if (level < snapshot.level) return "reached";
+  if (level === snapshot.level) {
+    return snapshot.kanjiPassed >= snapshot.kanjiRequired ? "reached" : "inProgress";
+  }
+  return "target";
+}
+
+/** Whether a newLevel week's WK requirement is satisfied for `isWeekDone` purposes. */
+function isWkTargetMet(level: number, snapshot: WkLevelSnapshot | null): boolean {
+  // No snapshot yet: don't block "done" on an unknown WK state — genki alone counts.
+  if (!snapshot) return true;
+  return wkRowState(level, snapshot) === "reached";
+}
+
+export function ScheduleView({ wk }: { wk: ScheduleWk }) {
   const weeks = useMemo(() => buildWeeks(), []);
   const [now, setNow] = useState<Date | null>(null);
   const [checks, setChecks] = useState<Record<string, boolean>>({});
@@ -167,16 +213,33 @@ export function ScheduleView() {
   }
 
   const isWeekDone = (w: Week) =>
-    !!checks[`g${w.idx}`] && (!w.newLevel || !!checks[`w${w.level}`]);
+    !!checks[`g${w.idx}`] && (!w.newLevel || isWkTargetMet(w.level, wk.snapshot));
 
   const genkiDone = weeks.slice(0, GENKI_WEEKS).filter((w) => checks[`g${w.idx}`]).length;
-  let wkCurrent = 10;
-  for (let L = 11; L <= 20; L++) if (checks[`w${L}`] && L > wkCurrent) wkCurrent = L;
-  const wkLevelsHit = Array.from({ length: 10 }, (_, i) => 11 + i).filter((L) => checks[`w${L}`]).length;
   const daysLeft = now ? Math.max(0, Math.ceil((+midnight(EXAM) - +midnight(now)) / MS_DAY)) : null;
+
+  const wkProgress = wk.snapshot
+    ? clamp(
+        (wk.snapshot.level - 10 + Math.min(wk.snapshot.kanjiPassed / Math.max(1, wk.snapshot.kanjiRequired), 1)) /
+          10,
+        0,
+        1,
+      )
+    : 0;
 
   return (
     <div className="flex flex-col gap-5">
+      {!wk.configured ? (
+        <div className="rounded-xl border border-amber-200 bg-amber-50 p-3 text-sm text-amber-800 dark:border-amber-900 dark:bg-amber-950/40 dark:text-amber-300">
+          WaniKani isn&apos;t connected — add <code>WANIKANI_TOKEN</code> to <code>.env.local</code> (and the Vercel
+          project env), then sync from the Progress page.
+        </div>
+      ) : !wk.snapshot ? (
+        <div className="rounded-xl border border-indigo-200 bg-indigo-50 p-3 text-sm text-indigo-700 dark:border-indigo-900 dark:bg-indigo-950/40 dark:text-indigo-300">
+          WaniKani is connected but hasn&apos;t synced yet — run <b>Sync WaniKani</b> on the Progress page.
+        </div>
+      ) : null}
+
       {/* Header + stats */}
       <div className="rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm dark:border-neutral-800 dark:bg-neutral-900">
         <div className="flex items-start justify-between gap-4">
@@ -204,9 +267,23 @@ export function ScheduleView() {
             <Bar value={genkiDone / GENKI_WEEKS} />
           </Tile>
           <Tile label="WaniKani">
-            Lv <span className="font-semibold">{wkCurrent < 11 ? 11 : wkCurrent}</span>
-            <span className="text-neutral-400"> / 20 target</span>
-            <Bar value={wkLevelsHit / 10} />
+            {!wk.configured ? (
+              <span className="text-neutral-400">not connected</span>
+            ) : !wk.snapshot ? (
+              <span className="text-neutral-400">not synced yet</span>
+            ) : (
+              <>
+                Lv <span className="font-semibold">{wk.snapshot.level}</span>
+                <span className="text-neutral-400"> / 20 target</span>
+                <Bar value={wkProgress} />
+                {now && (
+                  <div className="mt-1 text-xs text-neutral-500 dark:text-neutral-400">
+                    {wk.snapshot.kanjiPassed}/{wk.snapshot.kanjiRequired} kanji to Lv {wk.snapshot.level + 1} ·
+                    synced {relativeTime(wk.snapshot.syncedAt, now)}
+                  </div>
+                )}
+              </>
+            )}
           </Tile>
         </div>
       </div>
@@ -242,9 +319,10 @@ export function ScheduleView() {
           inRange={inRange}
           checks={checks}
           toggle={toggle}
+          wk={wk}
         />
       ) : (
-        <AllWeeks weeks={weeks} curIdx={curIdx} checks={checks} toggle={toggle} isWeekDone={isWeekDone} />
+        <AllWeeks weeks={weeks} curIdx={curIdx} checks={checks} toggle={toggle} isWeekDone={isWeekDone} wk={wk} />
       )}
     </div>
   );
@@ -266,6 +344,76 @@ function Bar({ value }: { value: number }) {
         style={{ width: `${Math.round(value * 100)}%` }}
       />
     </div>
+  );
+}
+
+/** The WK status block for a newLevel week in the FocusCard (single-week) view. */
+function WkFocusRow({
+  level,
+  wkNote,
+  snapshot,
+}: {
+  level: number;
+  wkNote: string | null;
+  snapshot: WkLevelSnapshot | null;
+}) {
+  const state = wkRowState(level, snapshot);
+
+  if (state === "reached") {
+    return (
+      <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-3 dark:border-emerald-900 dark:bg-emerald-950/40">
+        <span className="font-semibold text-emerald-700 dark:text-emerald-300">✓ Reached Lv {level}</span>
+        {wkNote && (
+          <span className="mt-0.5 block text-sm text-emerald-700/70 dark:text-emerald-400/70">{wkNote}</span>
+        )}
+      </div>
+    );
+  }
+
+  if (state === "inProgress" && snapshot) {
+    return (
+      <div className="rounded-xl border border-neutral-200 bg-neutral-50 p-3 dark:border-neutral-800 dark:bg-neutral-800/40">
+        <span className="font-semibold text-neutral-600 dark:text-neutral-300">
+          Lv {level} — {snapshot.kanjiPassed}/{snapshot.kanjiRequired} kanji passed
+        </span>
+        <Bar value={clamp(snapshot.kanjiPassed / Math.max(1, snapshot.kanjiRequired), 0, 1)} />
+        {wkNote && <span className="mt-0.5 block text-sm text-neutral-500 dark:text-neutral-400">{wkNote}</span>}
+      </div>
+    );
+  }
+
+  return (
+    <div className="rounded-xl border border-neutral-200 bg-neutral-50 p-3 text-sm text-neutral-500 dark:border-neutral-800 dark:bg-neutral-800/40">
+      <span className="font-semibold text-neutral-600 dark:text-neutral-300">Target: Lv {level}</span>
+      {wkNote && <span className="mt-0.5 block">{wkNote}</span>}
+    </div>
+  );
+}
+
+/** The compact WK chip for a newLevel week in the AllWeeks (list) view. */
+function WkChip({ level, snapshot }: { level: number; snapshot: WkLevelSnapshot | null }) {
+  const state = wkRowState(level, snapshot);
+
+  if (state === "reached") {
+    return (
+      <span className="rounded-lg border border-emerald-500 bg-emerald-50 px-2 py-1 text-xs font-semibold text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300">
+        ✓ Reached Lv {level}
+      </span>
+    );
+  }
+
+  if (state === "inProgress" && snapshot) {
+    return (
+      <span className="rounded-lg border border-emerald-200 bg-emerald-50/60 px-2 py-1 text-xs text-emerald-700 dark:border-emerald-900 dark:bg-emerald-950/30 dark:text-emerald-300">
+        Lv {level} · {snapshot.kanjiPassed}/{snapshot.kanjiRequired}
+      </span>
+    );
+  }
+
+  return (
+    <span className="rounded-lg border border-neutral-200 bg-neutral-50 px-2 py-1 text-xs text-neutral-500 dark:border-neutral-700 dark:bg-neutral-800">
+      Target: Lv {level}
+    </span>
   );
 }
 
@@ -306,6 +454,7 @@ function FocusCard({
   inRange,
   checks,
   toggle,
+  wk,
 }: {
   weeks: Week[];
   focusIdx: number;
@@ -314,6 +463,7 @@ function FocusCard({
   inRange: boolean;
   checks: Record<string, boolean>;
   toggle: (k: string) => void;
+  wk: ScheduleWk;
 }) {
   const w = weeks[focusIdx];
   const isNow = focusIdx === curIdx;
@@ -372,19 +522,21 @@ function FocusCard({
           detail={w.detail}
         />
         {w.newLevel ? (
-          <TaskRow
-            accent="emerald"
-            checked={!!checks[`w${w.level}`]}
-            onToggle={() => toggle(`w${w.level}`)}
-            title={`Reach WaniKani Lv ${w.level}`}
-            detail={w.wkNote ?? undefined}
-          />
+          <WkFocusRow level={w.level} wkNote={w.wkNote} snapshot={wk.snapshot} />
         ) : (
           <div className="rounded-xl border border-neutral-200 bg-neutral-50 p-3 text-sm text-neutral-500 dark:border-neutral-800 dark:bg-neutral-800/40">
             <span className="font-semibold text-neutral-600 dark:text-neutral-300">
               WaniKani Lv {w.level} — keep reviews clear
             </span>
             <span className="mt-0.5 block">Consolidation week; next level-up lands next week.</span>
+            {wk.snapshot && wk.snapshot.level === w.level && (
+              <>
+                <span className="mt-1 block font-semibold text-neutral-600 dark:text-neutral-300">
+                  {wk.snapshot.kanjiPassed}/{wk.snapshot.kanjiRequired} kanji passed
+                </span>
+                <Bar value={clamp(wk.snapshot.kanjiPassed / Math.max(1, wk.snapshot.kanjiRequired), 0, 1)} />
+              </>
+            )}
           </div>
         )}
       </div>
@@ -439,12 +591,14 @@ function AllWeeks({
   checks,
   toggle,
   isWeekDone,
+  wk,
 }: {
   weeks: Week[];
   curIdx: number;
   checks: Record<string, boolean>;
   toggle: (k: string) => void;
   isWeekDone: (w: Week) => boolean;
+  wk: ScheduleWk;
 }) {
   const nowRef = useRef<HTMLDivElement | null>(null);
 
@@ -510,24 +664,16 @@ function AllWeeks({
                 </label>
                 <div className="mt-2 flex flex-wrap items-center gap-1.5">
                   {w.newLevel ? (
-                    <label
-                      className={`inline-flex cursor-pointer items-center gap-1.5 rounded-lg border px-2 py-1 text-xs ${
-                        checks[`w${w.level}`]
-                          ? "border-emerald-500 bg-emerald-50 font-semibold text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300"
-                          : "border-neutral-200 bg-neutral-50 text-neutral-500 dark:border-neutral-700 dark:bg-neutral-800"
-                      }`}
-                    >
-                      <input
-                        type="checkbox"
-                        checked={!!checks[`w${w.level}`]}
-                        onChange={() => toggle(`w${w.level}`)}
-                        className="size-3.5 accent-emerald-600"
-                      />
-                      Reach WaniKani Lv {w.level}
-                    </label>
+                    <WkChip level={w.level} snapshot={wk.snapshot} />
                   ) : (
                     <span className="rounded-lg border border-neutral-200 bg-neutral-50 px-2 py-1 text-xs text-neutral-500 dark:border-neutral-700 dark:bg-neutral-800">
                       WaniKani Lv {w.level} — consolidate
+                      {wk.snapshot && wk.snapshot.level === w.level && (
+                        <>
+                          {" "}
+                          · {wk.snapshot.kanjiPassed}/{wk.snapshot.kanjiRequired}
+                        </>
+                      )}
                     </span>
                   )}
                   {w.wkNote && (

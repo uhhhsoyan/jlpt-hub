@@ -218,3 +218,16 @@ export const sprintChunks = pgTable("sprint_chunks", {
 });
 
 export type SprintChunkRow = typeof sprintChunks.$inferSelect;
+
+// Singleton (id = 1): the user's WaniKani level state as of the last sync. Drives the
+// schedule's level tracking; see WkLevelSnapshot in lib/types.ts for field semantics.
+export const wkSnapshot = pgTable("wk_snapshot", {
+  id: integer("id").primaryKey(),
+  level: integer("level").notNull(),
+  kanjiPassed: integer("kanji_passed").notNull(),
+  kanjiTotal: integer("kanji_total").notNull(),
+  kanjiRequired: integer("kanji_required").notNull(),
+  syncedAt: timestamp("synced_at", { withTimezone: true }).notNull(),
+});
+
+export type WkSnapshotRow = typeof wkSnapshot.$inferSelect;
