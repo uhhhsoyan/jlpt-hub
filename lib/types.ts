@@ -36,6 +36,20 @@ export interface ItemDetail {
   wkSubjectId?: number;
 }
 
+/**
+ * Snapshot of WaniKani level state, written on every sync (wk_snapshot singleton row).
+ * Level-up happens when 90% of the current level's kanji reach guru (srs_stage >= 5).
+ */
+export interface WkLevelSnapshot {
+  level: number;
+  kanjiPassed: number;
+  kanjiTotal: number;
+  /** ceil(0.9 * kanjiTotal) — WaniKani's level-up bar. */
+  kanjiRequired: number;
+  /** ISO timestamp (string so it serializes cleanly to client components). */
+  syncedAt: string;
+}
+
 /** Evidence ledger: where a study signal came from and what it says. */
 export type ObservationSource = "wanikani" | "practice" | "workshop" | "sprint" | "anki" | "manual";
 export type ObservationKind = "answer" | "srs_state" | "exposure";

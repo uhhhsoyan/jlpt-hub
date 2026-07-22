@@ -8,6 +8,7 @@ export async function runWanikaniSync(): Promise<WkSyncResult> {
   if (result.ok) {
     revalidatePath("/progress");
     revalidatePath("/library");
+    revalidatePath("/"); // schedule shows the synced level snapshot
   }
   return result;
 }

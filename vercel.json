@@ -1,0 +1,8 @@
+{
+  "crons": [
+    {
+      "path": "/api/cron/wanikani",
+      "schedule": "0 15 * * *"
+    }
+  ]
+}
