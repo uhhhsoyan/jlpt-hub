@@ -14,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "N4 Hub",
-  description: "JLPT N4 study schedule and sentence workshop.",
+  title: "JLPT Hub",
+  description: "JLPT N5/N4 study schedule and sentence workshop.",
 };
 
 export default function RootLayout({

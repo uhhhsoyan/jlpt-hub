@@ -37,8 +37,8 @@ export default async function WorkshopPage() {
       <header className="flex flex-col gap-1">
         <h1 className="text-xl font-bold tracking-tight">Sentence Workshop</h1>
         <p className="text-sm text-neutral-500 dark:text-neutral-400">
-          Turn everyday English into JLPT&nbsp;N4 Japanese, with the faithful version and a level
-          breakdown. <span className="text-neutral-400">文を作ろう。</span>
+          Turn everyday English into JLPT Japanese at your level — N5 or N4 — with the faithful
+          version and a level breakdown. <span className="text-neutral-400">文を作ろう。</span>
         </p>
       </header>
 
@@ -78,11 +78,16 @@ export default async function WorkshopPage() {
                 className="flex flex-col gap-1 rounded-xl border border-neutral-200 bg-white p-4 dark:border-neutral-800 dark:bg-neutral-900"
               >
                 <div className="flex items-start justify-between gap-3">
-                  <Furigana
-                    japanese={row.n4Japanese}
-                    reading={row.n4Reading}
-                    className="text-lg leading-[1.9]"
-                  />
+                  <div className="flex items-start gap-2">
+                    <span className="mt-1.5">
+                      <LevelBadge level={row.levelTag} />
+                    </span>
+                    <Furigana
+                      japanese={row.japanese}
+                      reading={row.reading}
+                      className="text-lg leading-[1.9]"
+                    />
+                  </div>
                   <form action={remove.bind(null, row.id)}>
                     <button
                       type="submit"

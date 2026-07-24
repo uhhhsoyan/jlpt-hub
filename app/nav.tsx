@@ -18,7 +18,7 @@ export function Nav() {
   return (
     <header className="sticky top-0 z-10 border-b border-neutral-200 bg-neutral-50/80 backdrop-blur dark:border-neutral-800 dark:bg-neutral-950/80">
       <div className="mx-auto flex h-14 w-full max-w-3xl items-center gap-6 px-5">
-        <span className="text-sm font-bold tracking-tight">N4 Hub</span>
+        <span className="text-sm font-bold tracking-tight">JLPT Hub</span>
         <nav className="flex gap-1">
           {TABS.map((t) => {
             const active = t.href === "/" ? pathname === "/" : pathname.startsWith(t.href);

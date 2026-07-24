@@ -1,6 +1,6 @@
-# N4 Hub — setup
+# JLPT Hub — setup
 
-Next.js 16 + Tailwind v4 + Drizzle/Neon + Claude (Anthropic API). First feature: the **Sentence Workshop** (English → JLPT N4 Japanese + faithful version + level breakdown, with save/browse).
+Next.js 16 + Tailwind v4 + Drizzle/Neon + Claude (Anthropic API). First feature: the **Sentence Workshop** (English → JLPT N5/N4 Japanese + faithful version + level breakdown, with save/browse).
 
 ## 1. Environment
 
