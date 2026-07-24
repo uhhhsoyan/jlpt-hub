@@ -4,6 +4,7 @@ import { useState, useTransition } from "react";
 import { generate, save } from "./actions";
 import type { GeneratedSentence } from "@/lib/types";
 import { LevelBadge } from "./level-badge";
+import { Furigana } from "@/app/furigana";
 
 export function Workshop() {
   const [input, setInput] = useState("");
@@ -102,8 +103,11 @@ function Result({
             </span>
           )}
         </div>
-        <p className="text-2xl leading-snug tracking-tight">{data.n4.japanese}</p>
-        <p className="text-sm text-neutral-500 dark:text-neutral-400">{data.n4.reading}</p>
+        <Furigana
+          japanese={data.n4.japanese}
+          reading={data.n4.reading}
+          className="text-2xl leading-[1.9] tracking-tight"
+        />
         <p className="mt-1 text-[15px] text-neutral-700 dark:text-neutral-300">
           &ldquo;{data.n4.gloss}&rdquo;
         </p>
@@ -118,8 +122,11 @@ function Result({
             <LevelBadge level={data.faithful.levelTag} />
             <span className="text-[11px] text-neutral-400">approx.</span>
           </div>
-          <p className="text-xl leading-snug tracking-tight">{data.faithful.japanese}</p>
-          <p className="text-sm text-neutral-500 dark:text-neutral-400">{data.faithful.reading}</p>
+          <Furigana
+            japanese={data.faithful.japanese}
+            reading={data.faithful.reading}
+            className="text-xl leading-[1.9] tracking-tight"
+          />
         </div>
       )}
 

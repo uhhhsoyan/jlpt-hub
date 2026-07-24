@@ -2,6 +2,7 @@ import { desc } from "drizzle-orm";
 import { getDb } from "@/lib/db";
 import { sentences, type SentenceRow } from "@/lib/db/schema";
 import { Workshop } from "./workshop-form";
+import { Furigana } from "@/app/furigana";
 import { LevelBadge } from "./level-badge";
 import { remove } from "./actions";
 import { errChain, firstLine } from "./db-error";
@@ -77,7 +78,11 @@ export default async function WorkshopPage() {
                 className="flex flex-col gap-1 rounded-xl border border-neutral-200 bg-white p-4 dark:border-neutral-800 dark:bg-neutral-900"
               >
                 <div className="flex items-start justify-between gap-3">
-                  <p className="text-lg leading-snug">{row.n4Japanese}</p>
+                  <Furigana
+                    japanese={row.n4Japanese}
+                    reading={row.n4Reading}
+                    className="text-lg leading-[1.9]"
+                  />
                   <form action={remove.bind(null, row.id)}>
                     <button
                       type="submit"
@@ -88,7 +93,6 @@ export default async function WorkshopPage() {
                     </button>
                   </form>
                 </div>
-                <p className="text-sm text-neutral-500 dark:text-neutral-400">{row.n4Reading}</p>
                 <p className="text-sm text-neutral-600 dark:text-neutral-300">
                   <span className="text-neutral-400">EN&nbsp;</span>
                   {row.englishInput}
