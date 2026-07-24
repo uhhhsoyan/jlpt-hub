@@ -5,7 +5,7 @@ import { eq } from "drizzle-orm";
 import { getDb } from "@/lib/db";
 import { sentences } from "@/lib/db/schema";
 import { generateSentence } from "@/lib/anthropic";
-import type { GeneratedSentence } from "@/lib/types";
+import type { GeneratedSentence, StudyLevel } from "@/lib/types";
 import { errChain, firstLine } from "./db-error";
 
 export type GenerateResult =
@@ -24,20 +24,30 @@ export async function generate(englishInput: string): Promise<GenerateResult> {
 
 export type SaveResult = { ok: true } | { ok: false; error: string };
 
-export async function save(englishInput: string, data: GeneratedSentence): Promise<SaveResult> {
+/** Saves one study version (by level) of a generation as its own sentence row. */
+export async function save(
+  englishInput: string,
+  data: GeneratedSentence,
+  level: StudyLevel,
+): Promise<SaveResult> {
+  const version = data.versions.find((v) => v.level === level);
+  if (!version) return { ok: false, error: `No ${level} version to save.` };
   try {
     await getDb().insert(sentences).values({
       englishInput,
-      n4Japanese: data.n4.japanese,
-      n4Reading: data.n4.reading,
-      n4Gloss: data.n4.gloss,
-      withinLevel: data.withinLevel,
+      japanese: version.japanese,
+      reading: version.reading,
+      gloss: version.gloss,
+      levelTag: version.level,
+      // withinLevel describes the primary version; a saved N5 sibling of an N4
+      // version is a simplification by construction.
+      withinLevel: version === data.versions[0] ? data.withinLevel : false,
       faithfulJapanese: data.faithful.japanese,
       faithfulReading: data.faithful.reading,
       faithfulLevelTag: data.faithful.levelTag,
-      faithfulDiffers: data.faithful.differsFromN4,
-      vocab: data.vocab,
-      grammar: data.grammar,
+      faithfulDiffers: data.faithful.differs,
+      vocab: version.vocab,
+      grammar: version.grammar,
       notes: data.notes,
     });
     revalidatePath("/workshop");
