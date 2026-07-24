@@ -14,6 +14,7 @@ import type {
   VocabItem,
   GrammarItem,
   JlptLevel,
+  StudyLevel,
   ItemKind,
   ItemRelation,
   ItemDetail,
@@ -24,12 +25,17 @@ import type {
   QuestionTag,
 } from "@/lib/types";
 
+// One saved study sentence at one level (N5 or N4). A single workshop generation can
+// produce both an N4 and an N5 rendition; saving both creates two rows. The n4_*
+// column names are historical (pre-JLPT-Hub, when every sentence was an "N4 version")
+// and are kept so the deployed app keeps working across the migration.
 export const sentences = pgTable("sentences", {
   id: uuid("id").defaultRandom().primaryKey(),
   englishInput: text("english_input").notNull(),
-  n4Japanese: text("n4_japanese").notNull(),
-  n4Reading: text("n4_reading").notNull(),
-  n4Gloss: text("n4_gloss").notNull(),
+  japanese: text("n4_japanese").notNull(),
+  reading: text("n4_reading").notNull(),
+  gloss: text("n4_gloss").notNull(),
+  levelTag: text("level_tag").$type<StudyLevel>().notNull().default("N4"),
   withinLevel: boolean("within_level").notNull(),
   faithfulJapanese: text("faithful_japanese").notNull(),
   faithfulReading: text("faithful_reading").notNull(),
