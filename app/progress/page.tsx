@@ -1,5 +1,7 @@
+import { after } from "next/server";
 import { and, inArray, sql } from "drizzle-orm";
 import { getDb } from "@/lib/db";
+import { syncWanikaniIfStale } from "@/lib/wanikani";
 import { items } from "@/lib/db/schema";
 import { getMasteryMap, type MasteryEntry } from "@/lib/mastery";
 import { getWeakItems, type WeakItem } from "@/lib/weakness";
@@ -135,6 +137,8 @@ async function loadWeakItems(): Promise<WeakItem[]> {
 
 export default async function ProgressPage() {
   const [db, weakItems] = await Promise.all([loadDashboard(), loadWeakItems()]);
+  // Refresh WaniKani in the background when the snapshot is over an hour old.
+  after(() => syncWanikaniIfStale());
 
   return (
     <div className="mx-auto flex w-full max-w-3xl flex-col gap-8 px-5 py-10 font-sans">

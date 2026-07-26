@@ -1,5 +1,7 @@
+import { after } from "next/server";
 import { getDb } from "@/lib/db";
 import { wkSnapshot } from "@/lib/db/schema";
+import { syncWanikaniIfStale } from "@/lib/wanikani";
 import type { WkLevelSnapshot } from "@/lib/types";
 import { ScheduleView, type ScheduleWk } from "./schedule-view";
 
@@ -28,6 +30,9 @@ async function loadWk(): Promise<ScheduleWk> {
 
 export default async function Home() {
   const wk = await loadWk();
+  // Refresh WaniKani in the background when the snapshot is over an hour old;
+  // runs after the response is sent, so opening the app stays instant.
+  after(() => syncWanikaniIfStale());
   return (
     <div className="mx-auto w-full max-w-3xl px-5 py-8 font-sans">
       <ScheduleView wk={wk} />

@@ -234,6 +234,10 @@ export const wkSnapshot = pgTable("wk_snapshot", {
   kanjiTotal: integer("kanji_total").notNull(),
   kanjiRequired: integer("kanji_required").notNull(),
   syncedAt: timestamp("synced_at", { withTimezone: true }).notNull(),
+  // Lease for the visit-triggered background sync: set when a request claims the
+  // right to sync (see syncWanikaniIfStale), so concurrent page loads don't all
+  // pull WaniKani at once. Expires on its own; success updates synced_at.
+  syncStartedAt: timestamp("sync_started_at", { withTimezone: true }),
 });
 
 export type WkSnapshotRow = typeof wkSnapshot.$inferSelect;

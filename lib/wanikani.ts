@@ -230,6 +230,45 @@ function humanizeError(e: unknown): string {
   return String(e);
 }
 
+/** A snapshot older than this is considered stale by the visit-triggered sync. */
+const STALE_AFTER_MINUTES = 60;
+/** How long a claimed-but-unfinished sync blocks new attempts (crash recovery). */
+const LEASE_MINUTES = 10;
+
+/**
+ * Visit-triggered background sync: if the snapshot is older than an hour, re-sync.
+ * Called via next/server `after()` on page loads, so it never blocks a response —
+ * the current render shows the stale snapshot and the next one shows fresh data.
+ *
+ * Concurrency: an atomic UPDATE on the singleton row claims a short lease, so
+ * simultaneous page loads (or instances) can't start duplicate syncs. The lease
+ * simply expires if a sync crashes. A database that has never synced has no
+ * wk_snapshot row and is left to the manual button / cron — this path only
+ * refreshes an existing snapshot.
+ */
+export async function syncWanikaniIfStale(): Promise<void> {
+  if (!process.env.WANIKANI_TOKEN) return;
+  try {
+    const db = getDb();
+    const claimed = (await db.$client.query(
+      `UPDATE wk_snapshot
+       SET sync_started_at = now()
+       WHERE id = 1
+         AND synced_at < now() - ($1 * interval '1 minute')
+         AND (sync_started_at IS NULL OR sync_started_at < now() - ($2 * interval '1 minute'))
+       RETURNING id`,
+      [STALE_AFTER_MINUTES, LEASE_MINUTES],
+    )) as { rows?: unknown[] } | unknown[];
+    const won = Array.isArray(claimed) ? claimed.length > 0 : (claimed.rows?.length ?? 0) > 0;
+    if (!won) return;
+
+    await syncWanikani();
+  } catch {
+    // Background freshness must never surface as a page error; the daily cron and
+    // the manual Sync button on /progress remain the loud paths.
+  }
+}
+
 /**
  * Pull kanji/vocabulary/kana_vocabulary subjects and assignments from WaniKani,
  * map them onto library items, and record the current SRS snapshot as observations.
