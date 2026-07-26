@@ -2,6 +2,7 @@
 
 import { useRef, useState } from "react";
 import type { SprintRow } from "./types";
+import { Furigana } from "@/app/furigana";
 
 export function ReadAlongTab({ rows }: { rows: SprintRow[] }) {
   const [playingId, setPlayingId] = useState<string | null>(null);
@@ -53,8 +54,11 @@ export function ReadAlongTab({ rows }: { rows: SprintRow[] }) {
               {playingId === row.id ? "▶" : "▷"}
             </button>
             <div className="min-w-0 flex-1">
-              <p className="text-lg leading-snug">{row.japanese}</p>
-              <p className="text-sm text-neutral-400">{row.reading}</p>
+              <Furigana
+                japanese={row.japanese}
+                reading={row.reading}
+                className="text-lg leading-[1.9]"
+              />
               <p className="text-sm text-neutral-400">{row.english}</p>
             </div>
           </li>

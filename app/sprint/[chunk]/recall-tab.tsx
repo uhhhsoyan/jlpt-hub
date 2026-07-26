@@ -4,6 +4,7 @@ import { useRef, useState, useTransition } from "react";
 import { recordRecall } from "../actions";
 import { useHotkeys } from "./use-hotkeys";
 import type { SprintRow } from "./types";
+import { Furigana } from "@/app/furigana";
 
 type Phase = "prompt" | "revealed";
 
@@ -133,8 +134,11 @@ export function RecallTab({ rows, chunk }: { rows: SprintRow[]; chunk: number })
         ) : (
           <>
             <div className="flex flex-col gap-1">
-              <p className="text-3xl leading-snug">{currentRow.japanese}</p>
-              <p className="text-neutral-400">{currentRow.reading}</p>
+              <Furigana
+                japanese={currentRow.japanese}
+                reading={currentRow.reading}
+                className="text-3xl leading-[1.9]"
+              />
             </div>
             <div className="flex gap-3">
               <button
