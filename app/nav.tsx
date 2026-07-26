@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { ThemeSwitcher } from "./theme-switcher";
 
 const TABS = [
   { href: "/", label: "Schedule" },
@@ -37,6 +38,7 @@ export function Nav() {
             );
           })}
         </nav>
+        <ThemeSwitcher />
       </div>
     </header>
   );
