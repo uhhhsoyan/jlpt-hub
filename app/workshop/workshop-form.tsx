@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { generate, save } from "./actions";
-import type { GeneratedSentence } from "@/lib/types";
+import type { GeneratedSentence, SentenceVersion, StudyLevel } from "@/lib/types";
 import { LevelBadge } from "./level-badge";
 import { Furigana } from "@/app/furigana";
 
@@ -10,13 +10,14 @@ export function Workshop() {
   const [input, setInput] = useState("");
   const [result, setResult] = useState<GeneratedSentence | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [saved, setSaved] = useState(false);
+  const [savedLevels, setSavedLevels] = useState<StudyLevel[]>([]);
+  const [savingLevel, setSavingLevel] = useState<StudyLevel | null>(null);
   const [genPending, startGen] = useTransition();
-  const [savePending, startSave] = useTransition();
+  const [, startSave] = useTransition();
 
   function onGenerate() {
     setError(null);
-    setSaved(false);
+    setSavedLevels([]);
     startGen(async () => {
       const r = await generate(input);
       if (r.ok) setResult(r.data);
@@ -27,13 +28,15 @@ export function Workshop() {
     });
   }
 
-  function onSave() {
-    if (!result) return;
+  function onSave(level: StudyLevel) {
+    if (!result || savingLevel) return;
     setError(null);
+    setSavingLevel(level);
     startSave(async () => {
-      const r = await save(input, result);
-      if (r.ok) setSaved(true);
+      const r = await save(input, result, level);
+      if (r.ok) setSavedLevels((prev) => [...prev, level]);
       else setError(r.error);
+      setSavingLevel(null);
     });
   }
 
@@ -60,7 +63,7 @@ export function Workshop() {
             disabled={genPending || !input.trim()}
             className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-indigo-500 disabled:opacity-40"
           >
-            {genPending ? "Generating…" : "Generate N4"}
+            {genPending ? "Generating…" : "Generate"}
           </button>
           <span className="text-xs text-neutral-400">⌘/Ctrl + Enter</span>
         </div>
@@ -73,7 +76,12 @@ export function Workshop() {
       )}
 
       {result && (
-        <Result data={result} onSave={onSave} savePending={savePending} saved={saved} />
+        <Result
+          data={result}
+          onSave={onSave}
+          savingLevel={savingLevel}
+          savedLevels={savedLevels}
+        />
       )}
     </section>
   );
@@ -82,12 +90,70 @@ export function Workshop() {
 function Result({
   data,
   onSave,
-  savePending,
-  saved,
+  savingLevel,
+  savedLevels,
 }: {
   data: GeneratedSentence;
+  onSave: (level: StudyLevel) => void;
+  savingLevel: StudyLevel | null;
+  savedLevels: StudyLevel[];
+}) {
+  return (
+    <div className="flex flex-col gap-4">
+      {data.versions.map((version, i) => (
+        <VersionCard
+          key={version.level}
+          version={version}
+          isPrimary={i === 0}
+          withinLevel={data.withinLevel}
+          onSave={() => onSave(version.level)}
+          saving={savingLevel === version.level}
+          saved={savedLevels.includes(version.level)}
+        />
+      ))}
+
+      {(data.faithful.differs || data.notes) && (
+        <div className="flex flex-col gap-4 rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm dark:border-neutral-800 dark:bg-neutral-900">
+          {data.faithful.differs && (
+            <div className="flex flex-col gap-1">
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-semibold uppercase tracking-wide text-neutral-500">
+                  Faithful version
+                </span>
+                <LevelBadge level={data.faithful.levelTag} />
+                <span className="text-[11px] text-neutral-400">approx.</span>
+              </div>
+              <Furigana
+                japanese={data.faithful.japanese}
+                reading={data.faithful.reading}
+                className="text-xl leading-[1.9] tracking-tight"
+              />
+            </div>
+          )}
+          {data.notes && (
+            <p className="rounded-lg bg-neutral-50 px-3 py-2 text-sm text-neutral-600 dark:bg-neutral-800/60 dark:text-neutral-300">
+              {data.notes}
+            </p>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function VersionCard({
+  version,
+  isPrimary,
+  withinLevel,
+  onSave,
+  saving,
+  saved,
+}: {
+  version: SentenceVersion;
+  isPrimary: boolean;
+  withinLevel: boolean;
   onSave: () => void;
-  savePending: boolean;
+  saving: boolean;
   saved: boolean;
 }) {
   return (
@@ -95,53 +161,30 @@ function Result({
       <div className="flex flex-col gap-1">
         <div className="flex items-center gap-2">
           <span className="text-xs font-semibold uppercase tracking-wide text-indigo-600 dark:text-indigo-400">
-            N4 version
+            {version.level} version
           </span>
-          {!data.withinLevel && (
+          {isPrimary && !withinLevel && (
             <span className="rounded-full bg-amber-100 px-2 py-0.5 text-[11px] font-medium text-amber-800 dark:bg-amber-950 dark:text-amber-300">
               simplified — some nuance dropped
             </span>
           )}
         </div>
         <Furigana
-          japanese={data.n4.japanese}
-          reading={data.n4.reading}
+          japanese={version.japanese}
+          reading={version.reading}
           className="text-2xl leading-[1.9] tracking-tight"
         />
         <p className="mt-1 text-[15px] text-neutral-700 dark:text-neutral-300">
-          &ldquo;{data.n4.gloss}&rdquo;
+          &ldquo;{version.gloss}&rdquo;
         </p>
       </div>
 
-      {data.faithful.differsFromN4 && (
-        <div className="flex flex-col gap-1 border-t border-neutral-100 pt-4 dark:border-neutral-800">
-          <div className="flex items-center gap-2">
-            <span className="text-xs font-semibold uppercase tracking-wide text-neutral-500">
-              Faithful version
-            </span>
-            <LevelBadge level={data.faithful.levelTag} />
-            <span className="text-[11px] text-neutral-400">approx.</span>
-          </div>
-          <Furigana
-            japanese={data.faithful.japanese}
-            reading={data.faithful.reading}
-            className="text-xl leading-[1.9] tracking-tight"
-          />
-        </div>
-      )}
-
-      {data.notes && (
-        <p className="rounded-lg bg-neutral-50 px-3 py-2 text-sm text-neutral-600 dark:bg-neutral-800/60 dark:text-neutral-300">
-          {data.notes}
-        </p>
-      )}
-
       <div className="grid gap-4 sm:grid-cols-2">
-        <Breakdown title="Grammar (N4 version)">
-          {data.grammar.length === 0 ? (
+        <Breakdown title="Grammar">
+          {version.grammar.length === 0 ? (
             <Empty />
           ) : (
-            data.grammar.map((g, i) => (
+            version.grammar.map((g, i) => (
               <li key={i} className="flex items-start gap-2 text-sm">
                 <LevelBadge level={g.level} />
                 <span>
@@ -152,11 +195,11 @@ function Result({
             ))
           )}
         </Breakdown>
-        <Breakdown title="Vocabulary (N4 version)">
-          {data.vocab.length === 0 ? (
+        <Breakdown title="Vocabulary">
+          {version.vocab.length === 0 ? (
             <Empty />
           ) : (
-            data.vocab.map((v, i) => (
+            version.vocab.map((v, i) => (
               <li key={i} className="flex items-start gap-2 text-sm">
                 <LevelBadge level={v.level} />
                 <span>
@@ -175,10 +218,10 @@ function Result({
       <div className="flex items-center gap-3 border-t border-neutral-100 pt-4 dark:border-neutral-800">
         <button
           onClick={onSave}
-          disabled={savePending || saved}
+          disabled={saving || saved}
           className="rounded-lg border border-neutral-300 px-4 py-2 text-sm font-semibold transition hover:bg-neutral-50 disabled:opacity-40 dark:border-neutral-700 dark:hover:bg-neutral-800"
         >
-          {saved ? "Saved ✓" : savePending ? "Saving…" : "Save to my sentences"}
+          {saved ? "Saved ✓" : saving ? "Saving…" : `Save ${version.level} to my sentences`}
         </button>
         {saved && <span className="text-sm text-emerald-600 dark:text-emerald-400">Added below.</span>}
       </div>

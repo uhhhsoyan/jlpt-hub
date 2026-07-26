@@ -87,31 +87,43 @@ export interface ExtractedQuestion {
   tags: ExtractedTag[];
 }
 
+/** Levels the learner is actively studying; every saved sentence is tagged with one. */
+export type StudyLevel = "N5" | "N4";
+
+/** One study rendition of the input, kept within its tagged JLPT level. */
+export interface SentenceVersion {
+  /** Highest JLPT level the version uses: "N5" when it's pure N5, else "N4". */
+  level: StudyLevel;
+  japanese: string;
+  /** Full kana reading of the sentence (no kanji). */
+  reading: string;
+  /** Literal English of THIS version, so the learner sees what the simpler Japanese says. */
+  gloss: string;
+  /** Content words in this version, with level tags. */
+  vocab: VocabItem[];
+  /** Grammar patterns in this version, with level tags. */
+  grammar: GrammarItem[];
+}
+
 /** The structured object Claude returns for one English input. */
 export interface GeneratedSentence {
-  /** A version rewritten to stay within JLPT N4 (which includes all N5). */
-  n4: {
-    japanese: string;
-    /** Full hiragana reading of the N4 sentence (no kanji). */
-    reading: string;
-    /** Literal English of the N4 version, so the learner sees what the simpler Japanese says. */
-    gloss: string;
-  };
-  /** True if the N4 version fully captures the input using only N4-level language. */
+  /**
+   * Study versions of the input. One entry when the faithful translation already fits
+   * within N4 (tagged with the level it actually uses); two entries — N4 first, then a
+   * simpler N5 rendition — when the faithful translation needs grammar/vocab above N4.
+   */
+  versions: SentenceVersion[];
+  /** True if versions[0] fully captures the input's meaning and nuance. */
   withinLevel: boolean;
-  /** The most natural Japanese that faithfully expresses the original English, even if it exceeds N4. */
+  /** The most natural Japanese that faithfully expresses the original English, whatever its level. */
   faithful: {
     japanese: string;
     reading: string;
     /** Approximate highest JLPT level of grammar/vocab used (model's best estimate). */
     levelTag: JlptLevel;
-    /** True when this meaningfully differs from the N4 version. */
-    differsFromN4: boolean;
+    /** True when this meaningfully differs from versions[0]. */
+    differs: boolean;
   };
-  /** Content words in the N4 sentence, with level tags. */
-  vocab: VocabItem[];
-  /** Grammar patterns in the N4 sentence, with level tags. */
-  grammar: GrammarItem[];
-  /** 1-3 sentence plain-English note on what was simplified / what the faithful version needs. */
+  /** 1-3 sentence plain-English note on levels used / what was simplified. */
   notes: string;
 }
