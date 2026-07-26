@@ -1,11 +1,13 @@
 export type ThemeAppearance = "light" | "dark";
 
 export interface ThemeDefinition {
-  /** Matches a `:root[data-theme="…"]` block in app/themes.css ("light"/"dark" are the stock palettes). */
+  /** Matches a `[data-theme="…"]` block in app/themes.css. */
   id: string;
   label: string;
   /** Japanese name, shown alongside the label in the picker. */
   labelJa: string;
+  /** Shown in the picker trigger and option rows. */
+  emoji: string;
   appearance: ThemeAppearance;
 }
 
@@ -18,12 +20,12 @@ export const SYSTEM_PREFERENCE = "system";
 export const THEME_STORAGE_KEY = "jlpt-hub-theme";
 
 export const THEMES: readonly ThemeDefinition[] = [
-  { id: "light", label: "Light", labelJa: "白", appearance: "light" },
-  { id: "dark", label: "Dark", labelJa: "墨", appearance: "dark" },
-  { id: "sakura", label: "Sakura", labelJa: "桜", appearance: "light" },
-  { id: "matcha", label: "Matcha", labelJa: "抹茶", appearance: "light" },
-  { id: "onsen", label: "Onsen", labelJa: "温泉", appearance: "dark" },
-  { id: "ai", label: "Indigo", labelJa: "藍", appearance: "dark" },
+  { id: "light", label: "Light", labelJa: "白", emoji: "☀️", appearance: "light" },
+  { id: "dark", label: "Dark", labelJa: "墨", emoji: "🌙", appearance: "dark" },
+  { id: "sakura", label: "Sakura", labelJa: "桜", emoji: "🌸", appearance: "light" },
+  { id: "matcha", label: "Matcha", labelJa: "抹茶", emoji: "🍵", appearance: "light" },
+  { id: "onsen", label: "Onsen", labelJa: "温泉", emoji: "♨️", appearance: "dark" },
+  { id: "ai", label: "Indigo", labelJa: "藍", emoji: "🌌", appearance: "dark" },
 ];
 
 export function resolveTheme(

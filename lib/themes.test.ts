@@ -33,13 +33,16 @@ test("resolveTheme falls back to the OS appearance", () => {
   assert.equal(resolveTheme("no-such-theme", false).id, "light");
 });
 
-test("every custom theme has a palette block in app/themes.css", () => {
+test("every theme has a palette block in app/themes.css", () => {
   const css = readFileSync(new URL("../app/themes.css", import.meta.url), "utf8");
   for (const t of THEMES) {
-    if (t.id === "light" || t.id === "dark") continue;
     assert.ok(
       css.includes(`:root[data-theme="${t.id}"]`),
       `missing palette block for theme "${t.id}"`,
+    );
+    assert.ok(
+      css.includes(`\n[data-theme="${t.id}"]`),
+      `palette block for "${t.id}" must also match nested preview elements`,
     );
   }
 });
