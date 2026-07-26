@@ -1,26 +1,27 @@
 @import "tailwindcss";
+@import "./themes.css";
+@import "./decor.css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/* `dark:` follows the active theme's appearance (set on <html> by the inline
+   theme script in layout.tsx), not the OS media query, so dark themes apply by
+   explicit choice. The "Auto" preference resolves to light/dark in that script. */
+@custom-variant dark (&:where([data-appearance="dark"], [data-appearance="dark"] *));
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
-  background: var(--background);
+  /* background-color, not the shorthand: decor.css layers background-image */
+  background-color: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
