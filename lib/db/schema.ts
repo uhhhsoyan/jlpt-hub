@@ -15,6 +15,7 @@ import type {
   GrammarItem,
   JlptLevel,
   StudyLevel,
+  IntegrationSource,
   ItemKind,
   ItemRelation,
   ItemDetail,
@@ -241,3 +242,28 @@ export const wkSnapshot = pgTable("wk_snapshot", {
 });
 
 export type WkSnapshotRow = typeof wkSnapshot.$inferSelect;
+
+// Singleton (id = 1): state of the last Bunpro sync, mirroring wk_snapshot. Doubles
+// as the staleness lease for the visit-triggered background sync (sync_started_at).
+export const bpSnapshot = pgTable("bp_snapshot", {
+  id: integer("id").primaryKey(),
+  reviewsSeen: integer("reviews_seen").notNull(),
+  itemsMapped: integer("items_mapped").notNull(),
+  observationsWritten: integer("observations_written").notNull(),
+  syncedAt: timestamp("synced_at", { withTimezone: true }).notNull(),
+  syncStartedAt: timestamp("sync_started_at", { withTimezone: true }),
+});
+
+export type BpSnapshotRow = typeof bpSnapshot.$inferSelect;
+
+// Per-integration kill switch. No row = enabled (integrations are opt-in via their
+// env keys anyway); a row with enabled=false stops every sync path (cron, visit-
+// triggered, manual button) without touching already-recorded evidence. Pair with
+// the purge action to fully remove an integration's contribution.
+export const integrationSettings = pgTable("integration_settings", {
+  source: text("source").$type<IntegrationSource>().primaryKey(),
+  enabled: boolean("enabled").notNull().default(true),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
+});
+
+export type IntegrationSettingsRow = typeof integrationSettings.$inferSelect;

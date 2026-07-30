@@ -1,13 +1,14 @@
 import { after } from "next/server";
-import { and, inArray, sql } from "drizzle-orm";
+import { and, count, inArray, sql } from "drizzle-orm";
 import { getDb } from "@/lib/db";
 import { syncWanikaniIfStale } from "@/lib/wanikani";
-import { items } from "@/lib/db/schema";
+import { syncBunproIfStale } from "@/lib/bunpro";
+import { bpSnapshot, integrationSettings, items, observations, wkSnapshot } from "@/lib/db/schema";
 import { getMasteryMap, type MasteryEntry } from "@/lib/mastery";
 import { getWeakItems, type WeakItem } from "@/lib/weakness";
 import { errChain, firstLine } from "@/app/workshop/db-error";
 import type { ItemKind, JlptLevel } from "@/lib/types";
-import { WanikaniSyncButton } from "./sync-button";
+import { IntegrationsPanel, type IntegrationState } from "./integrations-panel";
 import { ExamCountdown } from "./exam-countdown";
 import { CoverageBar, CoverageLegend, type CoverageCounts } from "./coverage";
 import { WeakPoints } from "./weak-points";
@@ -135,10 +136,57 @@ async function loadWeakItems(): Promise<WeakItem[]> {
   }
 }
 
+/** State for the Integrations panel; degrades to configured-flags-only if the DB is unreachable. */
+async function loadIntegrations(): Promise<IntegrationState[]> {
+  const base: IntegrationState[] = [
+    {
+      source: "wanikani",
+      configured: !!process.env.WANIKANI_TOKEN,
+      enabled: true,
+      syncedAt: null,
+      observationCount: 0,
+    },
+    {
+      source: "bunpro",
+      configured: !!process.env.BUNPRO_API_KEY,
+      enabled: true,
+      syncedAt: null,
+      observationCount: 0,
+    },
+  ];
+  try {
+    const db = getDb();
+    const [settings, wkRows, bpRows, counts] = await Promise.all([
+      db.select().from(integrationSettings),
+      db.select({ syncedAt: wkSnapshot.syncedAt }).from(wkSnapshot),
+      db.select({ syncedAt: bpSnapshot.syncedAt }).from(bpSnapshot),
+      db
+        .select({ source: observations.source, n: count() })
+        .from(observations)
+        .groupBy(observations.source),
+    ]);
+    const enabledBySource = new Map(settings.map((s) => [s.source, s.enabled]));
+    const countBySource = new Map(counts.map((c) => [c.source, Number(c.n)]));
+    return base.map((integration) => ({
+      ...integration,
+      enabled: enabledBySource.get(integration.source) ?? true,
+      syncedAt:
+        (integration.source === "wanikani" ? wkRows : bpRows)[0]?.syncedAt.toISOString() ?? null,
+      observationCount: countBySource.get(integration.source) ?? 0,
+    }));
+  } catch {
+    return base;
+  }
+}
+
 export default async function ProgressPage() {
-  const [db, weakItems] = await Promise.all([loadDashboard(), loadWeakItems()]);
-  // Refresh WaniKani in the background when the snapshot is over an hour old.
-  after(() => syncWanikaniIfStale());
+  const [db, weakItems, integrations] = await Promise.all([
+    loadDashboard(),
+    loadWeakItems(),
+    loadIntegrations(),
+  ]);
+  // Refresh integrations in the background when their snapshots are over an hour old.
+  after(() => Promise.all([syncWanikaniIfStale(), syncBunproIfStale()]));
 
   return (
     <div className="mx-auto flex w-full max-w-3xl flex-col gap-8 px-5 py-10 font-sans">
@@ -150,15 +198,7 @@ export default async function ProgressPage() {
         </p>
       </header>
 
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-stretch sm:justify-between">
-        <ExamCountdown />
-        <div className="flex flex-col items-start gap-1 sm:items-end sm:justify-center sm:text-right">
-          <WanikaniSyncButton />
-          <span className="text-xs text-neutral-400">
-            Pull SRS state from WaniKani (needs WANIKANI_TOKEN)
-          </span>
-        </div>
-      </div>
+      <ExamCountdown />
 
       {db.status === "missing_url" ? (
         <Notice>
@@ -235,6 +275,8 @@ export default async function ProgressPage() {
             <p className="text-xs text-neutral-400">Observations per week, last 8 weeks.</p>
             <EvidenceVolume weeks={db.evidenceWeeks} />
           </section>
+
+          <IntegrationsPanel integrations={integrations} />
         </>
       )}
     </div>

@@ -1,0 +1,1290 @@
+{
+  "builtAt": "2026-07-27T20:13:06.887Z",
+  "note": "bunproId -> curated grammar headword. Rebuild with npm run bunpro:crosswalk; hand-edits survive review, not rebuilds.",
+  "pairs": [
+    {
+      "bunproId": 1,
+      "bunproTitle": "だ",
+      "headword": "だ",
+      "method": "string"
+    },
+    {
+      "bunproId": 2,
+      "bunproTitle": "です",
+      "headword": "です",
+      "method": "string"
+    },
+    {
+      "bunproId": 3,
+      "bunproTitle": "は",
+      "headword": "は",
+      "method": "string"
+    },
+    {
+      "bunproId": 4,
+      "bunproTitle": "も",
+      "headword": "も",
+      "method": "claude"
+    },
+    {
+      "bunproId": 6,
+      "bunproTitle": "の",
+      "headword": "の",
+      "method": "claude"
+    },
+    {
+      "bunproId": 8,
+      "bunproTitle": "か",
+      "headword": "か",
+      "method": "string"
+    },
+    {
+      "bunproId": 9,
+      "bunproTitle": "でしょう",
+      "headword": "でしょう",
+      "method": "string"
+    },
+    {
+      "bunproId": 10,
+      "bunproTitle": "が",
+      "headword": "が",
+      "method": "string"
+    },
+    {
+      "bunproId": 13,
+      "bunproTitle": "がある",
+      "headword": "あります",
+      "method": "claude"
+    },
+    {
+      "bunproId": 15,
+      "bunproTitle": "と",
+      "headword": "と",
+      "method": "claude"
+    },
+    {
+      "bunproId": 16,
+      "bunproTitle": "の",
+      "headword": "〜の（名詞化）",
+      "method": "claude"
+    },
+    {
+      "bunproId": 17,
+      "bunproTitle": "～んです・のです",
+      "headword": "〜んです／〜のです",
+      "method": "claude"
+    },
+    {
+      "bunproId": 18,
+      "bunproTitle": "だろう",
+      "headword": "でしょう",
+      "method": "claude"
+    },
+    {
+      "bunproId": 21,
+      "bunproTitle": "を",
+      "headword": "を",
+      "method": "string"
+    },
+    {
+      "bunproId": 23,
+      "bunproTitle": "がいる",
+      "headword": "います",
+      "method": "claude"
+    },
+    {
+      "bunproId": 24,
+      "bunproTitle": "い-Adjectives",
+      "headword": "い形容詞＋名詞",
+      "method": "claude"
+    },
+    {
+      "bunproId": 25,
+      "bunproTitle": "で",
+      "headword": "で",
+      "method": "string"
+    },
+    {
+      "bunproId": 27,
+      "bunproTitle": "ている①",
+      "headword": "〜ている（進行）",
+      "method": "claude"
+    },
+    {
+      "bunproId": 31,
+      "bunproTitle": "へいく",
+      "headword": "〜に行く／〜に来る",
+      "method": "claude"
+    },
+    {
+      "bunproId": 32,
+      "bunproTitle": "に",
+      "headword": "に",
+      "method": "string"
+    },
+    {
+      "bunproId": 33,
+      "bunproTitle": "か",
+      "headword": "か",
+      "method": "string"
+    },
+    {
+      "bunproId": 34,
+      "bunproTitle": "のがすき",
+      "headword": "〜の（名詞化）",
+      "method": "claude"
+    },
+    {
+      "bunproId": 35,
+      "bunproTitle": "Verb + てもいい",
+      "headword": "〜てもいい",
+      "method": "string"
+    },
+    {
+      "bunproId": 36,
+      "bunproTitle": "で",
+      "headword": "で",
+      "method": "string"
+    },
+    {
+      "bunproId": 38,
+      "bunproTitle": "へ",
+      "headword": "へ",
+      "method": "string"
+    },
+    {
+      "bunproId": 40,
+      "bunproTitle": "だった・でした",
+      "headword": "〜でした／〜だった",
+      "method": "claude"
+    },
+    {
+      "bunproId": 41,
+      "bunproTitle": "う-Verb (Past)",
+      "headword": "動詞のた形",
+      "method": "claude"
+    },
+    {
+      "bunproId": 42,
+      "bunproTitle": "もう",
+      "headword": "もう（肯定）",
+      "method": "claude"
+    },
+    {
+      "bunproId": 43,
+      "bunproTitle": "だけ",
+      "headword": "〜だけ",
+      "method": "string"
+    },
+    {
+      "bunproId": 44,
+      "bunproTitle": "が",
+      "headword": "が",
+      "method": "string"
+    },
+    {
+      "bunproId": 45,
+      "bunproTitle": "から",
+      "headword": "から（理由）",
+      "method": "claude"
+    },
+    {
+      "bunproId": 46,
+      "bunproTitle": "てもいい",
+      "headword": "〜てもいい",
+      "method": "string"
+    },
+    {
+      "bunproId": 48,
+      "bunproTitle": "Verb + にいく",
+      "headword": "〜に行く／〜に来る",
+      "method": "claude"
+    },
+    {
+      "bunproId": 49,
+      "bunproTitle": "じゃない",
+      "headword": "〜じゃありません／〜ではありません",
+      "method": "claude"
+    },
+    {
+      "bunproId": 50,
+      "bunproTitle": "じゃなかった",
+      "headword": "〜じゃありませんでした／〜ではありませんでした",
+      "method": "claude"
+    },
+    {
+      "bunproId": 51,
+      "bunproTitle": "る-Verb (Negative)",
+      "headword": "動詞のない形",
+      "method": "claude"
+    },
+    {
+      "bunproId": 52,
+      "bunproTitle": "から",
+      "headword": "から（起点）",
+      "method": "claude"
+    },
+    {
+      "bunproId": 53,
+      "bunproTitle": "まえに",
+      "headword": "〜まえに",
+      "method": "string"
+    },
+    {
+      "bunproId": 54,
+      "bunproTitle": "けれども",
+      "headword": "でも",
+      "method": "claude"
+    },
+    {
+      "bunproId": 55,
+      "bunproTitle": "のなかで～がいちばん～",
+      "headword": "〜が一番",
+      "method": "claude"
+    },
+    {
+      "bunproId": 57,
+      "bunproTitle": "～になる・～くなる",
+      "headword": "〜くなる",
+      "method": "claude"
+    },
+    {
+      "bunproId": 58,
+      "bunproTitle": "Noun + まで",
+      "headword": "まで",
+      "method": "string"
+    },
+    {
+      "bunproId": 59,
+      "bunproTitle": "たい",
+      "headword": "〜たい",
+      "method": "string"
+    },
+    {
+      "bunproId": 60,
+      "bunproTitle": "てください",
+      "headword": "〜てください",
+      "method": "string"
+    },
+    {
+      "bunproId": 61,
+      "bunproTitle": "くらい ①",
+      "headword": "〜ぐらい／〜くらい",
+      "method": "claude"
+    },
+    {
+      "bunproId": 62,
+      "bunproTitle": "ので",
+      "headword": "から（理由）",
+      "method": "claude"
+    },
+    {
+      "bunproId": 63,
+      "bunproTitle": "たことがある",
+      "headword": "〜たことがある",
+      "method": "string"
+    },
+    {
+      "bunproId": 64,
+      "bunproTitle": "てから",
+      "headword": "〜てから",
+      "method": "string"
+    },
+    {
+      "bunproId": 65,
+      "bunproTitle": "ないでください",
+      "headword": "〜ないでください",
+      "method": "string"
+    },
+    {
+      "bunproId": 66,
+      "bunproTitle": "な",
+      "headword": "〜な（禁止）",
+      "method": "string"
+    },
+    {
+      "bunproId": 67,
+      "bunproTitle": "てはいけない",
+      "headword": "〜てはいけない",
+      "method": "string"
+    },
+    {
+      "bunproId": 68,
+      "bunproTitle": "たほうがいい",
+      "headword": "〜たほうがいい",
+      "method": "string"
+    },
+    {
+      "bunproId": 69,
+      "bunproTitle": "ないほうがいい",
+      "headword": "〜ないほうがいい",
+      "method": "string"
+    },
+    {
+      "bunproId": 70,
+      "bunproTitle": "ましょう",
+      "headword": "〜ましょう",
+      "method": "string"
+    },
+    {
+      "bunproId": 72,
+      "bunproTitle": "まだ",
+      "headword": "まだ（肯定）",
+      "method": "claude"
+    },
+    {
+      "bunproId": 73,
+      "bunproTitle": "より～のほうが",
+      "headword": "〜のほうが",
+      "method": "claude"
+    },
+    {
+      "bunproId": 74,
+      "bunproTitle": "なくちゃ・なきゃ",
+      "headword": "〜なきゃ（いけない）",
+      "method": "string"
+    },
+    {
+      "bunproId": 75,
+      "bunproTitle": "～ましょうか",
+      "headword": "〜ましょうか",
+      "method": "string"
+    },
+    {
+      "bunproId": 76,
+      "bunproTitle": "すぎる",
+      "headword": "〜すぎる",
+      "method": "string"
+    },
+    {
+      "bunproId": 79,
+      "bunproTitle": "たり～たりする",
+      "headword": "〜たり〜たりする",
+      "method": "claude"
+    },
+    {
+      "bunproId": 80,
+      "bunproTitle": "つもりだ",
+      "headword": "つもりだ",
+      "method": "string"
+    },
+    {
+      "bunproId": 81,
+      "bunproTitle": "や",
+      "headword": "や",
+      "method": "string"
+    },
+    {
+      "bunproId": 82,
+      "bunproTitle": "ませんか",
+      "headword": "〜ませんか",
+      "method": "string"
+    },
+    {
+      "bunproId": 83,
+      "bunproTitle": "まだ～ていません",
+      "headword": "まだ（否定）",
+      "method": "claude"
+    },
+    {
+      "bunproId": 84,
+      "bunproTitle": "にする",
+      "headword": "〜にする",
+      "method": "string"
+    },
+    {
+      "bunproId": 86,
+      "bunproTitle": "なくてはいけない",
+      "headword": "〜なければならない",
+      "method": "claude"
+    },
+    {
+      "bunproId": 87,
+      "bunproTitle": "なくてはならない",
+      "headword": "〜なければならない",
+      "method": "claude"
+    },
+    {
+      "bunproId": 88,
+      "bunproTitle": "でも",
+      "headword": "でも",
+      "method": "string"
+    },
+    {
+      "bunproId": 90,
+      "bunproTitle": "やすい",
+      "headword": "〜やすい",
+      "method": "string"
+    },
+    {
+      "bunproId": 91,
+      "bunproTitle": "がほしい",
+      "headword": "〜がほしい",
+      "method": "string"
+    },
+    {
+      "bunproId": 92,
+      "bunproTitle": "てあげる",
+      "headword": "〜てあげる",
+      "method": "string"
+    },
+    {
+      "bunproId": 93,
+      "bunproTitle": "とき",
+      "headword": "とき（時）",
+      "method": "string"
+    },
+    {
+      "bunproId": 94,
+      "bunproTitle": "とおもう",
+      "headword": "普通形＋と言う／と思う",
+      "method": "claude"
+    },
+    {
+      "bunproId": 95,
+      "bunproTitle": "なさい",
+      "headword": "〜なさい",
+      "method": "string"
+    },
+    {
+      "bunproId": 96,
+      "bunproTitle": "ないで",
+      "headword": "〜ないで",
+      "method": "string"
+    },
+    {
+      "bunproId": 97,
+      "bunproTitle": "みたい",
+      "headword": "〜みたいだ",
+      "method": "claude"
+    },
+    {
+      "bunproId": 98,
+      "bunproTitle": "こと",
+      "headword": "〜こと（名詞化）",
+      "method": "string"
+    },
+    {
+      "bunproId": 99,
+      "bunproTitle": "てみる",
+      "headword": "〜てみる",
+      "method": "string"
+    },
+    {
+      "bunproId": 100,
+      "bunproTitle": "にくい",
+      "headword": "〜にくい",
+      "method": "string"
+    },
+    {
+      "bunproId": 101,
+      "bunproTitle": "てほしい",
+      "headword": "〜てほしい",
+      "method": "string"
+    },
+    {
+      "bunproId": 102,
+      "bunproTitle": "たら",
+      "headword": "〜たら（条件）",
+      "method": "string"
+    },
+    {
+      "bunproId": 103,
+      "bunproTitle": "てくれる",
+      "headword": "〜てくれる",
+      "method": "string"
+    },
+    {
+      "bunproId": 105,
+      "bunproTitle": "そう ",
+      "headword": "〜そうだ（様態）",
+      "method": "claude"
+    },
+    {
+      "bunproId": 107,
+      "bunproTitle": "みたいに・みたいな",
+      "headword": "〜みたいだ",
+      "method": "claude"
+    },
+    {
+      "bunproId": 108,
+      "bunproTitle": "より",
+      "headword": "〜より",
+      "method": "string"
+    },
+    {
+      "bunproId": 110,
+      "bunproTitle": "ことができる",
+      "headword": "〜ことができる",
+      "method": "string"
+    },
+    {
+      "bunproId": 111,
+      "bunproTitle": "さ",
+      "headword": "〜さ（名詞化）",
+      "method": "string"
+    },
+    {
+      "bunproId": 112,
+      "bunproTitle": "がる",
+      "headword": "〜がる／〜たがる",
+      "method": "claude"
+    },
+    {
+      "bunproId": 113,
+      "bunproTitle": "かもしれない",
+      "headword": "〜かもしれない",
+      "method": "string"
+    },
+    {
+      "bunproId": 114,
+      "bunproTitle": "てもらう",
+      "headword": "〜てもらう",
+      "method": "string"
+    },
+    {
+      "bunproId": 115,
+      "bunproTitle": "はじめる",
+      "headword": "〜始める",
+      "method": "claude"
+    },
+    {
+      "bunproId": 116,
+      "bunproTitle": "あとで",
+      "headword": "〜あとで",
+      "method": "string"
+    },
+    {
+      "bunproId": 118,
+      "bunproTitle": "そうに・そうな ",
+      "headword": "〜そうだ（様態）",
+      "method": "claude"
+    },
+    {
+      "bunproId": 119,
+      "bunproTitle": "Number + も",
+      "headword": "も（強調）",
+      "method": "claude"
+    },
+    {
+      "bunproId": 121,
+      "bunproTitle": "Verb[よう]",
+      "headword": "意向形",
+      "method": "claude"
+    },
+    {
+      "bunproId": 122,
+      "bunproTitle": "〜ようと思う・〜おうと思う",
+      "headword": "〜（よ）うと思う",
+      "method": "claude"
+    },
+    {
+      "bunproId": 123,
+      "bunproTitle": "なら",
+      "headword": "〜なら（条件）",
+      "method": "string"
+    },
+    {
+      "bunproId": 124,
+      "bunproTitle": "たがる",
+      "headword": "〜がる／〜たがる",
+      "method": "claude"
+    },
+    {
+      "bunproId": 126,
+      "bunproTitle": "おわる",
+      "headword": "〜終わる",
+      "method": "claude"
+    },
+    {
+      "bunproId": 128,
+      "bunproTitle": "てくる ",
+      "headword": "〜てくる",
+      "method": "string"
+    },
+    {
+      "bunproId": 129,
+      "bunproTitle": "といい",
+      "headword": "〜たほうがいい",
+      "method": "claude"
+    },
+    {
+      "bunproId": 130,
+      "bunproTitle": "のに ",
+      "headword": "〜のに",
+      "method": "string"
+    },
+    {
+      "bunproId": 131,
+      "bunproTitle": "とか～とか",
+      "headword": "〜たり〜たりする",
+      "method": "claude"
+    },
+    {
+      "bunproId": 132,
+      "bunproTitle": "れる・られる (Potential)",
+      "headword": "可能形",
+      "method": "claude"
+    },
+    {
+      "bunproId": 133,
+      "bunproTitle": "ばあいは",
+      "headword": "〜たら（条件）",
+      "method": "claude"
+    },
+    {
+      "bunproId": 134,
+      "bunproTitle": "ていただけませんか",
+      "headword": "〜ていただけますか",
+      "method": "claude"
+    },
+    {
+      "bunproId": 135,
+      "bunproTitle": "るところだ",
+      "headword": "〜るところだ",
+      "method": "string"
+    },
+    {
+      "bunproId": 136,
+      "bunproTitle": "ていた ",
+      "headword": "〜ている（進行）",
+      "method": "claude"
+    },
+    {
+      "bunproId": 137,
+      "bunproTitle": "ていく",
+      "headword": "〜ていく",
+      "method": "string"
+    },
+    {
+      "bunproId": 138,
+      "bunproTitle": "ように・ような",
+      "headword": "〜ように［目的］",
+      "method": "claude"
+    },
+    {
+      "bunproId": 139,
+      "bunproTitle": "ひつようがある",
+      "headword": "〜ため（に）［目的］",
+      "method": "claude"
+    },
+    {
+      "bunproId": 140,
+      "bunproTitle": "てよかった",
+      "headword": "〜てよかった",
+      "method": "string"
+    },
+    {
+      "bunproId": 141,
+      "bunproTitle": "し～し ",
+      "headword": "〜し",
+      "method": "claude"
+    },
+    {
+      "bunproId": 142,
+      "bunproTitle": "に (Frequency)",
+      "headword": "に",
+      "method": "string"
+    },
+    {
+      "bunproId": 143,
+      "bunproTitle": "と",
+      "headword": "〜と（条件）",
+      "method": "claude"
+    },
+    {
+      "bunproId": 144,
+      "bunproTitle": "そんなに",
+      "headword": "そんなに〜ない",
+      "method": "claude"
+    },
+    {
+      "bunproId": 145,
+      "bunproTitle": "Verb［れる・られる］",
+      "headword": "受身形",
+      "method": "claude"
+    },
+    {
+      "bunproId": 146,
+      "bunproTitle": "たところだ",
+      "headword": "〜たところだ",
+      "method": "string"
+    },
+    {
+      "bunproId": 148,
+      "bunproTitle": "ながら",
+      "headword": "〜ながら",
+      "method": "claude"
+    },
+    {
+      "bunproId": 149,
+      "bunproTitle": "ようだ",
+      "headword": "〜ようだ",
+      "method": "string"
+    },
+    {
+      "bunproId": 150,
+      "bunproTitle": "ているところだ",
+      "headword": "〜ているところだ",
+      "method": "string"
+    },
+    {
+      "bunproId": 151,
+      "bunproTitle": "はずだ",
+      "headword": "〜はずだ",
+      "method": "string"
+    },
+    {
+      "bunproId": 153,
+      "bunproTitle": "Verb［せる・させる］",
+      "headword": "使役形",
+      "method": "claude"
+    },
+    {
+      "bunproId": 154,
+      "bunproTitle": "ば",
+      "headword": "〜ば（条件）",
+      "method": "string"
+    },
+    {
+      "bunproId": 155,
+      "bunproTitle": "らしい ①",
+      "headword": "〜らしい",
+      "method": "claude"
+    },
+    {
+      "bunproId": 156,
+      "bunproTitle": "かどうか",
+      "headword": "〜かどうか",
+      "method": "string"
+    },
+    {
+      "bunproId": 157,
+      "bunproTitle": "ときいた",
+      "headword": "〜そうだ（伝聞）",
+      "method": "claude"
+    },
+    {
+      "bunproId": 158,
+      "bunproTitle": "ようにする",
+      "headword": "〜ようにする",
+      "method": "string"
+    },
+    {
+      "bunproId": 159,
+      "bunproTitle": "てある ",
+      "headword": "〜てある",
+      "method": "string"
+    },
+    {
+      "bunproId": 160,
+      "bunproTitle": "ているあいだに",
+      "headword": "〜間に",
+      "method": "claude"
+    },
+    {
+      "bunproId": 161,
+      "bunproTitle": "はずがない",
+      "headword": "〜はずがない",
+      "method": "string"
+    },
+    {
+      "bunproId": 162,
+      "bunproTitle": "ておく",
+      "headword": "〜ておく",
+      "method": "string"
+    },
+    {
+      "bunproId": 163,
+      "bunproTitle": "ばよかった",
+      "headword": "〜てよかった",
+      "method": "claude"
+    },
+    {
+      "bunproId": 164,
+      "bunproTitle": "Causative-Passive",
+      "headword": "使役受身形",
+      "method": "claude"
+    },
+    {
+      "bunproId": 165,
+      "bunproTitle": "たばかり",
+      "headword": "〜たばかり",
+      "method": "string"
+    },
+    {
+      "bunproId": 168,
+      "bunproTitle": "ようになる",
+      "headword": "〜ようになる",
+      "method": "string"
+    },
+    {
+      "bunproId": 169,
+      "bunproTitle": "なければいけない",
+      "headword": "〜なければならない",
+      "method": "claude"
+    },
+    {
+      "bunproId": 170,
+      "bunproTitle": "なければならない",
+      "headword": "〜なければならない",
+      "method": "string"
+    },
+    {
+      "bunproId": 171,
+      "bunproTitle": "なくてもいい",
+      "headword": "〜なくてもいい",
+      "method": "string"
+    },
+    {
+      "bunproId": 172,
+      "bunproTitle": "てしまう・ちゃう",
+      "headword": "〜てしまう",
+      "method": "string"
+    },
+    {
+      "bunproId": 174,
+      "bunproTitle": "ても",
+      "headword": "〜ても",
+      "method": "string"
+    },
+    {
+      "bunproId": 176,
+      "bunproTitle": "他動詞・自動詞",
+      "headword": "自動詞・他動詞のペア",
+      "method": "claude"
+    },
+    {
+      "bunproId": 177,
+      "bunproTitle": "たらどう",
+      "headword": "〜たらどうですか",
+      "method": "claude"
+    },
+    {
+      "bunproId": 178,
+      "bunproTitle": "だす",
+      "headword": "〜出す",
+      "method": "claude"
+    },
+    {
+      "bunproId": 180,
+      "bunproTitle": "つづける",
+      "headword": "〜続ける",
+      "method": "claude"
+    },
+    {
+      "bunproId": 181,
+      "bunproTitle": "よていだ",
+      "headword": "予定だ",
+      "method": "claude"
+    },
+    {
+      "bunproId": 182,
+      "bunproTitle": "しか～ない ",
+      "headword": "〜しか〜ない",
+      "method": "claude"
+    },
+    {
+      "bunproId": 185,
+      "bunproTitle": "ということ",
+      "headword": "〜こと（名詞化）",
+      "method": "claude"
+    },
+    {
+      "bunproId": 187,
+      "bunproTitle": "ございます",
+      "headword": "尊敬語の特別な動詞",
+      "method": "claude"
+    },
+    {
+      "bunproId": 189,
+      "bunproTitle": "お～ください ",
+      "headword": "お〜ください",
+      "method": "claude"
+    },
+    {
+      "bunproId": 190,
+      "bunproTitle": "お～になる ",
+      "headword": "お〜になる",
+      "method": "claude"
+    },
+    {
+      "bunproId": 191,
+      "bunproTitle": "いらっしゃる",
+      "headword": "尊敬語の特別な動詞",
+      "method": "claude"
+    },
+    {
+      "bunproId": 192,
+      "bunproTitle": "いたす",
+      "headword": "謙譲語の特別な動詞",
+      "method": "claude"
+    },
+    {
+      "bunproId": 193,
+      "bunproTitle": "なさる",
+      "headword": "尊敬語の特別な動詞",
+      "method": "claude"
+    },
+    {
+      "bunproId": 355,
+      "bunproTitle": "がある + Noun",
+      "headword": "の",
+      "method": "claude"
+    },
+    {
+      "bunproId": 356,
+      "bunproTitle": "と",
+      "headword": "って（口語）",
+      "method": "claude"
+    },
+    {
+      "bunproId": 357,
+      "bunproTitle": "Verb［た・ている］+ Noun",
+      "headword": "動詞（普通形）＋名詞",
+      "method": "claude"
+    },
+    {
+      "bunproId": 358,
+      "bunproTitle": "って",
+      "headword": "って（口語）",
+      "method": "string"
+    },
+    {
+      "bunproId": 360,
+      "bunproTitle": "Verb + まで",
+      "headword": "まで",
+      "method": "string"
+    },
+    {
+      "bunproId": 361,
+      "bunproTitle": "けど・だけど",
+      "headword": "でも",
+      "method": "claude"
+    },
+    {
+      "bunproId": 364,
+      "bunproTitle": "また",
+      "headword": "それに",
+      "method": "claude"
+    },
+    {
+      "bunproId": 370,
+      "bunproTitle": "だが・ですが",
+      "headword": "しかし",
+      "method": "claude"
+    },
+    {
+      "bunproId": 372,
+      "bunproTitle": "まで",
+      "headword": "まで",
+      "method": "string"
+    },
+    {
+      "bunproId": 373,
+      "bunproTitle": "のように・のような ",
+      "headword": "〜ようだ",
+      "method": "claude"
+    },
+    {
+      "bunproId": 374,
+      "bunproTitle": "あまり～ない",
+      "headword": "あまり〜ない",
+      "method": "claude"
+    },
+    {
+      "bunproId": 375,
+      "bunproTitle": "ぜんぜん",
+      "headword": "ぜんぜん〜ない",
+      "method": "claude"
+    },
+    {
+      "bunproId": 380,
+      "bunproTitle": "だけでなく",
+      "headword": "〜し",
+      "method": "claude"
+    },
+    {
+      "bunproId": 389,
+      "bunproTitle": "それに",
+      "headword": "それに",
+      "method": "string"
+    },
+    {
+      "bunproId": 392,
+      "bunproTitle": "とかんがえられている",
+      "headword": "〜こと（名詞化）",
+      "method": "claude"
+    },
+    {
+      "bunproId": 393,
+      "bunproTitle": "なおす",
+      "headword": "〜方（かた）",
+      "method": "claude"
+    },
+    {
+      "bunproId": 416,
+      "bunproTitle": "Verb + て",
+      "headword": "〜てから",
+      "method": "claude"
+    },
+    {
+      "bunproId": 621,
+      "bunproTitle": "なん + counter + か",
+      "headword": "疑問詞＋か",
+      "method": "claude"
+    },
+    {
+      "bunproId": 628,
+      "bunproTitle": "ように",
+      "headword": "〜ように［目的］",
+      "method": "claude"
+    },
+    {
+      "bunproId": 631,
+      "bunproTitle": "んだけど・んですが",
+      "headword": "んだ／のだ（口語）",
+      "method": "claude"
+    },
+    {
+      "bunproId": 632,
+      "bunproTitle": "それで",
+      "headword": "それで",
+      "method": "string"
+    },
+    {
+      "bunproId": 637,
+      "bunproTitle": "らしい ②",
+      "headword": "〜らしい",
+      "method": "claude"
+    },
+    {
+      "bunproId": 707,
+      "bunproTitle": "てくれない・てもらえない",
+      "headword": "〜てもらえますか",
+      "method": "claude"
+    },
+    {
+      "bunproId": 718,
+      "bunproTitle": "なにか・なにも",
+      "headword": "疑問詞＋も＋否定",
+      "method": "claude"
+    },
+    {
+      "bunproId": 719,
+      "bunproTitle": "Adjective + の(は)",
+      "headword": "い形容詞＋名詞",
+      "method": "claude"
+    },
+    {
+      "bunproId": 720,
+      "bunproTitle": "の",
+      "headword": "の",
+      "method": "claude"
+    },
+    {
+      "bunproId": 721,
+      "bunproTitle": "誰か・どこか・誰も・どこも",
+      "headword": "疑問詞＋か",
+      "method": "claude"
+    },
+    {
+      "bunproId": 722,
+      "bunproTitle": "あげる",
+      "headword": "あげる",
+      "method": "string"
+    },
+    {
+      "bunproId": 723,
+      "bunproTitle": "くれる",
+      "headword": "くれる",
+      "method": "string"
+    },
+    {
+      "bunproId": 724,
+      "bunproTitle": "もらう",
+      "headword": "もらう",
+      "method": "string"
+    },
+    {
+      "bunproId": 725,
+      "bunproTitle": "Number + しか〜ない",
+      "headword": "〜しか〜ない",
+      "method": "claude"
+    },
+    {
+      "bunproId": 726,
+      "bunproTitle": "お〜する",
+      "headword": "お〜する",
+      "method": "string"
+    },
+    {
+      "bunproId": 727,
+      "bunproTitle": "Question-phrase + か",
+      "headword": "疑問詞＋か",
+      "method": "claude"
+    },
+    {
+      "bunproId": 728,
+      "bunproTitle": "～にする・～くする",
+      "headword": "〜にする",
+      "method": "string"
+    },
+    {
+      "bunproId": 729,
+      "bunproTitle": "かた",
+      "headword": "〜方（かた）",
+      "method": "claude"
+    },
+    {
+      "bunproId": 764,
+      "bunproTitle": "ている②",
+      "headword": "〜ている（結果の状態）",
+      "method": "claude"
+    },
+    {
+      "bunproId": 765,
+      "bunproTitle": "ている③",
+      "headword": "〜ている（進行）",
+      "method": "claude"
+    },
+    {
+      "bunproId": 766,
+      "bunproTitle": "ないと",
+      "headword": "〜なきゃ（いけない）",
+      "method": "claude"
+    },
+    {
+      "bunproId": 769,
+      "bunproTitle": "Adjective + て・Noun + で",
+      "headword": "で",
+      "method": "string"
+    },
+    {
+      "bunproId": 770,
+      "bunproTitle": "Verb + て+ B",
+      "headword": "〜てから",
+      "method": "claude"
+    },
+    {
+      "bunproId": 771,
+      "bunproTitle": "Adjective + て + B",
+      "headword": "〜くて",
+      "method": "claude"
+    },
+    {
+      "bunproId": 873,
+      "bunproTitle": "い-Adjectives くない",
+      "headword": "い形容詞のない形",
+      "method": "claude"
+    },
+    {
+      "bunproId": 874,
+      "bunproTitle": "い-Adjective (Past)",
+      "headword": "い形容詞の過去形",
+      "method": "claude"
+    },
+    {
+      "bunproId": 876,
+      "bunproTitle": "い-Adjective くなかった",
+      "headword": "い形容詞の過去否定形",
+      "method": "claude"
+    },
+    {
+      "bunproId": 888,
+      "bunproTitle": "う-Verb (Negative)",
+      "headword": "動詞のない形",
+      "method": "claude"
+    },
+    {
+      "bunproId": 895,
+      "bunproTitle": "る-Verb (Past)",
+      "headword": "動詞のた形",
+      "method": "claude"
+    },
+    {
+      "bunproId": 896,
+      "bunproTitle": "る-Verb (Negative-Past)",
+      "headword": "動詞のなかった形",
+      "method": "claude"
+    },
+    {
+      "bunproId": 897,
+      "bunproTitle": "う-Verb (Negative-Past)",
+      "headword": "動詞のなかった形",
+      "method": "claude"
+    },
+    {
+      "bunproId": 950,
+      "bunproTitle": "Verbs (Non-past)",
+      "headword": "動詞の辞書形",
+      "method": "claude"
+    },
+    {
+      "bunproId": 951,
+      "bunproTitle": "い-Adjective (Predicate)",
+      "headword": "い形容詞＋名詞",
+      "method": "claude"
+    },
+    {
+      "bunproId": 952,
+      "bunproTitle": "な-Adjective だ",
+      "headword": "だ",
+      "method": "claude"
+    },
+    {
+      "bunproId": 953,
+      "bunproTitle": "い-Adjective + Noun",
+      "headword": "い形容詞＋名詞",
+      "method": "claude"
+    },
+    {
+      "bunproId": 954,
+      "bunproTitle": "な-Adjective + Noun",
+      "headword": "な形容詞＋な＋名詞",
+      "method": "claude"
+    },
+    {
+      "bunproId": 955,
+      "bunproTitle": "と",
+      "headword": "と",
+      "method": "claude"
+    },
+    {
+      "bunproId": 1032,
+      "bunproTitle": "命令形",
+      "headword": "命令形",
+      "method": "string"
+    },
+    {
+      "bunproId": 1082,
+      "bunproTitle": "ます",
+      "headword": "ます",
+      "method": "string"
+    },
+    {
+      "bunproId": 1083,
+      "bunproTitle": "く・に",
+      "headword": "に",
+      "method": "string"
+    },
+    {
+      "bunproId": 1098,
+      "bunproTitle": "づらい",
+      "headword": "〜にくい",
+      "method": "claude"
+    },
+    {
+      "bunproId": 1103,
+      "bunproTitle": "が・の (Subject)",
+      "headword": "が",
+      "method": "string"
+    },
+    {
+      "bunproId": 1104,
+      "bunproTitle": "の (Questions)",
+      "headword": "〜んです／〜のです",
+      "method": "claude"
+    }
+  ]
+}

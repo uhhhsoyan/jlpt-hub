@@ -1,0 +1,7837 @@
+{
+  "fetchedAt": "2026-07-27T20:10:28.841Z",
+  "points": [
+    {
+      "id": 1,
+      "title": "だ",
+      "slug": "だ",
+      "level": "JLPT5",
+      "meaning": "To be, Is",
+      "grammarOrder": 1
+    },
+    {
+      "id": 2,
+      "title": "です",
+      "slug": "です",
+      "level": "JLPT5",
+      "meaning": "To be, Is",
+      "grammarOrder": 2
+    },
+    {
+      "id": 3,
+      "title": "は",
+      "slug": "は",
+      "level": "JLPT5",
+      "meaning": "As for... (Highlights sentence topic)",
+      "grammarOrder": 3
+    },
+    {
+      "id": 4,
+      "title": "も",
+      "slug": "も",
+      "level": "JLPT5",
+      "meaning": "Also, Too, As well, Even, Either, Neither",
+      "grammarOrder": 4
+    },
+    {
+      "id": 5,
+      "title": "これ",
+      "slug": "これ",
+      "level": "JLPT5",
+      "meaning": "This",
+      "grammarOrder": 5
+    },
+    {
+      "id": 6,
+      "title": "の",
+      "slug": "の",
+      "level": "JLPT5",
+      "meaning": "Indicates possession",
+      "grammarOrder": 8
+    },
+    {
+      "id": 7,
+      "title": "いい",
+      "slug": "いい",
+      "level": "JLPT5",
+      "meaning": "い-Adjective meaning 'good'",
+      "grammarOrder": 9
+    },
+    {
+      "id": 8,
+      "title": "か",
+      "slug": "か",
+      "level": "JLPT5",
+      "meaning": "Question marking particle",
+      "grammarOrder": 12
+    },
+    {
+      "id": 9,
+      "title": "でしょう",
+      "slug": "でしょう",
+      "level": "JLPT5",
+      "meaning": "Right?, Probably, Isn't it?",
+      "grammarOrder": 30
+    },
+    {
+      "id": 10,
+      "title": "が",
+      "slug": "が",
+      "level": "JLPT5",
+      "meaning": "Subject marking particle, Identification particle",
+      "grammarOrder": 13
+    },
+    {
+      "id": 11,
+      "title": "それ",
+      "slug": "それ",
+      "level": "JLPT5",
+      "meaning": "That",
+      "grammarOrder": 6
+    },
+    {
+      "id": 12,
+      "title": "る-Verb (Dictionary)",
+      "slug": "る-Verbs",
+      "level": "JLPT5",
+      "meaning": "る + ます (Ichidan Verbs)",
+      "grammarOrder": 16
+    },
+    {
+      "id": 13,
+      "title": "がある",
+      "slug": "がある",
+      "level": "JLPT5",
+      "meaning": "To be, There is",
+      "grammarOrder": 32
+    },
+    {
+      "id": 14,
+      "title": "ここ",
+      "slug": "ここ",
+      "level": "JLPT5",
+      "meaning": "Here, This place",
+      "grammarOrder": 23
+    },
+    {
+      "id": 15,
+      "title": "と",
+      "slug": "と-and",
+      "level": "JLPT5",
+      "meaning": "And",
+      "grammarOrder": 22
+    },
+    {
+      "id": 16,
+      "title": "の",
+      "slug": "のは",
+      "level": "JLPT5",
+      "meaning": "Verb nominalizer, The one who..., That which...",
+      "grammarOrder": 40
+    },
+    {
+      "id": 17,
+      "title": "～んです・のです",
+      "slug": "-んです-のです",
+      "level": "JLPT5",
+      "meaning": "Explanatory, Emphasis, The fact is",
+      "grammarOrder": 37
+    },
+    {
+      "id": 18,
+      "title": "だろう",
+      "slug": "だろう",
+      "level": "JLPT5",
+      "meaning": "Right?, Probably, Isn't it?",
+      "grammarOrder": 31
+    },
+    {
+      "id": 19,
+      "title": "あれ",
+      "slug": "あれ",
+      "level": "JLPT5",
+      "meaning": "That (over there)",
+      "grammarOrder": 7
+    },
+    {
+      "id": 20,
+      "title": "そこ",
+      "slug": "そこ",
+      "level": "JLPT5",
+      "meaning": "There, That place",
+      "grammarOrder": 24
+    },
+    {
+      "id": 21,
+      "title": "を",
+      "slug": "を",
+      "level": "JLPT5",
+      "meaning": "Object marking particle",
+      "grammarOrder": 18
+    },
+    {
+      "id": 22,
+      "title": "する",
+      "slug": "する",
+      "level": "JLPT5",
+      "meaning": "To do, To make into",
+      "grammarOrder": 44
+    },
+    {
+      "id": 23,
+      "title": "がいる",
+      "slug": "がいる",
+      "level": "JLPT5",
+      "meaning": "To be, There is,  To remain (in a state)",
+      "grammarOrder": 33
+    },
+    {
+      "id": 24,
+      "title": "い-Adjectives",
+      "slug": "い-adjectives",
+      "level": "JLPT5",
+      "meaning": "Adjectives ending in い",
+      "grammarOrder": 10
+    },
+    {
+      "id": 25,
+      "title": "で",
+      "slug": "で",
+      "level": "JLPT5",
+      "meaning": "At, In",
+      "grammarOrder": 26
+    },
+    {
+      "id": 26,
+      "title": "う-Verb (Dictionary)",
+      "slug": "う-Verbs",
+      "level": "JLPT5",
+      "meaning": "う + ます (Godan Verbs)",
+      "grammarOrder": 17
+    },
+    {
+      "id": 27,
+      "title": "ている①",
+      "slug": "ている1",
+      "level": "JLPT5",
+      "meaning": "Is, Am, Are (~ing)",
+      "grammarOrder": 62
+    },
+    {
+      "id": 28,
+      "title": "な-Adjectives",
+      "slug": "な-adjectives",
+      "level": "JLPT5",
+      "meaning": "Adjectives that are also nouns",
+      "grammarOrder": 11
+    },
+    {
+      "id": 29,
+      "title": "あそこ",
+      "slug": "あそこ",
+      "level": "JLPT5",
+      "meaning": "Over there",
+      "grammarOrder": 25
+    },
+    {
+      "id": 30,
+      "title": "この",
+      "slug": "この",
+      "level": "JLPT5",
+      "meaning": "This",
+      "grammarOrder": 34
+    },
+    {
+      "id": 31,
+      "title": "へいく",
+      "slug": "へいく",
+      "level": "JLPT5",
+      "meaning": "To go to, To head toward",
+      "grammarOrder": 43
+    },
+    {
+      "id": 32,
+      "title": "に",
+      "slug": "に",
+      "level": "JLPT5",
+      "meaning": "In, At, To, For, On",
+      "grammarOrder": 27
+    },
+    {
+      "id": 33,
+      "title": "か",
+      "slug": "か-or",
+      "level": "JLPT5",
+      "meaning": "Or",
+      "grammarOrder": 28
+    },
+    {
+      "id": 34,
+      "title": "のがすき",
+      "slug": "のがすき",
+      "level": "JLPT5",
+      "meaning": "Like doing, Love doing",
+      "grammarOrder": 50
+    },
+    {
+      "id": 35,
+      "title": "Verb + てもいい",
+      "slug": "verb-てもいい",
+      "level": "JLPT5",
+      "meaning": "It's okay to, It's alright to, Can/may",
+      "grammarOrder": 111
+    },
+    {
+      "id": 36,
+      "title": "で",
+      "slug": "で-by",
+      "level": "JLPT5",
+      "meaning": "With, By (using)",
+      "grammarOrder": 53
+    },
+    {
+      "id": 37,
+      "title": "その",
+      "slug": "その",
+      "level": "JLPT5",
+      "meaning": "That",
+      "grammarOrder": 35
+    },
+    {
+      "id": 38,
+      "title": "へ",
+      "slug": "へ",
+      "level": "JLPT5",
+      "meaning": "To, Toward",
+      "grammarOrder": 63
+    },
+    {
+      "id": 39,
+      "title": "くる",
+      "slug": "くる",
+      "level": "JLPT5",
+      "meaning": "To come",
+      "grammarOrder": 45
+    },
+    {
+      "id": 40,
+      "title": "だった・でした",
+      "slug": "だった-でした",
+      "level": "JLPT5",
+      "meaning": "Was, Were (Past tense) ",
+      "grammarOrder": 71
+    },
+    {
+      "id": 41,
+      "title": "う-Verb (Past)",
+      "slug": "う-verb-past",
+      "level": "JLPT5",
+      "meaning": "う - Verbs (Past tense)",
+      "grammarOrder": 47
+    },
+    {
+      "id": 42,
+      "title": "もう",
+      "slug": "もう",
+      "level": "JLPT5",
+      "meaning": "Already, Anymore",
+      "grammarOrder": 89
+    },
+    {
+      "id": 43,
+      "title": "だけ",
+      "slug": "だけ",
+      "level": "JLPT5",
+      "meaning": "Only, Just",
+      "grammarOrder": 82
+    },
+    {
+      "id": 44,
+      "title": "が",
+      "slug": "が-but",
+      "level": "JLPT5",
+      "meaning": "But, However",
+      "grammarOrder": 58
+    },
+    {
+      "id": 45,
+      "title": "から",
+      "slug": "から-because",
+      "level": "JLPT5",
+      "meaning": "Because, Since",
+      "grammarOrder": 55
+    },
+    {
+      "id": 46,
+      "title": "てもいい",
+      "slug": "てもいい",
+      "level": "JLPT5",
+      "meaning": "It is alright/fine/okay even if, Can/may, ~ is also okay",
+      "grammarOrder": 92
+    },
+    {
+      "id": 47,
+      "title": "あの",
+      "slug": "あの",
+      "level": "JLPT5",
+      "meaning": "That (over there)",
+      "grammarOrder": 36
+    },
+    {
+      "id": 48,
+      "title": "Verb + にいく",
+      "slug": "verb-にいく",
+      "level": "JLPT5",
+      "meaning": "To go ~, To go in order to ~",
+      "grammarOrder": 64
+    },
+    {
+      "id": 49,
+      "title": "じゃない",
+      "slug": "じゃない",
+      "level": "JLPT5",
+      "meaning": "Is not, Isn't",
+      "grammarOrder": 72
+    },
+    {
+      "id": 50,
+      "title": "じゃなかった",
+      "slug": "じゃなかった",
+      "level": "JLPT5",
+      "meaning": "Was not, Wasn't",
+      "grammarOrder": 73
+    },
+    {
+      "id": 51,
+      "title": "る-Verb (Negative)",
+      "slug": "るverb-ない",
+      "level": "JLPT5",
+      "meaning": "Will/Does/Do (not)",
+      "grammarOrder": 20
+    },
+    {
+      "id": 52,
+      "title": "から",
+      "slug": "から",
+      "level": "JLPT5",
+      "meaning": "From",
+      "grammarOrder": 56
+    },
+    {
+      "id": 53,
+      "title": "まえに",
+      "slug": "まえに",
+      "level": "JLPT5",
+      "meaning": "Before, In front of",
+      "grammarOrder": 97
+    },
+    {
+      "id": 54,
+      "title": "けれども",
+      "slug": "けれども",
+      "level": "JLPT5",
+      "meaning": "But, Although",
+      "grammarOrder": 131
+    },
+    {
+      "id": 55,
+      "title": "のなかで～がいちばん～",
+      "slug": "のなかで-がいちばん",
+      "level": "JLPT5",
+      "meaning": "Out of ~, ~ is the best/most ~",
+      "grammarOrder": 104
+    },
+    {
+      "id": 56,
+      "title": "どこ",
+      "slug": "どこ",
+      "level": "JLPT5",
+      "meaning": "Where",
+      "grammarOrder": 84
+    },
+    {
+      "id": 57,
+      "title": "～になる・～くなる",
+      "slug": "になる-くなる",
+      "level": "JLPT5",
+      "meaning": "To become (Adjective)",
+      "grammarOrder": 103
+    },
+    {
+      "id": 58,
+      "title": "Noun + まで",
+      "slug": "noun-まで",
+      "level": "JLPT5",
+      "meaning": "Until, Till,  To (but no further than)",
+      "grammarOrder": 99
+    },
+    {
+      "id": 59,
+      "title": "たい",
+      "slug": "たい",
+      "level": "JLPT5",
+      "meaning": "Want to do",
+      "grammarOrder": 93
+    },
+    {
+      "id": 60,
+      "title": "てください",
+      "slug": "てください",
+      "level": "JLPT5",
+      "meaning": "Please do (Polite request)",
+      "grammarOrder": 112
+    },
+    {
+      "id": 61,
+      "title": "くらい ①",
+      "slug": "くらい1",
+      "level": "JLPT5",
+      "meaning": "About, Approximately",
+      "grammarOrder": 98
+    },
+    {
+      "id": 62,
+      "title": "ので",
+      "slug": "ので",
+      "level": "JLPT5",
+      "meaning": "Because, So, Since, The reason being",
+      "grammarOrder": 54
+    },
+    {
+      "id": 63,
+      "title": "たことがある",
+      "slug": "たことがある",
+      "level": "JLPT5",
+      "meaning": "Have done before",
+      "grammarOrder": 121
+    },
+    {
+      "id": 64,
+      "title": "てから",
+      "slug": "てから",
+      "level": "JLPT5",
+      "meaning": "Once...is done, Once...happens, After doing",
+      "grammarOrder": 87
+    },
+    {
+      "id": 65,
+      "title": "ないでください",
+      "slug": "ないでください",
+      "level": "JLPT5",
+      "meaning": "Please don't (Polite request)",
+      "grammarOrder": 113
+    },
+    {
+      "id": 66,
+      "title": "な",
+      "slug": "な",
+      "level": "JLPT5",
+      "meaning": "Do not, Don't (Prohibitive)",
+      "grammarOrder": 81
+    },
+    {
+      "id": 67,
+      "title": "てはいけない",
+      "slug": "てはいけない",
+      "level": "JLPT5",
+      "meaning": "Must not, May not",
+      "grammarOrder": 114
+    },
+    {
+      "id": 68,
+      "title": "たほうがいい",
+      "slug": "たほうがいい",
+      "level": "JLPT5",
+      "meaning": "It'd be better to, Should do",
+      "grammarOrder": 117
+    },
+    {
+      "id": 69,
+      "title": "ないほうがいい",
+      "slug": "ないほうがいい",
+      "level": "JLPT5",
+      "meaning": "It'd be better not to, Shouldn't do",
+      "grammarOrder": 118
+    },
+    {
+      "id": 70,
+      "title": "ましょう",
+      "slug": "ましょう",
+      "level": "JLPT5",
+      "meaning": "Let's, Shall we (Polite volitional)",
+      "grammarOrder": 108
+    },
+    {
+      "id": 71,
+      "title": "ね",
+      "slug": "ね",
+      "level": "JLPT5",
+      "meaning": "Isn't it?, Right? (Sentence ending particle) ",
+      "grammarOrder": 15
+    },
+    {
+      "id": 72,
+      "title": "まだ",
+      "slug": "まだ",
+      "level": "JLPT5",
+      "meaning": "Still",
+      "grammarOrder": 90
+    },
+    {
+      "id": 73,
+      "title": "より～のほうが",
+      "slug": "より-のほうが",
+      "level": "JLPT5",
+      "meaning": "To be more ~ than ~",
+      "grammarOrder": 105
+    },
+    {
+      "id": 74,
+      "title": "なくちゃ・なきゃ",
+      "slug": "なくちゃ-なきゃ",
+      "level": "JLPT5",
+      "meaning": "Must do, Have to do",
+      "grammarOrder": 119
+    },
+    {
+      "id": 75,
+      "title": "～ましょうか",
+      "slug": "ましょうか",
+      "level": "JLPT5",
+      "meaning": "Shall we, Shall I",
+      "grammarOrder": 109
+    },
+    {
+      "id": 76,
+      "title": "すぎる",
+      "slug": "すぎる",
+      "level": "JLPT5",
+      "meaning": "Too much, Very",
+      "grammarOrder": 101
+    },
+    {
+      "id": 77,
+      "title": "のがじょうず",
+      "slug": "のがじょうず",
+      "level": "JLPT5",
+      "meaning": "To be good at, Proficient",
+      "grammarOrder": 126
+    },
+    {
+      "id": 78,
+      "title": "よ",
+      "slug": "よ",
+      "level": "JLPT5",
+      "meaning": "Emphasis (Sentence ending particle)",
+      "grammarOrder": 14
+    },
+    {
+      "id": 79,
+      "title": "たり～たりする",
+      "slug": "たり-たりする",
+      "level": "JLPT5",
+      "meaning": "Things like ~ and ~",
+      "grammarOrder": 94
+    },
+    {
+      "id": 80,
+      "title": "つもりだ",
+      "slug": "つもりだ",
+      "level": "JLPT5",
+      "meaning": "To plan to, To intend to",
+      "grammarOrder": 132
+    },
+    {
+      "id": 81,
+      "title": "や",
+      "slug": "や",
+      "level": "JLPT5",
+      "meaning": "Things like, And the like",
+      "grammarOrder": 120
+    },
+    {
+      "id": 82,
+      "title": "ませんか",
+      "slug": "ませんか",
+      "level": "JLPT5",
+      "meaning": "Won't you, Would you not, Why don't we",
+      "grammarOrder": 110
+    },
+    {
+      "id": 83,
+      "title": "まだ～ていません",
+      "slug": "まだ-ていません",
+      "level": "JLPT5",
+      "meaning": "Still haven't done (something)",
+      "grammarOrder": 91
+    },
+    {
+      "id": 84,
+      "title": "にする",
+      "slug": "にする",
+      "level": "JLPT5",
+      "meaning": "To decide on, To choose, To make something into, To view something as",
+      "grammarOrder": 102
+    },
+    {
+      "id": 85,
+      "title": "のがへた",
+      "slug": "のがへた",
+      "level": "JLPT5",
+      "meaning": "To be bad at, Poor at, Unskillful",
+      "grammarOrder": 125
+    },
+    {
+      "id": 86,
+      "title": "なくてはいけない",
+      "slug": "なくてはいけない",
+      "level": "JLPT5",
+      "meaning": "Must do, Have to do",
+      "grammarOrder": 115
+    },
+    {
+      "id": 87,
+      "title": "なくてはならない",
+      "slug": "なくてはならない",
+      "level": "JLPT5",
+      "meaning": "Must do, Have to do",
+      "grammarOrder": 116
+    },
+    {
+      "id": 88,
+      "title": "でも",
+      "slug": "でも",
+      "level": "JLPT4",
+      "meaning": "Or something,  Any... (with question words), No matter (who)",
+      "grammarOrder": 133
+    },
+    {
+      "id": 89,
+      "title": "など",
+      "slug": "など",
+      "level": "JLPT4",
+      "meaning": "Such as, Things like, Etc., And so on",
+      "grammarOrder": 170
+    },
+    {
+      "id": 90,
+      "title": "やすい",
+      "slug": "やすい",
+      "level": "JLPT4",
+      "meaning": "Easy to, Likely to",
+      "grammarOrder": 134
+    },
+    {
+      "id": 91,
+      "title": "がほしい",
+      "slug": "がほしい",
+      "level": "JLPT4",
+      "meaning": "To want something, To be in need of",
+      "grammarOrder": 202
+    },
+    {
+      "id": 92,
+      "title": "てあげる",
+      "slug": "てあげる",
+      "level": "JLPT4",
+      "meaning": "To do something for someone, As a favor for",
+      "grammarOrder": 247
+    },
+    {
+      "id": 93,
+      "title": "とき",
+      "slug": "とき",
+      "level": "JLPT4",
+      "meaning": "When, At the time of",
+      "grammarOrder": 152
+    },
+    {
+      "id": 94,
+      "title": "とおもう",
+      "slug": "とおもう",
+      "level": "JLPT4",
+      "meaning": "I think",
+      "grammarOrder": 169
+    },
+    {
+      "id": 95,
+      "title": "なさい",
+      "slug": "なさい",
+      "level": "JLPT4",
+      "meaning": "Command to do",
+      "grammarOrder": 250
+    },
+    {
+      "id": 96,
+      "title": "ないで",
+      "slug": "ないで",
+      "level": "JLPT4",
+      "meaning": "Without doing, Not ~ and ~",
+      "grammarOrder": 147
+    },
+    {
+      "id": 97,
+      "title": "みたい",
+      "slug": "みたい",
+      "level": "JLPT4",
+      "meaning": "Like, Similar to, Resembling",
+      "grammarOrder": 171
+    },
+    {
+      "id": 98,
+      "title": "こと",
+      "slug": "こと",
+      "level": "JLPT4",
+      "meaning": "Converting a verb into a noun",
+      "grammarOrder": 172
+    },
+    {
+      "id": 99,
+      "title": "てみる",
+      "slug": "てみる",
+      "level": "JLPT4",
+      "meaning": "To try to",
+      "grammarOrder": 245
+    },
+    {
+      "id": 100,
+      "title": "にくい",
+      "slug": "にくい",
+      "level": "JLPT4",
+      "meaning": "Difficult to, Hard to",
+      "grammarOrder": 135
+    },
+    {
+      "id": 101,
+      "title": "てほしい",
+      "slug": "てほしい",
+      "level": "JLPT4",
+      "meaning": "I want you to",
+      "grammarOrder": 203
+    },
+    {
+      "id": 102,
+      "title": "たら",
+      "slug": "たら",
+      "level": "JLPT4",
+      "meaning": "When, From when, Just when, If",
+      "grammarOrder": 265
+    },
+    {
+      "id": 103,
+      "title": "てくれる",
+      "slug": "てくれる",
+      "level": "JLPT4",
+      "meaning": "To do something for someone (usually you)",
+      "grammarOrder": 248
+    },
+    {
+      "id": 104,
+      "title": "までに",
+      "slug": "までに",
+      "level": "JLPT4",
+      "meaning": "By ~, By the time that ~, Before ~",
+      "grammarOrder": 155
+    },
+    {
+      "id": 105,
+      "title": "そう ",
+      "slug": "そう",
+      "level": "JLPT4",
+      "meaning": "Look like, Appear, Seem, Have a feeling that",
+      "grammarOrder": 173
+    },
+    {
+      "id": 106,
+      "title": "てすみません",
+      "slug": "てすみません",
+      "level": "JLPT4",
+      "meaning": "I'm sorry for",
+      "grammarOrder": 246
+    },
+    {
+      "id": 107,
+      "title": "みたいに・みたいな",
+      "slug": "みたいに-みたいな",
+      "level": "JLPT4",
+      "meaning": "Like, Similar to, Resembling",
+      "grammarOrder": 189
+    },
+    {
+      "id": 108,
+      "title": "より",
+      "slug": "より",
+      "level": "JLPT4",
+      "meaning": "More than, Over",
+      "grammarOrder": 164
+    },
+    {
+      "id": 109,
+      "title": "だけで",
+      "slug": "だけで",
+      "level": "JLPT4",
+      "meaning": "Just by, Just with",
+      "grammarOrder": 143
+    },
+    {
+      "id": 110,
+      "title": "ことができる",
+      "slug": "ことができる",
+      "level": "JLPT4",
+      "meaning": "Can, Be able to",
+      "grammarOrder": 280
+    },
+    {
+      "id": 111,
+      "title": "さ",
+      "slug": "さ",
+      "level": "JLPT4",
+      "meaning": "Converting adjectives to nouns",
+      "grammarOrder": 174
+    },
+    {
+      "id": 112,
+      "title": "がる",
+      "slug": "がる",
+      "level": "JLPT4",
+      "meaning": "To feel, To think, To act as if, To want, To desire",
+      "grammarOrder": 184
+    },
+    {
+      "id": 113,
+      "title": "かもしれない",
+      "slug": "かもしれない",
+      "level": "JLPT4",
+      "meaning": "Might, Maybe, Probably",
+      "grammarOrder": 188
+    },
+    {
+      "id": 114,
+      "title": "てもらう",
+      "slug": "てもらう",
+      "level": "JLPT4",
+      "meaning": "To get someone to do, To have someone do",
+      "grammarOrder": 249
+    },
+    {
+      "id": 115,
+      "title": "はじめる",
+      "slug": "はじめる",
+      "level": "JLPT4",
+      "meaning": "To start, To begin to",
+      "grammarOrder": 157
+    },
+    {
+      "id": 116,
+      "title": "あとで",
+      "slug": "あとで",
+      "level": "JLPT4",
+      "meaning": "After, Later",
+      "grammarOrder": 160
+    },
+    {
+      "id": 117,
+      "title": "がする",
+      "slug": "がする",
+      "level": "JLPT4",
+      "meaning": "To give off, Smell, Sound, Taste, Sensation",
+      "grammarOrder": 185
+    },
+    {
+      "id": 118,
+      "title": "そうに・そうな ",
+      "slug": "そうに-そうな",
+      "level": "JLPT4",
+      "meaning": "Seem, Look like, Sound",
+      "grammarOrder": 190
+    },
+    {
+      "id": 119,
+      "title": "Number + も",
+      "slug": "number-も",
+      "level": "JLPT4",
+      "meaning": "Emphasis, As ~ as, Not even",
+      "grammarOrder": 211
+    },
+    {
+      "id": 120,
+      "title": "かな",
+      "slug": "かな",
+      "level": "JLPT4",
+      "meaning": "I wonder",
+      "grammarOrder": 180
+    },
+    {
+      "id": 121,
+      "title": "Verb[よう]",
+      "slug": "よう-おう",
+      "level": "JLPT4",
+      "meaning": "Let's, I shall (Casual volitional)",
+      "grammarOrder": 177
+    },
+    {
+      "id": 122,
+      "title": "〜ようと思う・〜おうと思う",
+      "slug": "ようと思う-おうと思う",
+      "level": "JLPT4",
+      "meaning": "I think I will, I think I shall, Going to, Gonna (Volitional + と思う)",
+      "grammarOrder": 192
+    },
+    {
+      "id": 123,
+      "title": "なら",
+      "slug": "なら",
+      "level": "JLPT4",
+      "meaning": "Were it, If, If it's the case, As for (Conditional)",
+      "grammarOrder": 183
+    },
+    {
+      "id": 124,
+      "title": "たがる",
+      "slug": "たがる",
+      "level": "JLPT4",
+      "meaning": "To want to (Third person)",
+      "grammarOrder": 187
+    },
+    {
+      "id": 125,
+      "title": "ごろ",
+      "slug": "ごろ",
+      "level": "JLPT4",
+      "meaning": "Around, About",
+      "grammarOrder": 159
+    },
+    {
+      "id": 126,
+      "title": "おわる",
+      "slug": "おわる",
+      "level": "JLPT4",
+      "meaning": "To finish, To end",
+      "grammarOrder": 158
+    },
+    {
+      "id": 127,
+      "title": "がひつよう",
+      "slug": "がひつよう",
+      "level": "JLPT4",
+      "meaning": "Need, Necessary",
+      "grammarOrder": 267
+    },
+    {
+      "id": 128,
+      "title": "てくる ",
+      "slug": "てくる",
+      "level": "JLPT4",
+      "meaning": "To come to, To become, To continue, To be starting to, Has been ~ing",
+      "grammarOrder": 141
+    },
+    {
+      "id": 129,
+      "title": "といい",
+      "slug": "といい",
+      "level": "JLPT4",
+      "meaning": "I hope, I wish, You should, It would be good",
+      "grammarOrder": 196
+    },
+    {
+      "id": 130,
+      "title": "のに ",
+      "slug": "のに-despite",
+      "level": "JLPT4",
+      "meaning": "Despite, Although, Even though",
+      "grammarOrder": 168
+    },
+    {
+      "id": 131,
+      "title": "とか～とか",
+      "slug": "とか-とか",
+      "level": "JLPT4",
+      "meaning": "Among other things, For example, Such as",
+      "grammarOrder": 175
+    },
+    {
+      "id": 132,
+      "title": "れる・られる (Potential)",
+      "slug": "Verb[potential]",
+      "level": "JLPT4",
+      "meaning": "To be able, Can (Potential)",
+      "grammarOrder": 271
+    },
+    {
+      "id": 133,
+      "title": "ばあいは",
+      "slug": "ばあいは",
+      "level": "JLPT4",
+      "meaning": "In the event of, In the case of",
+      "grammarOrder": 231
+    },
+    {
+      "id": 134,
+      "title": "ていただけませんか",
+      "slug": "ていただけませんか",
+      "level": "JLPT4",
+      "meaning": "Won't you, Could you please (Humble request)",
+      "grammarOrder": 264
+    },
+    {
+      "id": 135,
+      "title": "るところだ",
+      "slug": "るところだ",
+      "level": "JLPT4",
+      "meaning": "About to, On the verge of",
+      "grammarOrder": 167
+    },
+    {
+      "id": 136,
+      "title": "ていた ",
+      "slug": "ていた",
+      "level": "JLPT4",
+      "meaning": "Was doing ~",
+      "grammarOrder": 161
+    },
+    {
+      "id": 137,
+      "title": "ていく",
+      "slug": "ていく",
+      "level": "JLPT4",
+      "meaning": "To ~ and go, To go on, To start",
+      "grammarOrder": 140
+    },
+    {
+      "id": 138,
+      "title": "ように・ような",
+      "slug": "ように-ような",
+      "level": "JLPT4",
+      "meaning": "As・like, Just like",
+      "grammarOrder": 222
+    },
+    {
+      "id": 139,
+      "title": "ひつようがある",
+      "slug": "ひつようがある",
+      "level": "JLPT4",
+      "meaning": "It is necessary to",
+      "grammarOrder": 269
+    },
+    {
+      "id": 140,
+      "title": "てよかった",
+      "slug": "てよかった",
+      "level": "JLPT4",
+      "meaning": "I'm glad that",
+      "grammarOrder": 233
+    },
+    {
+      "id": 141,
+      "title": "し～し ",
+      "slug": "し-し",
+      "level": "JLPT4",
+      "meaning": "And, Giving reasons",
+      "grammarOrder": 283
+    },
+    {
+      "id": 142,
+      "title": "に (Frequency)",
+      "slug": "に-frequency",
+      "level": "JLPT4",
+      "meaning": "Times (In each time period), Every, Frequency of",
+      "grammarOrder": 162
+    },
+    {
+      "id": 143,
+      "title": "と",
+      "slug": "と-conditional",
+      "level": "JLPT4",
+      "meaning": "If, When, Whenever, And, [Conditional]",
+      "grammarOrder": 275
+    },
+    {
+      "id": 144,
+      "title": "そんなに",
+      "slug": "そんなに",
+      "level": "JLPT4",
+      "meaning": "So (much), That much, Like that",
+      "grammarOrder": 268
+    },
+    {
+      "id": 145,
+      "title": "Verb［れる・られる］",
+      "slug": "Verb[passive]",
+      "level": "JLPT4",
+      "meaning": "Was done to ~ by ~, Done without consent, Done to one's dismay",
+      "grammarOrder": 148
+    },
+    {
+      "id": 146,
+      "title": "たところだ",
+      "slug": "たところだ",
+      "level": "JLPT4",
+      "meaning": "Just finished doing, Was just doing",
+      "grammarOrder": 286
+    },
+    {
+      "id": 147,
+      "title": "といってもいい",
+      "slug": "といってもいい",
+      "level": "JLPT4",
+      "meaning": "You could say, You might say",
+      "grammarOrder": 235
+    },
+    {
+      "id": 148,
+      "title": "ながら",
+      "slug": "ながら",
+      "level": "JLPT4",
+      "meaning": "While ~ing, During, As",
+      "grammarOrder": 285
+    },
+    {
+      "id": 149,
+      "title": "ようだ",
+      "slug": "ようだ",
+      "level": "JLPT4",
+      "meaning": "It seems that, It appears that, It looks like",
+      "grammarOrder": 178
+    },
+    {
+      "id": 150,
+      "title": "ているところだ",
+      "slug": "ているところだ",
+      "level": "JLPT4",
+      "meaning": "In the process of doing ~ right now/at this moment",
+      "grammarOrder": 287
+    },
+    {
+      "id": 151,
+      "title": "はずだ",
+      "slug": "はずだ",
+      "level": "JLPT4",
+      "meaning": "Bound to (be), Expected to (be), Should be (able)",
+      "grammarOrder": 273
+    },
+    {
+      "id": 152,
+      "title": "と～と、どちらが ",
+      "slug": "と-と-どちらが",
+      "level": "JLPT4",
+      "meaning": "Between ~ which one",
+      "grammarOrder": 288
+    },
+    {
+      "id": 153,
+      "title": "Verb［せる・させる］",
+      "slug": "causative",
+      "level": "JLPT4",
+      "meaning": "To make/let/have (somebody do something)",
+      "grammarOrder": 234
+    },
+    {
+      "id": 154,
+      "title": "ば",
+      "slug": "ば",
+      "level": "JLPT4",
+      "meaning": "If… then, (Conditional)",
+      "grammarOrder": 182
+    },
+    {
+      "id": 155,
+      "title": "らしい ①",
+      "slug": "らしい1",
+      "level": "JLPT4",
+      "meaning": "Seems like, Apparently, I heard",
+      "grammarOrder": 200
+    },
+    {
+      "id": 156,
+      "title": "かどうか",
+      "slug": "かどうか",
+      "level": "JLPT4",
+      "meaning": "Whether or not, If...or not",
+      "grammarOrder": 274
+    },
+    {
+      "id": 157,
+      "title": "ときいた",
+      "slug": "ときいた",
+      "level": "JLPT4",
+      "meaning": "I heard that",
+      "grammarOrder": 204
+    },
+    {
+      "id": 158,
+      "title": "ようにする",
+      "slug": "ようにする",
+      "level": "JLPT4",
+      "meaning": "To try to, To make sure to, To endeavor to",
+      "grammarOrder": 289
+    },
+    {
+      "id": 159,
+      "title": "てある ",
+      "slug": "てある",
+      "level": "JLPT4",
+      "meaning": "Something is done, Has been done, Remaining state",
+      "grammarOrder": 241
+    },
+    {
+      "id": 160,
+      "title": "ているあいだに",
+      "slug": "ているあいだに",
+      "level": "JLPT4",
+      "meaning": "While, During the time that ~",
+      "grammarOrder": 243
+    },
+    {
+      "id": 161,
+      "title": "はずがない",
+      "slug": "はずがない",
+      "level": "JLPT4",
+      "meaning": "Hardly possible, Cannot be, Highly unlikely, Improbable",
+      "grammarOrder": 277
+    },
+    {
+      "id": 162,
+      "title": "ておく",
+      "slug": "ておく",
+      "level": "JLPT4",
+      "meaning": "To do something in advance",
+      "grammarOrder": 201
+    },
+    {
+      "id": 163,
+      "title": "ばよかった",
+      "slug": "ばよかった",
+      "level": "JLPT4",
+      "meaning": "Should have, I wish, It would have been better to",
+      "grammarOrder": 317
+    },
+    {
+      "id": 164,
+      "title": "Causative-Passive",
+      "slug": "causative-passive",
+      "level": "JLPT4",
+      "meaning": "Verbs (Causative-passive voice), To be made to do something, To be forced to do",
+      "grammarOrder": 239
+    },
+    {
+      "id": 165,
+      "title": "たばかり",
+      "slug": "たばかり",
+      "level": "JLPT4",
+      "meaning": "Just did, Something just happened",
+      "grammarOrder": 296
+    },
+    {
+      "id": 166,
+      "title": "にみえる",
+      "slug": "にみえる",
+      "level": "JLPT4",
+      "meaning": "To look, To seem, To appear",
+      "grammarOrder": 303
+    },
+    {
+      "id": 167,
+      "title": "にきがつく",
+      "slug": "にきがつく",
+      "level": "JLPT4",
+      "meaning": "To notice (that), To realize (that)",
+      "grammarOrder": 307
+    },
+    {
+      "id": 168,
+      "title": "ようになる",
+      "slug": "ようになる",
+      "level": "JLPT4",
+      "meaning": "To reach the point that, To come to be that, To turn into",
+      "grammarOrder": 197
+    },
+    {
+      "id": 169,
+      "title": "なければいけない",
+      "slug": "なければいけない",
+      "level": "JLPT4",
+      "meaning": "Must do, Have to do",
+      "grammarOrder": 290
+    },
+    {
+      "id": 170,
+      "title": "なければならない",
+      "slug": "なければならない",
+      "level": "JLPT4",
+      "meaning": "Must do, Have to do",
+      "grammarOrder": 291
+    },
+    {
+      "id": 171,
+      "title": "なくてもいい",
+      "slug": "なくてもいい",
+      "level": "JLPT4",
+      "meaning": "Don't have to",
+      "grammarOrder": 244
+    },
+    {
+      "id": 172,
+      "title": "てしまう・ちゃう",
+      "slug": "てしまう-ちゃう",
+      "level": "JLPT4",
+      "meaning": "To do something by accident, To finish completely・totally, Unfortunately",
+      "grammarOrder": 237
+    },
+    {
+      "id": 173,
+      "title": "じゃないか",
+      "slug": "じゃないか",
+      "level": "JLPT4",
+      "meaning": "Isn't it?, Is it not?",
+      "grammarOrder": 199
+    },
+    {
+      "id": 174,
+      "title": "ても",
+      "slug": "ても",
+      "level": "JLPT4",
+      "meaning": "Even if, Even though",
+      "grammarOrder": 236
+    },
+    {
+      "id": 175,
+      "title": "かい",
+      "slug": "かい",
+      "level": "JLPT4",
+      "meaning": "Question marker",
+      "grammarOrder": 281
+    },
+    {
+      "id": 176,
+      "title": "他動詞・自動詞",
+      "slug": "transitive-intransitive-verbs",
+      "level": "JLPT4",
+      "meaning": "Done through action vs. occurring on its own",
+      "grammarOrder": 149
+    },
+    {
+      "id": 177,
+      "title": "たらどう",
+      "slug": "たらどう",
+      "level": "JLPT4",
+      "meaning": "Why don't you...?, What if you did...?",
+      "grammarOrder": 313
+    },
+    {
+      "id": 178,
+      "title": "だす",
+      "slug": "だす",
+      "level": "JLPT4",
+      "meaning": "To suddenly begin, To start doing",
+      "grammarOrder": 207
+    },
+    {
+      "id": 179,
+      "title": "とみえる",
+      "slug": "とみえる",
+      "level": "JLPT4",
+      "meaning": "It seems that, It can be deduced, One can conclude that",
+      "grammarOrder": 304
+    },
+    {
+      "id": 180,
+      "title": "つづける",
+      "slug": "つづける",
+      "level": "JLPT4",
+      "meaning": "To continue",
+      "grammarOrder": 292
+    },
+    {
+      "id": 181,
+      "title": "よていだ",
+      "slug": "よていだ",
+      "level": "JLPT4",
+      "meaning": "Plan to, Intend to",
+      "grammarOrder": 294
+    },
+    {
+      "id": 182,
+      "title": "しか～ない ",
+      "slug": "しか-ない",
+      "level": "JLPT4",
+      "meaning": "There's only, Nothing but",
+      "grammarOrder": 278
+    },
+    {
+      "id": 183,
+      "title": "のなかで",
+      "slug": "のなかで",
+      "level": "JLPT4",
+      "meaning": "In, Among, Within",
+      "grammarOrder": 221
+    },
+    {
+      "id": 184,
+      "title": "といわれている",
+      "slug": "といわれている",
+      "level": "JLPT4",
+      "meaning": "It is said that, Is known as",
+      "grammarOrder": 316
+    },
+    {
+      "id": 185,
+      "title": "ということ",
+      "slug": "ということ",
+      "level": "JLPT4",
+      "meaning": "~ing, The ~ that ~ (Nominalization)",
+      "grammarOrder": 151
+    },
+    {
+      "id": 186,
+      "title": "それでも",
+      "slug": "それでも",
+      "level": "JLPT4",
+      "meaning": "But still, And yet, Even so, Nevertheless",
+      "grammarOrder": 312
+    },
+    {
+      "id": 187,
+      "title": "ございます",
+      "slug": "ございます",
+      "level": "JLPT4",
+      "meaning": "To be, To exist (Polite)",
+      "grammarOrder": 260
+    },
+    {
+      "id": 188,
+      "title": "でございます",
+      "slug": "でございます",
+      "level": "JLPT4",
+      "meaning": "To be, Polite copula",
+      "grammarOrder": 261
+    },
+    {
+      "id": 189,
+      "title": "お～ください ",
+      "slug": "お-ください",
+      "level": "JLPT4",
+      "meaning": "Please do (Honorific)",
+      "grammarOrder": 258
+    },
+    {
+      "id": 190,
+      "title": "お～になる ",
+      "slug": "お-になる",
+      "level": "JLPT4",
+      "meaning": "To do (Honorific)",
+      "grammarOrder": 256
+    },
+    {
+      "id": 191,
+      "title": "いらっしゃる",
+      "slug": "いらっしゃる",
+      "level": "JLPT4",
+      "meaning": "To be (Honorific), To come (Honorific), To go (Honorific)",
+      "grammarOrder": 259
+    },
+    {
+      "id": 192,
+      "title": "いたす",
+      "slug": "いたす",
+      "level": "JLPT4",
+      "meaning": "To do (Humble), To venerably do",
+      "grammarOrder": 263
+    },
+    {
+      "id": 193,
+      "title": "なさる",
+      "slug": "なさる",
+      "level": "JLPT4",
+      "meaning": "To do (Honorific)",
+      "grammarOrder": 257
+    },
+    {
+      "id": 194,
+      "title": "かしら",
+      "slug": "かしら",
+      "level": "JLPT4",
+      "meaning": "I wonder",
+      "grammarOrder": 300
+    },
+    {
+      "id": 195,
+      "title": "ばいい",
+      "slug": "ばいい",
+      "level": "JLPT3",
+      "meaning": "Can, Should, It'd be good if",
+      "grammarOrder": 318
+    },
+    {
+      "id": 196,
+      "title": "べき",
+      "slug": "べき",
+      "level": "JLPT3",
+      "meaning": "Must, Should , Ought to",
+      "grammarOrder": 324
+    },
+    {
+      "id": 197,
+      "title": "中",
+      "slug": "中",
+      "level": "JLPT3",
+      "meaning": "During, While, Throughout, In the process of",
+      "grammarOrder": 320
+    },
+    {
+      "id": 198,
+      "title": "上で",
+      "slug": "上で",
+      "level": "JLPT3",
+      "meaning": "After, Upon",
+      "grammarOrder": 359
+    },
+    {
+      "id": 199,
+      "title": "ことだ",
+      "slug": "ことだ",
+      "level": "JLPT3",
+      "meaning": "Should, Ought",
+      "grammarOrder": 333
+    },
+    {
+      "id": 200,
+      "title": "そうだ ",
+      "slug": "そうだ",
+      "level": "JLPT3",
+      "meaning": "I heard that, It is said that",
+      "grammarOrder": 334
+    },
+    {
+      "id": 201,
+      "title": "ほど",
+      "slug": "ほど",
+      "level": "JLPT3",
+      "meaning": "The more, About, To the extent that, So much… that",
+      "grammarOrder": 345
+    },
+    {
+      "id": 202,
+      "title": "という",
+      "slug": "という-called",
+      "level": "JLPT3",
+      "meaning": "Called, Named, Known as, As much as",
+      "grammarOrder": 352
+    },
+    {
+      "id": 203,
+      "title": "なぜなら〜から",
+      "slug": "なぜなら-から",
+      "level": "JLPT3",
+      "meaning": "Because, The reason is, That is because",
+      "grammarOrder": 363
+    },
+    {
+      "id": 204,
+      "title": "によると・によれば",
+      "slug": "によると-によれば",
+      "level": "JLPT3",
+      "meaning": "According to",
+      "grammarOrder": 330
+    },
+    {
+      "id": 205,
+      "title": "ため(に)",
+      "slug": "ため-に",
+      "level": "JLPT3",
+      "meaning": "For, For the sake of, In order to",
+      "grammarOrder": 350
+    },
+    {
+      "id": 206,
+      "title": "ところが",
+      "slug": "ところが",
+      "level": "JLPT3",
+      "meaning": "Even so, However, Even though, But",
+      "grammarOrder": 343
+    },
+    {
+      "id": 207,
+      "title": "ば〜ほど",
+      "slug": "ば-ほど",
+      "level": "JLPT3",
+      "meaning": "The more…the more",
+      "grammarOrder": 346
+    },
+    {
+      "id": 209,
+      "title": "べきではない",
+      "slug": "べきではない",
+      "level": "JLPT3",
+      "meaning": "Should not, Must not , Ought not to",
+      "grammarOrder": 325
+    },
+    {
+      "id": 210,
+      "title": "の間に",
+      "slug": "の間に",
+      "level": "JLPT3",
+      "meaning": "While, During, Between, Period",
+      "grammarOrder": 321
+    },
+    {
+      "id": 211,
+      "title": "うちに",
+      "slug": "うちに",
+      "level": "JLPT3",
+      "meaning": "While, During",
+      "grammarOrder": 322
+    },
+    {
+      "id": 212,
+      "title": "たらいい・といい",
+      "slug": "たらいい-といい",
+      "level": "JLPT3",
+      "meaning": "It would be nice if, It would be good if, Should, I hope",
+      "grammarOrder": 319
+    },
+    {
+      "id": 213,
+      "title": "もの・もん",
+      "slug": "もの-もん",
+      "level": "JLPT3",
+      "meaning": "Because, Cause",
+      "grammarOrder": 356
+    },
+    {
+      "id": 214,
+      "title": "によって・による",
+      "slug": "によって-による",
+      "level": "JLPT3",
+      "meaning": "By means of, According to, Depending on, Because of, Due to",
+      "grammarOrder": 331
+    },
+    {
+      "id": 215,
+      "title": "ために",
+      "slug": "ために",
+      "level": "JLPT3",
+      "meaning": "Due to, Because of, As a result of",
+      "grammarOrder": 351
+    },
+    {
+      "id": 216,
+      "title": "ということだ",
+      "slug": "ということだ",
+      "level": "JLPT3",
+      "meaning": "I heard that, Rumor has it that, It is said that, It means that",
+      "grammarOrder": 353
+    },
+    {
+      "id": 217,
+      "title": "ところで",
+      "slug": "ところで",
+      "level": "JLPT3",
+      "meaning": "By the way, Incidentally",
+      "grammarOrder": 344
+    },
+    {
+      "id": 218,
+      "title": "あまり",
+      "slug": "あまり",
+      "level": "JLPT3",
+      "meaning": "So much...that",
+      "grammarOrder": 328
+    },
+    {
+      "id": 219,
+      "title": "ばかり",
+      "slug": "ばかり",
+      "level": "JLPT3",
+      "meaning": "Just, Only, Nothing but",
+      "grammarOrder": 366
+    },
+    {
+      "id": 220,
+      "title": "どんなに〜ても",
+      "slug": "どんなに-ても",
+      "level": "JLPT3",
+      "meaning": "No matter how",
+      "grammarOrder": 386
+    },
+    {
+      "id": 221,
+      "title": "ほど～ない",
+      "slug": "ほど～ない",
+      "level": "JLPT3",
+      "meaning": "Is not as…as, Isn't... like..., Not to the extent of...",
+      "grammarOrder": 347
+    },
+    {
+      "id": 222,
+      "title": "ことがある",
+      "slug": "ことがある",
+      "level": "JLPT3",
+      "meaning": "Something is possible, Sometimes, Occasionally, There are times when",
+      "grammarOrder": 369
+    },
+    {
+      "id": 223,
+      "title": "ものだ",
+      "slug": "ものだ",
+      "level": "JLPT3",
+      "meaning": "Supposed to, Should, That's the way it is",
+      "grammarOrder": 357
+    },
+    {
+      "id": 224,
+      "title": "に比べて",
+      "slug": "に比べて",
+      "level": "JLPT3",
+      "meaning": "Compared to, When compared to",
+      "grammarOrder": 385
+    },
+    {
+      "id": 225,
+      "title": "について",
+      "slug": "について",
+      "level": "JLPT3",
+      "meaning": "Concerning, About, Regarding",
+      "grammarOrder": 379
+    },
+    {
+      "id": 226,
+      "title": "最中に",
+      "slug": "最中に",
+      "level": "JLPT3",
+      "meaning": "In the middle of",
+      "grammarOrder": 358
+    },
+    {
+      "id": 228,
+      "title": "というのは",
+      "slug": "というのは",
+      "level": "JLPT3",
+      "meaning": "~ Known as ~ is, ~ Called ~ is, ~ Means ~, Because",
+      "grammarOrder": 354
+    },
+    {
+      "id": 229,
+      "title": "わけだ",
+      "slug": "わけだ",
+      "level": "JLPT3",
+      "meaning": "For that reason, No wonder, As you'd expect, Naturally, Thus, This is why",
+      "grammarOrder": 391
+    },
+    {
+      "id": 230,
+      "title": "あまりに",
+      "slug": "あまりに",
+      "level": "JLPT3",
+      "meaning": "So much...that, (Way) too...",
+      "grammarOrder": 390
+    },
+    {
+      "id": 231,
+      "title": "ばかりだ",
+      "slug": "ばかりだ",
+      "level": "JLPT3",
+      "meaning": "(Only) continue to, Keep on -ing, More and more",
+      "grammarOrder": 367
+    },
+    {
+      "id": 232,
+      "title": "いくら〜でも",
+      "slug": "いくら-でも",
+      "level": "JLPT3",
+      "meaning": "No matter how (much)",
+      "grammarOrder": 387
+    },
+    {
+      "id": 233,
+      "title": "ことはない",
+      "slug": "ことはない",
+      "level": "JLPT3",
+      "meaning": "There is no need to, Never happens",
+      "grammarOrder": 374
+    },
+    {
+      "id": 234,
+      "title": "くらい ②",
+      "slug": "くらい2",
+      "level": "JLPT3",
+      "meaning": "To the extent that, So…that, About the only thing that...",
+      "grammarOrder": 400
+    },
+    {
+      "id": 235,
+      "title": "まま(に)",
+      "slug": "まま",
+      "level": "JLPT3",
+      "meaning": "As is, While remaining, Left in a state",
+      "grammarOrder": 406
+    },
+    {
+      "id": 236,
+      "title": "に関する・に関して",
+      "slug": "に関する-に関して",
+      "level": "JLPT3",
+      "meaning": "Related to, About, Regarding",
+      "grammarOrder": 398
+    },
+    {
+      "id": 237,
+      "title": "に対して",
+      "slug": "に対して",
+      "level": "JLPT3",
+      "meaning": "In contrast to, While, In regard to, Whereas",
+      "grammarOrder": 399
+    },
+    {
+      "id": 238,
+      "title": "おかげで",
+      "slug": "おかげで",
+      "level": "JLPT3",
+      "meaning": "Thanks to, Because of",
+      "grammarOrder": 360
+    },
+    {
+      "id": 239,
+      "title": "てもかまわない",
+      "slug": "てもかまわない",
+      "level": "JLPT3",
+      "meaning": "It doesn't matter if, I don't mind",
+      "grammarOrder": 409
+    },
+    {
+      "id": 240,
+      "title": "といえば",
+      "slug": "といえば",
+      "level": "JLPT3",
+      "meaning": "Speaking of, If it were the case that",
+      "grammarOrder": 376
+    },
+    {
+      "id": 241,
+      "title": "わけではない",
+      "slug": "わけではない",
+      "level": "JLPT3",
+      "meaning": "It doesn't mean that, It is not the case, It's not like",
+      "grammarOrder": 392
+    },
+    {
+      "id": 242,
+      "title": "ばかりに",
+      "slug": "ばかりに",
+      "level": "JLPT3",
+      "meaning": "Simply because, Only because, Just because, Simply on account of",
+      "grammarOrder": 368
+    },
+    {
+      "id": 243,
+      "title": "だらけ",
+      "slug": "だらけ",
+      "level": "JLPT3",
+      "meaning": "Completely covered in, Full of",
+      "grammarOrder": 454
+    },
+    {
+      "id": 244,
+      "title": "から言うと",
+      "slug": "から言うと",
+      "level": "JLPT3",
+      "meaning": "Speaking in terms of, From the point of view of",
+      "grammarOrder": 418
+    },
+    {
+      "id": 245,
+      "title": "ことか",
+      "slug": "ことか",
+      "level": "JLPT3",
+      "meaning": "How…, What..., God knows...",
+      "grammarOrder": 448
+    },
+    {
+      "id": 246,
+      "title": "んだって",
+      "slug": "んだって",
+      "level": "JLPT3",
+      "meaning": "I heard that, He or She said that",
+      "grammarOrder": 396
+    },
+    {
+      "id": 247,
+      "title": "に取って",
+      "slug": "に取って",
+      "level": "JLPT3",
+      "meaning": "To, For, Concerning",
+      "grammarOrder": 419
+    },
+    {
+      "id": 248,
+      "title": "さえ",
+      "slug": "さえ",
+      "level": "JLPT3",
+      "meaning": "Even",
+      "grammarOrder": 425
+    },
+    {
+      "id": 249,
+      "title": "しかない",
+      "slug": "しかない",
+      "level": "JLPT3",
+      "meaning": "Have no choice but, Only, Just",
+      "grammarOrder": 408
+    },
+    {
+      "id": 250,
+      "title": "というより",
+      "slug": "というより",
+      "level": "JLPT3",
+      "meaning": "...is more of a... than a..., Rather than saying that...",
+      "grammarOrder": 421
+    },
+    {
+      "id": 251,
+      "title": "としたら・とすれば・とすると",
+      "slug": "としたら-とすれば-とすると",
+      "level": "JLPT3",
+      "meaning": "If it were the case that, Assuming that...",
+      "grammarOrder": 413
+    },
+    {
+      "id": 252,
+      "title": "つまり",
+      "slug": "つまり",
+      "level": "JLPT3",
+      "meaning": "In short, To sum up, In other words",
+      "grammarOrder": 430
+    },
+    {
+      "id": 253,
+      "title": "わけがない",
+      "slug": "わけがない",
+      "level": "JLPT3",
+      "meaning": "There is no way, There is no reason, It is impossible, Cannot be",
+      "grammarOrder": 412
+    },
+    {
+      "id": 254,
+      "title": "ような気がする",
+      "slug": "ような気がする",
+      "level": "JLPT3",
+      "meaning": "Have a feeling that",
+      "grammarOrder": 434
+    },
+    {
+      "id": 255,
+      "title": "ばかりでなく",
+      "slug": "ばかりでなく",
+      "level": "JLPT3",
+      "meaning": "Not only…but also, As well as",
+      "grammarOrder": 437
+    },
+    {
+      "id": 256,
+      "title": "別に〜ない",
+      "slug": "別に-ない",
+      "level": "JLPT3",
+      "meaning": "Not really, Not particularly, It's not like...",
+      "grammarOrder": 436
+    },
+    {
+      "id": 257,
+      "title": "がたい",
+      "slug": "がたい",
+      "level": "JLPT3",
+      "meaning": "Hard to, Difficult to",
+      "grammarOrder": 518
+    },
+    {
+      "id": 258,
+      "title": "こそ",
+      "slug": "こそ",
+      "level": "JLPT3",
+      "meaning": "For sure, For certain, Even more so, Underlined or bolded text",
+      "grammarOrder": 364
+    },
+    {
+      "id": 259,
+      "title": "ことから",
+      "slug": "ことから",
+      "level": "JLPT3",
+      "meaning": "From the fact that",
+      "grammarOrder": 420
+    },
+    {
+      "id": 260,
+      "title": "まるで…ようだ",
+      "slug": "まるで-ようだ",
+      "level": "JLPT3",
+      "meaning": "It is entirely as if, It is just as though",
+      "grammarOrder": 433
+    },
+    {
+      "id": 261,
+      "title": "向き",
+      "slug": "向き",
+      "level": "JLPT3",
+      "meaning": "Suitable for, Facing",
+      "grammarOrder": 498
+    },
+    {
+      "id": 262,
+      "title": "にしても",
+      "slug": "にしても",
+      "level": "JLPT3",
+      "meaning": "Even though, Even if, Even when, Also",
+      "grammarOrder": 416
+    },
+    {
+      "id": 263,
+      "title": "をはじめ",
+      "slug": "をはじめ",
+      "level": "JLPT3",
+      "meaning": "Not only...but also..., Starting with",
+      "grammarOrder": 423
+    },
+    {
+      "id": 264,
+      "title": "さえ〜ば",
+      "slug": "さえ-ば",
+      "level": "JLPT3",
+      "meaning": "If only…then, As long as..., Provided..., Only thing ... needs for ... is ...",
+      "grammarOrder": 426
+    },
+    {
+      "id": 265,
+      "title": "として",
+      "slug": "として",
+      "level": "JLPT3",
+      "meaning": "As (i.e. in the role of), For",
+      "grammarOrder": 414
+    },
+    {
+      "id": 266,
+      "title": "わけにはいかない",
+      "slug": "わけにはいかない",
+      "level": "JLPT3",
+      "meaning": "Cannot afford to, No way, Impossible to do",
+      "grammarOrder": 443
+    },
+    {
+      "id": 267,
+      "title": "Verb[volitional]とする",
+      "slug": "verb-volitionalとする",
+      "level": "JLPT3",
+      "meaning": "Try to, Attempt to, To be about to",
+      "grammarOrder": 468
+    },
+    {
+      "id": 268,
+      "title": "決して〜ない",
+      "slug": "決して-ない",
+      "level": "JLPT3",
+      "meaning": "Never, By no means",
+      "grammarOrder": 442
+    },
+    {
+      "id": 269,
+      "title": "ふりをする",
+      "slug": "ふりをする",
+      "level": "JLPT3",
+      "meaning": "To pretend, To act as if",
+      "grammarOrder": 509
+    },
+    {
+      "id": 270,
+      "title": "ことに",
+      "slug": "ことに",
+      "level": "JLPT3",
+      "meaning": "Extremely, Especially, To my ...",
+      "grammarOrder": 447
+    },
+    {
+      "id": 271,
+      "title": "めったに〜ない",
+      "slug": "めったに-ない",
+      "level": "JLPT3",
+      "meaning": "Hardly, Rarely, Seldom",
+      "grammarOrder": 466
+    },
+    {
+      "id": 272,
+      "title": "向け",
+      "slug": "向け",
+      "level": "JLPT3",
+      "meaning": "Intended for, Aimed at",
+      "grammarOrder": 499
+    },
+    {
+      "id": 273,
+      "title": "にしては",
+      "slug": "にしては",
+      "level": "JLPT3",
+      "meaning": "(Even) considering, (Even) for",
+      "grammarOrder": 415
+    },
+    {
+      "id": 274,
+      "title": "せいで",
+      "slug": "せいで",
+      "level": "JLPT3",
+      "meaning": "Because of, Due to, Blame",
+      "grammarOrder": 522
+    },
+    {
+      "id": 275,
+      "title": "そうもない",
+      "slug": "そうもない",
+      "level": "JLPT3",
+      "meaning": "Very unlikely to, Does not seem that, Does not appear that",
+      "grammarOrder": 471
+    },
+    {
+      "id": 276,
+      "title": "たとえ〜ても",
+      "slug": "たとえ-ても",
+      "level": "JLPT3",
+      "meaning": "Even if…is the case, Supposing that",
+      "grammarOrder": 446
+    },
+    {
+      "id": 277,
+      "title": "て初めて",
+      "slug": "て初めて",
+      "level": "JLPT3",
+      "meaning": "For the first time, Not until, Only after, Only when, Only because",
+      "grammarOrder": 424
+    },
+    {
+      "id": 278,
+      "title": "とは限らない",
+      "slug": "とは限らない",
+      "level": "JLPT3",
+      "meaning": "Not necessarily so, Is not always true, There is no guarantee that",
+      "grammarOrder": 465
+    },
+    {
+      "id": 279,
+      "title": "〜ようとしない",
+      "slug": "-ようとしない",
+      "level": "JLPT3",
+      "meaning": "Not willing to, Not make an effort to, To not attempt or try to, Volitional + としない",
+      "grammarOrder": 444
+    },
+    {
+      "id": 280,
+      "title": "一方だ",
+      "slug": "一方だ",
+      "level": "JLPT3",
+      "meaning": "More and more, Continue to, Keep on, -er and -er",
+      "grammarOrder": 487
+    },
+    {
+      "id": 281,
+      "title": "代わりに",
+      "slug": "代わりに",
+      "level": "JLPT3",
+      "meaning": "Instead of,  In place of, In exchange for",
+      "grammarOrder": 532
+    },
+    {
+      "id": 282,
+      "title": "切る",
+      "slug": "切る",
+      "level": "JLPT3",
+      "meaning": "To do something completely to the end, Utterly, Resolutely",
+      "grammarOrder": 501
+    },
+    {
+      "id": 283,
+      "title": "ことになる",
+      "slug": "ことになる",
+      "level": "JLPT3",
+      "meaning": "It will end up being, It is the result of, It has been decided that",
+      "grammarOrder": 372
+    },
+    {
+      "id": 284,
+      "title": "もしかしたら",
+      "slug": "もしかしたら",
+      "level": "JLPT3",
+      "meaning": "Perhaps, Maybe, Possibly",
+      "grammarOrder": 445
+    },
+    {
+      "id": 285,
+      "title": "ながらも",
+      "slug": "ながらも",
+      "level": "JLPT3",
+      "meaning": "But, Even while, Even though, Despite, Although",
+      "grammarOrder": 483
+    },
+    {
+      "id": 286,
+      "title": "に違いない",
+      "slug": "に違いない",
+      "level": "JLPT3",
+      "meaning": "There is no doubt that, I'm sure",
+      "grammarOrder": 461
+    },
+    {
+      "id": 287,
+      "title": "において・における",
+      "slug": "において-における",
+      "level": "JLPT3",
+      "meaning": "In, On, At, Regarding, In terms of",
+      "grammarOrder": 484
+    },
+    {
+      "id": 288,
+      "title": "その結果",
+      "slug": "その結果",
+      "level": "JLPT3",
+      "meaning": "As a result",
+      "grammarOrder": 384
+    },
+    {
+      "id": 289,
+      "title": "とおり",
+      "slug": "とおり",
+      "level": "JLPT3",
+      "meaning": "In that way, Exactly, Precisely, Just as",
+      "grammarOrder": 513
+    },
+    {
+      "id": 290,
+      "title": "ついでに",
+      "slug": "ついでに",
+      "level": "JLPT3",
+      "meaning": "While you are at it, On the occasion",
+      "grammarOrder": 475
+    },
+    {
+      "id": 291,
+      "title": "と共に",
+      "slug": "と共に",
+      "level": "JLPT3",
+      "meaning": "Together with, At the same time,  As well as",
+      "grammarOrder": 476
+    },
+    {
+      "id": 292,
+      "title": "一方で",
+      "slug": "一方で",
+      "level": "JLPT3",
+      "meaning": "On the other hand, At the same time, While",
+      "grammarOrder": 488
+    },
+    {
+      "id": 293,
+      "title": "切れない",
+      "slug": "切れない",
+      "level": "JLPT3",
+      "meaning": "Being unable to finish or complete",
+      "grammarOrder": 502
+    },
+    {
+      "id": 294,
+      "title": "ことにする",
+      "slug": "ことにする",
+      "level": "JLPT3",
+      "meaning": "To decide on, Have decided to",
+      "grammarOrder": 370
+    },
+    {
+      "id": 295,
+      "title": "くせに",
+      "slug": "くせに",
+      "level": "JLPT3",
+      "meaning": "Even though, And yet, Despite",
+      "grammarOrder": 523
+    },
+    {
+      "id": 296,
+      "title": "なんか・なんて",
+      "slug": "なんか-なんて",
+      "level": "JLPT3",
+      "meaning": "Such as, Things like, Emphasis",
+      "grammarOrder": 473
+    },
+    {
+      "id": 297,
+      "title": "に代わって",
+      "slug": "に代わって",
+      "level": "JLPT3",
+      "meaning": "In place of, On behalf of, To succeed",
+      "grammarOrder": 533
+    },
+    {
+      "id": 298,
+      "title": "につれて",
+      "slug": "につれて",
+      "level": "JLPT3",
+      "meaning": "As…then, In proportion to, (Along) with",
+      "grammarOrder": 477
+    },
+    {
+      "id": 299,
+      "title": "っぱなし",
+      "slug": "っぱなし",
+      "level": "JLPT3",
+      "meaning": "Leaving something in a certain state, Left as is, Keep on -ing",
+      "grammarOrder": 527
+    },
+    {
+      "id": 300,
+      "title": "次第",
+      "slug": "次第",
+      "level": "JLPT3",
+      "meaning": "As soon as",
+      "grammarOrder": 512
+    },
+    {
+      "id": 301,
+      "title": "たびに",
+      "slug": "たびに",
+      "level": "JLPT3",
+      "meaning": "Each time, Every time, Whenever",
+      "grammarOrder": 481
+    },
+    {
+      "id": 302,
+      "title": "割に",
+      "slug": "わりに",
+      "level": "JLPT3",
+      "meaning": "Although, Despite, Rather...for, Unexpectedly, Comparatively, Considering",
+      "grammarOrder": 467
+    },
+    {
+      "id": 303,
+      "title": "ずに",
+      "slug": "ずに",
+      "level": "JLPT3",
+      "meaning": "Without doing",
+      "grammarOrder": 491
+    },
+    {
+      "id": 304,
+      "title": "どころか",
+      "slug": "どころか",
+      "level": "JLPT3",
+      "meaning": "Far from, Anything but",
+      "grammarOrder": 534
+    },
+    {
+      "id": 305,
+      "title": "がち",
+      "slug": "がち",
+      "level": "JLPT3",
+      "meaning": "Apt to do, Tend to do, Prone to do",
+      "grammarOrder": 524
+    },
+    {
+      "id": 306,
+      "title": "ぎみ",
+      "slug": "ぎみ",
+      "level": "JLPT3",
+      "meaning": "Looking, Feeling a little, Touch of, Tending to, Slightly",
+      "grammarOrder": 525
+    },
+    {
+      "id": 307,
+      "title": "かけ",
+      "slug": "かけ",
+      "level": "JLPT3",
+      "meaning": "Half-, Not yet finished, About to, Begin to",
+      "grammarOrder": 504
+    },
+    {
+      "id": 308,
+      "title": "っけ",
+      "slug": "っけ",
+      "level": "JLPT3",
+      "meaning": "What is…again?, Was it... that... ?, Did you say...?",
+      "grammarOrder": 531
+    },
+    {
+      "id": 309,
+      "title": "きり",
+      "slug": "きり",
+      "level": "JLPT3",
+      "meaning": "Only, Just, Since",
+      "grammarOrder": 503
+    },
+    {
+      "id": 310,
+      "title": "ないことはない",
+      "slug": "ないことはない",
+      "level": "JLPT3",
+      "meaning": "Is not impossible, It doesn't mean that it isn't",
+      "grammarOrder": 472
+    },
+    {
+      "id": 311,
+      "title": "にかけて",
+      "slug": "にかけて",
+      "level": "JLPT3",
+      "meaning": "Over (a period), From ~ until, Through",
+      "grammarOrder": 505
+    },
+    {
+      "id": 312,
+      "title": "っぽい",
+      "slug": "っぽい",
+      "level": "JLPT3",
+      "meaning": "-ish, -like, Characteristic of, Typical of, Tendency to",
+      "grammarOrder": 526
+    },
+    {
+      "id": 313,
+      "title": "たとたんに",
+      "slug": "たとたんに",
+      "level": "JLPT3",
+      "meaning": "The instant or moment, As soon as, Just as",
+      "grammarOrder": 479
+    },
+    {
+      "id": 314,
+      "title": "てごらん",
+      "slug": "てごらん",
+      "level": "JLPT3",
+      "meaning": "(Please) try to, (Please) look",
+      "grammarOrder": 339
+    },
+    {
+      "id": 315,
+      "title": "ずにはいられない",
+      "slug": "ずにはいられない",
+      "level": "JLPT3",
+      "meaning": "Cannot help doing something, Cannot resist doing something",
+      "grammarOrder": 492
+    },
+    {
+      "id": 316,
+      "title": "上",
+      "slug": "上",
+      "level": "JLPT2",
+      "meaning": "From the standpoint of",
+      "grammarOrder": 562
+    },
+    {
+      "id": 317,
+      "title": "以上 ②",
+      "slug": "以上2",
+      "level": "JLPT2",
+      "meaning": "Since, Now that, As long as, If",
+      "grammarOrder": 564
+    },
+    {
+      "id": 318,
+      "title": "ぶりに",
+      "slug": "ぶりに",
+      "level": "JLPT2",
+      "meaning": "For the first time in, Haven't done for some time",
+      "grammarOrder": 624
+    },
+    {
+      "id": 319,
+      "title": "思うように",
+      "slug": "思うように",
+      "level": "JLPT2",
+      "meaning": "As one hopes, As desired, As one thought",
+      "grammarOrder": 666
+    },
+    {
+      "id": 320,
+      "title": "だけに",
+      "slug": "だけに",
+      "level": "JLPT2",
+      "meaning": "As might be expected, Because, All the more because, It's only natural",
+      "grammarOrder": 725
+    },
+    {
+      "id": 321,
+      "title": "得る・得る",
+      "slug": "得る-得る",
+      "level": "JLPT2",
+      "meaning": "Is able to, Can, Possible",
+      "grammarOrder": 538
+    },
+    {
+      "id": 322,
+      "title": "逆に",
+      "slug": "逆に",
+      "level": "JLPT2",
+      "meaning": "On the contrary",
+      "grammarOrder": 647
+    },
+    {
+      "id": 323,
+      "title": "から見ると",
+      "slug": "から見ると",
+      "level": "JLPT2",
+      "meaning": "From the point of view of, By the look of",
+      "grammarOrder": 677
+    },
+    {
+      "id": 324,
+      "title": "でしかない",
+      "slug": "でしかない",
+      "level": "JLPT2",
+      "meaning": "Merely, Nothing but, No more than",
+      "grammarOrder": 738
+    },
+    {
+      "id": 325,
+      "title": "ことになっている",
+      "slug": "ことになっている",
+      "level": "JLPT2",
+      "meaning": "To be expected to, To be scheduled to",
+      "grammarOrder": 697
+    },
+    {
+      "id": 326,
+      "title": "も～ば～も",
+      "slug": "も-ば-も",
+      "level": "JLPT2",
+      "meaning": "…And…, Both ... and ..., ... And ... as well",
+      "grammarOrder": 737
+    },
+    {
+      "id": 327,
+      "title": "に向かって・に向けて",
+      "slug": "に向かって-に向けて",
+      "level": "JLPT2",
+      "meaning": "Towards, To face, To head to",
+      "grammarOrder": 583
+    },
+    {
+      "id": 328,
+      "title": "にしたら",
+      "slug": "にしたら",
+      "level": "JLPT2",
+      "meaning": "From the point of view of",
+      "grammarOrder": 657
+    },
+    {
+      "id": 329,
+      "title": "にしても～にしても",
+      "slug": "にしても-にしても",
+      "level": "JLPT2",
+      "meaning": "Regardless of whether",
+      "grammarOrder": 658
+    },
+    {
+      "id": 330,
+      "title": "にすぎない",
+      "slug": "にすぎない",
+      "level": "JLPT2",
+      "meaning": "No more than, Just, Merely",
+      "grammarOrder": 736
+    },
+    {
+      "id": 331,
+      "title": "しかも",
+      "slug": "しかも",
+      "level": "JLPT2",
+      "meaning": "Moreover, Furthermore",
+      "grammarOrder": 752
+    },
+    {
+      "id": 332,
+      "title": "そういえば",
+      "slug": "そういえば",
+      "level": "JLPT2",
+      "meaning": "Speaking of which, By the way, Come to think of it",
+      "grammarOrder": 682
+    },
+    {
+      "id": 333,
+      "title": "つもりで",
+      "slug": "つもりで",
+      "level": "JLPT2",
+      "meaning": "With the intention of doing, Instead of..., Act as if or pretend, Believing that..., Thinking that...",
+      "grammarOrder": 542
+    },
+    {
+      "id": 334,
+      "title": "ずに済む",
+      "slug": "ずに済む",
+      "level": "JLPT2",
+      "meaning": "Get by without doing something, To get away with",
+      "grammarOrder": 652
+    },
+    {
+      "id": 335,
+      "title": "だけあって",
+      "slug": "だけあって",
+      "level": "JLPT2",
+      "meaning": "Is only natural, …Being the case, Because, As might be expected",
+      "grammarOrder": 727
+    },
+    {
+      "id": 336,
+      "title": "〜得ない",
+      "slug": "得ない",
+      "level": "JLPT2",
+      "meaning": "Unable to, Cannot",
+      "grammarOrder": 539
+    },
+    {
+      "id": 337,
+      "title": "上に",
+      "slug": "上に",
+      "level": "JLPT2",
+      "meaning": "As well, Besides, In addition to",
+      "grammarOrder": 563
+    },
+    {
+      "id": 338,
+      "title": "以上に",
+      "slug": "以上に",
+      "level": "JLPT2",
+      "meaning": "More than, No less than, Even more",
+      "grammarOrder": 565
+    },
+    {
+      "id": 339,
+      "title": "とか",
+      "slug": "とか",
+      "level": "JLPT2",
+      "meaning": "I heard that… something like, They said ... or something ",
+      "grammarOrder": 685
+    },
+    {
+      "id": 340,
+      "title": "からすると・からすれば",
+      "slug": "からすると-からすれば",
+      "level": "JLPT2",
+      "meaning": "Judging from, Considering",
+      "grammarOrder": 679
+    },
+    {
+      "id": 341,
+      "title": "としても",
+      "slug": "としても",
+      "level": "JLPT2",
+      "meaning": "Even if (we assume), Assuming,  Also as",
+      "grammarOrder": 660
+    },
+    {
+      "id": 342,
+      "title": "ことだから",
+      "slug": "ことだから",
+      "level": "JLPT2",
+      "meaning": "It is exactly because",
+      "grammarOrder": 700
+    },
+    {
+      "id": 343,
+      "title": "まい",
+      "slug": "まい",
+      "level": "JLPT2",
+      "meaning": "Won't, Intend not to, Probably not",
+      "grammarOrder": 561
+    },
+    {
+      "id": 344,
+      "title": "も構わず",
+      "slug": "もかまわず",
+      "level": "JLPT2",
+      "meaning": "Without worrying about",
+      "grammarOrder": 586
+    },
+    {
+      "id": 345,
+      "title": "ということは",
+      "slug": "ということは",
+      "level": "JLPT2",
+      "meaning": "That means, That is to say",
+      "grammarOrder": 672
+    },
+    {
+      "id": 346,
+      "title": "ものだから",
+      "slug": "ものだから",
+      "level": "JLPT2",
+      "meaning": "Because, The reason is",
+      "grammarOrder": 701
+    },
+    {
+      "id": 347,
+      "title": "ないことには～ない",
+      "slug": "ないことには-ない",
+      "level": "JLPT2",
+      "meaning": "Unless you do something",
+      "grammarOrder": 606
+    },
+    {
+      "id": 348,
+      "title": "には",
+      "slug": "には",
+      "level": "JLPT2",
+      "meaning": "In order to, In regard to, For",
+      "grammarOrder": 665
+    },
+    {
+      "id": 349,
+      "title": "次第だ・次第で",
+      "slug": "次第だ-次第で",
+      "level": "JLPT2",
+      "meaning": "Depending on, So",
+      "grammarOrder": 597
+    },
+    {
+      "id": 350,
+      "title": "それにしても",
+      "slug": "それにしても",
+      "level": "JLPT2",
+      "meaning": "Nevertheless, Even so",
+      "grammarOrder": 661
+    },
+    {
+      "id": 351,
+      "title": "確かに",
+      "slug": "確かに",
+      "level": "JLPT2",
+      "meaning": "Surely, Certainly",
+      "grammarOrder": 548
+    },
+    {
+      "id": 352,
+      "title": "～てこそ",
+      "slug": "-てこそ",
+      "level": "JLPT2",
+      "meaning": "Only if, Because, By, Unless, Until",
+      "grammarOrder": 599
+    },
+    {
+      "id": 353,
+      "title": "てならない",
+      "slug": "てならない",
+      "level": "JLPT2",
+      "meaning": "Very, Extremely, Can't help but do",
+      "grammarOrder": 731
+    },
+    {
+      "id": 354,
+      "title": "～を～に任せる",
+      "slug": "を-に任せる",
+      "level": "JLPT2",
+      "meaning": "Leave 〜 up to, Entrust 〜 to",
+      "grammarOrder": 558
+    },
+    {
+      "id": 355,
+      "title": "がある + Noun",
+      "slug": "がある-noun",
+      "level": "JLPT5",
+      "meaning": "Noun (B) that has Noun (A), Noun (B) with Noun (A)",
+      "grammarOrder": 51
+    },
+    {
+      "id": 356,
+      "title": "と",
+      "slug": "と",
+      "level": "JLPT5",
+      "meaning": "Quotation",
+      "grammarOrder": 75
+    },
+    {
+      "id": 357,
+      "title": "Verb［た・ている］+ Noun",
+      "slug": "verb-た-noun",
+      "level": "JLPT5",
+      "meaning": "Verb modified noun, Relative clause",
+      "grammarOrder": 78
+    },
+    {
+      "id": 358,
+      "title": "って",
+      "slug": "って",
+      "level": "JLPT5",
+      "meaning": "Casual quotation",
+      "grammarOrder": 76
+    },
+    {
+      "id": 359,
+      "title": "けっこう",
+      "slug": "けっこう",
+      "level": "JLPT5",
+      "meaning": "Quite, A lot, Fairly, Rather",
+      "grammarOrder": 95
+    },
+    {
+      "id": 360,
+      "title": "Verb + まで",
+      "slug": "v-まで",
+      "level": "JLPT5",
+      "meaning": "Until (something) happens",
+      "grammarOrder": 100
+    },
+    {
+      "id": 361,
+      "title": "けど・だけど",
+      "slug": "けど-だけど",
+      "level": "JLPT5",
+      "meaning": "But, However",
+      "grammarOrder": 57
+    },
+    {
+      "id": 362,
+      "title": "どんどん",
+      "slug": "どんどん",
+      "level": "JLPT4",
+      "meaning": "Progressively, Rapidly increasing, More and more",
+      "grammarOrder": 138
+    },
+    {
+      "id": 363,
+      "title": "まず",
+      "slug": "まず",
+      "level": "JLPT4",
+      "meaning": "To start with, Firstly",
+      "grammarOrder": 153
+    },
+    {
+      "id": 364,
+      "title": "また",
+      "slug": "また",
+      "level": "JLPT4",
+      "meaning": "Also, As well, Moreover, Again, Additionally",
+      "grammarOrder": 156
+    },
+    {
+      "id": 365,
+      "title": "そういう",
+      "slug": "そういう",
+      "level": "JLPT4",
+      "meaning": "Like that, Kind of",
+      "grammarOrder": 176
+    },
+    {
+      "id": 366,
+      "title": "～のだろうか",
+      "slug": "のだろうか",
+      "level": "JLPT4",
+      "meaning": "I wonder...",
+      "grammarOrder": 255
+    },
+    {
+      "id": 367,
+      "title": "ほとんど",
+      "slug": "ほとんど",
+      "level": "JLPT4",
+      "meaning": "Almost all, Most, Hardly any, Few (Adverbial noun)",
+      "grammarOrder": 212
+    },
+    {
+      "id": 368,
+      "title": "とうとう",
+      "slug": "とうとう",
+      "level": "JLPT4",
+      "meaning": "Finally, After all",
+      "grammarOrder": 163
+    },
+    {
+      "id": 369,
+      "title": "そんな・こんな・あんな・どんな",
+      "slug": "そんな-こんな-あんな-どんな",
+      "level": "JLPT4",
+      "meaning": "Such a・Kind of, Something like ~",
+      "grammarOrder": 213
+    },
+    {
+      "id": 370,
+      "title": "だが・ですが",
+      "slug": "だが・ですが",
+      "level": "JLPT4",
+      "meaning": "But, Still, However, Nevertheless",
+      "grammarOrder": 144
+    },
+    {
+      "id": 371,
+      "title": "てくれてありがとう",
+      "slug": "てくれてありがとう",
+      "level": "JLPT4",
+      "meaning": "Thank you for ~ ing",
+      "grammarOrder": 253
+    },
+    {
+      "id": 372,
+      "title": "まで",
+      "slug": "まで",
+      "level": "JLPT4",
+      "meaning": "Even, To even, To the extent of",
+      "grammarOrder": 154
+    },
+    {
+      "id": 373,
+      "title": "のように・のような ",
+      "slug": "のように-のような",
+      "level": "JLPT4",
+      "meaning": "Like (Noun), Similar to (Noun)",
+      "grammarOrder": 191
+    },
+    {
+      "id": 374,
+      "title": "あまり～ない",
+      "slug": "あまり-ない",
+      "level": "JLPT4",
+      "meaning": "Not very, Not much, Not really, Hardly",
+      "grammarOrder": 181
+    },
+    {
+      "id": 375,
+      "title": "ぜんぜん",
+      "slug": "ぜんぜん",
+      "level": "JLPT4",
+      "meaning": "(Not) at all",
+      "grammarOrder": 179
+    },
+    {
+      "id": 376,
+      "title": "たとえば",
+      "slug": "たとえば",
+      "level": "JLPT4",
+      "meaning": "For example",
+      "grammarOrder": 270
+    },
+    {
+      "id": 377,
+      "title": "もし",
+      "slug": "もし",
+      "level": "JLPT4",
+      "meaning": "If (For emphasis)",
+      "grammarOrder": 282
+    },
+    {
+      "id": 378,
+      "title": "～ない～はない",
+      "slug": "ない-はない",
+      "level": "JLPT4",
+      "meaning": "There is not ~ that is not/does not",
+      "grammarOrder": 228
+    },
+    {
+      "id": 379,
+      "title": "ように～てほしい",
+      "slug": "ように-てほしい",
+      "level": "JLPT4",
+      "meaning": "Want ~ to ~ like ~, Want ~ to be able to ~, Want ~ to ~ in the way of ~",
+      "grammarOrder": 242
+    },
+    {
+      "id": 380,
+      "title": "だけでなく",
+      "slug": "だけでなく",
+      "level": "JLPT4",
+      "meaning": "Not only… but also",
+      "grammarOrder": 279
+    },
+    {
+      "id": 381,
+      "title": "すこしも～ない",
+      "slug": "すこしも-ない",
+      "level": "JLPT4",
+      "meaning": "Not even a little, Not at all, Not in the least, Never",
+      "grammarOrder": 229
+    },
+    {
+      "id": 382,
+      "title": "以上 ①",
+      "slug": "以上1",
+      "level": "JLPT4",
+      "meaning": "More than (or equal to), Over・(and) above, Any more・Greater, Exceeding",
+      "grammarOrder": 216
+    },
+    {
+      "id": 383,
+      "title": "いか",
+      "slug": "いか",
+      "level": "JLPT4",
+      "meaning": "Less than (or equal to), Under・(and) below, Any less・fewer, Not exceeding",
+      "grammarOrder": 217
+    },
+    {
+      "id": 384,
+      "title": "なるべく",
+      "slug": "なるべく",
+      "level": "JLPT4",
+      "meaning": "As ~ as possible, Wherever practicable",
+      "grammarOrder": 166
+    },
+    {
+      "id": 385,
+      "title": "～ら",
+      "slug": "ら",
+      "level": "JLPT4",
+      "meaning": "We, Them, They, These, Those",
+      "grammarOrder": 139
+    },
+    {
+      "id": 386,
+      "title": "ようにいう",
+      "slug": "ようにいう",
+      "level": "JLPT4",
+      "meaning": "To tell, request, or order to do (in such a way)",
+      "grammarOrder": 293
+    },
+    {
+      "id": 387,
+      "title": "〜でも 〜でも",
+      "slug": "でも-でも",
+      "level": "JLPT4",
+      "meaning": "Whether ~ or, Neither ~ or",
+      "grammarOrder": 308
+    },
+    {
+      "id": 388,
+      "title": "ごとに",
+      "slug": "ごとに",
+      "level": "JLPT4",
+      "meaning": "Each, Every",
+      "grammarOrder": 165
+    },
+    {
+      "id": 389,
+      "title": "それに",
+      "slug": "それに",
+      "level": "JLPT4",
+      "meaning": "And, Besides, Moreover, In addition",
+      "grammarOrder": 309
+    },
+    {
+      "id": 390,
+      "title": "いがい",
+      "slug": "いがい",
+      "level": "JLPT4",
+      "meaning": "Except・besides, Other than, With the exception of",
+      "grammarOrder": 218
+    },
+    {
+      "id": 391,
+      "title": "～は～の一つだ",
+      "slug": "は-の一つだ",
+      "level": "JLPT4",
+      "meaning": "〜 is one of (many) 〜",
+      "grammarOrder": 227
+    },
+    {
+      "id": 392,
+      "title": "とかんがえられている",
+      "slug": "とかんがえられている",
+      "level": "JLPT4",
+      "meaning": "Is considered, Is thought of as",
+      "grammarOrder": 314
+    },
+    {
+      "id": 393,
+      "title": "なおす",
+      "slug": "なおす",
+      "level": "JLPT4",
+      "meaning": "To do over, To redo",
+      "grammarOrder": 150
+    },
+    {
+      "id": 394,
+      "title": "真(っ)",
+      "slug": "真(っ)",
+      "level": "JLPT4",
+      "meaning": "Completely, Exactly, Right",
+      "grammarOrder": 225
+    },
+    {
+      "id": 395,
+      "title": "ほかに(も)・ほか(に)は",
+      "slug": "ほかにも-ほかには",
+      "level": "JLPT4",
+      "meaning": "Other, Another, Any other, Anything else, As well as, Besides, In addition",
+      "grammarOrder": 266
+    },
+    {
+      "id": 396,
+      "title": "上は",
+      "slug": "上は",
+      "level": "JLPT2",
+      "meaning": "Once, Since, Now that, As long as",
+      "grammarOrder": 570
+    },
+    {
+      "id": 397,
+      "title": "ざるを得ない",
+      "slug": "ざるを得ない",
+      "level": "JLPT2",
+      "meaning": "Can't help doing, Have no choice but",
+      "grammarOrder": 540
+    },
+    {
+      "id": 398,
+      "title": "だけは",
+      "slug": "だけは",
+      "level": "JLPT2",
+      "meaning": "To do all that one can, As much or many ~ as one could",
+      "grammarOrder": 726
+    },
+    {
+      "id": 399,
+      "title": "が気になる",
+      "slug": "が気になる",
+      "level": "JLPT2",
+      "meaning": "To be interested in, To be concerned about",
+      "grammarOrder": 584
+    },
+    {
+      "id": 400,
+      "title": "としては",
+      "slug": "としては",
+      "level": "JLPT2",
+      "meaning": "As a, For a, As for",
+      "grammarOrder": 659
+    },
+    {
+      "id": 401,
+      "title": "からには",
+      "slug": "からには",
+      "level": "JLPT2",
+      "meaning": "As long as, Since, Given",
+      "grammarOrder": 641
+    },
+    {
+      "id": 402,
+      "title": "なくはない",
+      "slug": "なくはない",
+      "level": "JLPT2",
+      "meaning": "It's not that…, Kind of, might, Slightly, Somewhat, In some respects",
+      "grammarOrder": 605
+    },
+    {
+      "id": 403,
+      "title": "ことにはならない",
+      "slug": "ことにはならない",
+      "level": "JLPT2",
+      "meaning": "Just because… doesn't mean…",
+      "grammarOrder": 747
+    },
+    {
+      "id": 404,
+      "title": "ないわけにはいかない",
+      "slug": "ないわけにはいかない",
+      "level": "JLPT2",
+      "meaning": "Can't not, No way to avoid",
+      "grammarOrder": 755
+    },
+    {
+      "id": 405,
+      "title": "のではないだろうか",
+      "slug": "のではないだろうか",
+      "level": "JLPT2",
+      "meaning": "I think ... isn't it?, It might be that..., Don't you agree?",
+      "grammarOrder": 688
+    },
+    {
+      "id": 406,
+      "title": "ものがある",
+      "slug": "ものがある",
+      "level": "JLPT2",
+      "meaning": "Strong judgement, There is something, Feel strongly that",
+      "grammarOrder": 703
+    },
+    {
+      "id": 407,
+      "title": "何といっても",
+      "slug": "何といっても",
+      "level": "JLPT2",
+      "meaning": "By any account, All the same, No doubt",
+      "grammarOrder": 729
+    },
+    {
+      "id": 408,
+      "title": "にて",
+      "slug": "にて",
+      "level": "JLPT2",
+      "meaning": "In, At, With, Using, By",
+      "grammarOrder": 664
+    },
+    {
+      "id": 409,
+      "title": "それなのに",
+      "slug": "それなのに",
+      "level": "JLPT2",
+      "meaning": "And yet, Despite this",
+      "grammarOrder": 734
+    },
+    {
+      "id": 410,
+      "title": "手前",
+      "slug": "手前",
+      "level": "JLPT2",
+      "meaning": "Before, In front of, From one's standpoint or side",
+      "grammarOrder": 573
+    },
+    {
+      "id": 411,
+      "title": "てたまらない",
+      "slug": "てたまらない",
+      "level": "JLPT2",
+      "meaning": "Can't help but want to, Very, Extremely",
+      "grammarOrder": 739
+    },
+    {
+      "id": 412,
+      "title": "といった",
+      "slug": "といった",
+      "level": "JLPT2",
+      "meaning": "Such as, Like, So much as",
+      "grammarOrder": 720
+    },
+    {
+      "id": 413,
+      "title": "ところだった ②",
+      "slug": "ところだった2",
+      "level": "JLPT2",
+      "meaning": "Was just about to do something, Was in the middle of...",
+      "grammarOrder": 622
+    },
+    {
+      "id": 414,
+      "title": "ようでは・ようじゃ",
+      "slug": "ようでは-ようじゃ",
+      "level": "JLPT2",
+      "meaning": "If, If it is true that",
+      "grammarOrder": 709
+    },
+    {
+      "id": 415,
+      "title": "ものですから・もので",
+      "slug": "ものですから-もので",
+      "level": "JLPT2",
+      "meaning": "Because, My excuse is, My explanation is",
+      "grammarOrder": 702
+    },
+    {
+      "id": 416,
+      "title": "Verb + て",
+      "slug": "verb-て",
+      "level": "JLPT5",
+      "meaning": "And, Then (Linking events)",
+      "grammarOrder": 61
+    },
+    {
+      "id": 417,
+      "title": "その上",
+      "slug": "その上",
+      "level": "JLPT2",
+      "meaning": "Besides, In addition, Furthermore",
+      "grammarOrder": 569
+    },
+    {
+      "id": 418,
+      "title": "ないではいられない",
+      "slug": "ないではいられない",
+      "level": "JLPT2",
+      "meaning": "Cannot help doing something, Cannot resist doing something",
+      "grammarOrder": 607
+    },
+    {
+      "id": 419,
+      "title": "だけましだ",
+      "slug": "だけましだ",
+      "level": "JLPT2",
+      "meaning": "At least, It's better than..., One should feel grateful for",
+      "grammarOrder": 707
+    },
+    {
+      "id": 420,
+      "title": "というものだ",
+      "slug": "というものだ",
+      "level": "JLPT2",
+      "meaning": "Speaker's impression, Criticism or conclusion",
+      "grammarOrder": 676
+    },
+    {
+      "id": 421,
+      "title": "〜ようではないか",
+      "slug": "ようではないか",
+      "level": "JLPT2",
+      "meaning": "Let's do something, Why don't we",
+      "grammarOrder": 686
+    },
+    {
+      "id": 422,
+      "title": "どころではない",
+      "slug": "どころではない",
+      "level": "JLPT2",
+      "meaning": "This is not the time for…, Far from, Out of the question",
+      "grammarOrder": 623
+    },
+    {
+      "id": 423,
+      "title": "ふうに",
+      "slug": "ふうに",
+      "level": "JLPT2",
+      "meaning": "~ way, In a way that suggests, Like ~",
+      "grammarOrder": 673
+    },
+    {
+      "id": 424,
+      "title": "からして",
+      "slug": "からして",
+      "level": "JLPT2",
+      "meaning": "Even..., Judging from, Based on",
+      "grammarOrder": 680
+    },
+    {
+      "id": 425,
+      "title": "ところを見ると",
+      "slug": "ところを見ると",
+      "level": "JLPT2",
+      "meaning": "Judging from, Seeing that",
+      "grammarOrder": 678
+    },
+    {
+      "id": 426,
+      "title": "かと思ったら・かと思うと",
+      "slug": "かと思ったら-かと思うと",
+      "level": "JLPT2",
+      "meaning": "Then again, Just when I thought, No sooner than",
+      "grammarOrder": 667
+    },
+    {
+      "id": 427,
+      "title": "気",
+      "slug": "気",
+      "level": "JLPT2",
+      "meaning": "Feel like ~, Spirit",
+      "grammarOrder": 698
+    },
+    {
+      "id": 428,
+      "title": "ことなく",
+      "slug": "ことなく",
+      "level": "JLPT2",
+      "meaning": "Without ~ing",
+      "grammarOrder": 663
+    },
+    {
+      "id": 429,
+      "title": "中を",
+      "slug": "中を",
+      "level": "JLPT2",
+      "meaning": "In, On, Into, Inside of",
+      "grammarOrder": 567
+    },
+    {
+      "id": 430,
+      "title": "に限って",
+      "slug": "に限って",
+      "level": "JLPT2",
+      "meaning": "Particularly when, Those who, Only when",
+      "grammarOrder": 592
+    },
+    {
+      "id": 431,
+      "title": "それなら",
+      "slug": "それなら",
+      "level": "JLPT2",
+      "meaning": "Then, If that's the case",
+      "grammarOrder": 556
+    },
+    {
+      "id": 432,
+      "title": "てしょうがない",
+      "slug": "てしょうがない",
+      "level": "JLPT2",
+      "meaning": "Extremely, Very, Really, It can't be helped",
+      "grammarOrder": 706
+    },
+    {
+      "id": 433,
+      "title": "て当然だ",
+      "slug": "て当然だ",
+      "level": "JLPT2",
+      "meaning": "Natural, As a matter of course",
+      "grammarOrder": 689
+    },
+    {
+      "id": 434,
+      "title": "ようがない・ようもない",
+      "slug": "ようがない・ようもない",
+      "level": "JLPT2",
+      "meaning": "There's no way to, It's impossible to",
+      "grammarOrder": 553
+    },
+    {
+      "id": 435,
+      "title": "って",
+      "slug": "って-slang",
+      "level": "JLPT3",
+      "meaning": "As for, Speaking of, Casual は (Sentence topic marker)",
+      "grammarOrder": 326
+    },
+    {
+      "id": 436,
+      "title": "である",
+      "slug": "である",
+      "level": "JLPT3",
+      "meaning": "Formal or literary だ, Authoritative, Copula",
+      "grammarOrder": 342
+    },
+    {
+      "id": 437,
+      "title": " なかなか",
+      "slug": "なかなか",
+      "level": "JLPT3",
+      "meaning": "Very, Quite, Considerably",
+      "grammarOrder": 327
+    },
+    {
+      "id": 438,
+      "title": "すると",
+      "slug": "すると",
+      "level": "JLPT3",
+      "meaning": "Having done..., If...is done..., (And/just) then, Thereupon, If so",
+      "grammarOrder": 335
+    },
+    {
+      "id": 439,
+      "title": "全く～ない",
+      "slug": "全く-ない",
+      "level": "JLPT3",
+      "meaning": "Not~at all",
+      "grammarOrder": 332
+    },
+    {
+      "id": 440,
+      "title": "のに",
+      "slug": "のに",
+      "level": "JLPT3",
+      "meaning": "In order to",
+      "grammarOrder": 349
+    },
+    {
+      "id": 441,
+      "title": "～は～で有名",
+      "slug": "は-で有名",
+      "level": "JLPT3",
+      "meaning": "Is famous for",
+      "grammarOrder": 373
+    },
+    {
+      "id": 442,
+      "title": " ～と言っても",
+      "slug": "と言っても",
+      "level": "JLPT3",
+      "meaning": "Although ~ might say that ~",
+      "grammarOrder": 375
+    },
+    {
+      "id": 443,
+      "title": "的",
+      "slug": "的",
+      "level": "JLPT3",
+      "meaning": "~ly・~like・~al, Typical",
+      "grammarOrder": 355
+    },
+    {
+      "id": 444,
+      "title": "なかなか～ない",
+      "slug": "なかなか-ない",
+      "level": "JLPT3",
+      "meaning": "Not really, Hardly, Not easily or readily, By no means, Far from",
+      "grammarOrder": 329
+    },
+    {
+      "id": 445,
+      "title": "そうすると",
+      "slug": "そうすると",
+      "level": "JLPT3",
+      "meaning": "Having done that..., If that is done..., (And/just) then, Thereupon, If so",
+      "grammarOrder": 336
+    },
+    {
+      "id": 446,
+      "title": "からこそ",
+      "slug": "からこそ",
+      "level": "JLPT3",
+      "meaning": "Emphasized because, Precisely because",
+      "grammarOrder": 365
+    },
+    {
+      "id": 447,
+      "title": "そのため(に)",
+      "slug": "そのため-に",
+      "level": "JLPT3",
+      "meaning": "For that reason, Because of that, To that end",
+      "grammarOrder": 383
+    },
+    {
+      "id": 448,
+      "title": "ところだった ①",
+      "slug": "ところだった1",
+      "level": "JLPT3",
+      "meaning": "Almost, Nearly, About to, On the verge of",
+      "grammarOrder": 394
+    },
+    {
+      "id": 449,
+      "title": "それぞれ",
+      "slug": "それぞれ",
+      "level": "JLPT3",
+      "meaning": "Each, Respectively",
+      "grammarOrder": 405
+    },
+    {
+      "id": 450,
+      "title": "では・それでは・じゃあ",
+      "slug": "では-それでは-じゃあ",
+      "level": "JLPT3",
+      "meaning": "If so, Well (then), In that case",
+      "grammarOrder": 348
+    },
+    {
+      "id": 451,
+      "title": "ないうちに",
+      "slug": "ないうちに",
+      "level": "JLPT3",
+      "meaning": "Before it becomes, Before ~ occurs, Without",
+      "grammarOrder": 323
+    },
+    {
+      "id": 452,
+      "title": "だって",
+      "slug": "だって",
+      "level": "JLPT3",
+      "meaning": "I heard/was said, Because, But, Even or also, Even if or even though",
+      "grammarOrder": 395
+    },
+    {
+      "id": 453,
+      "title": "と同時に",
+      "slug": "と同時に",
+      "level": "JLPT3",
+      "meaning": "At the same time as, The instant, The moment, As well as",
+      "grammarOrder": 393
+    },
+    {
+      "id": 454,
+      "title": "そこで",
+      "slug": "そこで",
+      "level": "JLPT3",
+      "meaning": "Accordingly, Now, Therefore, To that end",
+      "grammarOrder": 407
+    },
+    {
+      "id": 455,
+      "title": "～というのは事実だ",
+      "slug": "というのは事実だ",
+      "level": "JLPT3",
+      "meaning": "It is a fact that ~, There is no doubt that",
+      "grammarOrder": 417
+    },
+    {
+      "id": 456,
+      "title": "～ても～なくても",
+      "slug": "ても-なくても",
+      "level": "JLPT3",
+      "meaning": "Whether ~ or not",
+      "grammarOrder": 410
+    },
+    {
+      "id": 457,
+      "title": "に合わせて・に合った",
+      "slug": "に合わせて-に合った",
+      "level": "JLPT3",
+      "meaning": "In accordance with, Matching, Fitting, Suitable for, Adjust or tune to",
+      "grammarOrder": 378
+    },
+    {
+      "id": 458,
+      "title": "さて",
+      "slug": "さて",
+      "level": "JLPT3",
+      "meaning": "Well, Well then",
+      "grammarOrder": 428
+    },
+    {
+      "id": 459,
+      "title": "むしろ",
+      "slug": "むしろ",
+      "level": "JLPT3",
+      "meaning": "Rather, Instead, Over",
+      "grammarOrder": 429
+    },
+    {
+      "id": 460,
+      "title": "とても～ない",
+      "slug": "とても-ない",
+      "level": "JLPT3",
+      "meaning": "Not ~ at all, Cannot ~ at all",
+      "grammarOrder": 435
+    },
+    {
+      "id": 461,
+      "title": "当たり",
+      "slug": "当たり",
+      "level": "JLPT3",
+      "meaning": "Per~, A~, Apiece, Each",
+      "grammarOrder": 462
+    },
+    {
+      "id": 462,
+      "title": "み",
+      "slug": "み",
+      "level": "JLPT3",
+      "meaning": "~ness, Used to indicate conditions or nature",
+      "grammarOrder": 457
+    },
+    {
+      "id": 463,
+      "title": "はもちろん",
+      "slug": "はもちろん",
+      "level": "JLPT3",
+      "meaning": "Not only but also, Let alone, Not to mention, Of course",
+      "grammarOrder": 422
+    },
+    {
+      "id": 464,
+      "title": "却って",
+      "slug": "却って",
+      "level": "JLPT3",
+      "meaning": "All the more, On the contrary, Conversely",
+      "grammarOrder": 432
+    },
+    {
+      "id": 465,
+      "title": "再び",
+      "slug": "再び",
+      "level": "JLPT3",
+      "meaning": "Again, Once more, A second time",
+      "grammarOrder": 456
+    },
+    {
+      "id": 466,
+      "title": "もっとも",
+      "slug": "もっとも",
+      "level": "JLPT3",
+      "meaning": "Although, But, However, For all that, Provided that",
+      "grammarOrder": 455
+    },
+    {
+      "id": 467,
+      "title": "まさか",
+      "slug": "まさか",
+      "level": "JLPT3",
+      "meaning": "I never dreamed, Never, No way, Don't tell me, You don't say",
+      "grammarOrder": 519
+    },
+    {
+      "id": 468,
+      "title": "前者は・後者は",
+      "slug": "前者は-後者は",
+      "level": "JLPT3",
+      "meaning": "The former ~ the latter, The first ~ the second",
+      "grammarOrder": 520
+    },
+    {
+      "id": 469,
+      "title": "は～くらいです",
+      "slug": "は-くらいです",
+      "level": "JLPT3",
+      "meaning": "About the only, To the extent that",
+      "grammarOrder": 401
+    },
+    {
+      "id": 470,
+      "title": "連用形",
+      "slug": "連用形",
+      "level": "JLPT3",
+      "meaning": "Formal Conjunctive",
+      "grammarOrder": 497
+    },
+    {
+      "id": 471,
+      "title": "できれば・できたら",
+      "slug": "できれば-できたら",
+      "level": "JLPT3",
+      "meaning": "If possible",
+      "grammarOrder": 510
+    },
+    {
+      "id": 472,
+      "title": "に限る",
+      "slug": "に限る",
+      "level": "JLPT3",
+      "meaning": "Nothing better than, There's nothing like, Limited to",
+      "grammarOrder": 464
+    },
+    {
+      "id": 473,
+      "title": "直ちに",
+      "slug": "直ちに",
+      "level": "JLPT3",
+      "meaning": "At once, Immediately, As soon as",
+      "grammarOrder": 478
+    },
+    {
+      "id": 474,
+      "title": "ではなくて・じゃなくて",
+      "slug": "ではなくて-じゃなくて",
+      "level": "JLPT3",
+      "meaning": "Not A but B, Conjunctive",
+      "grammarOrder": 438
+    },
+    {
+      "id": 475,
+      "title": "一体",
+      "slug": "一体",
+      "level": "JLPT3",
+      "meaning": "(What) the heck?, (Who) in the world?, (Where) on earth?, (How many) f*ing...",
+      "grammarOrder": 529
+    },
+    {
+      "id": 476,
+      "title": "でよければ",
+      "slug": "でよければ",
+      "level": "JLPT3",
+      "meaning": "If it is alright, If you don't mind, If you would like, If possible",
+      "grammarOrder": 511
+    },
+    {
+      "id": 477,
+      "title": "あるいは",
+      "slug": "あるいは",
+      "level": "JLPT3",
+      "meaning": "Or, Possibly, Maybe, Perhaps, Or possibly",
+      "grammarOrder": 482
+    },
+    {
+      "id": 478,
+      "title": "おきに",
+      "slug": "おきに",
+      "level": "JLPT3",
+      "meaning": "Repeated at intervals, Every other, Every, At intervals of",
+      "grammarOrder": 480
+    },
+    {
+      "id": 479,
+      "title": "上がる・上げる",
+      "slug": "上がる-上げる",
+      "level": "JLPT3",
+      "meaning": "Something is finished, To finish something, Something has come to an end, To do something completely, To do something through",
+      "grammarOrder": 500
+    },
+    {
+      "id": 480,
+      "title": "ますます",
+      "slug": "ますます",
+      "level": "JLPT3",
+      "meaning": "Increasingly, More and more, Decreasingly, Less and less, Keep -ing",
+      "grammarOrder": 486
+    },
+    {
+      "id": 481,
+      "title": "だけでなく(て)～も",
+      "slug": "だけでなく-て-も",
+      "level": "JLPT3",
+      "meaning": "Not only ~ but ~ also, Not just ~ but ~ also",
+      "grammarOrder": 439
+    },
+    {
+      "id": 482,
+      "title": "Verb[volitional] + としたが",
+      "slug": "verb-volitional-としたが",
+      "level": "JLPT3",
+      "meaning": "Tried to ~ but ~, Was about to ~ but ~, Was going to ~ but ~",
+      "grammarOrder": 469
+    },
+    {
+      "id": 483,
+      "title": "たて",
+      "slug": "たて",
+      "level": "JLPT3",
+      "meaning": "Freshly ~ed, Just ~ed",
+      "grammarOrder": 506
+    },
+    {
+      "id": 484,
+      "title": "すでに",
+      "slug": "すでに",
+      "level": "JLPT3",
+      "meaning": "Already, Too late",
+      "grammarOrder": 490
+    },
+    {
+      "id": 485,
+      "title": "遂に",
+      "slug": "遂に",
+      "level": "JLPT3",
+      "meaning": "Finally, At last",
+      "grammarOrder": 489
+    },
+    {
+      "id": 486,
+      "title": "必ずしも ",
+      "slug": "必ずしも",
+      "level": "JLPT3",
+      "meaning": "Not always, Not entirely, Not necessarily",
+      "grammarOrder": 496
+    },
+    {
+      "id": 487,
+      "title": "たものだ",
+      "slug": "たものだ",
+      "level": "JLPT3",
+      "meaning": "Used to",
+      "grammarOrder": 427
+    },
+    {
+      "id": 488,
+      "title": "つい",
+      "slug": "つい",
+      "level": "JLPT3",
+      "meaning": "Accidentally, Unconsciously, Against one's better judgement",
+      "grammarOrder": 521
+    },
+    {
+      "id": 489,
+      "title": "だけしか",
+      "slug": "だけしか",
+      "level": "JLPT3",
+      "meaning": " To emphasize '~only', Nothing but",
+      "grammarOrder": 440
+    },
+    {
+      "id": 490,
+      "title": "即ち",
+      "slug": "即ち",
+      "level": "JLPT3",
+      "meaning": "In other words, That is, Namely",
+      "grammarOrder": 431
+    },
+    {
+      "id": 491,
+      "title": "どうしても",
+      "slug": "どうしても",
+      "level": "JLPT3",
+      "meaning": "Regardless of, No matter what",
+      "grammarOrder": 515
+    },
+    {
+      "id": 492,
+      "title": "わざわざ",
+      "slug": "わざわざ",
+      "level": "JLPT3",
+      "meaning": "Expressly, Especially, Go out of one's way, Take the trouble to",
+      "grammarOrder": 528
+    },
+    {
+      "id": 493,
+      "title": "もしも～なら・もしも～でも",
+      "slug": "もしも～なら・もしも～でも",
+      "level": "JLPT3",
+      "meaning": " If, Supposing",
+      "grammarOrder": 516
+    },
+    {
+      "id": 494,
+      "title": "と同じで・と違って",
+      "slug": "と同じで-と違って",
+      "level": "JLPT3",
+      "meaning": "Like, Similar to, Unlike, Dissimilar to",
+      "grammarOrder": 459
+    },
+    {
+      "id": 495,
+      "title": "にもとづいて",
+      "slug": "にもとづいて",
+      "level": "JLPT3",
+      "meaning": "Based on, In accordance with",
+      "grammarOrder": 361
+    },
+    {
+      "id": 496,
+      "title": "さすが",
+      "slug": "さすが",
+      "level": "JLPT2",
+      "meaning": "as one would expect, only natural, that is just like..., even",
+      "grammarOrder": 710
+    },
+    {
+      "id": 497,
+      "title": "だけのことはある",
+      "slug": "だけのことはある",
+      "level": "JLPT2",
+      "meaning": "No wonder, Not surprising that, As expected",
+      "grammarOrder": 748
+    },
+    {
+      "id": 498,
+      "title": "てはいられない",
+      "slug": "てはいられない",
+      "level": "JLPT2",
+      "meaning": "Can't afford to, Unable to",
+      "grammarOrder": 750
+    },
+    {
+      "id": 499,
+      "title": "どうせ",
+      "slug": "どうせ",
+      "level": "JLPT2",
+      "meaning": "Anyhow, At any rate, In any case, I have no doubt that, Probably",
+      "grammarOrder": 543
+    },
+    {
+      "id": 500,
+      "title": "いきなり",
+      "slug": "いきなり",
+      "level": "JLPT2",
+      "meaning": "For no reason, Suddenly, All of a sudden",
+      "grammarOrder": 719
+    },
+    {
+      "id": 501,
+      "title": "からといって",
+      "slug": "からといって",
+      "level": "JLPT2",
+      "meaning": "Just because",
+      "grammarOrder": 681
+    },
+    {
+      "id": 502,
+      "title": "ことは〜が",
+      "slug": "ことは-が",
+      "level": "JLPT2",
+      "meaning": "It is true...but, although, but",
+      "grammarOrder": 711
+    },
+    {
+      "id": 503,
+      "title": "ものか",
+      "slug": "ものか",
+      "level": "JLPT2",
+      "meaning": "Definitely not, Absolutely not, Impossible, Do you really think~?",
+      "grammarOrder": 694
+    },
+    {
+      "id": 504,
+      "title": "に限らず",
+      "slug": "に限らず",
+      "level": "JLPT2",
+      "meaning": "Not just, Not only… but also",
+      "grammarOrder": 593
+    },
+    {
+      "id": 505,
+      "title": "更に",
+      "slug": "さらに",
+      "level": "JLPT2",
+      "meaning": "Even more or further, Again, More and more",
+      "grammarOrder": 712
+    },
+    {
+      "id": 506,
+      "title": "それとも",
+      "slug": "それとも",
+      "level": "JLPT2",
+      "meaning": "Or, Or else, Rather",
+      "grammarOrder": 656
+    },
+    {
+      "id": 507,
+      "title": "てからでないと",
+      "slug": "てからでないと",
+      "level": "JLPT2",
+      "meaning": "(Not) unless ~ cannot, (Not) until ~ cannot",
+      "grammarOrder": 604
+    },
+    {
+      "id": 508,
+      "title": "途中に・途中で",
+      "slug": "途中に・途中で",
+      "level": "JLPT2",
+      "meaning": "On the way, Partway, In the middle of",
+      "grammarOrder": 566
+    },
+    {
+      "id": 509,
+      "title": "というものでもない",
+      "slug": "というものでもない",
+      "level": "JLPT2",
+      "meaning": "There is no guarantee that…, Not necessarily",
+      "grammarOrder": 669
+    },
+    {
+      "id": 510,
+      "title": "～ところに・～ところへ",
+      "slug": "～ところに・～ところへ",
+      "level": "JLPT2",
+      "meaning": "At the time, When, While, Timing",
+      "grammarOrder": 618
+    },
+    {
+      "id": 511,
+      "title": "とも",
+      "slug": "とも",
+      "level": "JLPT2",
+      "meaning": "Even if, No matter",
+      "grammarOrder": 754
+    },
+    {
+      "id": 512,
+      "title": "要するに",
+      "slug": "要するに",
+      "level": "JLPT2",
+      "meaning": "To sum up, In summary, In short",
+      "grammarOrder": 603
+    },
+    {
+      "id": 513,
+      "title": "万が一",
+      "slug": "万が一",
+      "level": "JLPT2",
+      "meaning": "Just in case, In the worst-case scenario, In the unlikely event, By any chance",
+      "grammarOrder": 552
+    },
+    {
+      "id": 514,
+      "title": "を通じて・を通して",
+      "slug": "を通じて-を通して",
+      "level": "JLPT2",
+      "meaning": "Through, Via, Throughout",
+      "grammarOrder": 654
+    },
+    {
+      "id": 515,
+      "title": "よりほかない",
+      "slug": "よりほかない",
+      "level": "JLPT2",
+      "meaning": "To have no choice but, No other way than, Have to",
+      "grammarOrder": 547
+    },
+    {
+      "id": 516,
+      "title": "てはならない",
+      "slug": "てはならない",
+      "level": "JLPT2",
+      "meaning": "Must not, Cannot, Should not",
+      "grammarOrder": 749
+    },
+    {
+      "id": 517,
+      "title": "どうやら",
+      "slug": "どうやら",
+      "level": "JLPT2",
+      "meaning": "Apparently, Looks Like, Seems like",
+      "grammarOrder": 545
+    },
+    {
+      "id": 518,
+      "title": "に気をつける",
+      "slug": "に気をつける",
+      "level": "JLPT2",
+      "meaning": "Take care, Be careful, Pay attention, Make sure, Watch out",
+      "grammarOrder": 585
+    },
+    {
+      "id": 519,
+      "title": "を問わず",
+      "slug": "を問わず",
+      "level": "JLPT2",
+      "meaning": "Regardless of, Whether or not, No matter, With or without",
+      "grammarOrder": 600
+    },
+    {
+      "id": 520,
+      "title": "いよいよ",
+      "slug": "いよいよ",
+      "level": "JLPT2",
+      "meaning": "At last, Finally, More and more",
+      "grammarOrder": 651
+    },
+    {
+      "id": 521,
+      "title": "ものなら①",
+      "slug": "ものなら①",
+      "level": "JLPT2",
+      "meaning": "If, If one could, If something would be possible",
+      "grammarOrder": 557
+    },
+    {
+      "id": 522,
+      "title": "にあたり・にあたって",
+      "slug": "にあたり-にあたって",
+      "level": "JLPT2",
+      "meaning": "When, When doing something, On the occasion, At the time",
+      "grammarOrder": 615
+    },
+    {
+      "id": 523,
+      "title": "にかかわる",
+      "slug": "にかかわる",
+      "level": "JLPT2",
+      "meaning": "To relate to, To have to do with, Concerning, Depends on",
+      "grammarOrder": 582
+    },
+    {
+      "id": 524,
+      "title": "に決まっている",
+      "slug": "に決まっている",
+      "level": "JLPT2",
+      "meaning": "Surely, Bound to, Certainly, Be decided",
+      "grammarOrder": 696
+    },
+    {
+      "id": 525,
+      "title": "に越したことはない",
+      "slug": "に越したことはない",
+      "level": "JLPT2",
+      "meaning": "There is nothing better than, It is the best, Would be the best",
+      "grammarOrder": 602
+    },
+    {
+      "id": 526,
+      "title": "にせよ・にしろ",
+      "slug": "にせよ-にしろ",
+      "level": "JLPT2",
+      "meaning": "Even if, Even though, No matter, Whether… or",
+      "grammarOrder": 740
+    },
+    {
+      "id": 527,
+      "title": "に相違ない",
+      "slug": "に相違ない",
+      "level": "JLPT2",
+      "meaning": "Without a doubt, Certainly, Surely, Not mistaken",
+      "grammarOrder": 551
+    },
+    {
+      "id": 528,
+      "title": "につき",
+      "slug": "につき",
+      "level": "JLPT2",
+      "meaning": "Due to, On account of, Each or every",
+      "grammarOrder": 580
+    },
+    {
+      "id": 532,
+      "title": "お～願う",
+      "slug": "お-願う",
+      "level": "JLPT2",
+      "meaning": "Please, Could you please",
+      "grammarOrder": 683
+    },
+    {
+      "id": 533,
+      "title": "を込めて",
+      "slug": "を込めて",
+      "level": "JLPT2",
+      "meaning": "Full of, Filled with, With ～",
+      "grammarOrder": 721
+    },
+    {
+      "id": 534,
+      "title": "そうにない",
+      "slug": "そうにない",
+      "level": "JLPT2",
+      "meaning": "Unlikely to, Showing no signs of",
+      "grammarOrder": 645
+    },
+    {
+      "id": 535,
+      "title": "た末・の末",
+      "slug": "た末-の末",
+      "level": "JLPT2",
+      "meaning": "After, As a conclusion of",
+      "grammarOrder": 577
+    },
+    {
+      "id": 536,
+      "title": "という風に",
+      "slug": "という風に",
+      "level": "JLPT2",
+      "meaning": "As if to say, As if to suggest that, In such a way that, Things like",
+      "grammarOrder": 674
+    },
+    {
+      "id": 537,
+      "title": "というわけではない",
+      "slug": "というわけではない",
+      "level": "JLPT2",
+      "meaning": "It is not that, It doesn't mean that, It is not always the case",
+      "grammarOrder": 756
+    },
+    {
+      "id": 538,
+      "title": "にほかならない",
+      "slug": "にほかならない",
+      "level": "JLPT2",
+      "meaning": "Nothing but, None other than, Simply",
+      "grammarOrder": 554
+    },
+    {
+      "id": 539,
+      "title": "はたして",
+      "slug": "はたして",
+      "level": "JLPT2",
+      "meaning": "Wonder if ~ (really)?, Wonder how ~ (actually)?, Sure enough, As expected",
+      "grammarOrder": 631
+    },
+    {
+      "id": 540,
+      "title": "甲斐がある",
+      "slug": "甲斐がある",
+      "level": "JLPT2",
+      "meaning": "To be (not) worth, To (not) pay off",
+      "grammarOrder": 632
+    },
+    {
+      "id": 541,
+      "title": "と考えられる",
+      "slug": "と考えられる",
+      "level": "JLPT2",
+      "meaning": "Can be considered as, Is thought to be, One can think that, It is conceivable that",
+      "grammarOrder": 670
+    },
+    {
+      "id": 542,
+      "title": "かねる",
+      "slug": "かねる",
+      "level": "JLPT2",
+      "meaning": "Cannot, Be unable to, Hard to, Hesitant to",
+      "grammarOrder": 587
+    },
+    {
+      "id": 543,
+      "title": "に反して",
+      "slug": "に反して",
+      "level": "JLPT2",
+      "meaning": "Go against, Contrary to",
+      "grammarOrder": 646
+    },
+    {
+      "id": 544,
+      "title": "限り",
+      "slug": "限り",
+      "level": "JLPT2",
+      "meaning": "As long as, While… is the case, Limited to",
+      "grammarOrder": 596
+    },
+    {
+      "id": 545,
+      "title": "にかかわらず",
+      "slug": "にかかわらず",
+      "level": "JLPT2",
+      "meaning": "Regardless of, Whether or, No matter, With or without",
+      "grammarOrder": 590
+    },
+    {
+      "id": 546,
+      "title": "ものの",
+      "slug": "ものの",
+      "level": "JLPT2",
+      "meaning": "Although, But, Even Though",
+      "grammarOrder": 675
+    },
+    {
+      "id": 548,
+      "title": "ねばならない",
+      "slug": "ねばならない",
+      "level": "JLPT2",
+      "meaning": "Must, Have to, Should",
+      "grammarOrder": 608
+    },
+    {
+      "id": 549,
+      "title": "にしろ～にしろ",
+      "slug": "にしろ-にしろ",
+      "level": "JLPT2",
+      "meaning": "Whether… or",
+      "grammarOrder": 742
+    },
+    {
+      "id": 550,
+      "title": "をもとに",
+      "slug": "をもとに",
+      "level": "JLPT2",
+      "meaning": "Based on, From, According to",
+      "grammarOrder": 640
+    },
+    {
+      "id": 551,
+      "title": "につけ",
+      "slug": "につけ",
+      "level": "JLPT2",
+      "meaning": "Whenever, Every time something happens",
+      "grammarOrder": 581
+    },
+    {
+      "id": 552,
+      "title": "を除いて",
+      "slug": "を除いて",
+      "level": "JLPT2",
+      "meaning": "Except, With the exception of, Unless",
+      "grammarOrder": 589
+    },
+    {
+      "id": 553,
+      "title": "にわたって",
+      "slug": "にわたって",
+      "level": "JLPT2",
+      "meaning": "Across, Throughout, Extends, Over (a period of time or range)",
+      "grammarOrder": 575
+    },
+    {
+      "id": 554,
+      "title": "したがって",
+      "slug": "したがって",
+      "level": "JLPT2",
+      "meaning": "Therefore, Thus, As a result",
+      "grammarOrder": 634
+    },
+    {
+      "id": 555,
+      "title": "結果・の結果",
+      "slug": "結果・の結果",
+      "level": "JLPT2",
+      "meaning": "As a result of",
+      "grammarOrder": 628
+    },
+    {
+      "id": 556,
+      "title": "以来",
+      "slug": "以来",
+      "level": "JLPT2",
+      "meaning": "Since, Henceforth",
+      "grammarOrder": 629
+    },
+    {
+      "id": 557,
+      "title": "か〜ないかのうちに",
+      "slug": "か-ないかのうちに",
+      "level": "JLPT2",
+      "meaning": "Right after, As soon as, Just when, Barely",
+      "grammarOrder": 619
+    },
+    {
+      "id": 558,
+      "title": "に加えて",
+      "slug": "に加えて",
+      "level": "JLPT2",
+      "meaning": "Not only...but also, In addition, Not to mention",
+      "grammarOrder": 722
+    },
+    {
+      "id": 559,
+      "title": "げ",
+      "slug": "げ",
+      "level": "JLPT2",
+      "meaning": "Seemingly, Giving appearance of, [Expresses emotions or feelings]",
+      "grammarOrder": 699
+    },
+    {
+      "id": 560,
+      "title": "つつ",
+      "slug": "つつ",
+      "level": "JLPT2",
+      "meaning": "While, And",
+      "grammarOrder": 611
+    },
+    {
+      "id": 561,
+      "title": "反面",
+      "slug": "反面",
+      "level": "JLPT2",
+      "meaning": "While, On the other hand, Although, However, On the flip side",
+      "grammarOrder": 648
+    },
+    {
+      "id": 562,
+      "title": "ては",
+      "slug": "ては",
+      "level": "JLPT2",
+      "meaning": "If, With, Since, Because",
+      "grammarOrder": 625
+    },
+    {
+      "id": 563,
+      "title": "ては〜ては",
+      "slug": "ては-ては",
+      "level": "JLPT2",
+      "meaning": "Repeating action, If, Since",
+      "grammarOrder": 626
+    },
+    {
+      "id": 564,
+      "title": "いわゆる",
+      "slug": "いわゆる",
+      "level": "JLPT2",
+      "meaning": "What is called, So-called, Generally known",
+      "grammarOrder": 735
+    },
+    {
+      "id": 565,
+      "title": "かねない",
+      "slug": "かねない",
+      "level": "JLPT2",
+      "meaning": "Might, Could be, Capable of, Possible",
+      "grammarOrder": 588
+    },
+    {
+      "id": 566,
+      "title": "なお①",
+      "slug": "なお1",
+      "level": "JLPT2",
+      "meaning": "Still, Even, Yet",
+      "grammarOrder": 594
+    },
+    {
+      "id": 567,
+      "title": "なお②",
+      "slug": "なお2",
+      "level": "JLPT2",
+      "meaning": "In addition, Incidentally, Furthermore, Moreover",
+      "grammarOrder": 595
+    },
+    {
+      "id": 568,
+      "title": "に応えて",
+      "slug": "に応えて",
+      "level": "JLPT2",
+      "meaning": "In response to, Meet",
+      "grammarOrder": 655
+    },
+    {
+      "id": 569,
+      "title": "つつ(も)",
+      "slug": "つつ-も",
+      "level": "JLPT2",
+      "meaning": "Even while ~ing, Even though ~ing, Despite ~ing, Although ~ing",
+      "grammarOrder": 612
+    },
+    {
+      "id": 570,
+      "title": "にもかかわらず",
+      "slug": "にもかかわらず",
+      "level": "JLPT2",
+      "meaning": "Despite, In spite of, Regardless, Nevertheless",
+      "grammarOrder": 591
+    },
+    {
+      "id": 571,
+      "title": "抜く",
+      "slug": "抜く",
+      "level": "JLPT2",
+      "meaning": "All~, Completely, See through, Overcome, To the bitter end",
+      "grammarOrder": 649
+    },
+    {
+      "id": 572,
+      "title": "際に",
+      "slug": "際に",
+      "level": "JLPT2",
+      "meaning": "When, At the time of, In case of, On the occasion of",
+      "grammarOrder": 614
+    },
+    {
+      "id": 573,
+      "title": "せめて",
+      "slug": "せめて",
+      "level": "JLPT2",
+      "meaning": "At least",
+      "grammarOrder": 544
+    },
+    {
+      "id": 574,
+      "title": "何しろ",
+      "slug": "何しろ",
+      "level": "JLPT2",
+      "meaning": "No wonder, After all, In fact, Because, At any rate",
+      "grammarOrder": 741
+    },
+    {
+      "id": 575,
+      "title": "たって",
+      "slug": "たって",
+      "level": "JLPT2",
+      "meaning": "Even if, Even though, No matter how",
+      "grammarOrder": 758
+    },
+    {
+      "id": 576,
+      "title": "てでも",
+      "slug": "てでも",
+      "level": "JLPT2",
+      "meaning": "Even if I have to, By any or all means, No matter what",
+      "grammarOrder": 753
+    },
+    {
+      "id": 577,
+      "title": "はともかく",
+      "slug": "はともかく",
+      "level": "JLPT2",
+      "meaning": "Setting aside, Apart from",
+      "grammarOrder": 743
+    },
+    {
+      "id": 578,
+      "title": "やら～やら",
+      "slug": "やら-やら",
+      "level": "JLPT2",
+      "meaning": "Whether or, Things like, And … so on",
+      "grammarOrder": 745
+    },
+    {
+      "id": 579,
+      "title": "にかけては",
+      "slug": "にかけては",
+      "level": "JLPT2",
+      "meaning": "When it comes to, Regarding, Concerning",
+      "grammarOrder": 637
+    },
+    {
+      "id": 580,
+      "title": "よりしかたがない",
+      "slug": "よりしかたがない",
+      "level": "JLPT2",
+      "meaning": "There is no choice but, Can't be helped, Inevitable",
+      "grammarOrder": 601
+    },
+    {
+      "id": 581,
+      "title": "にしたがって",
+      "slug": "にしたがって",
+      "level": "JLPT2",
+      "meaning": "As, Following, As then, According to, In accordance with",
+      "grammarOrder": 578
+    },
+    {
+      "id": 582,
+      "title": "つつある",
+      "slug": "つつある",
+      "level": "JLPT2",
+      "meaning": "-ing, Be -ing",
+      "grammarOrder": 617
+    },
+    {
+      "id": 597,
+      "title": "か何か",
+      "slug": "か何か",
+      "level": "JLPT2",
+      "meaning": "Or something, Or something like that",
+      "grammarOrder": 730
+    },
+    {
+      "id": 598,
+      "title": "っこない",
+      "slug": "っこない",
+      "level": "JLPT2",
+      "meaning": "There is no chance of, There is no way of, Impossible",
+      "grammarOrder": 555
+    },
+    {
+      "id": 599,
+      "title": "に応じて",
+      "slug": "に応じて",
+      "level": "JLPT2",
+      "meaning": "Depending or based on, According to, In response to, Suitable for or to",
+      "grammarOrder": 653
+    },
+    {
+      "id": 600,
+      "title": "に伴って・に伴い",
+      "slug": "に伴って-に伴い",
+      "level": "JLPT2",
+      "meaning": "As, Due,  Along with, Hand-in-hand with, Resulted in, Be consequent upon",
+      "grammarOrder": 579
+    },
+    {
+      "id": 601,
+      "title": "のみならず",
+      "slug": "のみならず",
+      "level": "JLPT2",
+      "meaning": "Not only...but, Not just...but, What is more",
+      "grammarOrder": 733
+    },
+    {
+      "id": 602,
+      "title": "抜きで",
+      "slug": "抜きで",
+      "level": "JLPT2",
+      "meaning": "Without, Unless",
+      "grammarOrder": 650
+    },
+    {
+      "id": 603,
+      "title": "きっかけ",
+      "slug": "きっかけ",
+      "level": "JLPT2",
+      "meaning": "Lead to, Because of, As a start or trigger of, An opportunity",
+      "grammarOrder": 636
+    },
+    {
+      "id": 604,
+      "title": "おそらく",
+      "slug": "おそらく",
+      "level": "JLPT2",
+      "meaning": "Probably, Perhaps, (Most) likely, (I) fear that",
+      "grammarOrder": 693
+    },
+    {
+      "id": 605,
+      "title": "に先立ち",
+      "slug": "に先立ち",
+      "level": "JLPT2",
+      "meaning": "Before, Prior to, In preference over",
+      "grammarOrder": 630
+    },
+    {
+      "id": 606,
+      "title": "精々",
+      "slug": "精々",
+      "level": "JLPT2",
+      "meaning": "(At) most , (At) best, No more than, Barely",
+      "grammarOrder": 713
+    },
+    {
+      "id": 607,
+      "title": "あげく",
+      "slug": "あげく",
+      "level": "JLPT2",
+      "meaning": "After, In the end, After all, Eventually",
+      "grammarOrder": 635
+    },
+    {
+      "id": 608,
+      "title": "たまえ",
+      "slug": "たまえ",
+      "level": "JLPT2",
+      "meaning": "(Please) do!, Ask to, Beg to, (Order somebody to do something)",
+      "grammarOrder": 609
+    },
+    {
+      "id": 609,
+      "title": "とっくに",
+      "slug": "とっくに",
+      "level": "JLPT2",
+      "meaning": "Already, A long time ago, Long ago",
+      "grammarOrder": 638
+    },
+    {
+      "id": 610,
+      "title": "は別として",
+      "slug": "は別として",
+      "level": "JLPT2",
+      "meaning": "Apart from, (Setting) aside, Whether or, Except for, Save for",
+      "grammarOrder": 724
+    },
+    {
+      "id": 611,
+      "title": "はもとより",
+      "slug": "はもとより",
+      "level": "JLPT2",
+      "meaning": "Not only... but also, Let alone, Of course",
+      "grammarOrder": 644
+    },
+    {
+      "id": 612,
+      "title": "やがて",
+      "slug": "やがて",
+      "level": "JLPT2",
+      "meaning": "Before long, All too soon, In the end, Eventually",
+      "grammarOrder": 633
+    },
+    {
+      "id": 613,
+      "title": "いつの間にか",
+      "slug": "いつの間にか",
+      "level": "JLPT2",
+      "meaning": "Suddenly, Unnoticed, Without noticing, Too soon",
+      "grammarOrder": 642
+    },
+    {
+      "id": 614,
+      "title": "一旦",
+      "slug": "一旦",
+      "level": "JLPT2",
+      "meaning": "Once …, If … for a short time, Temporarily (stop), For now or the time being",
+      "grammarOrder": 643
+    },
+    {
+      "id": 618,
+      "title": "でできる・からできる",
+      "slug": "でできる-からできる",
+      "level": "JLPT4",
+      "meaning": "Made of, Made from, Produced from, Come from",
+      "grammarOrder": 284
+    },
+    {
+      "id": 619,
+      "title": "〜かは〜によって違う",
+      "slug": "かは-によって違う",
+      "level": "JLPT3",
+      "meaning": "Depends on, Changes depending on, Differ depending on",
+      "grammarOrder": 388
+    },
+    {
+      "id": 620,
+      "title": "Particle + の",
+      "slug": "particle-の",
+      "level": "JLPT3",
+      "meaning": "Combined particles",
+      "grammarOrder": 341
+    },
+    {
+      "id": 621,
+      "title": "なん + counter + か",
+      "slug": "なん-counter-か",
+      "level": "JLPT4",
+      "meaning": "Some, Several, A few",
+      "grammarOrder": 224
+    },
+    {
+      "id": 622,
+      "title": "がみられる",
+      "slug": "がみられる",
+      "level": "JLPT4",
+      "meaning": "Can see, Can be seen, Can observe, Can be observed, Be evident, Chance to see something",
+      "grammarOrder": 306
+    },
+    {
+      "id": 623,
+      "title": "又〜も",
+      "slug": "又-も",
+      "level": "JLPT3",
+      "meaning": "Moreover, Additionally, And also, In addition, Furthermore, Or",
+      "grammarOrder": 474
+    },
+    {
+      "id": 624,
+      "title": "と同じくらい",
+      "slug": "と同じくらい",
+      "level": "JLPT3",
+      "meaning": "About the same as, About as, No less",
+      "grammarOrder": 458
+    },
+    {
+      "id": 625,
+      "title": "Noun＋型",
+      "slug": "noun-型",
+      "level": "JLPT3",
+      "meaning": "Model, Type, Pattern, Kind, Shape, Size(d)",
+      "grammarOrder": 338
+    },
+    {
+      "id": 626,
+      "title": "まい～のように",
+      "slug": "まい-のように",
+      "level": "JLPT4",
+      "meaning": "Almost every ~, Nearly every ~, On a ~ basis",
+      "grammarOrder": 198
+    },
+    {
+      "id": 627,
+      "title": "合う",
+      "slug": "合う",
+      "level": "JLPT3",
+      "meaning": "To do for one another, Mutually, With",
+      "grammarOrder": 377
+    },
+    {
+      "id": 628,
+      "title": "ように",
+      "slug": "ように",
+      "level": "JLPT4",
+      "meaning": "So that, In order to, In such a way that",
+      "grammarOrder": 299
+    },
+    {
+      "id": 629,
+      "title": "と言える",
+      "slug": "と言える",
+      "level": "JLPT3",
+      "meaning": "Would or could say that..., Can probably say that..., Fair to say that...",
+      "grammarOrder": 381
+    },
+    {
+      "id": 630,
+      "title": "ことなの",
+      "slug": "ことなの",
+      "level": "JLPT3",
+      "meaning": "(A) is (Description of A), (A) means that (Description of A)",
+      "grammarOrder": 371
+    },
+    {
+      "id": 631,
+      "title": "んだけど・んですが",
+      "slug": "んだけど-んですが",
+      "level": "JLPT4",
+      "meaning": "But..., And...",
+      "grammarOrder": 272
+    },
+    {
+      "id": 632,
+      "title": "それで",
+      "slug": "それで",
+      "level": "JLPT4",
+      "meaning": "Because of that, So?, And then?, Therefore, With that",
+      "grammarOrder": 310
+    },
+    {
+      "id": 633,
+      "title": "のはXの方だ",
+      "slug": "のはxの方だ",
+      "level": "JLPT3",
+      "meaning": "It is...that..., It is...who..., ...is the one that..., ...is the one who...",
+      "grammarOrder": 337
+    },
+    {
+      "id": 634,
+      "title": "Number/Amount + は",
+      "slug": "number-amount-は",
+      "level": "JLPT4",
+      "meaning": "At least, Sort of, Or so",
+      "grammarOrder": 223
+    },
+    {
+      "id": 635,
+      "title": "化する",
+      "slug": "化する",
+      "level": "JLPT4",
+      "meaning": "-ification, -ization, To make something, To change, To become, Transform into",
+      "grammarOrder": 297
+    },
+    {
+      "id": 636,
+      "title": "～は～となっている",
+      "slug": "は-となっている",
+      "level": "JLPT3",
+      "meaning": "It is (has been), Have/has become, Happen to be, Has been established",
+      "grammarOrder": 536
+    },
+    {
+      "id": 637,
+      "title": "らしい ②",
+      "slug": "らしい2",
+      "level": "JLPT4",
+      "meaning": "typical of, -ish・like, appropriate for, becoming of, befitting",
+      "grammarOrder": 301
+    },
+    {
+      "id": 638,
+      "title": "ようにいのる",
+      "slug": "ようにいのる",
+      "level": "JLPT4",
+      "meaning": "Pray that/for, Hope that/for, Keep fingers crossed that",
+      "grammarOrder": 295
+    },
+    {
+      "id": 640,
+      "title": "に当たる",
+      "slug": "に当たる",
+      "level": "JLPT3",
+      "meaning": "Correspond to, Amounts to, Equals to, Is appropriate",
+      "grammarOrder": 463
+    },
+    {
+      "id": 641,
+      "title": "傾向がある",
+      "slug": "傾向がある",
+      "level": "JLPT2",
+      "meaning": "Tendency, Trend, Inclination",
+      "grammarOrder": 704
+    },
+    {
+      "id": 642,
+      "title": "関係がある",
+      "slug": "関係がある",
+      "level": "JLPT3",
+      "meaning": "(Not) involved with, (Not) concerned with, (No) connection with, (No) relationship with, (Not) related to",
+      "grammarOrder": 397
+    },
+    {
+      "id": 644,
+      "title": "点",
+      "slug": "点",
+      "level": "JLPT3",
+      "meaning": "Aspect, Respect, Point, Way, In terms of, In that, From the point of view",
+      "grammarOrder": 362
+    },
+    {
+      "id": 645,
+      "title": "という理由で",
+      "slug": "という理由で",
+      "level": "JLPT3",
+      "meaning": "For (that) reason; on the grounds of (that), With the reasoning, Under the pretext of, Due to",
+      "grammarOrder": 535
+    },
+    {
+      "id": 646,
+      "title": "折角",
+      "slug": "せっかく",
+      "level": "JLPT3",
+      "meaning": "With trouble, At great pains, Take the trouble, Might as well..., Rare/long-awaited occasion",
+      "grammarOrder": 530
+    },
+    {
+      "id": 647,
+      "title": "は言うまでもない ①",
+      "slug": "は言うまでもない1",
+      "level": "JLPT3",
+      "meaning": "It goes without saying (that), (It is) needless to say, I don't need to remind you",
+      "grammarOrder": 441
+    },
+    {
+      "id": 648,
+      "title": "という点から考えると",
+      "slug": "という点から考えると",
+      "level": "JLPT2",
+      "meaning": "From the standpoint of, From the perspective of, From the viewpoint of, Think in terms of, Viewed from the angle of",
+      "grammarOrder": 671
+    },
+    {
+      "id": 649,
+      "title": "～かというと ①",
+      "slug": "かというと1",
+      "level": "JLPT3",
+      "meaning": "Why? Well..., Why? Because..., If you ask me why..., The reason why is..., It is because...",
+      "grammarOrder": 449
+    },
+    {
+      "id": 650,
+      "title": "すくなくない",
+      "slug": "すくなくない",
+      "level": "JLPT4",
+      "meaning": "Quite a few, Quite a lot, Many, Not a few, Not a little",
+      "grammarOrder": 230
+    },
+    {
+      "id": 651,
+      "title": "で言うと",
+      "slug": "で言うと",
+      "level": "JLPT3",
+      "meaning": "In, Of, According to",
+      "grammarOrder": 451
+    },
+    {
+      "id": 652,
+      "title": "各",
+      "slug": "各",
+      "level": "JLPT4",
+      "meaning": "Each, Every, Respective, Various",
+      "grammarOrder": 214
+    },
+    {
+      "id": 653,
+      "title": "風",
+      "slug": "風",
+      "level": "JLPT4",
+      "meaning": "-style, Way, Fashion",
+      "grammarOrder": 305
+    },
+    {
+      "id": 654,
+      "title": "～ずつ",
+      "slug": "ずつ",
+      "level": "JLPT3",
+      "meaning": "One at a time, Per, Each, Gradually",
+      "grammarOrder": 452
+    },
+    {
+      "id": 655,
+      "title": "に至るまで",
+      "slug": "に至るまで",
+      "level": "JLPT1",
+      "meaning": "(Everything) from...to..., From…up until..., Starting with...ending with...",
+      "grammarOrder": 759
+    },
+    {
+      "id": 656,
+      "title": "同士",
+      "slug": "同士",
+      "level": "JLPT3",
+      "meaning": "Fellow, With each other, Mutually, Between, Among, Together, With",
+      "grammarOrder": 517
+    },
+    {
+      "id": 657,
+      "title": "ぬ",
+      "slug": "ぬ",
+      "level": "JLPT2",
+      "meaning": "Classical negative, Classical verb [ない]",
+      "grammarOrder": 662
+    },
+    {
+      "id": 658,
+      "title": "と並んで",
+      "slug": "と並んで",
+      "level": "JLPT3",
+      "meaning": "In line with, Comparable with, Along with, Just like, As … as",
+      "grammarOrder": 460
+    },
+    {
+      "id": 659,
+      "title": "とされている",
+      "slug": "とされている",
+      "level": "JLPT4",
+      "meaning": "To be considered, To be deemed, Be regarded as, Be accepted as, To be said, To be accredited with",
+      "grammarOrder": 315
+    },
+    {
+      "id": 660,
+      "title": "第一",
+      "slug": "第一",
+      "level": "JLPT3",
+      "meaning": "Start, First (point), Foremost, To begin with",
+      "grammarOrder": 485
+    },
+    {
+      "id": 661,
+      "title": "考えられない",
+      "slug": "考えられない",
+      "level": "JLPT3",
+      "meaning": "Unthinkable, Inconceivable, Unimaginable, Cannot think",
+      "grammarOrder": 495
+    },
+    {
+      "id": 662,
+      "title": "活かす",
+      "slug": "活かす",
+      "level": "JLPT2",
+      "meaning": "To make use of (something), To take full advantage of, To capitalize on, To leverage (skills), Bring out (the quality of)",
+      "grammarOrder": 559
+    },
+    {
+      "id": 663,
+      "title": "なし",
+      "slug": "なし",
+      "level": "JLPT3",
+      "meaning": "Without, No",
+      "grammarOrder": 493
+    },
+    {
+      "id": 664,
+      "title": "込む ①",
+      "slug": "込む1",
+      "level": "JLPT3",
+      "meaning": "To go into, To put into ",
+      "grammarOrder": 507
+    },
+    {
+      "id": 665,
+      "title": "さ - Filler",
+      "slug": "さ-filler",
+      "level": "JLPT3",
+      "meaning": "Like, You know, You see, Listen, Uhh",
+      "grammarOrder": 403
+    },
+    {
+      "id": 666,
+      "title": "でもある",
+      "slug": "でもある",
+      "level": "JLPT3",
+      "meaning": "Be also, It also is",
+      "grammarOrder": 514
+    },
+    {
+      "id": 667,
+      "title": "ずっと ①",
+      "slug": "ずっと1",
+      "level": "JLPT4",
+      "meaning": "Continuously, All throughout, Entire time, Ever (since), The whole time, All the way",
+      "grammarOrder": 219
+    },
+    {
+      "id": 668,
+      "title": "～代",
+      "slug": "代",
+      "level": "JLPT4",
+      "meaning": "Teens, Twenties, Thirties, 1910s, 20s/30s",
+      "grammarOrder": 208
+    },
+    {
+      "id": 669,
+      "title": "～(の)姿",
+      "slug": "の姿",
+      "level": "JLPT3",
+      "meaning": "Figure, Shape, Appearance, Looks, Wearing, Dressed in, Presence",
+      "grammarOrder": 380
+    },
+    {
+      "id": 670,
+      "title": "がけに",
+      "slug": "がけに",
+      "level": "JLPT2",
+      "meaning": "On the way to, As you go",
+      "grammarOrder": 620
+    },
+    {
+      "id": 671,
+      "title": "も又",
+      "slug": "も又",
+      "level": "JLPT2",
+      "meaning": "Too, Also (with more emphasis than も alone), Again",
+      "grammarOrder": 627
+    },
+    {
+      "id": 672,
+      "title": "だんだん",
+      "slug": "だんだん",
+      "level": "JLPT4",
+      "meaning": "Gradually, Little by little, Step by step",
+      "grammarOrder": 137
+    },
+    {
+      "id": 673,
+      "title": "だいたい",
+      "slug": "だいたい",
+      "level": "JLPT4",
+      "meaning": "Most・mostly, Adequately・generally, For the most part, Roughly・approximately, In the first place",
+      "grammarOrder": 220
+    },
+    {
+      "id": 674,
+      "title": "しかしながら",
+      "slug": "しかしながら",
+      "level": "JLPT2",
+      "meaning": "However, Nevertheless, But",
+      "grammarOrder": 746
+    },
+    {
+      "id": 675,
+      "title": "かなり",
+      "slug": "かなり",
+      "level": "JLPT3",
+      "meaning": "Quite, Considerably, Pretty, Fairly",
+      "grammarOrder": 389
+    },
+    {
+      "id": 676,
+      "title": "一応 ①",
+      "slug": "一応1",
+      "level": "JLPT2",
+      "meaning": "Just in case, Just to be sure",
+      "grammarOrder": 549
+    },
+    {
+      "id": 677,
+      "title": "左右する",
+      "slug": "左右する",
+      "level": "JLPT3",
+      "meaning": "Influence, Impact, Control",
+      "grammarOrder": 537
+    },
+    {
+      "id": 678,
+      "title": "ちゃんと・きちんと",
+      "slug": "ちゃんと-きちんと",
+      "level": "JLPT3",
+      "meaning": "Properly, Neatly, Orderly, Sufficiently, Decently",
+      "grammarOrder": 382
+    },
+    {
+      "id": 679,
+      "title": "後(の) Noun",
+      "slug": "後-のnoun",
+      "level": "JLPT2",
+      "meaning": "…left, Rest, Remaining, In, …to, …else",
+      "grammarOrder": 572
+    },
+    {
+      "id": 680,
+      "title": "何から何まで",
+      "slug": "何から何まで",
+      "level": "JLPT2",
+      "meaning": "Everything and anything, From A to Z, From head to toe, Everything",
+      "grammarOrder": 723
+    },
+    {
+      "id": 681,
+      "title": "～のうち(で)",
+      "slug": "-のうち-で",
+      "level": "JLPT2",
+      "meaning": "Of the, Among(st)",
+      "grammarOrder": 610
+    },
+    {
+      "id": 682,
+      "title": "かのようだ",
+      "slug": "かのようだ",
+      "level": "JLPT2",
+      "meaning": "As if, Just like",
+      "grammarOrder": 687
+    },
+    {
+      "id": 683,
+      "title": "に際して",
+      "slug": "に際して",
+      "level": "JLPT2",
+      "meaning": "On the occasion of, At the time of",
+      "grammarOrder": 613
+    },
+    {
+      "id": 684,
+      "title": "のももっともだ",
+      "slug": "のももっともだ",
+      "level": "JLPT2",
+      "meaning": "May well, Have or has good reason for, No wonder, … Is only natural",
+      "grammarOrder": 757
+    },
+    {
+      "id": 685,
+      "title": "のも当然だ",
+      "slug": "のも当然だ",
+      "level": "JLPT2",
+      "meaning": "It is only natural that, It is no wonder",
+      "grammarOrder": 690
+    },
+    {
+      "id": 686,
+      "title": "の下で",
+      "slug": "の下で",
+      "level": "JLPT2",
+      "meaning": "Under, Under the supervision of, On the basis of",
+      "grammarOrder": 571
+    },
+    {
+      "id": 687,
+      "title": "を中心に",
+      "slug": "を中心に",
+      "level": "JLPT2",
+      "meaning": "Focused on, Centered on or around, Mainly, Most notably",
+      "grammarOrder": 568
+    },
+    {
+      "id": 688,
+      "title": "恐れがある",
+      "slug": "恐れがある",
+      "level": "JLPT2",
+      "meaning": "There is a risk or fear that, Be in danger of, Possibility of",
+      "grammarOrder": 692
+    },
+    {
+      "id": 689,
+      "title": "を契機に",
+      "slug": "を契機に",
+      "level": "JLPT2",
+      "meaning": "Lead to, As a good opportunity to, As a result of, As a trigger",
+      "grammarOrder": 616
+    },
+    {
+      "id": 690,
+      "title": "を巡って",
+      "slug": "を巡って",
+      "level": "JLPT2",
+      "meaning": "Concerning, In regard to, About, (Split) over",
+      "grammarOrder": 574
+    },
+    {
+      "id": 691,
+      "title": "おまけに",
+      "slug": "おまけに",
+      "level": "JLPT2",
+      "meaning": "In addition, On top of that, What is more, To make matters worse",
+      "grammarOrder": 695
+    },
+    {
+      "id": 692,
+      "title": "に沿って",
+      "slug": "に沿って",
+      "level": "JLPT2",
+      "meaning": "Along, In accordance with, In line with",
+      "grammarOrder": 576
+    },
+    {
+      "id": 693,
+      "title": "陸に～ない",
+      "slug": "陸に-ない",
+      "level": "JLPT2",
+      "meaning": "Not well or properly, Not much or enough, Barely, Hardly",
+      "grammarOrder": 751
+    },
+    {
+      "id": 694,
+      "title": "幸い・幸いなことに",
+      "slug": "幸い-幸いなことに",
+      "level": "JLPT2",
+      "meaning": "Luckily, Fortunately",
+      "grammarOrder": 708
+    },
+    {
+      "id": 695,
+      "title": "ていては",
+      "slug": "ていては",
+      "level": "JLPT2",
+      "meaning": "If one keeps doing something, When, If something is...",
+      "grammarOrder": 621
+    },
+    {
+      "id": 696,
+      "title": "僅かに",
+      "slug": "僅かに",
+      "level": "JLPT2",
+      "meaning": "Only, Slightly, A little, Barely, Merely",
+      "grammarOrder": 714
+    },
+    {
+      "id": 697,
+      "title": "および",
+      "slug": "および",
+      "level": "JLPT2",
+      "meaning": "And, As well as",
+      "grammarOrder": 717
+    },
+    {
+      "id": 698,
+      "title": "たちまち",
+      "slug": "たちまち",
+      "level": "JLPT2",
+      "meaning": "Immediately, Quickly, Suddenly, In a moment or flash",
+      "grammarOrder": 718
+    },
+    {
+      "id": 707,
+      "title": "てくれない・てもらえない",
+      "slug": "てくれない-てもらえない",
+      "level": "JLPT4",
+      "meaning": "Won't you?, Will you?, Could you?, Can you?, Would you?",
+      "grammarOrder": 254
+    },
+    {
+      "id": 708,
+      "title": "未だに",
+      "slug": "未だに",
+      "level": "JLPT2",
+      "meaning": "Still, Not yet, Even now",
+      "grammarOrder": 639
+    },
+    {
+      "id": 709,
+      "title": "何より",
+      "slug": "何より",
+      "level": "JLPT2",
+      "meaning": "Be glad, Be relieved, Most, Best, Above all else, More than anything",
+      "grammarOrder": 728
+    },
+    {
+      "id": 710,
+      "title": "たった(の)",
+      "slug": "たった-の",
+      "level": "JLPT2",
+      "meaning": "Only, Just, No more than",
+      "grammarOrder": 691
+    },
+    {
+      "id": 712,
+      "title": "どれ",
+      "slug": "どれ",
+      "level": "JLPT5",
+      "meaning": "Which (of three or more)",
+      "grammarOrder": 83
+    },
+    {
+      "id": 713,
+      "title": "どの",
+      "slug": "どの",
+      "level": "JLPT5",
+      "meaning": "Which (of three or more), What (kind)",
+      "grammarOrder": 85
+    },
+    {
+      "id": 714,
+      "title": "誰",
+      "slug": "だれ",
+      "level": "JLPT5",
+      "meaning": "Who",
+      "grammarOrder": 65
+    },
+    {
+      "id": 715,
+      "title": "たくさん",
+      "slug": "たくさん",
+      "level": "JLPT5",
+      "meaning": "Many, A lot of, Plenty, Enough",
+      "grammarOrder": 96
+    },
+    {
+      "id": 716,
+      "title": "好き",
+      "slug": "すき",
+      "level": "JLPT5",
+      "meaning": "Like, Fond of",
+      "grammarOrder": 48
+    },
+    {
+      "id": 717,
+      "title": "きらい",
+      "slug": "きらい",
+      "level": "JLPT5",
+      "meaning": "Dislike, Not fond of",
+      "grammarOrder": 49
+    },
+    {
+      "id": 718,
+      "title": "なにか・なにも",
+      "slug": "なにか-なにも",
+      "level": "JLPT5",
+      "meaning": "Something, Nothing, Anything, Not anything, Some kind of, Not any kind of",
+      "grammarOrder": 106
+    },
+    {
+      "id": 719,
+      "title": "Adjective + の(は)",
+      "slug": "adjective-の-は",
+      "level": "JLPT5",
+      "meaning": "The 'one' that... (Indefinite pronoun, Adjective nominalization)",
+      "grammarOrder": 127
+    },
+    {
+      "id": 720,
+      "title": "の",
+      "slug": "の-noun-ommission",
+      "level": "JLPT5",
+      "meaning": "Possessive use (Noun omission)",
+      "grammarOrder": 80
+    },
+    {
+      "id": 721,
+      "title": "誰か・どこか・誰も・どこも",
+      "slug": "誰か-どこか-誰も-どこも",
+      "level": "JLPT5",
+      "meaning": "Someone, Somewhere, Not anyone, Not anywhere",
+      "grammarOrder": 107
+    },
+    {
+      "id": 722,
+      "title": "あげる",
+      "slug": "あげる",
+      "level": "JLPT5",
+      "meaning": "To give (away), To present, To provide",
+      "grammarOrder": 128
+    },
+    {
+      "id": 723,
+      "title": "くれる",
+      "slug": "くれる",
+      "level": "JLPT5",
+      "meaning": "To give (me), To be given",
+      "grammarOrder": 129
+    },
+    {
+      "id": 724,
+      "title": "もらう",
+      "slug": "もらう",
+      "level": "JLPT5",
+      "meaning": "To receive, To get, To obtain",
+      "grammarOrder": 130
+    },
+    {
+      "id": 725,
+      "title": "Number + しか〜ない",
+      "slug": "number-しか-ない",
+      "level": "JLPT4",
+      "meaning": "No more than, Not exceeding, As few as・as little as, Only",
+      "grammarOrder": 226
+    },
+    {
+      "id": 726,
+      "title": "お〜する",
+      "slug": "お-する",
+      "level": "JLPT4",
+      "meaning": "I humbly do, I am obliged to do, Humble speech",
+      "grammarOrder": 262
+    },
+    {
+      "id": 727,
+      "title": "Question-phrase + か",
+      "slug": "question-phrase-か",
+      "level": "JLPT4",
+      "meaning": "Including questions within sentences",
+      "grammarOrder": 311
+    },
+    {
+      "id": 728,
+      "title": "～にする・～くする",
+      "slug": "にする-くする",
+      "level": "JLPT4",
+      "meaning": "Adjective + する, To make something/someone (more)",
+      "grammarOrder": 194
+    },
+    {
+      "id": 729,
+      "title": "かた",
+      "slug": "かた",
+      "level": "JLPT4",
+      "meaning": "Way of ~ing, How to ~, Manner of ~ing",
+      "grammarOrder": 142
+    },
+    {
+      "id": 730,
+      "title": "たところで",
+      "slug": "たところで",
+      "level": "JLPT1",
+      "meaning": "Even if ~ cannot or will not, Even though ~ not",
+      "grammarOrder": 760
+    },
+    {
+      "id": 731,
+      "title": "～るまでだ",
+      "slug": "～るまでだ",
+      "level": "JLPT1",
+      "meaning": "Just, Merely, Simply, Only",
+      "grammarOrder": 772
+    },
+    {
+      "id": 732,
+      "title": "如く・如き・如し",
+      "slug": "如く-如き-如し",
+      "level": "JLPT1",
+      "meaning": "Like, Similar to, As if, The same as",
+      "grammarOrder": 761
+    },
+    {
+      "id": 733,
+      "title": "にあって",
+      "slug": "にあって",
+      "level": "JLPT1",
+      "meaning": "At, In the (place or situation), Under ~ conditions or circumstances, During, Suited to",
+      "grammarOrder": 773
+    },
+    {
+      "id": 734,
+      "title": "極まりない・極まる",
+      "slug": "極まりない-極まる",
+      "level": "JLPT1",
+      "meaning": "Extreme, Extremely",
+      "grammarOrder": 763
+    },
+    {
+      "id": 735,
+      "title": "に足る",
+      "slug": "に足る",
+      "level": "JLPT1",
+      "meaning": "To be worthy of, To be enough, To be sufficient",
+      "grammarOrder": 762
+    },
+    {
+      "id": 736,
+      "title": "といえども",
+      "slug": "といえども",
+      "level": "JLPT1",
+      "meaning": "Even (if), Although, Even though",
+      "grammarOrder": 764
+    },
+    {
+      "id": 737,
+      "title": "を余儀なくされる",
+      "slug": "を余儀なくされる",
+      "level": "JLPT1",
+      "meaning": "To be forced to do something",
+      "grammarOrder": 774
+    },
+    {
+      "id": 738,
+      "title": "きらいがある",
+      "slug": "きらいがある",
+      "level": "JLPT1",
+      "meaning": "Have a tendency to, Tend to, Be slightly~",
+      "grammarOrder": 766
+    },
+    {
+      "id": 739,
+      "title": "を以て",
+      "slug": "を以て",
+      "level": "JLPT1",
+      "meaning": "By means of, With, By, Via, In view of",
+      "grammarOrder": 765
+    },
+    {
+      "id": 740,
+      "title": "までもない",
+      "slug": "までもない",
+      "level": "JLPT1",
+      "meaning": "There is no need to, Do not have to, It is not necessary to, Needless to",
+      "grammarOrder": 768
+    },
+    {
+      "id": 741,
+      "title": "ならまだしも",
+      "slug": "ならまだしも",
+      "level": "JLPT1",
+      "meaning": "A is fine...but B is not, If it's ~ then it is ok...but ~ is not, It's different when...but, It's not so bad when...but",
+      "grammarOrder": 767
+    },
+    {
+      "id": 742,
+      "title": "とは",
+      "slug": "とは",
+      "level": "JLPT1",
+      "meaning": "That..., (Surprised) that..., (Never expected) that..., (Shocked) that...",
+      "grammarOrder": 775
+    },
+    {
+      "id": 743,
+      "title": "じゃあるまいし",
+      "slug": "じゃあるまいし",
+      "level": "JLPT1",
+      "meaning": "You are not ~ so..., it isn't ~ so...",
+      "grammarOrder": 776
+    },
+    {
+      "id": 744,
+      "title": "ようが～まいが",
+      "slug": "-よう--う-まい-が-と",
+      "level": "JLPT1",
+      "meaning": "Even if, No matter what, Whether or not, [Emphatic], Volitional + が",
+      "grammarOrder": 784
+    },
+    {
+      "id": 745,
+      "title": "ともなく・ともなしに",
+      "slug": "ともなく-ともなしに",
+      "level": "JLPT1",
+      "meaning": "Absentmindedly, Mindlessly, Unconsciously, Without paying attention",
+      "grammarOrder": 782
+    },
+    {
+      "id": 746,
+      "title": "てからというもの",
+      "slug": "てからというもの",
+      "level": "JLPT1",
+      "meaning": "After, Since, Ever since then",
+      "grammarOrder": 777
+    },
+    {
+      "id": 747,
+      "title": "かたわら",
+      "slug": "かたわら",
+      "level": "JLPT1",
+      "meaning": "While, Besides, In addition to",
+      "grammarOrder": 778
+    },
+    {
+      "id": 748,
+      "title": "を皮切りに",
+      "slug": "を皮切りに",
+      "level": "JLPT1",
+      "meaning": "Beginning of, Starting with",
+      "grammarOrder": 779
+    },
+    {
+      "id": 749,
+      "title": "に至っては",
+      "slug": "に至っては",
+      "level": "JLPT1",
+      "meaning": "When it comes to, As for, In particular, What is worse or more",
+      "grammarOrder": 780
+    },
+    {
+      "id": 750,
+      "title": "塗れ",
+      "slug": "塗れ",
+      "level": "JLPT1",
+      "meaning": "Stained, Covered in, Smeared, Dirty with, Soaked in",
+      "grammarOrder": 783
+    },
+    {
+      "id": 751,
+      "title": "なり",
+      "slug": "なり",
+      "level": "JLPT1",
+      "meaning": "As soon as, The moment, When",
+      "grammarOrder": 781
+    },
+    {
+      "id": 752,
+      "title": "ともなると・にもなると",
+      "slug": "ともなると-にもなると",
+      "level": "JLPT1",
+      "meaning": "When, If, Once, As",
+      "grammarOrder": 769
+    },
+    {
+      "id": 753,
+      "title": "をいいことに",
+      "slug": "をいいことに",
+      "level": "JLPT1",
+      "meaning": "To take advantage of",
+      "grammarOrder": 770
+    },
+    {
+      "id": 754,
+      "title": "如何",
+      "slug": "如何",
+      "level": "JLPT1",
+      "meaning": "Depending on",
+      "grammarOrder": 771
+    },
+    {
+      "id": 755,
+      "title": "～かというと ②",
+      "slug": "かというと2",
+      "level": "JLPT3",
+      "meaning": "If you ask me..., If I had to say, If I were to say, If I were to choose one, I'd rather",
+      "grammarOrder": 450
+    },
+    {
+      "id": 758,
+      "title": "言うまでもない ②",
+      "slug": "言うまでもない2",
+      "level": "JLPT3",
+      "meaning": "It goes without saying, It is needless to say, Of course, Obviously",
+      "grammarOrder": 470
+    },
+    {
+      "id": 759,
+      "title": "ずっと ②",
+      "slug": "ずっと2",
+      "level": "JLPT3",
+      "meaning": "By far, Way, Far...er, Far...more",
+      "grammarOrder": 453
+    },
+    {
+      "id": 760,
+      "title": "さ - Casual よ",
+      "slug": "さ-casualよ",
+      "level": "JLPT3",
+      "meaning": "Casual よ",
+      "grammarOrder": 404
+    },
+    {
+      "id": 761,
+      "title": "さ - Interjection",
+      "slug": "さ-interjection",
+      "level": "JLPT3",
+      "meaning": "All right, There we go, Now, You see, Well (I don't know, let me see)",
+      "grammarOrder": 402
+    },
+    {
+      "id": 762,
+      "title": "込む ②",
+      "slug": "込む2",
+      "level": "JLPT3",
+      "meaning": "Remain, To do thoroughly, Deeply, Intensely",
+      "grammarOrder": 508
+    },
+    {
+      "id": 763,
+      "title": "一応 ②",
+      "slug": "一応2",
+      "level": "JLPT2",
+      "meaning": "more or less, for the time being, tentatively, roughly",
+      "grammarOrder": 550
+    },
+    {
+      "id": 764,
+      "title": "ている②",
+      "slug": "ている2",
+      "level": "JLPT5",
+      "meaning": "State of being, Has (have) done",
+      "grammarOrder": 86
+    },
+    {
+      "id": 765,
+      "title": "ている③",
+      "slug": "ている3",
+      "level": "JLPT5",
+      "meaning": "Has/have done, Is ~ing (Repetition)",
+      "grammarOrder": 122
+    },
+    {
+      "id": 766,
+      "title": "ないと",
+      "slug": "ないと",
+      "level": "JLPT4",
+      "meaning": "Must, Have to",
+      "grammarOrder": 276
+    },
+    {
+      "id": 767,
+      "title": "聞こえる",
+      "slug": "聞こえる",
+      "level": "JLPT4",
+      "meaning": "To be audible, To sound (like), (Can) hear, To be heard",
+      "grammarOrder": 205
+    },
+    {
+      "id": 768,
+      "title": "見える",
+      "slug": "見える",
+      "level": "JLPT4",
+      "meaning": "To be visible, To seem, To be in sight",
+      "grammarOrder": 206
+    },
+    {
+      "id": 769,
+      "title": "Adjective + て・Noun + で",
+      "slug": "adjective-て-noun-で",
+      "level": "JLPT5",
+      "meaning": "And... (Conjunctive)",
+      "grammarOrder": 123
+    },
+    {
+      "id": 770,
+      "title": "Verb + て+ B",
+      "slug": "verb-て-b",
+      "level": "JLPT5",
+      "meaning": "And, And then, After that (sequence)",
+      "grammarOrder": 88
+    },
+    {
+      "id": 771,
+      "title": "Adjective + て + B",
+      "slug": "adjective-て-b",
+      "level": "JLPT5",
+      "meaning": "And..., Both and (Conjunctive)",
+      "grammarOrder": 124
+    },
+    {
+      "id": 772,
+      "title": "Verb[て] + B",
+      "slug": "verbて-b2",
+      "level": "JLPT4",
+      "meaning": "And・and so, Due to, Because of, Since, Conjunctive",
+      "grammarOrder": 238
+    },
+    {
+      "id": 773,
+      "title": "Verb[て]・Noun[で] + B",
+      "slug": "verb-て-noun-で-b",
+      "level": "JLPT4",
+      "meaning": "By, With, On, By means of, ~ing with",
+      "grammarOrder": 240
+    },
+    {
+      "id": 774,
+      "title": "なくて",
+      "slug": "なくて-conjunction",
+      "level": "JLPT4",
+      "meaning": "To not ~ and ~, Not ~ and ~ (Conjugations)",
+      "grammarOrder": 145
+    },
+    {
+      "id": 775,
+      "title": "なくて",
+      "slug": "なくて",
+      "level": "JLPT4",
+      "meaning": "Not ~ and, Not so, Because not (Examples)",
+      "grammarOrder": 146
+    },
+    {
+      "id": 776,
+      "title": "Verb[て] + B",
+      "slug": "verbて-b",
+      "level": "JLPT4",
+      "meaning": "Non-sequence, And, But (Contrast), Parallel action/state",
+      "grammarOrder": 251
+    },
+    {
+      "id": 777,
+      "title": "Verb[て]",
+      "slug": "verbて-request",
+      "level": "JLPT4",
+      "meaning": "Please do for me (Casual request)",
+      "grammarOrder": 232
+    },
+    {
+      "id": 778,
+      "title": "Verb[ないで]",
+      "slug": "verb-ないで",
+      "level": "JLPT4",
+      "meaning": "(Please) do not (for me), Casual request",
+      "grammarOrder": 252
+    },
+    {
+      "id": 779,
+      "title": "からする",
+      "slug": "からする",
+      "level": "JLPT1",
+      "meaning": "About, Or more, Over, Starts at",
+      "grammarOrder": 785
+    },
+    {
+      "id": 780,
+      "title": "にして①",
+      "slug": "にして1",
+      "level": "JLPT1",
+      "meaning": "At, Over, In, Only (after, when, or because)",
+      "grammarOrder": 786
+    },
+    {
+      "id": 781,
+      "title": "ものを",
+      "slug": "ものを",
+      "level": "JLPT1",
+      "meaning": "But, Although, If only, I wish I had",
+      "grammarOrder": 787
+    },
+    {
+      "id": 782,
+      "title": "であれ",
+      "slug": "であれ",
+      "level": "JLPT1",
+      "meaning": "Even if, Even, No matter",
+      "grammarOrder": 788
+    },
+    {
+      "id": 783,
+      "title": "をおいてほかに〜ない",
+      "slug": "をおいてほかに-ない",
+      "level": "JLPT1",
+      "meaning": "No...but, Nothing else but, None other than",
+      "grammarOrder": 789
+    },
+    {
+      "id": 784,
+      "title": "をもって",
+      "slug": "をもって",
+      "level": "JLPT1",
+      "meaning": "As of, With, Effective from",
+      "grammarOrder": 790
+    },
+    {
+      "id": 785,
+      "title": "とはいえ",
+      "slug": "とはいえ",
+      "level": "JLPT1",
+      "meaning": "Though, Although (I admit that), Be that as it may, Nonetheless",
+      "grammarOrder": 791
+    },
+    {
+      "id": 786,
+      "title": "ならでは",
+      "slug": "ならでは",
+      "level": "JLPT1",
+      "meaning": "Unique to, Only, Impossible if not, Expected only of",
+      "grammarOrder": 792
+    },
+    {
+      "id": 787,
+      "title": "すら",
+      "slug": "すら",
+      "level": "JLPT1",
+      "meaning": "Even",
+      "grammarOrder": 794
+    },
+    {
+      "id": 788,
+      "title": "あっての",
+      "slug": "あっての",
+      "level": "JLPT1",
+      "meaning": "Exist only because of or due to, Owe everything to",
+      "grammarOrder": 795
+    },
+    {
+      "id": 789,
+      "title": "～たまでだ",
+      "slug": "たまでだ",
+      "level": "JLPT1",
+      "meaning": "Just, Merely, Simply, Only",
+      "grammarOrder": 796
+    },
+    {
+      "id": 790,
+      "title": "を経て",
+      "slug": "を経て",
+      "level": "JLPT1",
+      "meaning": "Via, Through, After (experience at job, university, etc.), Pass through",
+      "grammarOrder": 797
+    },
+    {
+      "id": 791,
+      "title": "ながらに",
+      "slug": "ながらに",
+      "level": "JLPT1",
+      "meaning": "While being, Born (with), Traditional (old-fashioned, as it was long ago), As always, While crying or in tears, (Burned) alive",
+      "grammarOrder": 798
+    },
+    {
+      "id": 792,
+      "title": "たなり・なり",
+      "slug": "たなり-なり",
+      "level": "JLPT1",
+      "meaning": "While... ~ing, Remaining, Not or ever since, Keep or leave",
+      "grammarOrder": 799
+    },
+    {
+      "id": 793,
+      "title": "の極み",
+      "slug": "の極み",
+      "level": "JLPT1",
+      "meaning": "Ultimate, Extreme, Utter, Epitome, Peak",
+      "grammarOrder": 800
+    },
+    {
+      "id": 794,
+      "title": "にしてみれば",
+      "slug": "にしてみれば",
+      "level": "JLPT1",
+      "meaning": "For (A), In the case of (A), From (A)'s point of view, In the eyes of (A)",
+      "grammarOrder": 801
+    },
+    {
+      "id": 795,
+      "title": "だの",
+      "slug": "だの",
+      "level": "JLPT1",
+      "meaning": "Things like, And so on, Or something, And whatnot",
+      "grammarOrder": 802
+    },
+    {
+      "id": 796,
+      "title": "あくまでも",
+      "slug": "あくまでも",
+      "level": "JLPT1",
+      "meaning": "To the (bitter) end, Stubbornly, Persistently",
+      "grammarOrder": 803
+    },
+    {
+      "id": 797,
+      "title": "べく",
+      "slug": "べく",
+      "level": "JLPT1",
+      "meaning": "For the purpose of, In order to, To ensure",
+      "grammarOrder": 804
+    },
+    {
+      "id": 798,
+      "title": "ところを",
+      "slug": "ところを",
+      "level": "JLPT1",
+      "meaning": "When, While, In spite of (the circumstances), Regardless of (the circumstances)",
+      "grammarOrder": 805
+    },
+    {
+      "id": 799,
+      "title": "からある",
+      "slug": "からある",
+      "level": "JLPT1",
+      "meaning": "As much as, As many as, At least",
+      "grammarOrder": 806
+    },
+    {
+      "id": 800,
+      "title": "にして②",
+      "slug": "にして2",
+      "level": "JLPT1",
+      "meaning": "To be ~ and ~, To be ~ as well as ~, Both ~ and ~",
+      "grammarOrder": 807
+    },
+    {
+      "id": 801,
+      "title": "つ〜つ",
+      "slug": "つ-つ",
+      "level": "JLPT1",
+      "meaning": "two contrasting actions",
+      "grammarOrder": 808
+    },
+    {
+      "id": 802,
+      "title": "飽くまで(も)",
+      "slug": "飽くまで-も",
+      "level": "JLPT1",
+      "meaning": "Just, Only, Merely, Strictly",
+      "grammarOrder": 809
+    },
+    {
+      "id": 803,
+      "title": "であれ〜であれ",
+      "slug": "であれ-であれ",
+      "level": "JLPT1",
+      "meaning": "Whether or, Or, No matter which, In either case",
+      "grammarOrder": 810
+    },
+    {
+      "id": 804,
+      "title": "たら最後",
+      "slug": "たら最後",
+      "level": "JLPT1",
+      "meaning": "Once, Now that, As soon as",
+      "grammarOrder": 812
+    },
+    {
+      "id": 805,
+      "title": "いかなる",
+      "slug": "いかなる",
+      "level": "JLPT1",
+      "meaning": "What kind of, No matter what kind of, No … (with a negative verb), Any... (with a negative verb)",
+      "grammarOrder": 813
+    },
+    {
+      "id": 806,
+      "title": "なりに",
+      "slug": "なりに",
+      "level": "JLPT1",
+      "meaning": "In one's own way, Of someone's own, Do one's best in one's own way, As much as one can",
+      "grammarOrder": 814
+    },
+    {
+      "id": 807,
+      "title": "れる・られる + ままに",
+      "slug": "verb-passive-ままに",
+      "level": "JLPT1",
+      "meaning": "Do as (one is told or ordered…), In accordance with, In compliance with, Just like",
+      "grammarOrder": 815
+    },
+    {
+      "id": 808,
+      "title": "にまつわる",
+      "slug": "にまつわる",
+      "level": "JLPT1",
+      "meaning": "Surrounding, Related or relating to, Associated with, Connected to",
+      "grammarOrder": 816
+    },
+    {
+      "id": 809,
+      "title": "たる",
+      "slug": "たる",
+      "level": "JLPT1",
+      "meaning": "To be (in a position of), As a, For",
+      "grammarOrder": 817
+    },
+    {
+      "id": 810,
+      "title": "なら〜で",
+      "slug": "なら-で",
+      "level": "JLPT1",
+      "meaning": "If ~ should, Before ~ should",
+      "grammarOrder": 818
+    },
+    {
+      "id": 811,
+      "title": "をものともせず",
+      "slug": "をものともせず",
+      "level": "JLPT1",
+      "meaning": "Making nothing of, Ignoring, In defiance of, Regardless of, Disregarding",
+      "grammarOrder": 819
+    },
+    {
+      "id": 812,
+      "title": "には当たらない",
+      "slug": "には当たらない",
+      "level": "JLPT1",
+      "meaning": "No need to/for, Cannot, Not worth it to, Not suitable",
+      "grammarOrder": 820
+    },
+    {
+      "id": 813,
+      "title": "ものと思う",
+      "slug": "ものと思う",
+      "level": "JLPT1",
+      "meaning": "Think that, Believe that, Expect that, Have confidence that, Absolutely",
+      "grammarOrder": 821
+    },
+    {
+      "id": 814,
+      "title": "を踏まえて",
+      "slug": "を踏まえて",
+      "level": "JLPT1",
+      "meaning": "Based on, Considering, Keeping in mind, Taking into account, Therefore",
+      "grammarOrder": 822
+    },
+    {
+      "id": 815,
+      "title": "ゆえに",
+      "slug": "ゆえに",
+      "level": "JLPT1",
+      "meaning": "Because, The reason is, Due to, Therefore, So",
+      "grammarOrder": 823
+    },
+    {
+      "id": 816,
+      "title": "という",
+      "slug": "という",
+      "level": "JLPT1",
+      "meaning": "Every single, Each and every, Emphasis, Everything that could be called",
+      "grammarOrder": 824
+    },
+    {
+      "id": 817,
+      "title": "にとどまらず",
+      "slug": "にとどまらず",
+      "level": "JLPT1",
+      "meaning": "Not limited to, Not only...but also, Not stopping at",
+      "grammarOrder": 825
+    },
+    {
+      "id": 818,
+      "title": "と思いきや",
+      "slug": "と思いきや",
+      "level": "JLPT1",
+      "meaning": "Thought...but, When...thought that...but, Despite having thought...",
+      "grammarOrder": 826
+    },
+    {
+      "id": 819,
+      "title": "か否か",
+      "slug": "か否か",
+      "level": "JLPT1",
+      "meaning": "Whether or not",
+      "grammarOrder": 830
+    },
+    {
+      "id": 820,
+      "title": "たら〜で",
+      "slug": "たら-で",
+      "level": "JLPT1",
+      "meaning": "Even if, If",
+      "grammarOrder": 831
+    },
+    {
+      "id": 821,
+      "title": "べくして",
+      "slug": "べくして",
+      "level": "JLPT1",
+      "meaning": "As expected, Meant to, Supposed to, Destined to, Sure to",
+      "grammarOrder": 832
+    },
+    {
+      "id": 822,
+      "title": "まま(に)",
+      "slug": "ままに",
+      "level": "JLPT1",
+      "meaning": "As (one likes, feels or pleases), Spur of the moment, Wherever one fancies, Spontaneously, On a whim",
+      "grammarOrder": 833
+    },
+    {
+      "id": 823,
+      "title": "かれ〜かれ",
+      "slug": "かれ-かれ",
+      "level": "JLPT1",
+      "meaning": "Or, Either or",
+      "grammarOrder": 834
+    },
+    {
+      "id": 824,
+      "title": "〜に〜ない",
+      "slug": "-に-ない",
+      "level": "JLPT1",
+      "meaning": "Cannot even...if wants, Would like to...but cannot, Wants to...but cannot",
+      "grammarOrder": 835
+    },
+    {
+      "id": 825,
+      "title": "なくして(は)",
+      "slug": "なくして-は",
+      "level": "JLPT1",
+      "meaning": "Without, If not for",
+      "grammarOrder": 836
+    },
+    {
+      "id": 826,
+      "title": "のなんのって",
+      "slug": "のなんのって",
+      "level": "JLPT1",
+      "meaning": "So much that, Extremely, Very",
+      "grammarOrder": 837
+    },
+    {
+      "id": 827,
+      "title": "にかかっている",
+      "slug": "にかかっている",
+      "level": "JLPT1",
+      "meaning": "To depend on",
+      "grammarOrder": 838
+    },
+    {
+      "id": 828,
+      "title": "てやまない",
+      "slug": "てやまない",
+      "level": "JLPT1",
+      "meaning": "Never cease to, Always, Sincerely, Greatly, From the bottom of one's heart",
+      "grammarOrder": 839
+    },
+    {
+      "id": 829,
+      "title": "ぐらいなら",
+      "slug": "ぐらいなら",
+      "level": "JLPT1",
+      "meaning": "Would rather...than, Rather than, Better off",
+      "grammarOrder": 840
+    },
+    {
+      "id": 830,
+      "title": "ってば・ったら",
+      "slug": "ってば-ったら",
+      "level": "JLPT1",
+      "meaning": "I said...!, I told you...!, !",
+      "grammarOrder": 841
+    },
+    {
+      "id": 831,
+      "title": "ずとも",
+      "slug": "ずとも",
+      "level": "JLPT1",
+      "meaning": "Even if not, Without, Don't have to",
+      "grammarOrder": 842
+    },
+    {
+      "id": 832,
+      "title": "とあって",
+      "slug": "とあって",
+      "level": "JLPT1",
+      "meaning": "Since...(it is no wonder that), Because...(it is no wonder that), Due to...(it is no wonder that)",
+      "grammarOrder": 843
+    },
+    {
+      "id": 833,
+      "title": "でもなんでもない",
+      "slug": "でもなんでもない",
+      "level": "JLPT1",
+      "meaning": "Not at all, By no means, Definitely not, Nothing like that, Not really",
+      "grammarOrder": 844
+    },
+    {
+      "id": 834,
+      "title": "に至って・に至り",
+      "slug": "に至って-に至り",
+      "level": "JLPT1",
+      "meaning": "When it came to, Only when, Only after, Go as far as",
+      "grammarOrder": 848
+    },
+    {
+      "id": 835,
+      "title": "だに + しない",
+      "slug": "だに-しない",
+      "level": "JLPT1",
+      "meaning": "Not even, Not at all, Never could have",
+      "grammarOrder": 849
+    },
+    {
+      "id": 836,
+      "title": "がてら",
+      "slug": "がてら",
+      "level": "JLPT1",
+      "meaning": "On the occasion of, While … as well, While …  (one is) at it, During, Along the way",
+      "grammarOrder": 850
+    },
+    {
+      "id": 837,
+      "title": "んがため(に)",
+      "slug": "んがため-に",
+      "level": "JLPT1",
+      "meaning": "In order to, To, For the purpose of",
+      "grammarOrder": 851
+    },
+    {
+      "id": 838,
+      "title": "いかん〜ず",
+      "slug": "いかん-ず",
+      "level": "JLPT1",
+      "meaning": "Regardless of (whatever … is), Irrespective of (whatever … is)",
+      "grammarOrder": 852
+    },
+    {
+      "id": 839,
+      "title": "にも～ない",
+      "slug": "にも-ない",
+      "level": "JLPT1",
+      "meaning": "Cannot... even if one wants or tries, Would like but cannot, Wants or tries but cannot",
+      "grammarOrder": 853
+    },
+    {
+      "id": 840,
+      "title": "い-Adj[く] + もなんともない",
+      "slug": "い-adj-く-もなんともない",
+      "level": "JLPT1",
+      "meaning": "Not... or anything, Not at all, Not, By no means, Definitely not, Nothing like that",
+      "grammarOrder": 854
+    },
+    {
+      "id": 841,
+      "title": "に至っても",
+      "slug": "に至っても",
+      "level": "JLPT1",
+      "meaning": "Even when",
+      "grammarOrder": 866
+    },
+    {
+      "id": 842,
+      "title": "Verb + だに",
+      "slug": "verb-だに",
+      "level": "JLPT1",
+      "meaning": "Just, Even just, Even merely",
+      "grammarOrder": 855
+    },
+    {
+      "id": 843,
+      "title": "～なり～なり",
+      "slug": "-なり-なり",
+      "level": "JLPT1",
+      "meaning": "Or, Either or",
+      "grammarOrder": 856
+    },
+    {
+      "id": 844,
+      "title": "ないでもない",
+      "slug": "ないでもない",
+      "level": "JLPT1",
+      "meaning": "Kind of, Might, Slightly, It’s not (impossible) that, Somewhat, In some respects",
+      "grammarOrder": 857
+    },
+    {
+      "id": 845,
+      "title": "もさることながら",
+      "slug": "もさることながら",
+      "level": "JLPT1",
+      "meaning": "It is a fact that, But, Even more than, It goes without saying, Not only but also,",
+      "grammarOrder": 858
+    },
+    {
+      "id": 846,
+      "title": "ものと思っていた",
+      "slug": "ものと思っていた",
+      "level": "JLPT1",
+      "meaning": "Was under the impression that, (Always) the thought used to think",
+      "grammarOrder": 859
+    },
+    {
+      "id": 847,
+      "title": "でなくてなんだろう",
+      "slug": "でなくてなんだろう",
+      "level": "JLPT1",
+      "meaning": "If … is not … then what is?",
+      "grammarOrder": 860
+    },
+    {
+      "id": 848,
+      "title": "はさておき・はさておいて",
+      "slug": "はさておき-はさておいて",
+      "level": "JLPT1",
+      "meaning": "(Leaving or putting) aside, Apart",
+      "grammarOrder": 861
+    },
+    {
+      "id": 849,
+      "title": "折には",
+      "slug": "折には",
+      "level": "JLPT1",
+      "meaning": "When, Occasion, Opportunity, Time",
+      "grammarOrder": 862
+    },
+    {
+      "id": 850,
+      "title": "を兼ねて",
+      "slug": "を兼ねて",
+      "level": "JLPT1",
+      "meaning": "And also, Also (partly) to, Also (partly) for (the purpose of), At the same time, To double as, When … also, While … as well, And as",
+      "grammarOrder": 867
+    },
+    {
+      "id": 851,
+      "title": "Verb[ない]もの(だろう)か",
+      "slug": "verb-ないもの-だろうか",
+      "level": "JLPT1",
+      "meaning": "(Why) can’t, Isn’t there, Wish that, If only",
+      "grammarOrder": 868
+    },
+    {
+      "id": 852,
+      "title": "Verb[て] + みせる",
+      "slug": "verb-て-みせる",
+      "level": "JLPT1",
+      "meaning": "I will definitely, I will certainly, Just watch, Whatever it takes, I swear, for sure",
+      "grammarOrder": 869
+    },
+    {
+      "id": 853,
+      "title": "相まって",
+      "slug": "相まって",
+      "level": "JLPT1",
+      "meaning": "Combined with, Coupled with, Together with",
+      "grammarOrder": 870
+    },
+    {
+      "id": 854,
+      "title": "に足りない",
+      "slug": "に足りない",
+      "level": "JLPT1",
+      "meaning": "To not be worthy, To not be enough, To not be sufficient, To lack",
+      "grammarOrder": 871
+    },
+    {
+      "id": 855,
+      "title": "べからず",
+      "slug": "べからず",
+      "level": "JLPT1",
+      "meaning": "Do not, Must not, Should not, Cannot (べからざる)",
+      "grammarOrder": 872
+    },
+    {
+      "id": 856,
+      "title": "んばかりに",
+      "slug": "んばかりに",
+      "level": "JLPT1",
+      "meaning": "As if, As if it were about to, About to",
+      "grammarOrder": 873
+    },
+    {
+      "id": 857,
+      "title": "に則って・に則り",
+      "slug": "に則って-に則り",
+      "level": "JLPT1",
+      "meaning": "According to, In accordance with, Based on, In line with",
+      "grammarOrder": 874
+    },
+    {
+      "id": 858,
+      "title": "Adj限りだ",
+      "slug": "adj限りだ",
+      "level": "JLPT1",
+      "meaning": "Extremely, Really, Very, As ... as one can be",
+      "grammarOrder": 875
+    },
+    {
+      "id": 859,
+      "title": "はおろか",
+      "slug": "はおろか",
+      "level": "JLPT1",
+      "meaning": "Let alone, Much less, Needless to say, Not to mention, Not only but also",
+      "grammarOrder": 876
+    },
+    {
+      "id": 860,
+      "title": "めく・めいた",
+      "slug": "めく-めいた",
+      "level": "JLPT1",
+      "meaning": "Like, To show signs of,  To have the appearance of, To come to a (state) similar to, Somewhat, An air of,  Feels almost like",
+      "grammarOrder": 877
+    },
+    {
+      "id": 861,
+      "title": "といわず",
+      "slug": "といわず",
+      "level": "JLPT1",
+      "meaning": "Not only A or B but every-; A, B and every-; Not only A or B but all over;  A, B both, whether A or B",
+      "grammarOrder": 878
+    },
+    {
+      "id": 862,
+      "title": "にもほどがある",
+      "slug": "にもほどがある",
+      "level": "JLPT1",
+      "meaning": "There is a limit to, You are too ..., How …!, How … one can be!",
+      "grammarOrder": 879
+    },
+    {
+      "id": 863,
+      "title": "にもまして",
+      "slug": "にもまして",
+      "level": "JLPT1",
+      "meaning": "Even -er than, Even more than, More than anything, More than anybody, More than ever",
+      "grammarOrder": 880
+    },
+    {
+      "id": 864,
+      "title": "や否や",
+      "slug": "や否や",
+      "level": "JLPT1",
+      "meaning": "As soon as, No sooner than, The minute",
+      "grammarOrder": 884
+    },
+    {
+      "id": 865,
+      "title": "次第です",
+      "slug": "次第です",
+      "level": "JLPT1",
+      "meaning": "Because the reason is, Therefore, The present situation is like this, This is how (it is), Those are the circumstances, This is why",
+      "grammarOrder": 885
+    },
+    {
+      "id": 866,
+      "title": "というところ",
+      "slug": "というところ",
+      "level": "JLPT1",
+      "meaning": "I would say (about), I guess (about), It could be said that, About, At best",
+      "grammarOrder": 886
+    },
+    {
+      "id": 867,
+      "title": "１～たりとも～ない",
+      "slug": "１-りとも-ない",
+      "level": "JLPT1",
+      "meaning": "Not even one, Not a single, No (at all)",
+      "grammarOrder": 887
+    },
+    {
+      "id": 868,
+      "title": "ったらない・といったらない",
+      "slug": "ったらない・といったらない",
+      "level": "JLPT1",
+      "meaning": "Cannot tell, describe, say or express how, Words cannot express, Too … for words, Extremely",
+      "grammarOrder": 888
+    },
+    {
+      "id": 869,
+      "title": "に照らして・に照らすと",
+      "slug": "に照らして・に照らすと",
+      "level": "JLPT1",
+      "meaning": "In light of, Based on, According to, Referencing, Comparing against, In view of",
+      "grammarOrder": 889
+    },
+    {
+      "id": 870,
+      "title": "とあれば",
+      "slug": "とあれば",
+      "level": "JLPT1",
+      "meaning": "(Emphatic) if, If it is the case that, As (you wish)",
+      "grammarOrder": 890
+    },
+    {
+      "id": 871,
+      "title": "さぞ",
+      "slug": "さぞ",
+      "level": "JLPT1",
+      "meaning": "You must be very, How … you must be, I dare to say, I am sure or certain that you must be very",
+      "grammarOrder": 891
+    },
+    {
+      "id": 872,
+      "title": "ときたら",
+      "slug": "ときたら1",
+      "level": "JLPT1",
+      "meaning": "When it comes to, That or this … of mine, That or this darn …, That or this blasted …",
+      "grammarOrder": 892
+    },
+    {
+      "id": 873,
+      "title": "い-Adjectives くない",
+      "slug": "negative-い-adjectives",
+      "level": "JLPT5",
+      "meaning": "Not (Adjective)",
+      "grammarOrder": 52
+    },
+    {
+      "id": 874,
+      "title": "い-Adjective (Past)",
+      "slug": "past-tense-い-adjectives",
+      "level": "JLPT5",
+      "meaning": "Was, Were (Past tense)",
+      "grammarOrder": 39
+    },
+    {
+      "id": 876,
+      "title": "い-Adjective くなかった",
+      "slug": "い-Adjective-くなかった",
+      "level": "JLPT5",
+      "meaning": "Was not, Wasn't (Adjective)",
+      "grammarOrder": 74
+    },
+    {
+      "id": 877,
+      "title": "びる",
+      "slug": "びる",
+      "level": "JLPT1",
+      "meaning": "-like, Looking, Feeling, With an air of, To become",
+      "grammarOrder": 893
+    },
+    {
+      "id": 878,
+      "title": "にしたところで",
+      "slug": "にしたところで",
+      "level": "JLPT1",
+      "meaning": "Even, Even for, Even from the perspective of, Even in the case of",
+      "grammarOrder": 894
+    },
+    {
+      "id": 879,
+      "title": "～ばこそ",
+      "slug": "ばこそ",
+      "level": "JLPT1",
+      "meaning": "Precisely because, Only because, Because, Due to, Only if",
+      "grammarOrder": 895
+    },
+    {
+      "id": 880,
+      "title": "ても差し支えない",
+      "slug": "ても差し支えない",
+      "level": "JLPT1",
+      "meaning": "May, Is it a bother if, Do you mind if, Is it a problem if",
+      "grammarOrder": 896
+    },
+    {
+      "id": 881,
+      "title": "には及ばない①",
+      "slug": "には及ばない1",
+      "level": "JLPT1",
+      "meaning": "There is no need to, It is fine if you don’t, Unnecessary",
+      "grammarOrder": 897
+    },
+    {
+      "id": 882,
+      "title": "に即して",
+      "slug": "に即して",
+      "level": "JLPT1",
+      "meaning": "In line with, Based on, In accordance with",
+      "grammarOrder": 898
+    },
+    {
+      "id": 883,
+      "title": "ないまでも",
+      "slug": "ないまでも",
+      "level": "JLPT1",
+      "meaning": "May not … but (at least), Even though not, Even if not",
+      "grammarOrder": 899
+    },
+    {
+      "id": 884,
+      "title": "をよそに",
+      "slug": "をよそに",
+      "level": "JLPT1",
+      "meaning": "Ignoring, Disregarding, Despite",
+      "grammarOrder": 900
+    },
+    {
+      "id": 885,
+      "title": "まじき",
+      "slug": "まじき",
+      "level": "JLPT1",
+      "meaning": "Unbecoming of, Unworthy of, Not proper for, Should not, Must not, Cannot",
+      "grammarOrder": 904
+    },
+    {
+      "id": 886,
+      "title": "の至り",
+      "slug": "の至り",
+      "level": "JLPT1",
+      "meaning": "Utmost, Height of, Extreme, Heartiest, Such a, Very, really, Completely, Deeply",
+      "grammarOrder": 905
+    },
+    {
+      "id": 887,
+      "title": "に恥じない",
+      "slug": "に恥じない",
+      "level": "JLPT1",
+      "meaning": "Lives up to, Truly to …’s name, Worthy of, Not dishonor, Not putting to shame, Measure to",
+      "grammarOrder": 906
+    },
+    {
+      "id": 888,
+      "title": "う-Verb (Negative)",
+      "slug": "うverb--ない",
+      "level": "JLPT5",
+      "meaning": "Will/Does/Do (not)",
+      "grammarOrder": 21
+    },
+    {
+      "id": 889,
+      "title": "ずじまい",
+      "slug": "ずじまい",
+      "level": "JLPT1",
+      "meaning": "Ended up not, Did not (in the end), Never did",
+      "grammarOrder": 907
+    },
+    {
+      "id": 890,
+      "title": "に言わせれば・に言わせると・に言わせたら",
+      "slug": "に言わせれば",
+      "level": "JLPT1",
+      "meaning": "If you ask, In … opinion, According to",
+      "grammarOrder": 908
+    },
+    {
+      "id": 892,
+      "title": "ったら・といったら",
+      "slug": "ったら-といったら",
+      "level": "JLPT1",
+      "meaning": "Cannot tell, describe, say, express or find words for how, Words cannot express, Too … for words, Extremely",
+      "grammarOrder": 909
+    },
+    {
+      "id": 893,
+      "title": "こととて",
+      "slug": "こととて",
+      "level": "JLPT1",
+      "meaning": "Due to, Since, On account of, Because",
+      "grammarOrder": 910
+    },
+    {
+      "id": 894,
+      "title": "ずくめ",
+      "slug": "ずくめ",
+      "level": "JLPT1",
+      "meaning": "Completely, Entirely, All in, Nothing but, A real streak of, Without exception, Jet",
+      "grammarOrder": 911
+    },
+    {
+      "id": 895,
+      "title": "る-Verb (Past)",
+      "slug": "る-verb-past",
+      "level": "JLPT5",
+      "meaning": "る - Verbs (Past tense)",
+      "grammarOrder": 46
+    },
+    {
+      "id": 896,
+      "title": "る-Verb (Negative-Past)",
+      "slug": "る-verb-neg-past",
+      "level": "JLPT5",
+      "meaning": "る - Verbs (Negative-past tense)",
+      "grammarOrder": 59
+    },
+    {
+      "id": 897,
+      "title": "う-Verb (Negative-Past)",
+      "slug": "う-verb-neg-past",
+      "level": "JLPT5",
+      "meaning": "う - Verbs (Negative-past tense)",
+      "grammarOrder": 60
+    },
+    {
+      "id": 929,
+      "title": "には及ばない②",
+      "slug": "には及ばない②",
+      "level": "JLPT1",
+      "meaning": "To be no match (for), To not compare (with), To fall short (of), To not reach, Cannot win with, To be out of reach (for), To not be on par (with)",
+      "grammarOrder": 912
+    },
+    {
+      "id": 930,
+      "title": "とは言うものの",
+      "slug": "とは言うものの",
+      "level": "JLPT1",
+      "meaning": "Although, But, Although I say, Although it is said, Having said that",
+      "grammarOrder": 913
+    },
+    {
+      "id": 931,
+      "title": "が早いか",
+      "slug": "が早いか",
+      "level": "JLPT1",
+      "meaning": "As soon as, No sooner than, The instant that, No sooner had",
+      "grammarOrder": 914
+    },
+    {
+      "id": 932,
+      "title": "に難くない",
+      "slug": "に難くない",
+      "level": "JLPT1",
+      "meaning": "Not hard to, Not difficult to, Easy to, Is obvious that",
+      "grammarOrder": 915
+    },
+    {
+      "id": 933,
+      "title": "ならいざ知らず",
+      "slug": "ならばいざ知らず",
+      "level": "JLPT1",
+      "meaning": "Don’t know about it, Maybe it would or might be possible for",
+      "grammarOrder": 916
+    },
+    {
+      "id": 934,
+      "title": "を禁じ得ない",
+      "slug": "を禁じ得ない",
+      "level": "JLPT1",
+      "meaning": "Cannot help feeling, Cannot but, Cannot hold back",
+      "grammarOrder": 917
+    },
+    {
+      "id": 935,
+      "title": "にかこつけて",
+      "slug": "にかこつけて",
+      "level": "JLPT1",
+      "meaning": "In the name of, Using the excuse of, To use as a pretext of, Under the guise or pretense of",
+      "grammarOrder": 918
+    },
+    {
+      "id": 936,
+      "title": "ようによっては",
+      "slug": "ようによっては",
+      "level": "JLPT1",
+      "meaning": "Depending on the way, Depending on how",
+      "grammarOrder": 919
+    },
+    {
+      "id": 937,
+      "title": "べくもない",
+      "slug": "べくもない",
+      "level": "JLPT1",
+      "meaning": "No (doubt or hope), There is no way, It is impossible, Not a hope in hell",
+      "grammarOrder": 920
+    },
+    {
+      "id": 938,
+      "title": "ずにはすまない",
+      "slug": "ずにはすまない",
+      "level": "JLPT1",
+      "meaning": "Won't get away without, Won't get off without, Have to, Have no choice but to, Can’t not",
+      "grammarOrder": 924
+    },
+    {
+      "id": 939,
+      "title": "に堪えない",
+      "slug": "に堪えない",
+      "level": "JLPT1",
+      "meaning": "Cannot bear to, Cannot stand to, Too much to, Cannot go on doing, Cannot tolerate",
+      "grammarOrder": 925
+    },
+    {
+      "id": 940,
+      "title": "始末だ",
+      "slug": "始末だ",
+      "level": "JLPT1",
+      "meaning": "Ends up, Finally, In the end, (Unfortunately) As a result, This is what happened, To come about, To wind up",
+      "grammarOrder": 926
+    },
+    {
+      "id": 941,
+      "title": "ものなら②",
+      "slug": "ものなら②",
+      "level": "JLPT1",
+      "meaning": "If you were to do, If you try to, If … happens, Should there be",
+      "grammarOrder": 927
+    },
+    {
+      "id": 942,
+      "title": "にひきかえ",
+      "slug": "にひきかえ",
+      "level": "JLPT1",
+      "meaning": "In stark contrast, In comparison, On the other hand, While, In sharp contrast",
+      "grammarOrder": 928
+    },
+    {
+      "id": 943,
+      "title": "それまでだ",
+      "slug": "それまでだ",
+      "level": "JLPT1",
+      "meaning": "If… then it is all in vain, It's done, It is useless, No point, It is a waste, That's it, It is all gone, ",
+      "grammarOrder": 929
+    },
+    {
+      "id": 944,
+      "title": "といおうか",
+      "slug": "といおうか",
+      "level": "JLPT1",
+      "meaning": "How to put it, How shall I put it, How should I put it, Or perhaps, Or maybe, Call it … or",
+      "grammarOrder": 930
+    },
+    {
+      "id": 945,
+      "title": "ずにはおかない",
+      "slug": "ずにはおかない",
+      "level": "JLPT1",
+      "meaning": "Will definitely, Will certainly, Bound to, Not fail to",
+      "grammarOrder": 931
+    },
+    {
+      "id": 946,
+      "title": "を限りに",
+      "slug": "を限りに",
+      "level": "JLPT1",
+      "meaning": "As of (the end of), (Starting) from, (No longer) after, By (the), Ending with",
+      "grammarOrder": 932
+    },
+    {
+      "id": 947,
+      "title": "てはかなわない",
+      "slug": "てはかなわない",
+      "level": "JLPT1",
+      "meaning": "It's unbearable when, It'd be unbearable if, I can't stand it when, I couldn’t stand it if",
+      "grammarOrder": 933
+    },
+    {
+      "id": 948,
+      "title": "かたがた",
+      "slug": "かたがた",
+      "level": "JLPT1",
+      "meaning": "Partly for (the purpose of), In addition to, Along with, By the way, And also to, Incidentally, While",
+      "grammarOrder": 934
+    },
+    {
+      "id": 949,
+      "title": "を余儀なくさせる",
+      "slug": "を余儀なくさせる",
+      "level": "JLPT1",
+      "meaning": "Force to, To compel, Make unavoidable",
+      "grammarOrder": 935
+    },
+    {
+      "id": 950,
+      "title": "Verbs (Non-past)",
+      "slug": "verb-non-past",
+      "level": "JLPT5",
+      "meaning": "(Non-past)",
+      "grammarOrder": 77
+    },
+    {
+      "id": 951,
+      "title": "い-Adjective (Predicate)",
+      "slug": "い-adjective-predicate",
+      "level": "JLPT5",
+      "meaning": "い-Adjective (Predicate)",
+      "grammarOrder": 69
+    },
+    {
+      "id": 952,
+      "title": "な-Adjective だ",
+      "slug": "な-adjective-predicate",
+      "level": "JLPT5",
+      "meaning": "な-Adjective (Predicate)",
+      "grammarOrder": 70
+    },
+    {
+      "id": 953,
+      "title": "い-Adjective + Noun",
+      "slug": "い-adjective-noun",
+      "level": "JLPT5",
+      "meaning": "Describing a noun",
+      "grammarOrder": 41
+    },
+    {
+      "id": 954,
+      "title": "な-Adjective + Noun",
+      "slug": "な-adjective-noun",
+      "level": "JLPT5",
+      "meaning": "Describing a noun",
+      "grammarOrder": 42
+    },
+    {
+      "id": 955,
+      "title": "と",
+      "slug": "と-with",
+      "level": "JLPT5",
+      "meaning": "With",
+      "grammarOrder": 29
+    },
+    {
+      "id": 956,
+      "title": "どうにも",
+      "slug": "どうにも",
+      "level": "JLPT1",
+      "meaning": "Cannot, There is no way one can, Nothing one can do, Cannot possibly not by any means, Cannot do no matter how hard one tries, Nothing will come out, It is meaningless to",
+      "grammarOrder": 827
+    },
+    {
+      "id": 957,
+      "title": "ことだし",
+      "slug": "ことだし",
+      "level": "JLPT1",
+      "meaning": "(And) so, Because, Since",
+      "grammarOrder": 828
+    },
+    {
+      "id": 958,
+      "title": "ぐるみで",
+      "slug": "ぐるみで",
+      "level": "JLPT1",
+      "meaning": "Whole, -wide, Across the, Entire, All of, With … altogether",
+      "grammarOrder": 845
+    },
+    {
+      "id": 959,
+      "title": "そばから",
+      "slug": "そばから",
+      "level": "JLPT1",
+      "meaning": "As soon as, Right after, Even if … still",
+      "grammarOrder": 846
+    },
+    {
+      "id": 960,
+      "title": "わ〜わ",
+      "slug": "わ-わ",
+      "level": "JLPT1",
+      "meaning": "~and ~and, Keep ~ing, One after another, So much, So many, One after the other",
+      "grammarOrder": 864
+    },
+    {
+      "id": 961,
+      "title": "まくる",
+      "slug": "まくる",
+      "level": "JLPT1",
+      "meaning": "Like crazy, Keep doing (without a second thought), Nothing but, On and on, Do … all around, To do a lot of, One after another, All over, Keep, Everything, Constantly, All the time ",
+      "grammarOrder": 881
+    },
+    {
+      "id": 962,
+      "title": "とばかり（に）",
+      "slug": "とばかり",
+      "level": "JLPT1",
+      "meaning": "As if (to say), Seeming that",
+      "grammarOrder": 863
+    },
+    {
+      "id": 963,
+      "title": "わ〜わ（で）",
+      "slug": "わ-わで",
+      "level": "JLPT1",
+      "meaning": "And...so, And...because, Since",
+      "grammarOrder": 882
+    },
+    {
+      "id": 964,
+      "title": "だ ⇒ や",
+      "slug": "だ-kansai",
+      "level": "関西弁",
+      "meaning": "To be, Am, Are, Is",
+      "grammarOrder": 959
+    },
+    {
+      "id": 965,
+      "title": "ね ⇒ な",
+      "slug": "ね-kansai",
+      "level": "関西弁",
+      "meaning": "Right?, Okay?, Isn't it?",
+      "grammarOrder": 964
+    },
+    {
+      "id": 966,
+      "title": "よ ⇒ で・わ",
+      "slug": "よ-kansai",
+      "level": "関西弁",
+      "meaning": "Emphasis (sentence ending particle)",
+      "grammarOrder": 960
+    },
+    {
+      "id": 967,
+      "title": "じゃないか ⇒ やんか",
+      "slug": "ちがう-kansai",
+      "level": "関西弁",
+      "meaning": "Isn't it?, Doesn't it?, Don't you?",
+      "grammarOrder": 962
+    },
+    {
+      "id": 968,
+      "title": "くない ⇒ ない",
+      "slug": "くない-kansai",
+      "level": "関西弁",
+      "meaning": "Is not",
+      "grammarOrder": 967
+    },
+    {
+      "id": 969,
+      "title": "ているの ⇒ てん",
+      "slug": "ているの-kansai",
+      "level": "関西弁",
+      "meaning": "Explanatory",
+      "grammarOrder": 969
+    },
+    {
+      "id": 970,
+      "title": "ている ⇒ てる",
+      "slug": "ている-kansai",
+      "level": "関西弁",
+      "meaning": "Does, Is doing",
+      "grammarOrder": 968
+    },
+    {
+      "id": 971,
+      "title": "ない ⇒ へん",
+      "slug": "ない-kansai",
+      "level": "関西弁",
+      "meaning": "Not, Will not, Did not, Has not",
+      "grammarOrder": 965
+    },
+    {
+      "id": 972,
+      "title": "のだ ⇒ ねん",
+      "slug": "のだ-kansai",
+      "level": "関西弁",
+      "meaning": "Explanatory",
+      "grammarOrder": 963
+    },
+    {
+      "id": 973,
+      "title": "じゃない ⇒ ちゃう",
+      "slug": "じゃない-kansai",
+      "level": "関西弁",
+      "meaning": "To be not, Am not, Are not, Is not",
+      "grammarOrder": 966
+    },
+    {
+      "id": 974,
+      "title": "とく・たる・てまう",
+      "slug": "ておく-kansai",
+      "level": "関西弁",
+      "meaning": "To do in advance, To do for, To unfortunately do",
+      "grammarOrder": 970
+    },
+    {
+      "id": 975,
+      "title": "命令形 ⇒ ます形 + 長音",
+      "slug": "命令形-kansai",
+      "level": "関西弁",
+      "meaning": "Do (something)! (imperative)",
+      "grammarOrder": 971
+    },
+    {
+      "id": 976,
+      "title": "ないで ⇒ んといて",
+      "slug": "ないでください-kansai",
+      "level": "関西弁",
+      "meaning": "Don't (please), Please do not",
+      "grammarOrder": 972
+    },
+    {
+      "id": 977,
+      "title": "辞書形 + な ⇒ ます形 + な",
+      "slug": "な-kansai",
+      "level": "関西弁",
+      "meaning": "Do not, Don't (prohibitive)",
+      "grammarOrder": 973
+    },
+    {
+      "id": 978,
+      "title": "ないで・な ⇒ なさんな",
+      "slug": "ないで-kansai",
+      "level": "関西弁",
+      "meaning": "(Please) do not, Do not, Don't (prohibitive)",
+      "grammarOrder": 974
+    },
+    {
+      "id": 979,
+      "title": "Verb よう・う ⇒ Verb よ・お",
+      "slug": "よう-おう-kansai",
+      "level": "関西弁",
+      "meaning": "Will, Let's, Shall?",
+      "grammarOrder": 975
+    },
+    {
+      "id": 980,
+      "title": "と思う ⇒ 思う",
+      "slug": "とおもう-kansai",
+      "level": "関西弁",
+      "meaning": "Think (that)",
+      "grammarOrder": 976
+    },
+    {
+      "id": 981,
+      "title": "させる ⇒ さす",
+      "slug": "させる-kansai",
+      "level": "関西弁",
+      "meaning": "To make someone do something (causative)",
+      "grammarOrder": 977
+    },
+    {
+      "id": 982,
+      "title": "[い] Adjective - [く] change",
+      "slug": "いadjectiveく-kansai",
+      "level": "関西弁",
+      "meaning": "And (adverb)",
+      "grammarOrder": 978
+    },
+    {
+      "id": 983,
+      "title": "ないといけない ⇒ なあかん",
+      "slug": "ないといけない-kansai",
+      "level": "関西弁",
+      "meaning": "Have to, Must, Should, Have no choice but to",
+      "grammarOrder": 979
+    },
+    {
+      "id": 984,
+      "title": "だよね・でしょう ⇒ やん",
+      "slug": "でしょう-kansai",
+      "level": "関西弁",
+      "meaning": "Right?, Don't you think?",
+      "grammarOrder": 961
+    },
+    {
+      "id": 985,
+      "title": "～てやる",
+      "slug": "てやる",
+      "level": "JLPT1",
+      "meaning": "Just wait and see, Just you wait, To do a favor, For you, Definitely, For sure",
+      "grammarOrder": 936
+    },
+    {
+      "id": 986,
+      "title": "ただ〜のみ",
+      "slug": "ただ-のみ",
+      "level": "JLPT1",
+      "meaning": "Nothing but, Should, Have to, Only, All that remains,",
+      "grammarOrder": 937
+    },
+    {
+      "id": 987,
+      "title": "ものとする",
+      "slug": "ものとする",
+      "level": "JLPT1",
+      "meaning": "Shall, To assume, To suppose, To consider",
+      "grammarOrder": 938
+    },
+    {
+      "id": 988,
+      "title": "との",
+      "slug": "との",
+      "level": "JLPT1",
+      "meaning": "That, To",
+      "grammarOrder": 939
+    },
+    {
+      "id": 989,
+      "title": "以前",
+      "slug": "以前",
+      "level": "JLPT1",
+      "meaning": "Before, Not even, Before even, Precede, Far from",
+      "grammarOrder": 940
+    },
+    {
+      "id": 990,
+      "title": "ともあろう",
+      "slug": "ともあろう",
+      "level": "JLPT1",
+      "meaning": "Of all people, Such,",
+      "grammarOrder": 941
+    },
+    {
+      "id": 991,
+      "title": "こそすれ〜ない",
+      "slug": "こそすれ-ない",
+      "level": "JLPT1",
+      "meaning": "And certainly not, But certainly not, But, Although, Even though",
+      "grammarOrder": 942
+    },
+    {
+      "id": 992,
+      "title": "並み",
+      "slug": "並み",
+      "level": "JLPT1",
+      "meaning": "As, On par with, Worthy of",
+      "grammarOrder": 943
+    },
+    {
+      "id": 993,
+      "title": "に先駆けて",
+      "slug": "に先駆けて",
+      "level": "JLPT1",
+      "meaning": "First, Prior to, Pioneer, Ahead of",
+      "grammarOrder": 944
+    },
+    {
+      "id": 994,
+      "title": "を機に",
+      "slug": "を機に",
+      "level": "JLPT1",
+      "meaning": "Opportunity, Occasion",
+      "grammarOrder": 945
+    },
+    {
+      "id": 995,
+      "title": "と来たら",
+      "slug": "ときたら2",
+      "level": "JLPT1",
+      "meaning": "For …(is the best), When it comes to, Concerning",
+      "grammarOrder": 921
+    },
+    {
+      "id": 996,
+      "title": "ものとして",
+      "slug": "ものとして",
+      "level": "JLPT1",
+      "meaning": "Assuming, Supposing, (Interpret) as, On the assumption, Regarding, Considering",
+      "grammarOrder": 922
+    },
+    {
+      "id": 997,
+      "title": "を前提に",
+      "slug": "を前提に",
+      "level": "JLPT1",
+      "meaning": "On the premise of",
+      "grammarOrder": 923
+    },
+    {
+      "id": 998,
+      "title": "に限ったことではない",
+      "slug": "に限ったことではない",
+      "level": "JLPT1",
+      "meaning": "Not limited to, Not restricted to, Not only",
+      "grammarOrder": 901
+    },
+    {
+      "id": 999,
+      "title": "とは比べものにならない",
+      "slug": "とは比べものにならない",
+      "level": "JLPT1",
+      "meaning": "Nothing compared to, Cannot be compared to, Much more, Way better, Above comparison (beyond comparison), Far greater than",
+      "grammarOrder": 902
+    },
+    {
+      "id": 1032,
+      "title": "命令形",
+      "slug": "命令形",
+      "level": "JLPT4",
+      "meaning": "(Verb)!, Do (something)!",
+      "grammarOrder": 298
+    },
+    {
+      "id": 1065,
+      "title": "ぞ",
+      "slug": "ぞ",
+      "level": "Non-JLPT",
+      "meaning": "Strong emphasis (toward anyone), !",
+      "grammarOrder": 946
+    },
+    {
+      "id": 1066,
+      "title": "ぜ",
+      "slug": "ぜ",
+      "level": "Non-JLPT",
+      "meaning": "Strong emphasis (friendly or familiar), !",
+      "grammarOrder": 947
+    },
+    {
+      "id": 1067,
+      "title": "わ",
+      "slug": "わ",
+      "level": "Non-JLPT",
+      "meaning": "You know?, Oh?, Ever so, Oh how I ever (emphasis)",
+      "grammarOrder": 948
+    },
+    {
+      "id": 1068,
+      "title": "い",
+      "slug": "い",
+      "level": "Non-JLPT",
+      "meaning": "So?, Well? (friendly or familiar)",
+      "grammarOrder": 949
+    },
+    {
+      "id": 1069,
+      "title": "ん (Slang)",
+      "slug": "ん-slang",
+      "level": "Non-JLPT",
+      "meaning": "Slang abbreviation",
+      "grammarOrder": 950
+    },
+    {
+      "id": 1070,
+      "title": "つ (Slang)",
+      "slug": "つ-slang",
+      "level": "Non-JLPT",
+      "meaning": "Called, Said that (slang abbreviation)",
+      "grammarOrder": 951
+    },
+    {
+      "id": 1071,
+      "title": "～やがる",
+      "slug": "やがる",
+      "level": "Non-JLPT",
+      "meaning": "To have the nerve to (A), To have the gall to (A), To freaking (A)",
+      "grammarOrder": 952
+    },
+    {
+      "id": 1072,
+      "title": "がいい",
+      "slug": "がいい",
+      "level": "Non-JLPT",
+      "meaning": "You should, It would be good to",
+      "grammarOrder": 953
+    },
+    {
+      "id": 1073,
+      "title": "かろう",
+      "slug": "かろう",
+      "level": "Non-JLPT",
+      "meaning": "Probably, Right?",
+      "grammarOrder": 954
+    },
+    {
+      "id": 1074,
+      "title": "やや",
+      "slug": "やや",
+      "level": "Non-JLPT",
+      "meaning": "A little bit, Marginally, Slightly",
+      "grammarOrder": 955
+    },
+    {
+      "id": 1075,
+      "title": "いずれも",
+      "slug": "いずれも",
+      "level": "Non-JLPT",
+      "meaning": "All (positive), None (negative), Both, Whatever, Whatsoever",
+      "grammarOrder": 956
+    },
+    {
+      "id": 1076,
+      "title": "あわよくば",
+      "slug": "あわよくば",
+      "level": "Non-JLPT",
+      "meaning": "If luck is on my side, If the time is right, If possible, all going well",
+      "grammarOrder": 957
+    },
+    {
+      "id": 1077,
+      "title": "あり",
+      "slug": "あり",
+      "level": "JLPT3",
+      "meaning": "Possibility, To have, With",
+      "grammarOrder": 494
+    },
+    {
+      "id": 1078,
+      "title": "おおよそ",
+      "slug": "おおよそ",
+      "level": "JLPT2",
+      "meaning": "Approximately, Roughly, About, Outline, Gist",
+      "grammarOrder": 560
+    },
+    {
+      "id": 1079,
+      "title": "～ざる",
+      "slug": "ざる",
+      "level": "JLPT2",
+      "meaning": "To not ~, Un~",
+      "grammarOrder": 541
+    },
+    {
+      "id": 1080,
+      "title": "ならともかく",
+      "slug": "ならともかく",
+      "level": "JLPT2",
+      "meaning": "If it's (A), sure, but (B), Putting aside (A), (B)",
+      "grammarOrder": 744
+    },
+    {
+      "id": 1081,
+      "title": "んじゃない",
+      "slug": "んじゃない",
+      "level": "JLPT3",
+      "meaning": "Don't, Mustn't, Shouldn't have",
+      "grammarOrder": 411
+    },
+    {
+      "id": 1082,
+      "title": "ます",
+      "slug": "polite-verb-endings",
+      "level": "JLPT5",
+      "meaning": "Polite Verb Endings",
+      "grammarOrder": 19
+    },
+    {
+      "id": 1083,
+      "title": "く・に",
+      "slug": "describing-verbs",
+      "level": "JLPT4",
+      "meaning": "～ly (Describing verbs), Adverbs",
+      "grammarOrder": 193
+    },
+    {
+      "id": 1084,
+      "title": "がん～",
+      "slug": "がん-totally",
+      "level": "JLPT1",
+      "meaning": "Totally, Seriously, Completely, Furiously, Majorly",
+      "grammarOrder": 829
+    },
+    {
+      "id": 1086,
+      "title": "むず",
+      "slug": "むず",
+      "level": "Non-JLPT",
+      "meaning": "Shall, Isn't it?, I wonder",
+      "grammarOrder": 958
+    },
+    {
+      "id": 1087,
+      "title": "なにやら",
+      "slug": "なにやら",
+      "level": "JLPT2",
+      "meaning": "Something (or other), Some kind of",
+      "grammarOrder": 546
+    },
+    {
+      "id": 1088,
+      "title": "どうにか",
+      "slug": "どうにか",
+      "level": "JLPT1",
+      "meaning": "Somehow (or other)",
+      "grammarOrder": 883
+    },
+    {
+      "id": 1089,
+      "title": "なりとも",
+      "slug": "なりとも",
+      "level": "JLPT1",
+      "meaning": "Even (a little), At least",
+      "grammarOrder": 865
+    },
+    {
+      "id": 1090,
+      "title": "次第に",
+      "slug": "次第に",
+      "level": "JLPT2",
+      "meaning": "Gradually",
+      "grammarOrder": 598
+    },
+    {
+      "id": 1091,
+      "title": "訳あり(訳あって)",
+      "slug": "訳あり",
+      "level": "JLPT1",
+      "meaning": "～ with reasons, Due to reasons, Defective, Problematic, Unique",
+      "grammarOrder": 847
+    },
+    {
+      "id": 1092,
+      "title": "～て頂戴",
+      "slug": "て頂戴",
+      "level": "JLPT2",
+      "meaning": "Please do",
+      "grammarOrder": 684
+    },
+    {
+      "id": 1093,
+      "title": "～に値する",
+      "slug": "に値する",
+      "level": "JLPT2",
+      "meaning": "Be worthy of, Deserving of, Amounts to",
+      "grammarOrder": 705
+    },
+    {
+      "id": 1094,
+      "title": "なぜ",
+      "slug": "なぜ",
+      "level": "JLPT5",
+      "meaning": "Why",
+      "grammarOrder": 66
+    },
+    {
+      "id": 1095,
+      "title": "どうして",
+      "slug": "どうして",
+      "level": "JLPT5",
+      "meaning": "Why",
+      "grammarOrder": 67
+    },
+    {
+      "id": 1096,
+      "title": "なんで",
+      "slug": "なんで",
+      "level": "JLPT5",
+      "meaning": "Why",
+      "grammarOrder": 68
+    },
+    {
+      "id": 1097,
+      "title": "～ばと思います",
+      "slug": "～ばと思います",
+      "level": "JLPT2",
+      "meaning": "I would appreciate it if, If you could, I would like to think that",
+      "grammarOrder": 668
+    },
+    {
+      "id": 1098,
+      "title": "づらい",
+      "slug": "づらい",
+      "level": "JLPT4",
+      "meaning": "Hard to, Tough to, Painful to, Difficult to",
+      "grammarOrder": 136
+    },
+    {
+      "id": 1099,
+      "title": "を境に",
+      "slug": "を境に",
+      "level": "JLPT1",
+      "meaning": "After (that moment), From (that time)",
+      "grammarOrder": 811
+    },
+    {
+      "id": 1101,
+      "title": "のみ",
+      "slug": "のみ",
+      "level": "JLPT2",
+      "meaning": "Only (formal)",
+      "grammarOrder": 732
+    },
+    {
+      "id": 1102,
+      "title": "させてもらう",
+      "slug": "させてもらう",
+      "level": "JLPT3",
+      "meaning": "To have the honor of doing, To take the liberty of doing, To do (polite, formal)",
+      "grammarOrder": 340
+    },
+    {
+      "id": 1103,
+      "title": "が・の (Subject)",
+      "slug": "の-subject",
+      "level": "JLPT5",
+      "meaning": "Particle Swapping",
+      "grammarOrder": 79
+    },
+    {
+      "id": 1104,
+      "title": "の (Questions)",
+      "slug": "の-questions",
+      "level": "JLPT5",
+      "meaning": "Contextual and Explanatory Questions",
+      "grammarOrder": 38
+    },
+    {
+      "id": 1105,
+      "title": "って感じ",
+      "slug": "って感じ",
+      "level": "JLPT4",
+      "meaning": "Kind of thing, Kind of vibe, Kind of feeling",
+      "grammarOrder": 302
+    },
+    {
+      "id": 1106,
+      "title": "の次に",
+      "slug": "の次に",
+      "level": "JLPT4",
+      "meaning": "Next to (rank), Second to, Ranked after",
+      "grammarOrder": 215
+    },
+    {
+      "id": 1107,
+      "title": "弱",
+      "slug": "弱",
+      "level": "JLPT2",
+      "meaning": "Just less than",
+      "grammarOrder": 715
+    },
+    {
+      "id": 1108,
+      "title": "強",
+      "slug": "強",
+      "level": "JLPT2",
+      "meaning": "Just more than",
+      "grammarOrder": 716
+    },
+    {
+      "id": 1109,
+      "title": "～たはいいが",
+      "slug": "～たはいいが",
+      "level": "JLPT1",
+      "meaning": "It's all well and good but...",
+      "grammarOrder": 793
+    },
+    {
+      "id": 1110,
+      "title": "くは",
+      "slug": "くは",
+      "level": "JLPT4",
+      "meaning": "Emphasis and Contrast",
+      "grammarOrder": 195
+    },
+    {
+      "id": 1111,
+      "title": "かかる (Time/Price)",
+      "slug": "かかる-time-cost",
+      "level": "JLPT4",
+      "meaning": "Costs (money), Takes (time)",
+      "grammarOrder": 209
+    },
+    {
+      "id": 1112,
+      "title": "する (Have/Wear)",
+      "slug": "する-wear",
+      "level": "JLPT4",
+      "meaning": "Have (a feature), Wear (an accessory)",
+      "grammarOrder": 186
+    },
+    {
+      "id": 1113,
+      "title": "する (Cost)",
+      "slug": "する-cost",
+      "level": "JLPT4",
+      "meaning": "Cost (money), Run you about (a certain price)",
+      "grammarOrder": 210
+    },
+    {
+      "id": 1114,
+      "title": "を顧みず",
+      "slug": "を顧みず",
+      "level": "JLPT1",
+      "meaning": "Without regard for, Ignoring, Without concern for",
+      "grammarOrder": 903
+    }
+  ]
+}

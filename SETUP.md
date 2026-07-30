@@ -9,6 +9,7 @@ cp .env.example .env.local
 ```
 
 - **`ANTHROPIC_API_KEY`** — from [console.anthropic.com](https://console.anthropic.com) → API keys. This is **API billing**, separate from any claude.ai Pro/Max subscription. Add a payment method / prepaid credits and set a spend limit while you're there. Generation uses `claude-opus-4-8`.
+- **`BUNPRO_API_KEY`** *(optional)* — from [bunpro.jp/settings/api](https://bunpro.jp/settings/api), enables the read-only Bunpro grammar sync (see `docs/plans/05-bunpro-sync.md`).
 - **`DATABASE_URL`** — a Neon Postgres connection string. Either provision Neon through the Vercel dashboard (Storage → Create → Neon) and copy the pooled connection string, or sign up at [neon.tech](https://neon.tech). Generation works without this; **saving/browsing** needs it.
 
 ## 2. Database

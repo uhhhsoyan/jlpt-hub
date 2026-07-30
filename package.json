@@ -13,6 +13,8 @@
     "db:backfill-workshop": "node --env-file=.env.local scripts/backfill-workshop.mjs",
     "db:generate": "drizzle-kit generate",
     "db:studio": "drizzle-kit studio",
+    "bunpro:catalog": "node scripts/fetch-bunpro-grammar.mjs",
+    "bunpro:crosswalk": "node --env-file=.env.local scripts/build-bunpro-crosswalk.mjs",
     "sprint:generate": "node --env-file=.env.local scripts/generate-sprint.mjs",
     "sprint:tts": "node --env-file=.env.local scripts/tts-sprint.mjs",
     "media:upload": "node --env-file=.env.local scripts/upload-media.mjs"

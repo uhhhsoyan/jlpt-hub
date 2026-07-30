@@ -1,6 +1,7 @@
 import { eq, inArray } from "drizzle-orm";
 import { getDb } from "@/lib/db";
 import { items, observations, wkSnapshot } from "@/lib/db/schema";
+import { isIntegrationEnabled } from "@/lib/integrations";
 import type { ItemKind, ItemDetail } from "@/lib/types";
 
 const WK_BASE = "https://api.wanikani.com/v2";
@@ -249,6 +250,7 @@ const LEASE_MINUTES = 10;
 export async function syncWanikaniIfStale(): Promise<void> {
   if (!process.env.WANIKANI_TOKEN) return;
   try {
+    if (!(await isIntegrationEnabled("wanikani"))) return;
     const db = getDb();
     const claimed = (await db.$client.query(
       `UPDATE wk_snapshot
@@ -288,6 +290,10 @@ export async function syncWanikani(): Promise<WkSyncResult> {
         "WANIKANI_TOKEN is not set — generate a personal access token at " +
         "https://www.wanikani.com/settings/personal_access_tokens and add it to your environment.",
     };
+  }
+
+  if (!(await isIntegrationEnabled("wanikani"))) {
+    return { ok: false, error: "The WaniKani integration is disabled — enable it below to sync." };
   }
 
   try {

@@ -34,6 +34,8 @@ export interface ItemDetail {
   exampleEnglish?: string;
   /** Set by the WaniKani sync once a subject is mapped to this item. */
   wkSubjectId?: number;
+  /** Set by the Bunpro sync once a grammar point is mapped to this item. */
+  bpGrammarPointId?: number;
 }
 
 /**
@@ -51,7 +53,17 @@ export interface WkLevelSnapshot {
 }
 
 /** Evidence ledger: where a study signal came from and what it says. */
-export type ObservationSource = "wanikani" | "practice" | "workshop" | "sprint" | "anki" | "manual";
+export type ObservationSource =
+  | "wanikani"
+  | "bunpro"
+  | "practice"
+  | "workshop"
+  | "sprint"
+  | "anki"
+  | "manual";
+
+/** External services that sync evidence in; each can be disabled and purged independently. */
+export type IntegrationSource = "wanikani" | "bunpro";
 export type ObservationKind = "answer" | "srs_state" | "exposure";
 
 export type MasteryStatus = "unseen" | "learning" | "solid" | "mastered";
