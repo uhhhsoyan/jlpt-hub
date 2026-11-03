@@ -45,6 +45,11 @@ Reconciled against the repo on 2026-10-27 and built the same day. Exam: JLPT N4,
   conversation is the review step.
 - Stateless transport only (Vercel functions); JSON responses, no SSE.
 - Photos are not uploaded through MCP; `image_refs` is a text pointer.
+- Classification never blocks capture (2026-11-03). `root_cause` is an open vocabulary:
+  `ROOT_CAUSES` is the preferred list, anything else is stored verbatim and shown as a
+  "custom" row in the report so new categories can emerge before being promoted. Unknown
+  section words fall back to `other` with the raw word in `practice_questions.meta`, a
+  JSON sink for any structured fact without a column. The free-text `note` is always kept.
 - Cut before the freeze: Hindsight sidecar, GCS bucket, embedded Hub chat, weekly Batches
   readiness job, Anki sync, app rename, OAuth on the endpoint.
 

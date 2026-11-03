@@ -1,7 +1,7 @@
 import { sql } from "drizzle-orm";
 import { getDb } from "@/lib/db";
 import { HALF_LIFE_DAYS } from "@/lib/mastery";
-import type { ItemKind, JlptLevel, PracticeSection, RootCause } from "@/lib/types";
+import { isKnownRootCause, type ItemKind, type JlptLevel, type PracticeSection } from "@/lib/types";
 
 export interface WeakItem {
   itemId: string;
@@ -71,9 +71,14 @@ export async function getWeakItems(opts: GetWeakItemsOptions = {}): Promise<Weak
   }));
 }
 
-/** Misses grouped by root cause over a trailing window; "unclassified" is a miss with no cause recorded. */
+/**
+ * Misses grouped by root cause over a trailing window; "unclassified" is a miss with no
+ * cause recorded. `known` is false for a cause outside ROOT_CAUSES (a custom label a
+ * logging surface used); a recurring one is a candidate for promotion to the list.
+ */
 export interface RootCauseMisses {
-  rootCause: RootCause | "unclassified";
+  rootCause: string;
+  known: boolean;
   misses: number;
 }
 
@@ -91,7 +96,8 @@ export async function getMissesByRootCause(windowDays = 30): Promise<RootCauseMi
     ORDER BY n DESC
   `);
   return res.rows.map((r) => ({
-    rootCause: (r.root_cause as RootCause | null) ?? "unclassified",
+    rootCause: r.root_cause ?? "unclassified",
+    known: r.root_cause != null && isKnownRootCause(r.root_cause),
     misses: Number(r.n),
   }));
 }

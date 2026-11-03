@@ -14,7 +14,7 @@ import {
 } from "@/lib/ledger";
 import { getReadiness } from "@/lib/readiness";
 import { getAccuracyBySection, getMissesByRootCause, getWeakItems } from "@/lib/weakness";
-import { ROOT_CAUSES } from "@/lib/types";
+import { normalizeRootCause, ROOT_CAUSES } from "@/lib/types";
 
 /**
  * The study ledger's MCP endpoint (Streamable HTTP, stateless). One long random bearer
@@ -65,12 +65,22 @@ const attemptSchema = z.object({
   section: z.string().describe(SECTION_HINT),
   level: z.enum(["N5", "N4"]).optional(),
   correct: z.boolean().nullable().describe("null if skipped or ungradable"),
-  root_cause: z.enum(ROOT_CAUSES).nullable().optional().describe("Why it was missed; omit for correct answers"),
+  root_cause: z
+    .string()
+    .nullable()
+    .optional()
+    .describe(
+      `Why it was missed; omit for correct answers. Prefer one of: ${ROOT_CAUSES.join(", ")}. If none fits, use a short kebab-case label of your own; it is stored verbatim and reported under its own name.`,
+    ),
   note: z.string().optional().describe("One-line diagnosis, e.g. 'picked つもり, needed はず'"),
   stem: z.string().optional().describe("Question text if worth keeping"),
   choices: z.array(z.string()).optional(),
   explanation: z.string().optional(),
   tags: z.array(tagSchema).default([]).describe("1-3 items the question really tests; these become evidence"),
+  meta: z
+    .record(z.string(), z.unknown())
+    .optional()
+    .describe("Any other structured facts about this attempt with no field of their own; stored as-is"),
 });
 
 function buildServer(): McpServer {
@@ -81,7 +91,7 @@ function buildServer(): McpServer {
     {
       title: "Log practice attempts",
       description:
-        "Record one reviewed page/set of practice questions as a confirmed session. Each attempt carries right/wrong, the item(s) it tests, and for misses a root_cause from the fixed list. Returns the session id and any tags that matched no library item (no evidence is written for those; fix the tag text and re-log just those if it matters).",
+        "Record one reviewed page/set of practice questions as a confirmed session. Each attempt carries right/wrong, the item(s) it tests, a free-text note, and for misses a root_cause (preferred list given on the field; any label accepted). Nothing is rejected for not fitting a category: unknown sections land in 'other' with the raw word kept, and 'meta' takes anything else. Returns the session id and any tags that matched no library item (no evidence is written for those; fix the tag text and re-log just those if it matters).",
       inputSchema: {
         label: z.string().describe("e.g. '500問 Week 3 Day 2' or 'Mock test 1 文法'"),
         source_name: z.string().optional().describe("e.g. 'Shin Nihongo 500 Mon N4-N5'"),
@@ -97,20 +107,23 @@ function buildServer(): McpServer {
         const takenAt = new Date(args.taken_at);
         if (Number.isNaN(takenAt.getTime())) throw new Error(`Unparseable taken_at: ${args.taken_at}`);
 
-        const attempts: AttemptInput[] = args.attempts.map((a, i) => {
-          const section = normalizeSection(a.section);
-          if (!section) throw new Error(`Attempt ${a.number ?? i + 1}: unknown section '${a.section}'. Use ${SECTION_HINT}.`);
+        const attempts: AttemptInput[] = args.attempts.map((a) => {
+          // Never reject for an unrecognised category: fall back and keep the raw word.
+          const section = normalizeSection(a.section) ?? "other";
+          const meta: Record<string, unknown> = { ...(a.meta ?? {}) };
+          if (section === "other" && normalizeSection(a.section) === null) meta.sectionRaw = a.section;
           return {
             number: a.number,
             section,
             level: a.level ?? null,
             correct: a.correct,
-            rootCause: a.root_cause ?? null,
+            rootCause: normalizeRootCause(a.root_cause),
             note: a.note ?? null,
             stem: a.stem ?? null,
             choices: a.choices,
             explanation: a.explanation ?? null,
             tags: a.tags,
+            meta,
           };
         });
 

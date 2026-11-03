@@ -25,7 +25,6 @@ import type {
   PracticeSection,
   PracticeSurface,
   QuestionTag,
-  RootCause,
   InsightSource,
 } from "@/lib/types";
 
@@ -176,9 +175,14 @@ export const practiceQuestions = pgTable(
     // Exam level the question targets, when known (the 500問 book mixes N5 and N4).
     level: text("level").$type<StudyLevel>(),
     // Why it was missed — null for correct answers and for misses not yet classified.
-    rootCause: text("root_cause").$type<RootCause>(),
+    // Open vocabulary: ROOT_CAUSES in lib/types.ts is the preferred set, anything else is
+    // kept verbatim (normalized to kebab-case) and reported under its own label.
+    rootCause: text("root_cause"),
     // Free-text diagnosis from the review ("picked つもり, needed はず — confused certainty").
     note: text("note"),
+    // Sink for structured facts with no column of their own (e.g. sectionRaw when the
+    // section word wasn't recognised, or anything a logging surface wants to keep).
+    meta: jsonb("meta").$type<Record<string, unknown>>(),
     createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
   },
   (t) => [index("practice_questions_session").on(t.sessionId, t.number)],

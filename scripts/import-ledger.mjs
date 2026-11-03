@@ -4,7 +4,8 @@
 //
 // Expected columns (header row, any order; extra columns ignored):
 //   date, week_day, q_num, section, grammar_point, level, genki_ref, genki_coverage, result, note
-// Optional: root_cause (one of lib/types.ts ROOT_CAUSES). Without it, a cause is inferred
+// Optional: root_cause (prefer one of lib/types.ts ROOT_CAUSES; any other label is kept
+// verbatim, kebab-cased, and reported under its own name). Without it, a cause is inferred
 // from the note only when a keyword makes it unambiguous; otherwise the miss stays
 // unclassified and can be tagged later.
 //
@@ -128,9 +129,14 @@ const CAUSE_RULES = [
   [/\bmispars|parse|relative clause|misread the sentence\b/i, "misparse"],
   [/\bnever (?:learned|seen)|unknown grammar|not (?:yet )?(?:learned|covered)|grammar gap\b/i, "grammar-unknown"],
 ];
+const normalizeCause = (s) =>
+  s.trim().toLowerCase().replace(/[\s_]+/g, "-").replace(/-+/g, "-").replace(/^-|-$/g, "");
 function inferCause(note, explicit) {
-  if (explicit && ROOT_CAUSES.has(explicit)) return explicit;
-  if (explicit) console.warn(`  ! unknown root_cause '${explicit}' ignored`);
+  const given = explicit ? normalizeCause(explicit) : "";
+  if (given) {
+    if (!ROOT_CAUSES.has(given)) console.warn(`  · custom root_cause '${given}' kept as-is`);
+    return given;
+  }
   if (!note) return null;
   for (const [re, cause] of CAUSE_RULES) if (re.test(note)) return cause;
   return null;
@@ -383,7 +389,9 @@ for (const s of [...sessions.values()].sort((a, b) => a.key.localeCompare(b.key)
     position++;
     const qNum = Number.parseInt(get(row, "q_num"), 10);
     const number = Number.isFinite(qNum) ? qNum : position;
-    const section = normalizeSection(get(row, "section"));
+    const sectionRaw = get(row, "section");
+    const section = normalizeSection(sectionRaw);
+    const meta = section === "other" && sectionRaw && sectionRaw.toLowerCase() !== "other" ? { sectionRaw } : null;
     const levelRaw = get(row, "level").toUpperCase();
     const level = levelRaw === "N5" || levelRaw === "N4" ? levelRaw : null;
     const correct = parseResult(get(row, "result"));
@@ -405,9 +413,9 @@ for (const s of [...sessions.values()].sort((a, b) => a.key.localeCompare(b.key)
     // session page reads sensibly.
     const [q] = await sql.query(
       `INSERT INTO practice_questions
-         (session_id, number, section, stem, choices, correct_choice, user_choice, is_correct, explanation, tags, level, root_cause, note)
-       VALUES ($1, $2, $3, $4, '[]'::jsonb, NULL, NULL, $5, NULL, $6::jsonb, $7, $8, $9) RETURNING id`,
-      [session.id, number, section, label, correct, JSON.stringify(tags), level, rootCause, note],
+         (session_id, number, section, stem, choices, correct_choice, user_choice, is_correct, explanation, tags, level, root_cause, note, meta)
+       VALUES ($1, $2, $3, $4, '[]'::jsonb, NULL, NULL, $5, NULL, $6::jsonb, $7, $8, $9, $10::jsonb) RETURNING id`,
+      [session.id, number, section, label, correct, JSON.stringify(tags), level, rootCause, note, meta ? JSON.stringify(meta) : null],
     );
     questions++;
 

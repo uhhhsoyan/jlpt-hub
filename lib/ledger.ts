@@ -14,7 +14,6 @@ import type {
   PracticeSection,
   PracticeSurface,
   QuestionTag,
-  RootCause,
   StudyLevel,
 } from "@/lib/types";
 
@@ -62,12 +61,15 @@ export interface AttemptInput {
   level?: StudyLevel | null;
   /** null when the question was skipped or ungradable. */
   correct: boolean | null;
-  rootCause?: RootCause | null;
+  /** Open vocabulary; see normalizeRootCause in lib/types.ts. */
+  rootCause?: string | null;
   note?: string | null;
   stem?: string | null;
   choices?: string[];
   explanation?: string | null;
   tags: ExtractedTag[];
+  /** Anything structured that has no field of its own; stored as-is on the question. */
+  meta?: Record<string, unknown> | null;
 }
 
 export interface LogAttemptsInput {
@@ -149,6 +151,7 @@ export async function logAttempts(input: LogAttemptsInput): Promise<LogAttemptsR
         level: a.level ?? null,
         rootCause: a.rootCause ?? null,
         note: a.note || null,
+        meta: a.meta && Object.keys(a.meta).length > 0 ? a.meta : null,
       })
       .returning({ id: practiceQuestions.id });
 

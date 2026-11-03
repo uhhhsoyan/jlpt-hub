@@ -3,7 +3,7 @@
 import { useState, useTransition } from "react";
 import { updateQuestion } from "../actions";
 import type { PracticeQuestionRow } from "@/lib/db/schema";
-import { ROOT_CAUSE_LABEL, type PracticeSection } from "@/lib/types";
+import { rootCauseLabel, type PracticeSection } from "@/lib/types";
 
 const SECTION_LABEL: Record<PracticeSection, string> = {
   kanji: "Kanji",
@@ -92,7 +92,7 @@ export function QuestionCard({
         <div className="flex flex-wrap items-baseline gap-2 text-sm">
           {question.rootCause && (
             <span className="rounded-full bg-rose-100 px-2 py-0.5 text-[11px] font-medium text-rose-800 dark:bg-rose-950 dark:text-rose-300">
-              {ROOT_CAUSE_LABEL[question.rootCause]}
+              {rootCauseLabel(question.rootCause)}
             </span>
           )}
           {question.note && <span className="text-neutral-600 dark:text-neutral-300">{question.note}</span>}

@@ -1,4 +1,4 @@
-import { ROOT_CAUSE_LABEL, type PracticeSection, type RootCause } from "@/lib/types";
+import { rootCauseLabel, type PracticeSection } from "@/lib/types";
 import type { RootCauseMisses, SectionAccuracy } from "@/lib/weakness";
 
 const SECTION_LABEL: Record<PracticeSection, string> = {
@@ -10,8 +10,8 @@ const SECTION_LABEL: Record<PracticeSection, string> = {
   other: "Other",
 };
 
-function causeLabel(cause: RootCause | "unclassified"): string {
-  return cause === "unclassified" ? "Unclassified" : ROOT_CAUSE_LABEL[cause];
+function causeLabel(cause: string): string {
+  return cause === "unclassified" ? "Unclassified" : rootCauseLabel(cause);
 }
 
 export interface RootCausesData {
@@ -31,6 +31,7 @@ export function RootCauses({ data }: { data: RootCausesData }) {
   const recent = new Map(data.recent.map((r) => [r.rootCause, r.misses]));
   const causes = data.month.map((row) => ({
     cause: row.rootCause,
+    known: row.known,
     month: row.misses,
     recent: recent.get(row.rootCause) ?? 0,
   }));
@@ -66,6 +67,11 @@ export function RootCauses({ data }: { data: RootCausesData }) {
                     }
                   >
                     {causeLabel(c.cause)}
+                    {!c.known && c.cause !== "unclassified" && (
+                      <span className="ml-1.5 rounded bg-neutral-100 px-1 py-px text-[10px] font-medium uppercase tracking-wide text-neutral-400 dark:bg-neutral-800">
+                        custom
+                      </span>
+                    )}
                   </span>
                   <div className="h-1.5 w-full overflow-hidden rounded-full bg-neutral-100 dark:bg-neutral-800">
                     <div

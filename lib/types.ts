@@ -172,6 +172,25 @@ export const ROOT_CAUSE_LABEL: Record<RootCause, string> = {
   "time-pressure": "Time pressure",
 };
 
+export function isKnownRootCause(cause: string): cause is RootCause {
+  return (ROOT_CAUSES as readonly string[]).includes(cause);
+}
+
+/**
+ * Root causes are an open vocabulary: the list above is the preferred set, but anything
+ * short and kebab-case is stored as given so new categories can show up in the data before
+ * they are promoted to the list. This only tidies spelling ("Careless", "time pressure").
+ */
+export function normalizeRootCause(raw: string | null | undefined): string | null {
+  if (raw == null) return null;
+  const v = raw.trim().toLowerCase().replace(/[\s_]+/g, "-").replace(/-+/g, "-").replace(/^-|-$/g, "");
+  return v.length > 0 ? v : null;
+}
+
+export function rootCauseLabel(cause: string): string {
+  return isKnownRootCause(cause) ? ROOT_CAUSE_LABEL[cause] : cause;
+}
+
 /** Where a practice session was logged from. `hub` is the photo-upload flow; the rest write through the MCP tools or the CSV import. */
 export type PracticeSurface = "hub" | "claude-ai" | "claude-code" | "import";
 
