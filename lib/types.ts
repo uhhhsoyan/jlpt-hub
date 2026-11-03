@@ -36,6 +36,10 @@ export interface ItemDetail {
   wkSubjectId?: number;
   /** Set by the Bunpro sync once a grammar point is mapped to this item. */
   bpGrammarPointId?: number;
+  /** Genki (3rd edition) chapter reference, e.g. "L12"; written by the ledger import. */
+  genkiRef?: string | null;
+  /** Coverage flag from the ledger, e.g. "NOT-IN-GENKI". */
+  genkiCoverage?: string | null;
 }
 
 /**
@@ -139,3 +143,56 @@ export interface GeneratedSentence {
   /** 1-3 sentence plain-English note on levels used / what was simplified. */
   notes: string;
 }
+
+/**
+ * Why a practice question was missed. The heart of the study ledger: accuracy by item
+ * says *what* is weak, root cause says *why*, which is what decides the next week's drills.
+ * Distilled from ~150 logged Shin Nihongo 500 Mon questions (Oct 2026).
+ */
+export const ROOT_CAUSES = [
+  "grammar-unknown",
+  "vocab-in-grammar",
+  "reading-selection",
+  "particle-cue-missed",
+  "pattern-glue",
+  "misparse",
+  "careless",
+  "time-pressure",
+] as const;
+export type RootCause = (typeof ROOT_CAUSES)[number];
+
+export const ROOT_CAUSE_LABEL: Record<RootCause, string> = {
+  "grammar-unknown": "Grammar unknown",
+  "vocab-in-grammar": "Vocab inside grammar",
+  "reading-selection": "Reading selection",
+  "particle-cue-missed": "Particle cue missed",
+  "pattern-glue": "Pattern glue",
+  misparse: "Misparse",
+  careless: "Careless",
+  "time-pressure": "Time pressure",
+};
+
+export function isKnownRootCause(cause: string): cause is RootCause {
+  return (ROOT_CAUSES as readonly string[]).includes(cause);
+}
+
+/**
+ * Root causes are an open vocabulary: the list above is the preferred set, but anything
+ * short and kebab-case is stored as given so new categories can show up in the data before
+ * they are promoted to the list. This only tidies spelling ("Careless", "time pressure").
+ */
+export function normalizeRootCause(raw: string | null | undefined): string | null {
+  if (raw == null) return null;
+  const v = raw.trim().toLowerCase().replace(/[\s_]+/g, "-").replace(/-+/g, "-").replace(/^-|-$/g, "");
+  return v.length > 0 ? v : null;
+}
+
+export function rootCauseLabel(cause: string): string {
+  return isKnownRootCause(cause) ? ROOT_CAUSE_LABEL[cause] : cause;
+}
+
+/** Where a practice session was logged from. `hub` is the photo-upload flow; the rest write through the MCP tools or the CSV import. */
+export type PracticeSurface = "hub" | "claude-ai" | "claude-code" | "import";
+
+/** Free-form study notes (patterns, beliefs, "confuses どっち/どう under time pressure"). */
+export type InsightSource = PracticeSurface;

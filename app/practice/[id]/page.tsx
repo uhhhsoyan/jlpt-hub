@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { asc, eq } from "drizzle-orm";
 import { getDb } from "@/lib/db";
 import { practiceSessions, practiceQuestions, type PracticeSessionRow, type PracticeQuestionRow } from "@/lib/db/schema";
-import type { PracticeSection } from "@/lib/types";
+import type { PracticeSection, PracticeSurface } from "@/lib/types";
 import { errChain, firstLine } from "@/app/workshop/db-error";
 import { StatusBadge } from "../status-badge";
 import { QuestionCard } from "./question-card";
@@ -19,6 +19,18 @@ const SECTION_LABEL: Record<PracticeSection, string> = {
   listening: "Listening",
   other: "Other",
 };
+
+const SURFACE_LABEL: Record<PracticeSurface, string> = {
+  hub: "",
+  "claude-ai": "logged from claude.ai",
+  "claude-code": "logged from Claude Code",
+  import: "imported ledger",
+};
+
+/** Session image refs are Blob URLs or local paths from the upload flow; MCP clients may send plain text pointers instead. */
+function isRenderableImage(ref: string): boolean {
+  return /^(https?:\/\/|\/)/.test(ref);
+}
 
 type DbState =
   | { status: "ok"; session: PracticeSessionRow; questions: PracticeQuestionRow[] }
@@ -130,6 +142,8 @@ function SessionDetail({
             <p className="text-sm text-neutral-500 dark:text-neutral-400">
               {session.sourceName && <>{session.sourceName} · </>}
               {session.takenAt.toISOString().slice(0, 10)}
+              {SURFACE_LABEL[session.surface] && <> · {SURFACE_LABEL[session.surface]}</>}
+              {session.timed != null && <> · {session.timed ? "timed" : "untimed"}</>}
             </p>
           </div>
           <StatusBadge status={session.status} />
@@ -137,7 +151,12 @@ function SessionDetail({
 
         {session.imagePaths.length > 0 && (
           <div className="flex flex-wrap gap-2">
-            {session.imagePaths.map((src, i) => (
+            {session.imagePaths.map((src, i) =>
+              !isRenderableImage(src) ? (
+                <span key={src} className="self-center text-xs text-neutral-400">
+                  {src}
+                </span>
+              ) : (
               <a key={src} href={src} target="_blank" rel="noopener noreferrer">
                 {/* eslint-disable-next-line @next/next/no-img-element -- local static file under public/, not worth an Image loader for a small thumbnail */}
                 <img
@@ -146,7 +165,8 @@ function SessionDetail({
                   className="h-16 w-16 rounded-lg border border-neutral-200 object-cover dark:border-neutral-800"
                 />
               </a>
-            ))}
+              ),
+            )}
           </div>
         )}
       </header>
