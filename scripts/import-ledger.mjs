@@ -1,6 +1,6 @@
 // Imports the claude.ai project's jlpt_500_ledger.csv (the pre-MCP study ledger) into the
-// practice tables as confirmed sessions, one per date, so the ~150 already-reviewed
-// questions count as evidence and show up in the root-cause report.
+// practice tables as confirmed sessions, one per date, so the already-reviewed questions
+// count as evidence and show up in the root-cause report.
 //
 // Expected columns (header row, any order; extra columns ignored):
 //   date, week_day, q_num, section, grammar_point, level, genki_ref, genki_coverage, result, note
@@ -8,20 +8,33 @@
 // from the note only when a keyword makes it unambiguous; otherwise the miss stays
 // unclassified and can be tagged later.
 //
+// Item linking: grammar_point is a free-text label ("あまり + negative", "kanji-reading:大人(おとな)",
+// "借りた vs 貸した"). A label that exactly matches a library headword resolves directly;
+// everything else is mapped to library items by Claude (full N5/N4 inventory in the prompt,
+// 1–3 items per label). Answers are cached in data/import/ledger-tags.json so re-runs are
+// free and deterministic; delete an entry (or the file) to re-map. --no-claude skips the
+// mapping step and uses the cache only.
+//
 // Idempotent: deletes every previous import session (surface='import') and its
 // observations, then re-inserts. Genki refs are merged into items.detail on each matched
-// grammar/vocab item (edition noted in the key: genkiRef = 3rd ed.).
+// grammar item (edition noted in the key: genkiRef = 3rd ed.).
 //
-// Usage: npm run db:import-ledger [-- path/to/ledger.csv]
+// Usage: npm run db:import-ledger [-- [--no-claude] path/to/ledger.csv]
 //        default path: data/import/jlpt_500_ledger.csv
+import Anthropic from "@anthropic-ai/sdk";
 import { neon } from "@neondatabase/serverless";
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
-const csvPath = resolve(process.argv[2] ?? join(root, "data", "import", "jlpt_500_ledger.csv"));
+const args = process.argv.slice(2);
+const useClaude = !args.includes("--no-claude");
+const csvArg = args.find((a) => !a.startsWith("--"));
+const csvPath = resolve(csvArg ?? join(root, "data", "import", "jlpt_500_ledger.csv"));
+const cachePath = join(dirname(csvPath), "ledger-tags.json");
 const SOURCE_NAME = "Shin Nihongo 500 Mon N4-N5";
+const MODEL = "claude-opus-4-8"; // same model as lib/anthropic.ts
 
 const url = process.env.DATABASE_URL;
 if (!url) {
@@ -129,8 +142,8 @@ const normalizePattern = (s) =>
     .replace(/^[\s〜～~]+/u, "")
     .replace(/[\s〜～~]+$/u, "");
 
-// --- Item resolution (grammar first, then vocab for NOT-IN-GENKI words) ---
-const itemRows = await sql.query(`SELECT id, kind, headword, reading FROM items WHERE kind IN ('grammar','vocab')`);
+// --- Item resolution ---
+const itemRows = await sql.query(`SELECT id, kind, level, headword, reading, meaning FROM items`);
 const group = (rows, keyFn) => {
   const m = new Map();
   for (const r of rows) {
@@ -143,14 +156,17 @@ const group = (rows, keyFn) => {
   return m;
 };
 const uniq = (ids) => (ids && ids.length === 1 ? ids[0] : null);
-const grammarRows = itemRows.filter((r) => r.kind === "grammar");
-const vocabRows = itemRows.filter((r) => r.kind === "vocab");
-const grammarExact = group(grammarRows, (r) => r.headword);
-const grammarNorm = group(grammarRows, (r) => normalizePattern(r.headword));
-const vocabExact = group(vocabRows, (r) => r.headword);
-const vocabReading = group(vocabRows, (r) => r.reading);
+const byKind = (kind) => itemRows.filter((r) => r.kind === kind);
+const grammarExact = group(byKind("grammar"), (r) => r.headword);
+const grammarNorm = group(byKind("grammar"), (r) => normalizePattern(r.headword));
+const vocabExact = group(byKind("vocab"), (r) => r.headword);
+const vocabReading = group(byKind("vocab"), (r) => r.reading);
+const vocabHeadwordReading = group(byKind("vocab"), (r) => `${r.headword}|${r.reading}`);
+const kanjiExact = group(byKind("kanji"), (r) => r.headword);
+const itemById = new Map(itemRows.map((r) => [r.id, r]));
 const KANA_ONLY = /^[぀-ゟ゠-ヿ]+$/u;
 
+/** Direct match of a raw label against grammar, then vocab. */
 function resolveItem(text) {
   const t = text.trim();
   if (!t) return null;
@@ -159,6 +175,160 @@ function resolveItem(text) {
   const v = uniq(vocabExact.get(t)) ?? (KANA_ONLY.test(t) ? uniq(vocabReading.get(t)) : null);
   if (v) return { kind: "vocab", itemId: v };
   return null;
+}
+
+/** Resolve one Claude-proposed tag {kind, headword, reading} to an item id. */
+function resolveProposed(tag) {
+  const hw = (tag.headword ?? "").trim();
+  const rd = (tag.reading ?? "").trim();
+  if (!hw) return null;
+  if (tag.kind === "grammar") return uniq(grammarExact.get(hw)) ?? uniq(grammarNorm.get(normalizePattern(hw)));
+  if (tag.kind === "kanji") return uniq(kanjiExact.get(hw));
+  if (tag.kind === "vocab") {
+    return (
+      (rd ? uniq(vocabHeadwordReading.get(`${hw}|${rd}`)) : null) ??
+      uniq(vocabExact.get(hw)) ??
+      (KANA_ONLY.test(hw) ? uniq(vocabReading.get(hw)) : null)
+    );
+  }
+  return null;
+}
+
+// --- Claude mapping for labels the direct matcher can't place ---
+const distinctLabels = new Map(); // label -> {section, level, note}
+for (const row of dataRows) {
+  const label = get(row, "grammar_point");
+  if (!label || resolveItem(label) || distinctLabels.has(label)) continue;
+  distinctLabels.set(label, { section: get(row, "section"), level: get(row, "level"), note: get(row, "note") });
+}
+let cache = {};
+if (existsSync(cachePath)) {
+  try {
+    cache = JSON.parse(readFileSync(cachePath, "utf8"));
+  } catch (e) {
+    console.warn(`  ! could not read ${cachePath}: ${e.message}`);
+  }
+}
+const toMap = [...distinctLabels.keys()].filter((l) => !Array.isArray(cache[l]));
+
+if (toMap.length > 0 && useClaude) {
+  if (!process.env.ANTHROPIC_API_KEY) {
+    console.error("ANTHROPIC_API_KEY is not set (expected in .env.local); rerun with --no-claude to skip mapping.");
+    process.exit(1);
+  }
+  console.log(`Mapping ${toMap.length} label(s) to library items with ${MODEL} (${Object.keys(cache).length} cached)…`);
+  const inventory = itemRows
+    .map((r) => (r.kind === "vocab" ? `vocab|${r.headword}|${r.reading}|${r.meaning}` : `${r.kind}|${r.headword}|${r.meaning}`))
+    .join("\n");
+  const system = [
+    {
+      type: "text",
+      text: `You map a learner's study-ledger labels onto a fixed inventory of JLPT N5/N4 library items.
+
+Each label describes what ONE practice question (Shin Nihongo 500 Mon, N4-N5) tested. Labels are informal: Japanese mixed with English, "A vs B" contrasts, "X + Y" compositions, and "kanji-reading:" / "kanji-hyouki:" prefixes for the 文字 section (reading = choose the reading of a kanji word; hyouki = choose the correct kanji spelling of a kana word). The section (kanji / vocab / grammar) and the learner's note are given for context.
+
+For each label return the inventory items the question actually tests, 1 to 3 of them, most central first:
+- Copy "headword" EXACTLY as it appears in the inventory (and "reading" for vocab, exactly as listed). Never invent items.
+- Grammar labels → grammar items. For "A vs B" include both when both are in the inventory.
+- kanji-reading / kanji-hyouki labels → the vocab item for the whole word when it exists (e.g. 大人, 時計). Add the kanji item only when the question is about one character on its own.
+- Vocab labels → the vocab item; add a grammar item only when a grammar pattern is the real point.
+- If nothing in the inventory fits, return an empty items array for that label. Prefer an empty array over a loose match.
+
+Return every label you were given, in the same order, with its number "n" and the label string copied verbatim.`,
+    },
+    { type: "text", text: `INVENTORY (kind|headword|[reading|]meaning):\n${inventory}`, cache_control: { type: "ephemeral" } },
+  ];
+  const schema = {
+    type: "object",
+    additionalProperties: false,
+    required: ["mappings"],
+    properties: {
+      mappings: {
+        type: "array",
+        items: {
+          type: "object",
+          additionalProperties: false,
+          required: ["n", "label", "items"],
+          properties: {
+            n: { type: "integer" },
+            label: { type: "string" },
+            items: {
+              type: "array",
+              items: {
+                type: "object",
+                additionalProperties: false,
+                required: ["kind", "headword", "reading"],
+                properties: {
+                  kind: { type: "string", enum: ["grammar", "vocab", "kanji"] },
+                  headword: { type: "string" },
+                  reading: { type: "string" },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  };
+  const client = new Anthropic();
+  const BATCH = 25;
+  let usage = { input: 0, cached: 0, output: 0 };
+  for (let i = 0; i < toMap.length; i += BATCH) {
+    const batch = toMap.slice(i, i + BATCH);
+    const userText = batch
+      .map((label, n) => {
+        const ctx = distinctLabels.get(label);
+        const note = ctx.note ? ` | note: ${ctx.note.replace(/\s+/g, " ").slice(0, 300)}` : "";
+        return `${n + 1}. label: ${label} | section: ${ctx.section} | level: ${ctx.level}${note}`;
+      })
+      .join("\n");
+    const res = await client.messages.create({
+      model: MODEL,
+      max_tokens: 8192,
+      system,
+      messages: [{ role: "user", content: userText }],
+      output_config: { format: { type: "json_schema", schema } },
+    });
+    usage.input += res.usage.input_tokens;
+    usage.cached += res.usage.cache_read_input_tokens ?? 0;
+    usage.output += res.usage.output_tokens;
+    const block = res.content.find((b) => b.type === "text");
+    if (!block) throw new Error("Claude returned no text block");
+    const { mappings } = JSON.parse(block.text);
+    if (mappings.length !== batch.length) console.warn(`  ! batch sent ${batch.length} labels, got ${mappings.length} mappings`);
+    const byN = new Map(mappings.map((m) => [m.n, m.items]));
+    const byLabel = new Map(mappings.map((m) => [m.label.trim(), m.items]));
+    batch.forEach((label, idx) => {
+      const items = byN.get(idx + 1) ?? byLabel.get(label.trim()) ?? null;
+      if (items === null) {
+        console.warn(`  ! no mapping returned for: ${label}`);
+        return;
+      }
+      cache[label] = items.slice(0, 3);
+    });
+    console.log(`  batch ${Math.floor(i / BATCH) + 1}/${Math.ceil(toMap.length / BATCH)} done`);
+  }
+  writeFileSync(cachePath, JSON.stringify(cache, null, 2) + "\n");
+  console.log(`Mapping cached in ${cachePath} (tokens: ${usage.input} in, ${usage.cached} cache-read, ${usage.output} out).`);
+} else if (toMap.length > 0) {
+  console.log(`--no-claude: ${toMap.length} label(s) have no cached mapping and will stay unlinked.`);
+}
+
+/** Tags for a label: direct match, else cached Claude mapping. Each {kind, text, itemId}. */
+function tagsFor(label) {
+  const direct = resolveItem(label);
+  if (direct) return [{ kind: direct.kind, text: itemById.get(direct.itemId).headword, itemId: direct.itemId }];
+  const proposed = cache[label];
+  if (!Array.isArray(proposed)) return [];
+  const out = [];
+  const seen = new Set();
+  for (const p of proposed) {
+    const id = resolveProposed(p);
+    if (!id || seen.has(id)) continue;
+    seen.add(id);
+    out.push({ kind: itemById.get(id).kind, text: itemById.get(id).headword, itemId: id });
+  }
+  return out;
 }
 
 // --- Group rows into sessions by date ---
@@ -194,9 +364,10 @@ if (prior.length > 0) {
   console.log(`Removed ${ids.length} previous import session(s).`);
 }
 
-const unresolved = new Map(); // text -> count
+const unresolved = new Map(); // label -> count
 const genkiUpdates = new Map(); // itemId -> {ref, coverage}
 let questions = 0;
+let linkedQuestions = 0;
 let observations = 0;
 let classified = 0;
 let misses = 0;
@@ -217,43 +388,53 @@ for (const s of [...sessions.values()].sort((a, b) => a.key.localeCompare(b.key)
     const level = levelRaw === "N5" || levelRaw === "N4" ? levelRaw : null;
     const correct = parseResult(get(row, "result"));
     const note = get(row, "note") || null;
-    const grammarPoint = get(row, "grammar_point");
+    const label = get(row, "grammar_point");
     const rootCause = correct === false ? inferCause(note, get(row, "root_cause")) : null;
     if (correct === false) {
       misses++;
       if (rootCause) classified++;
     }
 
-    const match = resolveItem(grammarPoint);
-    const tags = grammarPoint ? [{ kind: match?.kind ?? "grammar", text: grammarPoint, itemId: match?.itemId ?? null }] : [];
-    if (grammarPoint && !match) unresolved.set(grammarPoint, (unresolved.get(grammarPoint) ?? 0) + 1);
+    let tags = label ? tagsFor(label) : [];
+    if (label && tags.length === 0) {
+      unresolved.set(label, (unresolved.get(label) ?? 0) + 1);
+      tags = [{ kind: "grammar", text: label, itemId: null }];
+    }
 
+    // The label is the only "question text" an import has; store it as the stem so the
+    // session page reads sensibly.
     const [q] = await sql.query(
       `INSERT INTO practice_questions
          (session_id, number, section, stem, choices, correct_choice, user_choice, is_correct, explanation, tags, level, root_cause, note)
-       VALUES ($1, $2, $3, '', '[]'::jsonb, NULL, NULL, $4, NULL, $5::jsonb, $6, $7, $8) RETURNING id`,
-      [session.id, number, section, correct, JSON.stringify(tags), level, rootCause, note],
+       VALUES ($1, $2, $3, $4, '[]'::jsonb, NULL, NULL, $5, NULL, $6::jsonb, $7, $8, $9) RETURNING id`,
+      [session.id, number, section, label, correct, JSON.stringify(tags), level, rootCause, note],
     );
     questions++;
 
-    if (match) {
+    const matched = tags.filter((t) => t.itemId);
+    if (matched.length > 0) linkedQuestions++;
+    for (const t of matched) {
       await sql.query(
         `INSERT INTO question_items (question_id, item_id, role) VALUES ($1, $2, 'tested') ON CONFLICT DO NOTHING`,
-        [q.id, match.itemId],
+        [q.id, t.itemId],
       );
       if (correct !== null) {
         await sql.query(
           `INSERT INTO observations (item_id, source, kind, correct, occurred_at, meta)
            VALUES ($1, 'practice', 'answer', $2, $3, $4::jsonb)`,
-          [match.itemId, correct, s.takenAt.toISOString(), JSON.stringify({ sessionId: session.id, questionId: q.id, surface: "import" })],
+          [t.itemId, correct, s.takenAt.toISOString(), JSON.stringify({ sessionId: session.id, questionId: q.id, surface: "import" })],
         );
         observations++;
       }
-      const ref = get(row, "genki_ref");
-      const coverage = get(row, "genki_coverage");
-      if (ref || coverage) {
-        const prev = genkiUpdates.get(match.itemId) ?? {};
-        genkiUpdates.set(match.itemId, { ref: ref || prev.ref, coverage: coverage || prev.coverage });
+    }
+    const ref = get(row, "genki_ref");
+    const coverage = get(row, "genki_coverage");
+    if (ref || coverage) {
+      const grammarMatches = matched.filter((t) => t.kind === "grammar");
+      const targets = grammarMatches.length > 0 ? grammarMatches : matched.slice(0, 1);
+      for (const t of targets) {
+        const prev = genkiUpdates.get(t.itemId) ?? {};
+        genkiUpdates.set(t.itemId, { ref: ref || prev.ref, coverage: coverage || prev.coverage });
       }
     }
   }
@@ -266,10 +447,13 @@ for (const [itemId, { ref, coverage }] of genkiUpdates) {
   );
 }
 
-console.log(`Inserted ${sessions.size} sessions, ${questions} questions, ${observations} observations.`);
+console.log(`Inserted ${sessions.size} sessions, ${questions} questions (${linkedQuestions} linked to items), ${observations} observations.`);
 console.log(`Misses: ${misses}, root cause set on ${classified} (${misses - classified} left unclassified).`);
 console.log(`Genki refs written to ${genkiUpdates.size} items.`);
 if (unresolved.size > 0) {
-  console.log(`\n${unresolved.size} grammar_point value(s) matched no library item (no evidence written):`);
-  for (const [text, n] of [...unresolved.entries()].sort((a, b) => b[1] - a[1])) console.log(`  ${n}× ${text}`);
+  console.log(`\n${unresolved.size} label(s) matched no library item (no evidence written):`);
+  for (const [text, n] of [...unresolved.entries()].sort((a, b) => b[1] - a[1])) {
+    const proposed = Array.isArray(cache[text]) ? cache[text].map((p) => `${p.kind}:${p.headword}`).join(", ") : "not mapped";
+    console.log(`  ${n}× ${text}  →  ${proposed || "(Claude: nothing fits)"}`);
+  }
 }

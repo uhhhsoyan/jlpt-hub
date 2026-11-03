@@ -122,9 +122,14 @@ that logged them). Every miss should carry a `root_cause` from `lib/types.ts` �
 
 **Importing the old CSV ledger.** Download `jlpt_500_ledger.csv` from the claude.ai project
 files into `data/import/` (gitignored) and run `npm run db:import-ledger`. It creates one
-confirmed session per date, resolves `grammar_point` against the library, writes Genki
-refs onto matched items, and prints anything it could not match. Re-running replaces the
-previous import.
+confirmed session per date, links each `grammar_point` label to library items, writes Genki
+refs onto matched grammar items, and prints anything it could not match. Re-running replaces
+the previous import.
+
+Labels are free text ("借りた vs 貸した", "kanji-reading:大人(おとな)"), so anything that is not
+an exact headword is mapped to 1–3 items by Claude (needs `ANTHROPIC_API_KEY`; about 30k
+input tokens, cached across batches). Answers land in `data/import/ledger-tags.json`; edit
+an entry to correct a link, delete it to re-map, or pass `--no-claude` to use the cache only.
 
 Deployment Protection must stay **off** for `/mcp` (claude.ai cannot pass a Vercel
 password); the bearer token is the gate. Production currently has it off.
