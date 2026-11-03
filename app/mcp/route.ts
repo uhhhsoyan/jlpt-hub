@@ -30,13 +30,25 @@ export const maxDuration = 60;
 
 const SERVER_INFO = { name: "jlpt-hub-study-ledger", version: "1.0.0" };
 
+/**
+ * The token is accepted two ways: `Authorization: Bearer <token>` (Claude Code's .mcp.json,
+ * curl) or `x-api-key: <token>`. claude.ai's custom-connector form reserves the
+ * Authorization header for its own OAuth flow, so that surface sends x-api-key.
+ */
+function presentedToken(req: Request): string | null {
+  const auth = req.headers.get("authorization") ?? "";
+  const bearer = /^Bearer\s+(.+)$/i.exec(auth.trim());
+  if (bearer) return bearer[1];
+  const apiKey = req.headers.get("x-api-key")?.trim();
+  return apiKey ? apiKey : null;
+}
+
 function authorized(req: Request): boolean {
   const expected = process.env.MCP_TOKEN;
   if (!expected) return false;
-  const header = req.headers.get("authorization") ?? "";
-  const match = /^Bearer\s+(.+)$/i.exec(header.trim());
-  if (!match) return false;
-  const given = Buffer.from(match[1]);
+  const token = presentedToken(req);
+  if (!token) return false;
+  const given = Buffer.from(token);
   const want = Buffer.from(expected);
   return given.length === want.length && timingSafeEqual(given, want);
 }
@@ -292,7 +304,6 @@ async function handle(req: Request): Promise<Response> {
   if (!authorized(req)) {
     return new Response("Unauthorized", {
       status: 401,
-      headers: { "WWW-Authenticate": 'Bearer realm="study-ledger"' },
     });
   }
   const server = buildServer();
