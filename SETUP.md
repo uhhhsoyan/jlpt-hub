@@ -104,8 +104,11 @@ project, Claude Code, the mobile app — instead of appending to a CSV. Tools:
 2. **Schema.** `npm run db:push` adds `practice_sessions.surface/timed`,
    `practice_questions.level/root_cause/note`, and the `insights` table.
 3. **claude.ai** (web, desktop, mobile share one connector): Settings → Connectors → Add
-   custom connector → URL `https://<host>/mcp`, and a fixed request header
-   `Authorization: Bearer <token>`. Then enable it in the Japanese Study project.
+   custom connector → URL `https://<host>/mcp`. Authentication: choose **No sign-in** (the
+   form may say it "detected" sign-in; ignore that). Add one request header: name
+   `x-api-key`, value the bare token (no "Bearer" prefix); the form reserves the
+   `Authorization` header for its own OAuth flow, which is why the endpoint accepts the
+   token either way. Then enable it in the Japanese Study project.
 4. **Claude Code:** `.mcp.json` at the repo root already points at production and reads the
    token from `$MCP_TOKEN` in your shell (`export MCP_TOKEN=…`). Or:
    `claude mcp add --transport http study-ledger https://<host>/mcp --header "Authorization: Bearer <token>"`.
