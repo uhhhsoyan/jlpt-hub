@@ -70,3 +70,42 @@ Also run `npm run db:push` once so the `clips` table exists. Clips are written t
 ```bash
 npx vercel            # link + deploy; set env vars in the Vercel dashboard
 ```
+
+## Study ledger (MCP)
+
+The Hub exposes its study ledger as an MCP server at `/mcp` (Streamable HTTP, stateless,
+JSON responses) so Claude can log reviewed practice pages from anywhere — the claude.ai
+project, Claude Code, the mobile app — instead of appending to a CSV. Tools:
+`log_attempts`, `log_insight`, `get_insights`, `get_weakness_report`, `get_readiness`,
+`list_sessions`, `sync_status`. Source: `app/mcp/route.ts`, write path in `lib/ledger.ts`.
+
+1. **Token.** `openssl rand -hex 32` → `MCP_TOKEN` in `.env.local` and in the Vercel project
+   env (`printf '%s' "$TOKEN" | vercel env add MCP_TOKEN production`, and again for
+   `preview`). The endpoint refuses everything while the var is unset.
+2. **Schema.** `npm run db:push` adds `practice_sessions.surface/timed`,
+   `practice_questions.level/root_cause/note`, and the `insights` table.
+3. **claude.ai** (web, desktop, mobile share one connector): Settings → Connectors → Add
+   custom connector → URL `https://<host>/mcp`, and a fixed request header
+   `Authorization: Bearer <token>`. Then enable it in the Japanese Study project.
+4. **Claude Code:** `.mcp.json` at the repo root already points at production and reads the
+   token from `$MCP_TOKEN` in your shell (`export MCP_TOKEN=…`). Or:
+   `claude mcp add --transport http study-ledger https://<host>/mcp --header "Authorization: Bearer <token>"`.
+5. **Smoke test** (replace host/token):
+   ```bash
+   curl -s -X POST https://<host>/mcp -H 'content-type: application/json' \
+     -H 'accept: application/json, text/event-stream' -H "Authorization: Bearer $MCP_TOKEN" \
+     -d '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"sync_status","arguments":{}}}'
+   ```
+
+Sessions logged through MCP land as `confirmed` (the review happened in the conversation
+that logged them). Every miss should carry a `root_cause` from `lib/types.ts` —
+`ROOT_CAUSES` — because the "Why you miss" panel on `/progress` groups on it.
+
+**Importing the old CSV ledger.** Download `jlpt_500_ledger.csv` from the claude.ai project
+files into `data/import/` (gitignored) and run `npm run db:import-ledger`. It creates one
+confirmed session per date, resolves `grammar_point` against the library, writes Genki
+refs onto matched items, and prints anything it could not match. Re-running replaces the
+previous import.
+
+Deployment Protection must stay **off** for `/mcp` (claude.ai cannot pass a Vercel
+password); the bearer token is the gate. Production currently has it off.

@@ -1,56 +1,23 @@
 import { after } from "next/server";
-import { and, count, inArray, sql } from "drizzle-orm";
+import { count, sql } from "drizzle-orm";
 import { getDb } from "@/lib/db";
 import { syncWanikaniIfStale } from "@/lib/wanikani";
 import { syncBunproIfStale } from "@/lib/bunpro";
-import { bpSnapshot, integrationSettings, items, observations, wkSnapshot } from "@/lib/db/schema";
-import { getMasteryMap, type MasteryEntry } from "@/lib/mastery";
-import { getWeakItems, type WeakItem } from "@/lib/weakness";
+import { bpSnapshot, integrationSettings, observations, wkSnapshot } from "@/lib/db/schema";
+import { COVERAGE_KINDS as KINDS, getCoverage, type CoverageBucket } from "@/lib/readiness";
+import { getAccuracyBySection, getMissesByRootCause, getWeakItems, type WeakItem } from "@/lib/weakness";
 import { errChain, firstLine } from "@/app/workshop/db-error";
-import type { ItemKind, JlptLevel } from "@/lib/types";
+import type { ItemKind } from "@/lib/types";
 import { IntegrationsPanel, type IntegrationState } from "./integrations-panel";
 import { ExamCountdown } from "./exam-countdown";
-import { CoverageBar, CoverageLegend, type CoverageCounts } from "./coverage";
+import { CoverageBar, CoverageLegend } from "./coverage";
 import { WeakPoints } from "./weak-points";
+import { RootCauses, type RootCausesData } from "./root-causes";
 import { EvidenceVolume, type EvidenceWeekData } from "./evidence-volume";
 
 export const dynamic = "force-dynamic";
 
-const KINDS: ItemKind[] = ["vocab", "kanji", "grammar"];
-const LEVELS: JlptLevel[] = ["N5", "N4"];
 const KIND_LABEL: Record<ItemKind, string> = { vocab: "Vocab", kanji: "Kanji", grammar: "Grammar" };
-
-interface CoverageBucket {
-  kind: ItemKind;
-  level: JlptLevel;
-  total: number;
-  counts: CoverageCounts;
-}
-
-function emptyCounts(): CoverageCounts {
-  return { unseen: 0, learning: 0, solid: 0, mastered: 0 };
-}
-
-/** Buckets every N5/N4 vocab/kanji/grammar item by kind+level, joined against getMasteryMap(). */
-function buildCoverage(
-  rows: { id: string; kind: ItemKind; level: JlptLevel }[],
-  masteryMap: Map<string, MasteryEntry>,
-): CoverageBucket[] {
-  const buckets = new Map<string, CoverageBucket>();
-  for (const kind of KINDS) {
-    for (const level of LEVELS) {
-      buckets.set(`${kind}-${level}`, { kind, level, total: 0, counts: emptyCounts() });
-    }
-  }
-  for (const row of rows) {
-    const bucket = buckets.get(`${row.kind}-${row.level}`);
-    if (!bucket) continue;
-    const status = masteryMap.get(row.id)?.status ?? "unseen";
-    bucket.total += 1;
-    bucket.counts[status] += 1;
-  }
-  return KINDS.flatMap((kind) => LEVELS.map((level) => buckets.get(`${kind}-${level}`)!));
-}
 
 type EvidenceRow = Record<string, unknown> & {
   week_start: string | Date;
@@ -86,12 +53,8 @@ type DbState =
 async function loadDashboard(): Promise<DbState> {
   try {
     const db = getDb();
-    const [itemRows, masteryMap, weekRes] = await Promise.all([
-      db
-        .select({ id: items.id, kind: items.kind, level: items.level })
-        .from(items)
-        .where(and(inArray(items.kind, KINDS), inArray(items.level, LEVELS))),
-      getMasteryMap(),
+    const [coverage, weekRes] = await Promise.all([
+      getCoverage(),
       db.execute<EvidenceRow>(sql`
         WITH weeks AS (
           SELECT generate_series(
@@ -114,7 +77,7 @@ async function loadDashboard(): Promise<DbState> {
 
     return {
       status: "ok",
-      coverage: buildCoverage(itemRows, masteryMap),
+      coverage,
       evidenceWeeks: buildEvidenceWeeks(weekRes.rows),
     };
   } catch (e) {
@@ -133,6 +96,20 @@ async function loadWeakItems(): Promise<WeakItem[]> {
     return await getWeakItems({ limit: 15 });
   } catch {
     return [];
+  }
+}
+
+/** Root-cause facet is supplementary too — soft-fail to empty. */
+async function loadRootCauses(): Promise<RootCausesData> {
+  try {
+    const [recent, month, sections] = await Promise.all([
+      getMissesByRootCause(14),
+      getMissesByRootCause(30),
+      getAccuracyBySection(30),
+    ]);
+    return { recent, month, sections };
+  } catch {
+    return { recent: [], month: [], sections: [] };
   }
 }
 
@@ -180,9 +157,10 @@ async function loadIntegrations(): Promise<IntegrationState[]> {
 }
 
 export default async function ProgressPage() {
-  const [db, weakItems, integrations] = await Promise.all([
+  const [db, weakItems, rootCauses, integrations] = await Promise.all([
     loadDashboard(),
     loadWeakItems(),
+    loadRootCauses(),
     loadIntegrations(),
   ]);
   // Refresh integrations in the background when their snapshots are over an hour old.
@@ -259,6 +237,13 @@ export default async function ProgressPage() {
                 </div>
               );
             })}
+          </section>
+
+          <section className="flex flex-col gap-3">
+            <h2 className="text-sm font-semibold uppercase tracking-wide text-neutral-400">
+              Why you miss
+            </h2>
+            <RootCauses data={rootCauses} />
           </section>
 
           <section className="flex flex-col gap-3">

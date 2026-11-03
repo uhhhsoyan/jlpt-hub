@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "study-ledger": {
+      "type": "http",
+      "url": "https://jlpt-hub-gules.vercel.app/mcp",
+      "headers": {
+        "Authorization": "Bearer ${MCP_TOKEN}"
+      }
+    }
+  }
+}

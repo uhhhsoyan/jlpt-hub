@@ -26,6 +26,9 @@
 # practice session photos (local-only, uploaded per session; don't survive Vercel anyway)
 /public/practice
 
+# study-ledger CSV export from the claude.ai project (personal data, re-importable)
+/data/import
+
 # misc
 .DS_Store
 *.pem
@@ -51,3 +54,4 @@ next-env.d.ts
 
 # agent session worktrees
 /.claude/worktrees/
+.env*.local

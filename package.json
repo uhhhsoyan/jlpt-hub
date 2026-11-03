@@ -11,6 +11,7 @@
     "db:push": "drizzle-kit push",
     "db:seed": "node --env-file=.env.local scripts/seed-items.mjs",
     "db:backfill-workshop": "node --env-file=.env.local scripts/backfill-workshop.mjs",
+    "db:import-ledger": "node --env-file=.env.local scripts/import-ledger.mjs",
     "db:generate": "drizzle-kit generate",
     "db:studio": "drizzle-kit studio",
     "bunpro:catalog": "node scripts/fetch-bunpro-grammar.mjs",
@@ -21,6 +22,7 @@
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.111.0",
+    "@modelcontextprotocol/sdk": "^1.32.2",
     "@neondatabase/serverless": "^1.1.0",
     "@vercel/blob": "^2.6.1",
     "drizzle-orm": "^0.45.2",

@@ -23,7 +23,10 @@ import type {
   ObservationKind,
   PracticeSessionStatus,
   PracticeSection,
+  PracticeSurface,
   QuestionTag,
+  RootCause,
+  InsightSource,
 } from "@/lib/types";
 
 // One saved study sentence at one level (N5 or N4). A single workshop generation can
@@ -143,6 +146,10 @@ export const practiceSessions = pgTable("practice_sessions", {
   label: text("label").notNull(), // e.g. "500問 Week 2 Day 3"
   sourceName: text("source_name"), // e.g. "Shin Nihongo 500 Mon N4-N5"
   status: text("status").$type<PracticeSessionStatus>().notNull().default("review"),
+  // Which surface wrote the session: the Hub photo flow, an MCP client, or the CSV import.
+  surface: text("surface").$type<PracticeSurface>().notNull().default("hub"),
+  // Whether the page was done under exam timing; null when unknown (older sessions).
+  timed: boolean("timed"),
   imagePaths: jsonb("image_paths").$type<string[]>().notNull(),
   takenAt: timestamp("taken_at", { withTimezone: true }).notNull(),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
@@ -166,6 +173,12 @@ export const practiceQuestions = pgTable(
     isCorrect: boolean("is_correct"), // null until both choices are known
     explanation: text("explanation"),
     tags: jsonb("tags").$type<QuestionTag[]>().notNull(),
+    // Exam level the question targets, when known (the 500問 book mixes N5 and N4).
+    level: text("level").$type<StudyLevel>(),
+    // Why it was missed — null for correct answers and for misses not yet classified.
+    rootCause: text("root_cause").$type<RootCause>(),
+    // Free-text diagnosis from the review ("picked つもり, needed はず — confused certainty").
+    note: text("note"),
     createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
   },
   (t) => [index("practice_questions_session").on(t.sessionId, t.number)],
@@ -267,3 +280,23 @@ export const integrationSettings = pgTable("integration_settings", {
 });
 
 export type IntegrationSettingsRow = typeof integrationSettings.$inferSelect;
+
+// Narrative study notes: recurring patterns and beliefs that don't attach to one item
+// ("confuses どっち/どう under time pressure"). Written by the MCP log_insight tool and
+// read back by get_insights; the relational ledger above stays the ground truth, this is
+// the lightweight stand-in for a memory system.
+export const insights = pgTable(
+  "insights",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    text: text("text").notNull(),
+    tags: jsonb("tags").$type<string[]>().notNull().default([]),
+    // Optional links into the item graph, when the note is about specific items.
+    itemIds: jsonb("item_ids").$type<string[]>().notNull().default([]),
+    source: text("source").$type<InsightSource>().notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+  },
+  (t) => [index("insights_created").on(t.createdAt)],
+);
+
+export type InsightRow = typeof insights.$inferSelect;
