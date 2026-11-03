@@ -4,13 +4,33 @@ Next.js 16 + Tailwind v4 + Drizzle/Neon + Claude (Anthropic API). First feature:
 
 ## 1. Environment
 
+Secrets live in the Vercel project (`jlpt-hub`) and are pulled into `.env.local`; nothing is hand-edited.
+
 ```bash
-cp .env.example .env.local
+npm i -g vercel && vercel login          # once
+vercel link --yes --project jlpt-hub     # once per clone
+npm run env:pull                         # writes .env.local from the Development environment
 ```
 
-- **`ANTHROPIC_API_KEY`** — from [console.anthropic.com](https://console.anthropic.com) → API keys. This is **API billing**, separate from any claude.ai Pro/Max subscription. Add a payment method / prepaid credits and set a spend limit while you're there. Generation uses `claude-opus-4-8`.
+To add or change a value, store it on Vercel as a plain (pullable) variable in all three environments, then pull again. The script prompts for the value with hidden input so you can paste it from a browser without opening an editor:
+
+```bash
+npm run env:set -- DATABASE_URL ANTHROPIC_API_KEY      # prompts per name
+npm run env:set -- CRON_SECRET=$(openssl rand -hex 32) # inline value
+npm run env:pull
+```
+
+Values that were stored as **Sensitive** on Vercel can never be read back by `env:pull` (they come down as empty strings). `env:set` replaces such a variable with a plain one, so re-enter the value from its source:
+
+- **`DATABASE_URL`** — Neon pooled connection string: [console.neon.tech](https://console.neon.tech) → project → Connect, or Vercel → Storage → the Neon database → `.env.local` tab. Generation works without this; **saving/browsing** needs it.
+- **`ANTHROPIC_API_KEY`** — [console.anthropic.com](https://console.anthropic.com) → API keys (existing keys can't be viewed; create a new one). This is **API billing**, separate from any claude.ai Pro/Max subscription. Add a payment method / prepaid credits and set a spend limit while you're there. Generation uses `claude-opus-4-8`.
+- **`BLOB_READ_WRITE_TOKEN`** *(optional locally)* — Vercel → Storage → the Blob store → `.env.local` tab.
+- **`WANIKANI_TOKEN`** *(optional)* — [wanikani.com/settings/personal_access_tokens](https://www.wanikani.com/settings/personal_access_tokens).
 - **`BUNPRO_API_KEY`** *(optional)* — from [bunpro.jp/settings/api](https://bunpro.jp/settings/api), enables the read-only Bunpro grammar sync (see `docs/plans/05-bunpro-sync.md`).
-- **`DATABASE_URL`** — a Neon Postgres connection string. Either provision Neon through the Vercel dashboard (Storage → Create → Neon) and copy the pooled connection string, or sign up at [neon.tech](https://neon.tech). Generation works without this; **saving/browsing** needs it.
+- **`MCP_TOKEN`** — see "Study ledger (MCP)" below. **`CRON_SECRET`** — any random string, only used by Vercel Cron.
+- **`WHISPER_MODEL` / `WHISPER_CLI`** — local only (Listening Mine); `env:pull` overwrites `.env.local`, so put these in `.env.development.local` instead.
+
+`.env.example` documents every variable.
 
 ## 2. Database
 
@@ -79,9 +99,8 @@ project, Claude Code, the mobile app — instead of appending to a CSV. Tools:
 `log_attempts`, `log_insight`, `get_insights`, `get_weakness_report`, `get_readiness`,
 `list_sessions`, `sync_status`. Source: `app/mcp/route.ts`, write path in `lib/ledger.ts`.
 
-1. **Token.** `openssl rand -hex 32` → `MCP_TOKEN` in `.env.local` and in the Vercel project
-   env (`printf '%s' "$TOKEN" | vercel env add MCP_TOKEN production`, and again for
-   `preview`). The endpoint refuses everything while the var is unset.
+1. **Token.** `npm run env:set -- MCP_TOKEN=$(openssl rand -hex 32)` then `npm run env:pull`.
+   The endpoint refuses everything while the var is unset.
 2. **Schema.** `npm run db:push` adds `practice_sessions.surface/timed`,
    `practice_questions.level/root_cause/note`, and the `insights` table.
 3. **claude.ai** (web, desktop, mobile share one connector): Settings → Connectors → Add
