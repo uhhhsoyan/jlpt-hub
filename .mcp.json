@@ -6,6 +6,10 @@
       "headers": {
         "Authorization": "Bearer ${MCP_TOKEN}"
       }
+    },
+    "hindsight": {
+      "type": "http",
+      "url": "http://localhost:8888/mcp/jlpt-study/"
     }
   }
 }

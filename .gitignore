@@ -55,3 +55,6 @@ next-env.d.ts
 # agent session worktrees
 /.claude/worktrees/
 .env*.local
+
+# Hindsight (optional local memory add-on): mirror watermark + any local venv
+/.hindsight/

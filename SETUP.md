@@ -145,3 +145,23 @@ an entry to correct a link, delete it to re-map, or pass `--no-claude` to use th
 
 Deployment Protection must stay **off** for `/mcp` (claude.ai cannot pass a Vercel
 password); the bearer token is the gate. Production currently has it off.
+
+## Hindsight (optional, local)
+
+A local [Hindsight](https://hindsight.vectorize.io) memory bank mirrored from the ledger, for
+recall/reflect over your misses and a graph view of the entities (grammar points, root
+causes) they connect. Pure add-on: Postgres stays the only source of truth, the mirror script
+is the only bridge, and nothing in the app notices if it is down. Needs Docker and
+`ANTHROPIC_API_KEY` in `.env.local` (retain/reflect call Claude). Plan and details:
+`docs/plans/07-hindsight.md`.
+
+```bash
+npm run hindsight:up                 # docker container "hindsight": API :8888, UI :9999
+npm run hindsight:mirror             # read-only against Neon; retains new insights/sessions
+npm run hindsight:ask -- recall ほど
+npm run hindsight:ask -- reflect "What should I drill this week?"
+npm run hindsight:down
+```
+
+`.mcp.json` also lists the bank's MCP endpoint (`hindsight`) for Claude Code; it only
+answers while the container is up.
