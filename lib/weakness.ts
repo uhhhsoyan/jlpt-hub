@@ -72,6 +72,55 @@ export async function getWeakItems(opts: GetWeakItemsOptions = {}): Promise<Weak
 }
 
 /**
+ * How much closed-book practice the trailing window actually holds, returned next to every
+ * windowed report so an empty result reads as "nothing in the window" rather than "no data".
+ * Lesson (open-book) sessions are excluded here and from every accuracy figure.
+ */
+export interface PracticeWindow {
+  windowDays: number;
+  sessions: number;
+  graded: number;
+  /** Most recent confirmed practice session overall (ISO date), null if none. */
+  lastPracticeAt: string | null;
+  totalSessions: number;
+  /** Set when the window is empty, with what to do about it. */
+  hint?: string;
+}
+
+type WindowRow = Record<string, unknown> & {
+  in_window: string | number;
+  graded: string | number;
+  total: string | number;
+  last_at: string | Date | null;
+};
+
+export async function getPracticeWindow(windowDays = 30): Promise<PracticeWindow> {
+  const res = await getDb().execute<WindowRow>(sql`
+    SELECT count(*) FILTER (WHERE s.taken_at >= now() - (${windowDays} * interval '1 day')) AS in_window,
+           count(*) AS total,
+           max(s.taken_at) AS last_at,
+           (SELECT count(*) FROM practice_questions q
+             JOIN practice_sessions s2 ON s2.id = q.session_id
+             WHERE s2.status = 'confirmed' AND s2.mode = 'practice' AND q.is_correct IS NOT NULL
+               AND s2.taken_at >= now() - (${windowDays} * interval '1 day')) AS graded
+    FROM practice_sessions s
+    WHERE s.status = 'confirmed' AND s.mode = 'practice'
+  `);
+  const row = res.rows[0];
+  const sessions = Number(row?.in_window ?? 0);
+  const totalSessions = Number(row?.total ?? 0);
+  const lastPracticeAt = row?.last_at ? new Date(row.last_at).toISOString().slice(0, 10) : null;
+  const out: PracticeWindow = { windowDays, sessions, graded: Number(row?.graded ?? 0), lastPracticeAt, totalSessions };
+  if (sessions === 0) {
+    out.hint =
+      totalSessions === 0
+        ? "No closed-book practice has been logged yet; lesson (open-book) sessions never count here."
+        : `No closed-book practice in the last ${windowDays} days; the most recent was ${lastPracticeAt}. Pass a larger window_days to include it.`;
+  }
+  return out;
+}
+
+/**
  * Misses grouped by root cause over a trailing window; "unclassified" is a miss with no
  * cause recorded. `known` is false for a cause outside ROOT_CAUSES (a custom label a
  * logging surface used); a recurring one is a candidate for promotion to the list.
@@ -90,6 +139,7 @@ export async function getMissesByRootCause(windowDays = 30): Promise<RootCauseMi
     FROM practice_questions q
     JOIN practice_sessions s ON s.id = q.session_id
     WHERE s.status = 'confirmed'
+      AND s.mode = 'practice'
       AND q.is_correct = false
       AND s.taken_at >= now() - (${windowDays} * interval '1 day')
     GROUP BY q.root_cause
@@ -116,7 +166,7 @@ type SectionRow = Record<string, unknown> & {
   correct: string | number;
 };
 
-/** Plain (undecayed) accuracy by section over a trailing window of confirmed sessions. */
+/** Plain (undecayed) accuracy by section over a trailing window of confirmed practice sessions. */
 export async function getAccuracyBySection(windowDays = 30): Promise<SectionAccuracy[]> {
   const res = await getDb().execute<SectionRow>(sql`
     SELECT q.section,
@@ -125,6 +175,7 @@ export async function getAccuracyBySection(windowDays = 30): Promise<SectionAccu
     FROM practice_questions q
     JOIN practice_sessions s ON s.id = q.session_id
     WHERE s.status = 'confirmed'
+      AND s.mode = 'practice'
       AND s.taken_at >= now() - (${windowDays} * interval '1 day')
     GROUP BY q.section
     ORDER BY graded DESC

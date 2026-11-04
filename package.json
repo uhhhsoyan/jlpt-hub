@@ -14,6 +14,7 @@
     "db:seed": "node --env-file=.env.local scripts/seed-items.mjs",
     "db:backfill-workshop": "node --env-file=.env.local scripts/backfill-workshop.mjs",
     "db:import-ledger": "node --env-file=.env.local scripts/import-ledger.mjs",
+    "db:relink": "node --env-file=.env.local --import tsx scripts/relink-tags.mts",
     "db:generate": "drizzle-kit generate",
     "db:studio": "drizzle-kit studio",
     "bunpro:catalog": "node scripts/fetch-bunpro-grammar.mjs",

@@ -152,6 +152,8 @@ export interface GeneratedSentence {
 export const ROOT_CAUSES = [
   "grammar-unknown",
   "vocab-in-grammar",
+  "vocab-unknown",
+  "vocab-confusion",
   "reading-selection",
   "particle-cue-missed",
   "pattern-glue",
@@ -164,6 +166,8 @@ export type RootCause = (typeof ROOT_CAUSES)[number];
 export const ROOT_CAUSE_LABEL: Record<RootCause, string> = {
   "grammar-unknown": "Grammar unknown",
   "vocab-in-grammar": "Vocab inside grammar",
+  "vocab-unknown": "Vocab unknown",
+  "vocab-confusion": "Vocab confusion",
   "reading-selection": "Reading selection",
   "particle-cue-missed": "Particle cue missed",
   "pattern-glue": "Pattern glue",
@@ -196,3 +200,13 @@ export type PracticeSurface = "hub" | "claude-ai" | "claude-code" | "import";
 
 /** Free-form study notes (patterns, beliefs, "confuses どっち/どう under time pressure"). */
 export type InsightSource = PracticeSurface;
+
+/**
+ * What a session's answers are evidence of. `practice` is closed-book work (500問 pages,
+ * mock tests, chat drills): answers feed accuracy, the weak list and root-cause reports.
+ * `lesson` is open-book work right after reading the explanation (textbook example
+ * sentences, れんしゅう with the notes in view): it proves exposure, not ability, so its
+ * answers are recorded as `exposure` observations and left out of every accuracy figure.
+ */
+export const SESSION_MODES = ["practice", "lesson"] as const;
+export type SessionMode = (typeof SESSION_MODES)[number];
