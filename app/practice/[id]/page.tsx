@@ -2,7 +2,13 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { asc, eq } from "drizzle-orm";
 import { getDb } from "@/lib/db";
-import { practiceSessions, practiceQuestions, type PracticeSessionRow, type PracticeQuestionRow } from "@/lib/db/schema";
+import {
+  practiceSessions,
+  practiceQuestions,
+  studySources,
+  type PracticeSessionRow,
+  type PracticeQuestionRow,
+} from "@/lib/db/schema";
 import type { PracticeSection, PracticeSurface } from "@/lib/types";
 import { errChain, firstLine } from "@/app/workshop/db-error";
 import { StatusBadge } from "../status-badge";
@@ -32,8 +38,10 @@ function isRenderableImage(ref: string): boolean {
   return /^(https?:\/\/|\/)/.test(ref);
 }
 
+type SourceRef = { slug: string; name: string } | null;
+
 type DbState =
-  | { status: "ok"; session: PracticeSessionRow; questions: PracticeQuestionRow[] }
+  | { status: "ok"; session: PracticeSessionRow; source: SourceRef; questions: PracticeQuestionRow[] }
   | { status: "missing_url" }
   | { status: "missing_table" }
   | { status: "error"; detail: string }
@@ -42,8 +50,13 @@ type DbState =
 async function loadSession(id: string): Promise<DbState> {
   try {
     const db = getDb();
-    const [session] = await db.select().from(practiceSessions).where(eq(practiceSessions.id, id));
-    if (!session) return { status: "not_found" };
+    const [row] = await db
+      .select({ session: practiceSessions, sourceSlug: studySources.slug, sourceDisplayName: studySources.name })
+      .from(practiceSessions)
+      .leftJoin(studySources, eq(studySources.id, practiceSessions.sourceId))
+      .where(eq(practiceSessions.id, id));
+    if (!row) return { status: "not_found" };
+    const source: SourceRef = row.sourceSlug && row.sourceDisplayName ? { slug: row.sourceSlug, name: row.sourceDisplayName } : null;
 
     const questions = await db
       .select()
@@ -51,7 +64,7 @@ async function loadSession(id: string): Promise<DbState> {
       .where(eq(practiceQuestions.sessionId, id))
       .orderBy(asc(practiceQuestions.number));
 
-    return { status: "ok", session, questions };
+    return { status: "ok", session: row.session, source, questions };
   } catch (e) {
     const s = errChain(e);
     if (/DATABASE_URL/i.test(s)) return { status: "missing_url" };
@@ -117,7 +130,7 @@ export default async function PracticeSessionPage({
           Couldn&apos;t read the database: {db.detail}
         </p>
       ) : (
-        <SessionDetail session={db.session} questions={db.questions} />
+        <SessionDetail session={db.session} source={db.source} questions={db.questions} />
       )}
     </div>
   );
@@ -125,9 +138,11 @@ export default async function PracticeSessionPage({
 
 function SessionDetail({
   session,
+  source,
   questions,
 }: {
   session: PracticeSessionRow;
+  source: SourceRef;
   questions: PracticeQuestionRow[];
 }) {
   const isConfirmed = session.status === "confirmed";
@@ -140,6 +155,14 @@ function SessionDetail({
           <div className="min-w-0">
             <h1 className="truncate text-xl font-bold tracking-tight">{session.label}</h1>
             <p className="text-sm text-neutral-500 dark:text-neutral-400">
+              {source && (
+                <>
+                  <Link href={`/sources/${source.slug}`} className="hover:underline">
+                    {source.name}
+                  </Link>
+                  {" · "}
+                </>
+              )}
               {session.sourceName && <>{session.sourceName} · </>}
               {session.takenAt.toISOString().slice(0, 10)}
               {SURFACE_LABEL[session.surface] && <> · {SURFACE_LABEL[session.surface]}</>}

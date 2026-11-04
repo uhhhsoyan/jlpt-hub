@@ -107,6 +107,7 @@ Source: `app/mcp/route.ts`, write path in `lib/ledger.ts`, tag matching in `lib/
    table. Then `npm run db:seed` (aliases and hand-curated items live in
    `data/seed/grammar.json` / `vocab-extra.json`) and `npm run db:relink` to attach any
    tags that were logged before their item or alias existed.
+   Study sources (`/sources`, `list_sources`, `log_study`): `npm run db:seed-sources` then `npm run db:backfill-sources`; see `docs/plans/08-study-sources.md`.
 3. **claude.ai** (web, desktop, mobile share one connector): Settings → Connectors → Add
    custom connector → URL `https://<host>/mcp`. Authentication: choose **No sign-in** (the
    form may say it "detected" sign-in; ignore that). Add one request header: name

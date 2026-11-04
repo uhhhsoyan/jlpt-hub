@@ -10,6 +10,7 @@ import { practiceSessions, practiceQuestions, questionItems, observations } from
 import { extractQuestions, type PracticeImage } from "@/lib/practice-extract";
 import { resolveTags } from "@/lib/resolve-items";
 import { deleteStoredFiles, storeFile } from "@/lib/storage";
+import { getStudySourceBySlug } from "@/lib/study-sources-db";
 import type { QuestionTag } from "@/lib/types";
 import { errChain, firstLine } from "@/app/workshop/db-error";
 
@@ -34,8 +35,21 @@ export async function createSession(formData: FormData): Promise<CreateSessionRe
   const label = String(formData.get("label") ?? "").trim();
   if (!label) return { ok: false, error: "Give this session a label." };
 
+  // Catalog source from the picker (slug) plus free-text detail (lesson / page) kept in source_name.
+  const sourceSlug = String(formData.get("sourceSlug") ?? "").trim();
   const sourceNameRaw = String(formData.get("sourceName") ?? "").trim();
   const sourceName = sourceNameRaw || null;
+  let source: { id: string; name: string } | null = null;
+  if (sourceSlug) {
+    try {
+      const row = await getStudySourceBySlug(sourceSlug);
+      if (!row) return { ok: false, error: "That source is no longer in the catalog — reload and pick again." };
+      source = { id: row.id, name: row.name };
+    } catch (e) {
+      return { ok: false, error: humanize(e) };
+    }
+  }
+  const extractionHint = [source?.name, sourceName].filter(Boolean).join(" ") || undefined;
 
   const takenAtRaw = String(formData.get("takenAt") ?? "").trim();
   const takenAt = takenAtRaw ? new Date(takenAtRaw) : new Date();
@@ -85,7 +99,7 @@ export async function createSession(formData: FormData): Promise<CreateSessionRe
       images.push({ mediaType: file.type, base64: buf.toString("base64") });
     }
 
-    const extracted = (await extractQuestions(images, { sourceName: sourceName ?? undefined, label })).sort(
+    const extracted = (await extractQuestions(images, { sourceName: extractionHint, label })).sort(
       (a, b) => a.number - b.number,
     );
 
@@ -103,6 +117,7 @@ export async function createSession(formData: FormData): Promise<CreateSessionRe
     await db.insert(practiceSessions).values({
       id: sessionId,
       label,
+      sourceId: source?.id ?? null,
       sourceName,
       status: "review",
       imagePaths,
