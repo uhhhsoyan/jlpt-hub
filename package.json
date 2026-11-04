@@ -23,7 +23,11 @@
     "bunpro:crosswalk": "node --env-file=.env.local scripts/build-bunpro-crosswalk.mjs",
     "sprint:generate": "node --env-file=.env.local scripts/generate-sprint.mjs",
     "sprint:tts": "node --env-file=.env.local scripts/tts-sprint.mjs",
-    "media:upload": "node --env-file=.env.local scripts/upload-media.mjs"
+    "media:upload": "node --env-file=.env.local scripts/upload-media.mjs",
+    "hindsight:up": "bash scripts/hindsight.sh up",
+    "hindsight:down": "bash scripts/hindsight.sh down",
+    "hindsight:mirror": "node --env-file=.env.local --import tsx scripts/hindsight-mirror.mts",
+    "hindsight:ask": "node --env-file=.env.local --import tsx scripts/hindsight-ask.mts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.111.0",
@@ -41,6 +45,7 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@vectorize-io/hindsight-client": "^1.2.0",
     "dotenv": "^17.4.2",
     "drizzle-kit": "^0.31.10",
     "eslint": "^9",
