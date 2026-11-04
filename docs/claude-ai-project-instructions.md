@@ -35,7 +35,8 @@ Fill the session fields:
 
 - `label`: short and specific, e.g. `500問 W3D2`, `Mock test 1 文法`, `Chat drill: ほど/より`, `SKM N4 L1 れんしゅう1`.
 - `mode`: `practice` or `lesson` (see above). One session per part of a lesson (examples, れんしゅう1, れんしゅう2) is fine.
-- `source_name`: the book or source, e.g. `Shin Nihongo 500 Mon N4-N5`, `Genki II L14`, `chat`.
+- `source`: the catalog slug of the book or app (see "Study sources" below), e.g. `shin-nihongo-500-mon-n4-n5`, `skm-n4-bunpou`, `genki-2`. A name or alias works too (`Genki II`, `SKM N4 文法`). Omit for a chat drill with no book.
+- `source_name`: the detail within that source, e.g. `W3D2`, `実力養成編 第1部 2課`, `L14 れんしゅう`; or the source's name in full when nothing in the catalog fits (`chat`). If the result says `sourceUnresolved`, tell me so I can add an alias; do not re-log.
 - `taken_at`: the date I did the questions (ISO), not today's date if different.
 - `timed`: true only when I said it was done under exam timing.
 - `image_refs`: for photos, a short pointer such as `claude.ai chat 2026-11-03 "500問 W3D2"`.
@@ -55,6 +56,23 @@ One entry in `attempts` per question, including the ones I got right (correct an
 - `meta`: any structured fact with no field of its own (e.g. `{"attempt": 2}` on a retry). Lesson conventions already in use, keep them: example sentences are numbered pattern × sentence (11–14, 21–23, 31–34), and `meta` carries `part` (`examples`, `れんしゅう1`), `pattern`, `sentence`, `sub` (A/B), `blank`, `choice`, `answer`, `wrote`, and `task: "translate"` for a translation pass. For れんしゅう worth revisiting, keep `stem` and `choices`.
 
 After the call, tell me the session id and any tags the tool reported as unresolved. Each comes with the closest library items; if one of them is clearly right, say so and mention that the tag can be fixed on my side (the text is kept on the question and `relink_tags` attaches it once the item or alias exists). Do not re-log the session. If a session went in with the wrong `mode`, `label` or `taken_at`, fix it with `update_session` (find the id with `list_sessions`); it rewrites the evidence rows for you.
+
+### Study sources
+
+The Hub keeps a catalog of what I study from; `list_sources` returns it with each entry's `howUsed` (how it fits the plan, which mode or tool to log it with) and usage so far. Call it when unsure of a slug or when I ask what I have been neglecting. Current slugs:
+
+- 新完全マスター N4: `skm-n4-bunpou` (文法), `skm-n4-goi` (語彙), `skm-n4-kanji` (漢字), `skm-n4-dokkai` (読解), `skm-n4-choukai` (聴解)
+- Genki (3rd ed.): `genki-1`, `genki-1-workbook`, `genki-2`, `genki-2-workbook`
+- 新にほんご500問 N4-N5: `shin-nihongo-500-mon-n4-n5`
+- Official JLPT workbooks: `jlpt-official-n5-2012`, `jlpt-official-n5-2018`, `jlpt-official-n4-2012`, `jlpt-official-n4-2018`
+- Apps: `wanikani`, `bunpro`, `satori-reader`
+
+Two tools, by what the sitting produced:
+
+- Graded questions, right or wrong → `log_attempts` with `source` set (practice or lesson mode as above).
+- Time with no graded questions → `log_study`: `{ source, activity, minutes, taken_at, note }`. `activity` is `reading` (Satori Reader, a textbook passage), `listening`, `review` (a WaniKani or Bunpro review session), `lesson` (read a grammar explanation without doing its exercises), `drill`, or `other`. One call per sitting, after the fact; put what was read or reviewed in `note`. Never log individual WaniKani/Bunpro answers: their syncs do that.
+
+If a source is missing from the catalog, say so and log with `source_name` carrying the full name; I add it in the Hub and the session is linked afterwards. A session linked to the wrong source is fixed with `update_session` (`source`, or `none` to unlink).
 
 ### Logging everything else: `log_insight`
 

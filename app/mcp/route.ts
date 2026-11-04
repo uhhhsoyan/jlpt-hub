@@ -17,8 +17,9 @@ import {
 } from "@/lib/ledger";
 import { getReadiness } from "@/lib/readiness";
 import { findItems } from "@/lib/resolve-items";
+import { listStudySources, logStudy } from "@/lib/study-sources-db";
 import { getAccuracyBySection, getMissesByRootCause, getPracticeWindow, getWeakItems } from "@/lib/weakness";
-import { normalizeRootCause, ROOT_CAUSES, SESSION_MODES } from "@/lib/types";
+import { normalizeRootCause, ROOT_CAUSES, SESSION_MODES, STUDY_ACTIVITIES } from "@/lib/types";
 
 /**
  * The study ledger's MCP endpoint (Streamable HTTP, stateless). One long random bearer
@@ -32,7 +33,7 @@ import { normalizeRootCause, ROOT_CAUSES, SESSION_MODES } from "@/lib/types";
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
 
-const SERVER_INFO = { name: "jlpt-hub-study-ledger", version: "1.2.0" };
+const SERVER_INFO = { name: "jlpt-hub-study-ledger", version: "1.3.0" };
 
 /**
  * The token is accepted two ways: `Authorization: Bearer <token>` (Claude Code's .mcp.json,
@@ -109,10 +110,17 @@ function buildServer(): McpServer {
     {
       title: "Log practice attempts",
       description:
-        "Record one reviewed page/set of questions as a confirmed session. mode=practice (default) is closed-book work: answers count toward accuracy, the weak list and root-cause reports. mode=lesson is open-book work done right after reading the explanation (textbook example sentences, れんしゅう with the notes in view): it is recorded as exposure, moves items from unseen to learning, and is excluded from every accuracy figure. Each attempt carries right/wrong, the item(s) it tests, a free-text note, and for misses a root_cause (preferred list given on the field; any label accepted). Nothing is rejected for not fitting a category: unknown sections land in 'other' with the raw word kept, and 'meta' takes anything else. Result: sessionId, mode, questions, graded (attempts with correct true/false), correct, observations (evidence rows written: one per resolved tag per graded attempt in practice, one per resolved tag per attempt in lesson; tags that matched nothing write none until relink_tags), and unresolvedTags (tags that matched no library item, each with the closest items and a match label; 'prefix-only' means a shorter, different item, not the one meant). The tag text is kept, so relink_tags can attach it later once the item or alias exists. A session logged with the wrong mode, label or date is fixed with update_session, not re-logged.",
+        "Record one reviewed page/set of questions as a confirmed session. mode=practice (default) is closed-book work: answers count toward accuracy, the weak list and root-cause reports. mode=lesson is open-book work done right after reading the explanation (textbook example sentences, れんしゅう with the notes in view): it is recorded as exposure, moves items from unseen to learning, and is excluded from every accuracy figure. Each attempt carries right/wrong, the item(s) it tests, a free-text note, and for misses a root_cause (preferred list given on the field; any label accepted). Nothing is rejected for not fitting a category: unknown sections land in 'other' with the raw word kept, and 'meta' takes anything else. Name the book or app in 'source' (a catalog slug from list_sources, or its name/alias) and put the lesson/page in 'source_name'; when 'source' is absent, source_name is matched against the catalog too. Result: sessionId, mode, questions, graded (attempts with correct true/false), correct, observations (evidence rows written: one per resolved tag per graded attempt in practice, one per resolved tag per attempt in lesson; tags that matched nothing write none until relink_tags), unresolvedTags (tags that matched no library item, each with the closest items and a match label; 'prefix-only' means a shorter, different item, not the one meant), source (the catalog entry linked, or null) and sourceUnresolved (the source text when it matched no catalog entry; the text is still kept on the session). The tag text is kept, so relink_tags can attach it later once the item or alias exists. A session logged with the wrong mode, label, date or source is fixed with update_session, not re-logged. For study time that produced no graded answers (reading, app reviews, listening), use log_study instead.",
       inputSchema: {
         label: z.string().describe("e.g. '500問 Week 3 Day 2', 'Mock test 1 文法', 'SKM N4 L1 れんしゅう1'"),
-        source_name: z.string().optional().describe("e.g. 'Shin Nihongo 500 Mon N4-N5'"),
+        source: z
+          .string()
+          .optional()
+          .describe("Slug or name/alias of a catalog source, e.g. 'skm-n4-bunpou', 'shin-nihongo-500-mon-n4-n5', 'Genki II'; see list_sources"),
+        source_name: z
+          .string()
+          .optional()
+          .describe("Free text kept on the session: the lesson/page detail when 'source' is given ('実力養成編 第1部 2課', 'L14'), or the book name when it is not"),
         taken_at: z.string().describe("ISO date or datetime the page was done, e.g. 2026-10-27"),
         surface: z.enum(["claude-ai", "claude-code", "hub"]).default("claude-ai"),
         mode: z
@@ -151,6 +159,7 @@ function buildServer(): McpServer {
 
         const result = await logAttempts({
           label: args.label,
+          source: args.source ?? null,
           sourceName: args.source_name ?? null,
           takenAt,
           surface: args.surface,
@@ -324,12 +333,17 @@ function buildServer(): McpServer {
     {
       title: "Correct a logged session",
       description:
-        "Fix a session that was logged with the wrong mode, label or taken_at, instead of re-logging it. Pass only the fields to change. Changing mode or taken_at rebuilds the session's evidence rows (answers become exposures when it turns into a lesson, and back); questions, tags, notes and insights are untouched. Use list_sessions to find the id.",
+        "Fix a session that was logged with the wrong mode, label, taken_at or source, instead of re-logging it. Pass only the fields to change. Changing mode or taken_at rebuilds the session's evidence rows (answers become exposures when it turns into a lesson, and back); questions, tags, notes and insights are untouched. Use list_sessions to find the id.",
       inputSchema: {
         session_id: z.string().uuid(),
         mode: z.enum(SESSION_MODES).optional().describe("practice (closed book, counts) or lesson (open book, exposure only)"),
         label: z.string().min(1).optional(),
         taken_at: z.string().optional().describe("ISO date or datetime the work was done"),
+        source: z
+          .string()
+          .min(1)
+          .optional()
+          .describe("Catalog source to link (slug, name or alias; see list_sources), or 'none' to unlink"),
       },
       annotations: { idempotentHint: true },
     },
@@ -340,10 +354,90 @@ function buildServer(): McpServer {
           takenAt = new Date(args.taken_at);
           if (Number.isNaN(takenAt.getTime())) throw new Error(`Unparseable taken_at: ${args.taken_at}`);
         }
-        if (args.mode === undefined && args.label === undefined && takenAt === undefined) {
-          throw new Error("Nothing to change: pass mode, label and/or taken_at.");
+        if (args.mode === undefined && args.label === undefined && takenAt === undefined && args.source === undefined) {
+          throw new Error("Nothing to change: pass mode, label, taken_at and/or source.");
         }
-        return ok(await updateSession({ sessionId: args.session_id, mode: args.mode, label: args.label, takenAt }));
+        return ok(
+          await updateSession({ sessionId: args.session_id, mode: args.mode, label: args.label, takenAt, source: args.source }),
+        );
+      } catch (e) {
+        return fail(e);
+      }
+    },
+  );
+
+  server.registerTool(
+    "list_sources",
+    {
+      title: "Study source catalog",
+      description:
+        "The catalog of books, question banks, official workbooks and apps the learner studies from, with how each is meant to be used (howUsed: which mode or tool to log it with) and usage so far: sessions (practice and lesson counts, last date) and study-log minutes. Use it to pick the 'source' slug for log_attempts, update_session and log_study, and to see which sources are going untouched. Inactive sources are hidden unless include_inactive is set.",
+      inputSchema: {
+        include_inactive: z.boolean().default(false),
+      },
+      annotations: { readOnlyHint: true },
+    },
+    async (args) => {
+      try {
+        const sources = await listStudySources({ includeInactive: args.include_inactive });
+        return ok({
+          sources: sources.map((s) => ({
+            slug: s.slug,
+            name: s.name,
+            nameJa: s.nameJa,
+            kind: s.kind,
+            level: s.level,
+            description: s.description,
+            howUsed: s.howUsed,
+            ...(s.active ? {} : { active: false }),
+            sessions: s.stats.sessions,
+            practiceSessions: s.stats.practiceSessions,
+            lessonSessions: s.stats.lessonSessions,
+            lastSessionAt: s.stats.lastSessionAt,
+            studyLogEntries: s.stats.logEntries,
+            studyMinutes: s.stats.minutes,
+            lastStudyLogAt: s.stats.lastLogAt,
+          })),
+        });
+      } catch (e) {
+        return fail(e);
+      }
+    },
+  );
+
+  server.registerTool(
+    "log_study",
+    {
+      title: "Log study time",
+      description:
+        "Record time-based study that produced no graded questions: 30 minutes of reading in Satori Reader, a WaniKani or Bunpro review session, a listening pass, reading a textbook chapter without doing its exercises. It writes a study-log entry against a catalog source (no item evidence: app answers arrive through their own syncs, and graded work belongs in log_attempts). Use it once per sitting, after the fact. Errors if the source does not match a catalog entry, listing the valid slugs. Returns the entry id, the source linked, activity, minutes and taken_at.",
+      inputSchema: {
+        source: z.string().min(1).describe("Catalog source: slug, name or alias, e.g. 'satori-reader', 'wanikani', 'Genki II'; see list_sources"),
+        activity: z
+          .enum(STUDY_ACTIVITIES)
+          .describe("reading | listening | review (SRS reviews) | lesson (read the explanation, no exercises) | drill | other"),
+        minutes: z.number().int().min(0).max(24 * 60).optional().describe("How long, if known"),
+        taken_at: z.string().describe("ISO date or datetime the study was done, e.g. 2026-11-04"),
+        note: z.string().optional().describe("What was read/reviewed, e.g. 'Satori: Kiki-Mimi Radio ep. 3', 'WK level 12 reviews, 85%'"),
+        meta: z.record(z.string(), z.unknown()).optional().describe("Any structured facts with no field of their own; stored as-is"),
+        surface: z.enum(["claude-ai", "claude-code", "hub"]).default("claude-ai"),
+      },
+    },
+    async (args) => {
+      try {
+        const takenAt = new Date(args.taken_at);
+        if (Number.isNaN(takenAt.getTime())) throw new Error(`Unparseable taken_at: ${args.taken_at}`);
+        return ok(
+          await logStudy({
+            source: args.source,
+            activity: args.activity,
+            minutes: args.minutes ?? null,
+            takenAt,
+            note: args.note ?? null,
+            meta: args.meta ?? null,
+            surface: args.surface,
+          }),
+        );
       } catch (e) {
         return fail(e);
       }

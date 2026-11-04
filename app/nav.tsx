@@ -11,6 +11,7 @@ const TABS = [
   { href: "/practice", label: "Practice" },
   { href: "/sprint", label: "Sprint" },
   { href: "/mine", label: "Mine" },
+  { href: "/sources", label: "Sources" },
   { href: "/progress", label: "Progress" },
 ];
 
@@ -19,15 +20,16 @@ export function Nav() {
   return (
     <header className="sticky top-0 z-10 border-b border-neutral-200 bg-neutral-50/80 backdrop-blur dark:border-neutral-800 dark:bg-neutral-950/80">
       <div className="mx-auto flex h-14 w-full max-w-3xl items-center gap-6 px-5">
-        <span className="text-sm font-bold tracking-tight">JLPT Hub</span>
-        <nav className="flex gap-1">
+        <span className="shrink-0 text-sm font-bold tracking-tight">JLPT Hub</span>
+        {/* Scrolls sideways on a phone rather than wrapping or pushing the theme switcher off-screen. */}
+        <nav className="flex min-w-0 flex-1 gap-1 overflow-x-auto [scrollbar-width:none]">
           {TABS.map((t) => {
             const active = t.href === "/" ? pathname === "/" : pathname.startsWith(t.href);
             return (
               <Link
                 key={t.href}
                 href={t.href}
-                className={`rounded-lg px-3 py-1.5 text-sm font-semibold transition ${
+                className={`shrink-0 rounded-lg px-3 py-1.5 text-sm font-semibold transition ${
                   active
                     ? "bg-neutral-900 text-white dark:bg-white dark:text-neutral-900"
                     : "text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-200"

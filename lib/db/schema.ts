@@ -27,6 +27,8 @@ import type {
   QuestionTag,
   InsightSource,
   SessionMode,
+  StudySourceKind,
+  StudyActivity,
 } from "@/lib/types";
 
 // One saved study sentence at one level (N5 or N4). A single workshop generation can
@@ -147,7 +149,11 @@ export type ObservationRow = typeof observations.$inferSelect;
 export const practiceSessions = pgTable("practice_sessions", {
   id: uuid("id").defaultRandom().primaryKey(),
   label: text("label").notNull(), // e.g. "500問 Week 2 Day 3"
-  sourceName: text("source_name"), // e.g. "Shin Nihongo 500 Mon N4-N5"
+  // Catalog entry the page came from (study_sources); null for sessions that name no
+  // source or whose source_name matched nothing. source_name stays as free text for the
+  // detail (chapter, lesson, page) and for pre-catalog sessions.
+  sourceId: uuid("source_id").references(() => studySources.id, { onDelete: "set null" }),
+  sourceName: text("source_name"), // e.g. "Shin Nihongo 500 Mon N4-N5", "実力養成編 第1部 2課"
   status: text("status").$type<PracticeSessionStatus>().notNull().default("review"),
   // Which surface wrote the session: the Hub photo flow, an MCP client, or the CSV import.
   surface: text("surface").$type<PracticeSurface>().notNull().default("hub"),
@@ -313,3 +319,54 @@ export const insights = pgTable(
 );
 
 export type InsightRow = typeof insights.$inferSelect;
+
+// The catalog of things the learner studies from: textbooks, workbooks, question banks,
+// the official JLPT workbooks, and apps. Seeded from data/seed/study-sources.json
+// (`npm run db:seed-sources`, upsert on slug) and editable in the Hub at /sources. Never
+// deleted: `active=false` hides a source from the grid and the practice form while every
+// session and study-log row that points at it keeps resolving.
+export const studySources = pgTable("study_sources", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  slug: text("slug").notNull().unique(), // stable id used by the MCP tools and URLs
+  name: text("name").notNull(), // English display name
+  nameJa: text("name_ja"), // Japanese title, when the source has one
+  kind: text("kind").$type<StudySourceKind>().notNull(),
+  level: text("level"), // "N4", "N5", "N4-N5"; null for level-agnostic apps
+  edition: text("edition"), // "3rd edition, The Japan Times"
+  url: text("url"),
+  imageUrl: text("image_url"), // Blob URL or pasted URL; null = /public/sources/<slug>.* or the placeholder card
+  color: text("color"), // hex, for the typographic placeholder card
+  // Alternate names a logging surface might use ("SKM N4 文法", "Genki II"); see
+  // resolveSource in lib/study-sources.ts for how they are matched.
+  aliases: jsonb("aliases").$type<string[]>().notNull().default([]),
+  sortOrder: integer("sort_order").notNull().default(0),
+  active: boolean("active").notNull().default(true),
+  description: text("description"), // what it is, one line
+  howUsed: text("how_used"), // how it fits the study plan, so a logging agent knows which mode/tool to use
+  notes: text("notes"),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+});
+
+export type StudySourceRow = typeof studySources.$inferSelect;
+
+// Time-based study with no graded questions: 30 minutes in Satori Reader, a WaniKani
+// review session, a listening pass. Written by the MCP log_study tool. Evidence-free on
+// purpose: it says what was done with which source, not what was learned; item-level
+// signals for apps still arrive through their own syncs (WaniKani, Bunpro).
+export const studyLog = pgTable(
+  "study_log",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    sourceId: uuid("source_id").references(() => studySources.id, { onDelete: "set null" }),
+    activity: text("activity").$type<StudyActivity>().notNull(),
+    minutes: integer("minutes"),
+    takenAt: timestamp("taken_at", { withTimezone: true }).notNull(),
+    note: text("note"),
+    meta: jsonb("meta").$type<Record<string, unknown>>(),
+    surface: text("surface").$type<PracticeSurface>().notNull().default("claude-ai"),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+  },
+  (t) => [index("study_log_source").on(t.sourceId, t.takenAt)],
+);
+
+export type StudyLogRow = typeof studyLog.$inferSelect;

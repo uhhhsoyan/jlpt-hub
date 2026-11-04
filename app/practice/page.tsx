@@ -1,10 +1,11 @@
 import Link from "next/link";
-import { desc, sql } from "drizzle-orm";
+import { desc, eq, sql } from "drizzle-orm";
 import { getDb } from "@/lib/db";
-import { practiceSessions, type PracticeSessionRow } from "@/lib/db/schema";
+import { practiceSessions, studySources, type PracticeSessionRow } from "@/lib/db/schema";
+import { loadStudySources } from "@/lib/study-sources-db";
 import { getWeakItems, type WeakItem } from "@/lib/weakness";
 import { errChain, firstLine } from "@/app/workshop/db-error";
-import { NewSessionForm } from "./new-session-form";
+import { NewSessionForm, type SourceOption } from "./new-session-form";
 import { StatusBadge } from "./status-badge";
 import { WeakPointsPanel } from "./weak-points-panel";
 import { deleteSession } from "./actions";
@@ -14,6 +15,7 @@ export const dynamic = "force-dynamic";
 interface SessionSummary {
   id: string;
   label: string;
+  source: { slug: string; name: string } | null;
   sourceName: string | null;
   status: PracticeSessionRow["status"];
   mode: PracticeSessionRow["mode"];
@@ -38,7 +40,11 @@ async function loadSessions(): Promise<DbState> {
   try {
     const db = getDb();
     const [rows, scoreRes] = await Promise.all([
-      db.select().from(practiceSessions).orderBy(desc(practiceSessions.takenAt)),
+      db
+        .select({ session: practiceSessions, sourceSlug: studySources.slug, sourceDisplayName: studySources.name })
+        .from(practiceSessions)
+        .leftJoin(studySources, eq(studySources.id, practiceSessions.sourceId))
+        .orderBy(desc(practiceSessions.takenAt)),
       db.execute<ScoreRow>(sql`
         SELECT session_id,
                count(*) FILTER (WHERE is_correct IS NOT NULL) AS graded,
@@ -51,9 +57,10 @@ async function loadSessions(): Promise<DbState> {
     const scores = new Map(
       scoreRes.rows.map((r) => [r.session_id, { graded: Number(r.graded), correct: Number(r.correct) }]),
     );
-    const sessions = rows.map((r) => ({
+    const sessions = rows.map(({ session: r, sourceSlug, sourceDisplayName }) => ({
       id: r.id,
       label: r.label,
+      source: sourceSlug && sourceDisplayName ? { slug: sourceSlug, name: sourceDisplayName } : null,
       sourceName: r.sourceName,
       status: r.status,
       mode: r.mode,
@@ -80,8 +87,17 @@ async function loadWeakItems(): Promise<WeakItem[]> {
   }
 }
 
+/** Active catalog sources for the picker; an empty list (table missing, DB down) just leaves "Other / none". */
+async function loadSourceOptions(): Promise<SourceOption[]> {
+  try {
+    return (await loadStudySources({ activeOnly: true })).map((s) => ({ slug: s.slug, name: s.name, nameJa: s.nameJa }));
+  } catch {
+    return [];
+  }
+}
+
 export default async function PracticePage() {
-  const [db, weakItems] = await Promise.all([loadSessions(), loadWeakItems()]);
+  const [db, weakItems, sources] = await Promise.all([loadSessions(), loadWeakItems(), loadSourceOptions()]);
 
   return (
     <div className="mx-auto flex w-full max-w-2xl flex-col gap-8 px-5 py-10 font-sans">
@@ -93,7 +109,7 @@ export default async function PracticePage() {
         </p>
       </header>
 
-      <NewSessionForm />
+      <NewSessionForm sources={sources} />
 
       <section className="flex flex-col gap-3">
         <div className="flex items-baseline justify-between">
@@ -133,6 +149,14 @@ export default async function PracticePage() {
                   <StatusBadge status={session.status} />
                 </div>
                 <p className="text-sm text-neutral-500 dark:text-neutral-400">
+                  {session.source && (
+                    <>
+                      <Link href={`/sources/${session.source.slug}`} className="hover:underline">
+                        {session.source.name}
+                      </Link>
+                      {" · "}
+                    </>
+                  )}
                   {session.sourceName && <>{session.sourceName} · </>}
                   {session.takenAt.toISOString().slice(0, 10)}
                   {session.mode === "lesson" && <> · open book</>}

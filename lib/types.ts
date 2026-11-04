@@ -218,3 +218,33 @@ export type InsightSource = PracticeSurface;
  */
 export const SESSION_MODES = ["practice", "lesson"] as const;
 export type SessionMode = (typeof SESSION_MODES)[number];
+
+/**
+ * Study sources: the books, question banks, official workbooks and apps the learner
+ * studies from (docs/plans/08-study-sources.md). A practice session can point at one, and
+ * time-based activity with no graded questions is logged against one in `study_log`.
+ */
+export const STUDY_SOURCE_KINDS = ["textbook", "workbook", "question-bank", "official-test", "app", "reader"] as const;
+export type StudySourceKind = (typeof STUDY_SOURCE_KINDS)[number];
+
+export const STUDY_SOURCE_KIND_LABEL: Record<StudySourceKind, string> = {
+  textbook: "Textbook",
+  workbook: "Workbook",
+  "question-bank": "Question bank",
+  "official-test": "Official test",
+  app: "App",
+  reader: "Reader",
+};
+
+/** What a study-log entry records: activity that produced no graded answers. */
+export const STUDY_ACTIVITIES = ["reading", "listening", "review", "lesson", "drill", "other"] as const;
+export type StudyActivity = (typeof STUDY_ACTIVITIES)[number];
+
+export const STUDY_ACTIVITY_LABEL: Record<StudyActivity, string> = {
+  reading: "Reading",
+  listening: "Listening",
+  review: "Review",
+  lesson: "Lesson",
+  drill: "Drill",
+  other: "Other",
+};

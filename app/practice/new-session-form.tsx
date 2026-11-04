@@ -4,13 +4,18 @@ import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { createSession } from "./actions";
 
-const SOURCE_SUGGESTIONS = ["Shin Nihongo 500 Mon (N4–N5)", "Official JLPT practice workbook"];
+/** Active catalog entries for the source picker (see /sources); plain data so it crosses the client boundary. */
+export interface SourceOption {
+  slug: string;
+  name: string;
+  nameJa: string | null;
+}
 
 function todayIso(): string {
   return new Date().toISOString().slice(0, 10);
 }
 
-export function NewSessionForm() {
+export function NewSessionForm({ sources }: { sources: SourceOption[] }) {
   const router = useRouter();
   const [previews, setPreviews] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
@@ -57,23 +62,37 @@ export function NewSessionForm() {
         />
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2">
+      <div className="grid gap-4 sm:grid-cols-3">
+        <div className="flex flex-col gap-2">
+          <label htmlFor="sourceSlug" className="text-sm font-medium text-neutral-600 dark:text-neutral-300">
+            Source
+          </label>
+          <select
+            id="sourceSlug"
+            name="sourceSlug"
+            defaultValue=""
+            className="w-full rounded-xl border border-neutral-300 bg-white p-2.5 text-[15px] outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 dark:border-neutral-700 dark:bg-neutral-900 dark:focus:ring-indigo-900"
+          >
+            <option value="">Other / none</option>
+            {sources.map((s) => (
+              <option key={s.slug} value={s.slug}>
+                {s.name}
+                {s.nameJa ? ` · ${s.nameJa}` : ""}
+              </option>
+            ))}
+          </select>
+        </div>
+
         <div className="flex flex-col gap-2">
           <label htmlFor="sourceName" className="text-sm font-medium text-neutral-600 dark:text-neutral-300">
-            Source <span className="text-neutral-400">(optional)</span>
+            Detail <span className="text-neutral-400">(lesson / page)</span>
           </label>
           <input
             id="sourceName"
             name="sourceName"
-            list="practice-source-suggestions"
-            placeholder="Shin Nihongo 500 Mon (N4–N5)"
+            placeholder="W2D3, L14, p. 42"
             className="w-full rounded-xl border border-neutral-300 bg-white p-2.5 text-[15px] outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 dark:border-neutral-700 dark:bg-neutral-900 dark:focus:ring-indigo-900"
           />
-          <datalist id="practice-source-suggestions">
-            {SOURCE_SUGGESTIONS.map((s) => (
-              <option key={s} value={s} />
-            ))}
-          </datalist>
         </div>
 
         <div className="flex flex-col gap-2">

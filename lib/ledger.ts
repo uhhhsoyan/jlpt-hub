@@ -6,9 +6,11 @@ import {
   practiceQuestions,
   practiceSessions,
   questionItems,
+  studySources,
 } from "@/lib/db/schema";
 import { matchTag, matchText, suggestItems, type ItemIndex, type ItemSuggestion } from "@/lib/item-match";
 import { loadItemIndex, resolveTags } from "@/lib/resolve-items";
+import { loadStudySources, resolveSource } from "@/lib/study-sources-db";
 import type {
   ExtractedTag,
   InsightSource,
@@ -88,6 +90,13 @@ export interface AttemptInput {
 
 export interface LogAttemptsInput {
   label: string;
+  /**
+   * Catalog source (slug, name or alias; see lib/study-sources.ts). Resolved first; when
+   * absent, sourceName is tried against the catalog too, so "Shin Nihongo 500 Mon N4-N5"
+   * links the session without a separate field.
+   */
+  source?: string | null;
+  /** Free text kept on the session: the book when `source` is absent, or the detail (lesson, page). */
   sourceName?: string | null;
   takenAt: Date;
   surface: PracticeSurface;
@@ -121,6 +130,10 @@ export interface LogAttemptsResult {
    * Each suggestion carries `match`; "prefix-only" is a shorter, different item, not a hit.
    */
   unresolvedTags: UnresolvedTag[];
+  /** The catalog source the session was linked to, or null. */
+  source: { slug: string; name: string } | null;
+  /** Set when `source` / `source_name` was given but matched no catalog entry (the text is still kept on the session). */
+  sourceUnresolved?: string;
 }
 
 function unresolvedWithSuggestions(index: ItemIndex, number: number, tag: QuestionTag): UnresolvedTag {
@@ -137,7 +150,7 @@ export async function logAttempts(input: LogAttemptsInput): Promise<LogAttemptsR
   const db = getDb();
   const mode: SessionMode = input.mode ?? "practice";
 
-  const index = await loadItemIndex();
+  const [index, sources] = await Promise.all([loadItemIndex(), loadStudySources()]);
   const allTags = input.attempts.flatMap((a) => a.tags);
   const resolved = await resolveTags(allTags, index);
   let cursor = 0;
@@ -147,11 +160,18 @@ export async function logAttempts(input: LogAttemptsInput): Promise<LogAttemptsR
     return { ...a, number: a.number ?? i + 1, tags };
   });
 
+  // Explicit `source` first, else the free-text source name; whichever was tried and
+  // failed is reported back so the caller can fix the alias rather than lose the link.
+  const sourceText = input.source?.trim() || input.sourceName?.trim() || null;
+  const source = sourceText ? resolveSource(sources, sourceText) : null;
+  const sourceUnresolved = sourceText && !source ? sourceText : undefined;
+
   const [session] = await db
     .insert(practiceSessions)
     .values({
       label: input.label,
-      sourceName: input.sourceName ?? null,
+      sourceId: source?.id ?? null,
+      sourceName: input.sourceName?.trim() || null,
       status: "confirmed",
       surface: input.surface,
       mode,
@@ -227,6 +247,8 @@ export async function logAttempts(input: LogAttemptsInput): Promise<LogAttemptsR
     correct,
     observations: obsRows.length,
     unresolvedTags,
+    source: source ? { slug: source.slug, name: source.name } : null,
+    ...(sourceUnresolved ? { sourceUnresolved } : {}),
   };
 }
 
@@ -328,6 +350,8 @@ export async function getInsightTagCounts(): Promise<{ tag: string; n: number }[
 export interface SessionSummary {
   id: string;
   label: string;
+  /** Catalog source the session is linked to (see list_sources), or null. */
+  source: { slug: string; name: string } | null;
   sourceName: string | null;
   surface: PracticeSurface;
   mode: SessionMode;
@@ -344,6 +368,8 @@ export async function listSessions(limit = 10, id?: string): Promise<SessionSumm
     .select({
       id: practiceSessions.id,
       label: practiceSessions.label,
+      sourceSlug: studySources.slug,
+      sourceDisplayName: studySources.name,
       sourceName: practiceSessions.sourceName,
       surface: practiceSessions.surface,
       mode: practiceSessions.mode,
@@ -354,12 +380,14 @@ export async function listSessions(limit = 10, id?: string): Promise<SessionSumm
     })
     .from(practiceSessions)
     .leftJoin(practiceQuestions, eq(practiceQuestions.sessionId, practiceSessions.id))
+    .leftJoin(studySources, eq(studySources.id, practiceSessions.sourceId))
     .where(id ? eq(practiceSessions.id, id) : undefined)
-    .groupBy(practiceSessions.id)
+    .groupBy(practiceSessions.id, studySources.slug, studySources.name)
     .orderBy(desc(practiceSessions.takenAt))
     .limit(Math.min(Math.max(limit, 1), 100));
-  return rows.map((r) => ({
+  return rows.map(({ sourceSlug, sourceDisplayName, ...r }) => ({
     ...r,
+    source: sourceSlug && sourceDisplayName ? { slug: sourceSlug, name: sourceDisplayName } : null,
     takenAt: r.takenAt.toISOString(),
     graded: Number(r.graded),
     correct: Number(r.correct),
@@ -371,11 +399,13 @@ export interface UpdateSessionInput {
   mode?: SessionMode;
   label?: string;
   takenAt?: Date;
+  /** Catalog source: slug, name or alias; the string "none" unlinks the session. */
+  source?: string;
 }
 
 export interface UpdateSessionResult {
   session: SessionSummary;
-  /** Which of mode / label / taken_at actually changed (unchanged values are skipped). */
+  /** Which of mode / label / taken_at / source actually changed (unchanged values are skipped). */
   changed: string[];
   /** Evidence rows rewritten when mode or taken_at changed; null when neither did. */
   observations: { removed: number; written: number } | null;
@@ -408,6 +438,28 @@ export async function updateSession(input: UpdateSessionInput): Promise<UpdateSe
   if (input.takenAt !== undefined && input.takenAt.getTime() !== current.takenAt.getTime()) {
     patch.takenAt = input.takenAt;
     changed.push("taken_at");
+  }
+  const sourceText = input.source?.trim();
+  if (sourceText) {
+    let sourceId: string | null;
+    if (sourceText.toLowerCase() === "none") sourceId = null;
+    else {
+      const sources = await loadStudySources();
+      const match = resolveSource(sources, sourceText);
+      if (!match) {
+        throw new Error(
+          `No study source matches "${sourceText}". Use a slug from list_sources (${sources
+            .filter((s) => s.active)
+            .map((s) => s.slug)
+            .join(", ")}) or "none" to unlink.`,
+        );
+      }
+      sourceId = match.id;
+    }
+    if (sourceId !== current.sourceId) {
+      patch.sourceId = sourceId;
+      changed.push("source");
+    }
   }
   if (changed.length > 0) await db.update(practiceSessions).set(patch).where(eq(practiceSessions.id, current.id));
 

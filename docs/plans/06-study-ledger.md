@@ -68,6 +68,9 @@ Reconciled against the repo on 2026-10-27 and built the same day. Exam: JLPT N4,
   `match` label and an item that is only a prefix of the query (まで for 〜までに) ranks
   last, so a near miss is not read as a hit. Root causes promoted from use:
   context-cue-missed, distractor-bias, kanji-lookalike, katakana-decoding.
+- Study sources are a catalog, not free text (2026-11-04): `study_sources`,
+  `practice_sessions.source_id`, `study_log` for time with no graded questions, and the
+  `list_sources` / `log_study` tools. See [08 — Study sources](./08-study-sources.md).
 - Cut before the freeze: Hindsight sidecar, GCS bucket, embedded Hub chat, weekly Batches
   readiness job, Anki sync, app rename, OAuth on the endpoint.
 
