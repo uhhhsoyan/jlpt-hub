@@ -160,6 +160,10 @@ export const ROOT_CAUSES = [
   "misparse",
   "careless",
   "time-pressure",
+  "context-cue-missed",
+  "distractor-bias",
+  "kanji-lookalike",
+  "katakana-decoding",
 ] as const;
 export type RootCause = (typeof ROOT_CAUSES)[number];
 
@@ -174,6 +178,10 @@ export const ROOT_CAUSE_LABEL: Record<RootCause, string> = {
   misparse: "Misparse",
   careless: "Careless",
   "time-pressure": "Time pressure",
+  "context-cue-missed": "Context cue missed",
+  "distractor-bias": "Distractor bias",
+  "kanji-lookalike": "Kanji lookalike",
+  "katakana-decoding": "Katakana decoding",
 };
 
 export function isKnownRootCause(cause: string): cause is RootCause {

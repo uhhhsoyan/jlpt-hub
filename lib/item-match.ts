@@ -36,6 +36,13 @@ export interface IndexRow {
   aliases: string[] | null;
 }
 
+/**
+ * How a suggestion matched the query. "prefix-only" means the item's form is merely a prefix
+ * of the query (まで for 〜までに, 方/かた for かたづける): usually a different, shorter item,
+ * so it ranks below every other kind of hit and should not be read as the one meant.
+ */
+export type SuggestionMatch = "exact" | "extends" | "contains" | "prefix-only" | "meaning";
+
 export interface ItemSuggestion {
   id: string;
   kind: ItemKind;
@@ -43,6 +50,7 @@ export interface ItemSuggestion {
   headword: string;
   reading: string;
   meaning: string;
+  match?: SuggestionMatch;
 }
 
 /** key -> ids sharing that key; only a single id means an unambiguous match. */
@@ -125,8 +133,9 @@ export function toSuggestion(row: IndexRow): ItemSuggestion {
 
 /**
  * Near matches for a tag that did not resolve, or for a free-text lookup: substring hits on
- * headword, aliases, reading and meaning, ranked exact > starts-with > contains, same kind
- * first, N5 before N4. Pure; `findItems` is the DB-backed wrapper.
+ * headword, aliases, reading and meaning, ranked exact > extends (item form starts with the
+ * query) > contains > meaning > prefix-only (item form is a strict prefix of the query), same
+ * kind first, N5 before N4. Pure; `findItems` is the DB-backed wrapper.
  */
 export function suggestItems(index: ItemIndex, query: string, opts: { kind?: ItemKind | null; limit?: number } = {}): ItemSuggestion[] {
   const limit = opts.limit ?? 5;
@@ -135,24 +144,31 @@ export function suggestItems(index: ItemIndex, query: string, opts: { kind?: Ite
   const lower = q.toLowerCase();
   if (!q) return [];
 
-  const scored: { row: IndexRow; score: number }[] = [];
+  const SCORE: Record<SuggestionMatch, number> = { exact: 100, extends: 60, contains: 40, meaning: 20, "prefix-only": 10 };
+  const scored: { row: IndexRow; score: number; match: SuggestionMatch }[] = [];
   for (const row of index.rows) {
     const forms = [row.headword, ...(row.aliases ?? []), row.reading].filter(Boolean);
-    let best = 0;
+    let best: SuggestionMatch | null = null;
+    const consider = (m: SuggestionMatch) => {
+      if (best === null || SCORE[m] > SCORE[best]) best = m;
+    };
     for (const form of forms) {
       const f = looseKey(form);
-      if (form === q || (loose && f === loose)) best = Math.max(best, 100);
-      else if (loose && (f.startsWith(loose) || loose.startsWith(f) && f.length >= 2)) best = Math.max(best, 60);
-      else if (loose && f.includes(loose)) best = Math.max(best, 40);
+      if (form === q || (loose && f === loose)) consider("exact");
+      else if (loose && f.startsWith(loose)) consider("extends");
+      else if (loose && f.includes(loose)) consider("contains");
+      else if (loose && f.length >= 2 && loose.startsWith(f)) consider("prefix-only");
     }
-    if (best === 0 && lower.length >= 3 && row.meaning.toLowerCase().includes(lower)) best = 20;
-    if (best === 0) continue;
-    if (opts.kind && row.kind === opts.kind) best += 5;
-    if (row.level === "N5") best += 1;
-    scored.push({ row, score: best });
+    if (best === null && lower.length >= 3 && row.meaning.toLowerCase().includes(lower)) best = "meaning";
+    if (best === null) continue;
+    let score = SCORE[best];
+    // A different kind than the tag asked for is weaker evidence, not stronger.
+    if (opts.kind) score += row.kind === opts.kind ? 5 : -5;
+    if (row.level === "N5") score += 1;
+    scored.push({ row, score, match: best });
   }
   scored.sort((a, b) => b.score - a.score || a.row.headword.length - b.row.headword.length);
-  return scored.slice(0, limit).map((s) => toSuggestion(s.row));
+  return scored.slice(0, limit).map((s) => ({ ...toSuggestion(s.row), match: s.match }));
 }
 
 /** Resolve free text to an item of any kind (headword, alias, kana reading, loosened pattern). */

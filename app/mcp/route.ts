@@ -12,6 +12,7 @@ import {
   logInsight,
   normalizeSection,
   relinkUnresolved,
+  updateSession,
   type AttemptInput,
 } from "@/lib/ledger";
 import { getReadiness } from "@/lib/readiness";
@@ -31,7 +32,7 @@ import { normalizeRootCause, ROOT_CAUSES, SESSION_MODES } from "@/lib/types";
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
 
-const SERVER_INFO = { name: "jlpt-hub-study-ledger", version: "1.1.0" };
+const SERVER_INFO = { name: "jlpt-hub-study-ledger", version: "1.2.0" };
 
 /**
  * The token is accepted two ways: `Authorization: Bearer <token>` (Claude Code's .mcp.json,
@@ -108,7 +109,7 @@ function buildServer(): McpServer {
     {
       title: "Log practice attempts",
       description:
-        "Record one reviewed page/set of questions as a confirmed session. mode=practice (default) is closed-book work: answers count toward accuracy, the weak list and root-cause reports. mode=lesson is open-book work done right after reading the explanation (textbook example sentences, れんしゅう with the notes in view): it is recorded as exposure, moves items from unseen to learning, and is excluded from every accuracy figure. Each attempt carries right/wrong, the item(s) it tests, a free-text note, and for misses a root_cause (preferred list given on the field; any label accepted). Nothing is rejected for not fitting a category: unknown sections land in 'other' with the raw word kept, and 'meta' takes anything else. Returns the session id and any tags that matched no library item, each with the closest items; the tag text is kept, so relink_tags can attach it later once the item or alias exists.",
+        "Record one reviewed page/set of questions as a confirmed session. mode=practice (default) is closed-book work: answers count toward accuracy, the weak list and root-cause reports. mode=lesson is open-book work done right after reading the explanation (textbook example sentences, れんしゅう with the notes in view): it is recorded as exposure, moves items from unseen to learning, and is excluded from every accuracy figure. Each attempt carries right/wrong, the item(s) it tests, a free-text note, and for misses a root_cause (preferred list given on the field; any label accepted). Nothing is rejected for not fitting a category: unknown sections land in 'other' with the raw word kept, and 'meta' takes anything else. Result: sessionId, mode, questions, graded (attempts with correct true/false), correct, observations (evidence rows written: one per resolved tag per graded attempt in practice, one per resolved tag per attempt in lesson; tags that matched nothing write none until relink_tags), and unresolvedTags (tags that matched no library item, each with the closest items and a match label; 'prefix-only' means a shorter, different item, not the one meant). The tag text is kept, so relink_tags can attach it later once the item or alias exists. A session logged with the wrong mode, label or date is fixed with update_session, not re-logged.",
       inputSchema: {
         label: z.string().describe("e.g. '500問 Week 3 Day 2', 'Mock test 1 文法', 'SKM N4 L1 れんしゅう1'"),
         source_name: z.string().optional().describe("e.g. 'Shin Nihongo 500 Mon N4-N5'"),
@@ -266,7 +267,7 @@ function buildServer(): McpServer {
     {
       title: "Find library items",
       description:
-        "Look up library items by headword, alias, kana reading, grammar pattern or English meaning, ranked by closeness. Use it before tagging when unsure of the canonical form, and to check whether an item exists at all.",
+        "Look up library items by headword, alias, kana reading, grammar pattern or English meaning, ranked by closeness. Use it before tagging when unsure of the canonical form, and to check whether an item exists at all. Each hit carries match: exact, extends (the item is a longer form of the query), contains, meaning, or prefix-only (the item is merely a prefix of the query, e.g. まで for 〜までに: a different, shorter item, so an unresolved tag is still unresolved).",
       inputSchema: {
         query: z.string().min(1).describe("e.g. 'ほど', 'いちばん', 'black tea', '〜と〜とどちら'"),
         kind: z.enum(["vocab", "kanji", "grammar"]).optional().describe("Prefer this kind in the ranking"),
@@ -312,6 +313,37 @@ function buildServer(): McpServer {
     async (args) => {
       try {
         return ok(await listSessions(args.limit));
+      } catch (e) {
+        return fail(e);
+      }
+    },
+  );
+
+  server.registerTool(
+    "update_session",
+    {
+      title: "Correct a logged session",
+      description:
+        "Fix a session that was logged with the wrong mode, label or taken_at, instead of re-logging it. Pass only the fields to change. Changing mode or taken_at rebuilds the session's evidence rows (answers become exposures when it turns into a lesson, and back); questions, tags, notes and insights are untouched. Use list_sessions to find the id.",
+      inputSchema: {
+        session_id: z.string().uuid(),
+        mode: z.enum(SESSION_MODES).optional().describe("practice (closed book, counts) or lesson (open book, exposure only)"),
+        label: z.string().min(1).optional(),
+        taken_at: z.string().optional().describe("ISO date or datetime the work was done"),
+      },
+      annotations: { idempotentHint: true },
+    },
+    async (args) => {
+      try {
+        let takenAt: Date | undefined;
+        if (args.taken_at !== undefined) {
+          takenAt = new Date(args.taken_at);
+          if (Number.isNaN(takenAt.getTime())) throw new Error(`Unparseable taken_at: ${args.taken_at}`);
+        }
+        if (args.mode === undefined && args.label === undefined && takenAt === undefined) {
+          throw new Error("Nothing to change: pass mode, label and/or taken_at.");
+        }
+        return ok(await updateSession({ sessionId: args.session_id, mode: args.mode, label: args.label, takenAt }));
       } catch (e) {
         return fail(e);
       }

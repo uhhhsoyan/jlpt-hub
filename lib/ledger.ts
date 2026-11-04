@@ -118,6 +118,7 @@ export interface LogAttemptsResult {
   /**
    * Tags that matched no library item. The tag text is kept on the question, so once the
    * item exists (or gains an alias) `relink_tags` attaches the evidence retroactively.
+   * Each suggestion carries `match`; "prefix-only" is a shorter, different item, not a hit.
    */
   unresolvedTags: UnresolvedTag[];
 }
@@ -337,7 +338,7 @@ export interface SessionSummary {
 }
 
 /** Most recent sessions with their scores, for an MCP client to see what is already logged. */
-export async function listSessions(limit = 10): Promise<SessionSummary[]> {
+export async function listSessions(limit = 10, id?: string): Promise<SessionSummary[]> {
   const db = getDb();
   const rows = await db
     .select({
@@ -353,6 +354,7 @@ export async function listSessions(limit = 10): Promise<SessionSummary[]> {
     })
     .from(practiceSessions)
     .leftJoin(practiceQuestions, eq(practiceQuestions.sessionId, practiceSessions.id))
+    .where(id ? eq(practiceSessions.id, id) : undefined)
     .groupBy(practiceSessions.id)
     .orderBy(desc(practiceSessions.takenAt))
     .limit(Math.min(Math.max(limit, 1), 100));
@@ -362,6 +364,85 @@ export async function listSessions(limit = 10): Promise<SessionSummary[]> {
     graded: Number(r.graded),
     correct: Number(r.correct),
   }));
+}
+
+export interface UpdateSessionInput {
+  sessionId: string;
+  mode?: SessionMode;
+  label?: string;
+  takenAt?: Date;
+}
+
+export interface UpdateSessionResult {
+  session: SessionSummary;
+  /** Which of mode / label / taken_at actually changed (unchanged values are skipped). */
+  changed: string[];
+  /** Evidence rows rewritten when mode or taken_at changed; null when neither did. */
+  observations: { removed: number; written: number } | null;
+}
+
+type LinkedQuestionRow = Record<string, unknown> & { question_id: string; item_id: string; is_correct: boolean | null };
+
+/**
+ * Correct a session logged with the wrong mode, label or date, instead of re-logging it.
+ * Questions, tags, notes and insights are untouched. When mode or taken_at changes, the
+ * session's observations are rebuilt from its question_items with the new values, so a
+ * practice session turned lesson stops counting toward accuracy (and vice versa).
+ */
+export async function updateSession(input: UpdateSessionInput): Promise<UpdateSessionResult> {
+  const db = getDb();
+  const [current] = await db.select().from(practiceSessions).where(eq(practiceSessions.id, input.sessionId));
+  if (!current) throw new Error(`No session with id ${input.sessionId}.`);
+
+  const patch: Partial<typeof practiceSessions.$inferInsert> = {};
+  const changed: string[] = [];
+  if (input.mode !== undefined && input.mode !== current.mode) {
+    patch.mode = input.mode;
+    changed.push("mode");
+  }
+  const label = input.label?.trim();
+  if (label && label !== current.label) {
+    patch.label = label;
+    changed.push("label");
+  }
+  if (input.takenAt !== undefined && input.takenAt.getTime() !== current.takenAt.getTime()) {
+    patch.takenAt = input.takenAt;
+    changed.push("taken_at");
+  }
+  if (changed.length > 0) await db.update(practiceSessions).set(patch).where(eq(practiceSessions.id, current.id));
+
+  let obs: UpdateSessionResult["observations"] = null;
+  if (changed.includes("mode") || changed.includes("taken_at")) {
+    const mode = patch.mode ?? current.mode;
+    const occurredAt = patch.takenAt ?? current.takenAt;
+    const removed = await db.execute(sql`
+      DELETE FROM observations WHERE source = 'practice' AND meta->>'sessionId' = ${current.id} RETURNING id
+    `);
+    const links = await db.execute<LinkedQuestionRow>(sql`
+      SELECT qi.question_id, qi.item_id, q.is_correct
+      FROM question_items qi
+      JOIN practice_questions q ON q.id = qi.question_id
+      WHERE q.session_id = ${current.id} AND qi.role = 'tested'
+    `);
+    const obsRows: (typeof observations.$inferInsert)[] = [];
+    for (const l of links.rows) {
+      const kind = evidenceKind(mode, l.is_correct);
+      if (!kind) continue;
+      obsRows.push({
+        itemId: l.item_id,
+        source: "practice",
+        kind,
+        correct: l.is_correct,
+        occurredAt,
+        meta: { sessionId: current.id, questionId: l.question_id, surface: current.surface, mode, rebuilt: true },
+      });
+    }
+    if (obsRows.length > 0) await db.insert(observations).values(obsRows);
+    obs = { removed: removed.rows.length, written: obsRows.length };
+  }
+
+  const session = (await listSessions(1, current.id))[0];
+  return { session, changed, observations: obs };
 }
 
 export interface RelinkResult {

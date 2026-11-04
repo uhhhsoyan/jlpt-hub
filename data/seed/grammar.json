@@ -1557,5 +1557,18 @@
       "どちらも〜ない",
       "どっちも"
     ]
+  },
+  {
+    "pattern": "〜までに",
+    "level": "N4",
+    "meaning": "by (a deadline): the action happens at some point before the time; contrast まで = continuously until",
+    "example": "二十日までに旅行のお金をはらいます。",
+    "exampleReading": "はつかまでに りょこうの おかねを はらいます。",
+    "exampleEnglish": "I will pay the money for the trip by the 20th.",
+    "aliases": [
+      "までに",
+      "〜までに〜",
+      "までには"
+    ]
   }
 ]
