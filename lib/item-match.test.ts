@@ -9,6 +9,9 @@ const rows: IndexRow[] = [
   { id: "hodo-v", kind: "vocab", level: "N4", headword: "ほど", reading: "ほど", meaning: "extent, degree", aliases: null },
   { id: "ichiban-g", kind: "grammar", level: "N5", headword: "〜が一番", reading: "", meaning: "superlative", aliases: ["一番", "いちばん", "がいちばん"] },
   { id: "ichiban-v", kind: "vocab", level: "N5", headword: "一番", reading: "いちばん", meaning: "number one, the most", aliases: null },
+  { id: "made", kind: "grammar", level: "N5", headword: "まで", reading: "", meaning: "until", aliases: null },
+  { id: "tokoro-v", kind: "vocab", level: "N5", headword: "所", reading: "ところ", meaning: "place", aliases: null },
+  { id: "ru-tokoro", kind: "grammar", level: "N4", headword: "〜るところだ", reading: "", meaning: "about to do ~", aliases: null },
   { id: "dochira-v", kind: "vocab", level: "N5", headword: "どちら", reading: "どちら", meaning: "which (of two)", aliases: null },
   { id: "dochira-g", kind: "grammar", level: "N5", headword: "〜と〜とどちら", reading: "", meaning: "which of A and B", aliases: ["とどちら", "どちらが"] },
   { id: "kutsu", kind: "vocab", level: "N5", headword: "靴", reading: "くつ", meaning: "shoes", aliases: null },
@@ -59,4 +62,23 @@ test("suggestions rank exact and prefix hits first, same kind preferred", () => 
   assert.deepEqual(kutsu, ["kutsu", "kutsushita"]);
   assert.deepEqual(suggestItems(index, "shoes").map((x) => x.id), ["kutsu"]);
   assert.deepEqual(suggestItems(index, "   "), []);
+});
+
+test("an item that is only a prefix of the query ranks last and is labelled prefix-only", () => {
+  // まで is a different item from 〜までに; it is still offered, but marked so it is not taken for a hit.
+  const madeni = suggestItems(index, "〜までに", { kind: "grammar" });
+  assert.deepEqual(
+    madeni.map((x) => [x.id, x.match]),
+    [["made", "prefix-only"]],
+  );
+  // 〜るところだ contains ところだ; vocab 所 (reading ところ) is only a prefix of it and the wrong kind.
+  const tokoro = suggestItems(index, "〜ところだ", { kind: "grammar" });
+  assert.deepEqual(
+    tokoro.map((x) => [x.id, x.match]),
+    [
+      ["ru-tokoro", "contains"],
+      ["tokoro-v", "prefix-only"],
+    ],
+  );
+  assert.equal(suggestItems(index, "ほど", { kind: "grammar" })[0]?.match, "exact");
 });

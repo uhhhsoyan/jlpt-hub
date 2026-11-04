@@ -8,6 +8,42 @@
       "meaning": "black tea",
       "pos": null,
       "level": "N5"
+    },
+    {
+      "headword": "通う",
+      "reading": "かよう",
+      "romaji": "kayou",
+      "meaning": "to commute, to go regularly (to school, work, a lesson)",
+      "pos": "verb",
+      "level": "N4"
+    },
+    {
+      "headword": "片付ける",
+      "reading": "かたづける",
+      "romaji": "katazukeru",
+      "meaning": "to tidy up, to put away, to finish off",
+      "pos": "verb",
+      "level": "N4",
+      "aliases": [
+        "かたづける",
+        "片づける"
+      ]
+    },
+    {
+      "headword": "ドイツ",
+      "reading": "どいつ",
+      "romaji": "doitsu",
+      "meaning": "Germany",
+      "pos": null,
+      "level": "N5"
+    },
+    {
+      "headword": "有名",
+      "reading": "ゆうめい",
+      "romaji": "yuumei",
+      "meaning": "famous",
+      "pos": "na-adjective",
+      "level": "N5"
     }
   ]
 }

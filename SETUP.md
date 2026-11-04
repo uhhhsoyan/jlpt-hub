@@ -97,7 +97,7 @@ The Hub exposes its study ledger as an MCP server at `/mcp` (Streamable HTTP, st
 JSON responses) so Claude can log reviewed practice pages from anywhere — the claude.ai
 project, Claude Code, the mobile app — instead of appending to a CSV. Tools:
 `log_attempts` (with `mode` practice|lesson), `log_insight`, `get_insights`, `find_items`,
-`relink_tags`, `get_weakness_report`, `get_readiness`, `list_sessions`, `sync_status`.
+`relink_tags`, `update_session`, `get_weakness_report`, `get_readiness`, `list_sessions`, `sync_status`.
 Source: `app/mcp/route.ts`, write path in `lib/ledger.ts`, tag matching in `lib/item-match.ts`.
 
 1. **Token.** `npm run env:set -- MCP_TOKEN=$(openssl rand -hex 32)` then `npm run env:pull`.

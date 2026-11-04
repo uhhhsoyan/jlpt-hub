@@ -62,6 +62,12 @@ Reconciled against the repo on 2026-10-27 and built the same day. Exam: JLPT N4,
   back with suggestions; `find_items` looks up canonical forms; `relink_tags` attaches
   evidence once the item exists. Windowed reports say how many practice sessions the
   window holds so an empty result is never mistaken for missing data.
+- Sessions are corrected, not re-logged (2026-11-04, after the second claude.ai session
+  logged six open-book sets as practice). `update_session` changes mode / label / taken_at
+  and rebuilds that session's observations from its question links. Suggestions carry a
+  `match` label and an item that is only a prefix of the query (まで for 〜までに) ranks
+  last, so a near miss is not read as a hit. Root causes promoted from use:
+  context-cue-missed, distractor-bias, kanji-lookalike, katakana-decoding.
 - Cut before the freeze: Hindsight sidecar, GCS bucket, embedded Hub chat, weekly Batches
   readiness job, Anki sync, app rename, OAuth on the endpoint.
 
