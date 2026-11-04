@@ -16,6 +16,7 @@ interface SessionSummary {
   label: string;
   sourceName: string | null;
   status: PracticeSessionRow["status"];
+  mode: PracticeSessionRow["mode"];
   takenAt: Date;
   graded: number;
   correct: number;
@@ -55,6 +56,7 @@ async function loadSessions(): Promise<DbState> {
       label: r.label,
       sourceName: r.sourceName,
       status: r.status,
+      mode: r.mode,
       takenAt: r.takenAt,
       graded: scores.get(r.id)?.graded ?? 0,
       correct: scores.get(r.id)?.correct ?? 0,
@@ -133,6 +135,7 @@ export default async function PracticePage() {
                 <p className="text-sm text-neutral-500 dark:text-neutral-400">
                   {session.sourceName && <>{session.sourceName} · </>}
                   {session.takenAt.toISOString().slice(0, 10)}
+                  {session.mode === "lesson" && <> · open book</>}
                   {session.graded > 0 && (
                     <>
                       {" "}

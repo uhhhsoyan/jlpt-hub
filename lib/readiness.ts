@@ -2,7 +2,14 @@ import { and, inArray } from "drizzle-orm";
 import { getDb } from "@/lib/db";
 import { items } from "@/lib/db/schema";
 import { getMasteryMap, type MasteryEntry } from "@/lib/mastery";
-import { getAccuracyBySection, getMissesByRootCause, type RootCauseMisses, type SectionAccuracy } from "@/lib/weakness";
+import {
+  getAccuracyBySection,
+  getMissesByRootCause,
+  getPracticeWindow,
+  type PracticeWindow,
+  type RootCauseMisses,
+  type SectionAccuracy,
+} from "@/lib/weakness";
 import type { ItemKind, JlptLevel, MasteryStatus } from "@/lib/types";
 
 /** JLPT N4, Sunday Dec 6 2026 (also hard-coded in app/progress/exam-countdown.tsx). */
@@ -70,9 +77,10 @@ export interface Readiness {
   daysToExam: number;
   coverage: ReadinessBucket[];
   overall: { total: number; touchedPct: number; readyPct: number };
-  /** Trailing 30 days of confirmed practice. */
+  /** Trailing window of confirmed closed-book practice (lessons excluded). */
   recent: {
     windowDays: number;
+    practice: PracticeWindow;
     bySection: SectionAccuracy[];
     missesByRootCause: RootCauseMisses[];
   };
@@ -84,8 +92,9 @@ function pct(part: number, total: number): number {
 
 /** Inventory coverage × mastery × recent accuracy: the number the final weeks are managed by. */
 export async function getReadiness(windowDays = 30): Promise<Readiness> {
-  const [buckets, bySection, missesByRootCause] = await Promise.all([
+  const [buckets, practice, bySection, missesByRootCause] = await Promise.all([
     getCoverage(),
+    getPracticeWindow(windowDays),
     getAccuracyBySection(windowDays),
     getMissesByRootCause(windowDays),
   ]);
@@ -107,6 +116,6 @@ export async function getReadiness(windowDays = 30): Promise<Readiness> {
     daysToExam,
     coverage,
     overall: { total, touchedPct: pct(touched, total), readyPct: pct(ready, total) },
-    recent: { windowDays, bySection, missesByRootCause },
+    recent: { windowDays, practice, bySection, missesByRootCause },
   };
 }

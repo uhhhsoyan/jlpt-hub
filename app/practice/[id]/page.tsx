@@ -143,6 +143,7 @@ function SessionDetail({
               {session.sourceName && <>{session.sourceName} · </>}
               {session.takenAt.toISOString().slice(0, 10)}
               {SURFACE_LABEL[session.surface] && <> · {SURFACE_LABEL[session.surface]}</>}
+              {session.mode === "lesson" && <> · open book (exposure only)</>}
               {session.timed != null && <> · {session.timed ? "timed" : "untimed"}</>}
             </p>
           </div>

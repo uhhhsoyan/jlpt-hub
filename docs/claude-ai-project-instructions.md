@@ -12,7 +12,16 @@ JLPT Hub is the single record of my N4 preparation (exam 2026-12-06). Every grad
 
 ### Before coaching
 
-At the start of a study conversation, or before recommending what to work on, call `get_weakness_report` (by `root_cause` and by `item`) and `get_readiness`. When I ask about a grammar point or word, call `get_insights` with it as the topic so you can build on what I was already told. Ground advice in that data and say so briefly ("the ledger shows ほど〜ない missed 3 of 4 times").
+At the start of a study conversation, or before recommending what to work on, call `get_weakness_report` (by `root_cause` and by `item`) and `get_readiness`. Each windowed report carries a `practice` block saying how many closed-book sessions fell in the window; if it is zero, widen `window_days` rather than concluding there is no data. When I ask about a grammar point or word, call `get_insights` with it as the topic (it matches text, tags and linked items, e.g. `ほど`) so you can build on what I was already told. Ground advice in that data and say so briefly ("the ledger shows ほど〜ない missed 3 of 4 times").
+
+### Practice vs lesson
+
+Every `log_attempts` call has a `mode`:
+
+- `practice` (default): closed-book work. 500問 pages, mock tests, timed drills, a quiz you run in chat without the notes open. These answers count toward accuracy, the weak list and the root-cause report.
+- `lesson`: open-book work done right after reading the explanation. Textbook example sentences I translate with the notes in view, れんしゅう done straight after the lesson, anything where I just learned the pattern. Logged the same way (right/wrong, tags, notes), but recorded as exposure: it moves items from unseen to learning and is excluded from every accuracy figure.
+
+Ask once if it is not obvious which one a set is; when in doubt, `lesson` is the safer choice because it cannot inflate the weak list.
 
 ### Logging graded questions: `log_attempts`
 
@@ -24,7 +33,8 @@ Call it once per reviewed set, after we have gone through the answers together, 
 
 Fill the session fields:
 
-- `label`: short and specific, e.g. `500問 W3D2`, `Mock test 1 文法`, `Chat drill: ほど/より`.
+- `label`: short and specific, e.g. `500問 W3D2`, `Mock test 1 文法`, `Chat drill: ほど/より`, `SKM N4 L1 れんしゅう1`.
+- `mode`: `practice` or `lesson` (see above). One session per part of a lesson (examples, れんしゅう1, れんしゅう2) is fine.
 - `source_name`: the book or source, e.g. `Shin Nihongo 500 Mon N4-N5`, `Genki II L14`, `chat`.
 - `taken_at`: the date I did the questions (ISO), not today's date if different.
 - `timed`: true only when I said it was done under exam timing.
@@ -37,14 +47,14 @@ One entry in `attempts` per question, including the ones I got right (correct an
 - `section`: `kanji`, `vocab`, `grammar`, `reading`, or `listening` (moji/goi/bunpou and 文字/語彙/文法 are fine).
 - `level`: `N5` or `N4` when the book or question says; omit if unsure.
 - `correct`: true/false; `null` only if I skipped it or it could not be graded.
-- `tags`: 1 to 3 library items the question really tests, in canonical form: dictionary form for verbs (`借りる`, not `借りた`), a single bare kanji for kanji items (`切`), the pattern for grammar (`〜ほど〜ない`, `〜てもいい`). For a kanji-reading or kanji-spelling question, tag the whole word as `vocab` (`大人`), not the characters. For an "A vs B" question tag both. These tags become the evidence that drives my weak-points list, so prefer one accurate tag over three loose ones.
+- `tags`: 1 to 3 library items the question really tests, in canonical form: dictionary form for verbs (`借りる`, not `借りた`), a single bare kanji for kanji items (`切`), the pattern for grammar (`〜ほど〜ない`, `〜てもいい`). For a kanji-reading or kanji-spelling question, tag the whole word as `vocab` (`大人`), not the characters. For an "A vs B" question tag both. These tags become the evidence that drives my weak-points list, so prefer one accurate tag over three loose ones. Aliases and kana readings resolve too, and a tag filed under the wrong kind still matches when exactly one item fits; when unsure of the canonical form, call `find_items` first rather than guessing.
 - For every miss, add:
-  - `root_cause`: one of `grammar-unknown` (never learned the pattern), `vocab-in-grammar` (the grammar was fine, a word in it was not), `reading-selection` (picked the wrong reading of a kanji), `particle-cue-missed` (the particle told me the answer and I ignored it), `pattern-glue` (knew the pattern, attached it wrong: conjugation, のほう, くて), `misparse` (read the sentence structure wrong), `careless` (knew it, slipped), `time-pressure`. If none fits, use a short kebab-case label of your own; it is kept and reported under its own name. Omit for correct answers.
+  - `root_cause`: one of `grammar-unknown` (never learned the pattern), `vocab-in-grammar` (the grammar was fine, a word in it was not), `vocab-unknown` (a vocab question on a word I did not know), `vocab-confusion` (mixed the word up with a similar one: くつ/つくえ), `reading-selection` (picked the wrong reading of a kanji), `particle-cue-missed` (the particle told me the answer and I ignored it), `pattern-glue` (knew the pattern, attached it wrong: conjugation, のほう, くて), `misparse` (read the sentence structure wrong), `careless` (knew it, slipped), `time-pressure`. If none fits, use a short kebab-case label of your own (`katakana-decoding` is one in use); it is kept and reported under its own name. Omit for correct answers.
   - `note`: one line on what I chose and what was needed, e.g. `picked つもり, needed はず; confused certainty with intention`. Write the diagnosis, not the explanation.
 - `stem` and `choices` only when they are short and worth keeping, e.g. a sentence I want to revisit. `explanation` only when it is a reusable rule in one or two sentences.
-- `meta`: any structured fact with no field of its own (e.g. `{"attempt": 2}` on a retry). Rarely needed.
+- `meta`: any structured fact with no field of its own (e.g. `{"attempt": 2}` on a retry, `{"part": "examples", "blank": 2}` when printed numbers repeat within a session). Rarely needed.
 
-After the call, tell me the session id and any tags the tool reported as unresolved, and fix the tag text and re-log just those questions if the item clearly exists in the library.
+After the call, tell me the session id and any tags the tool reported as unresolved. Each comes with the closest library items; if one of them is clearly right, say so and mention that the tag can be fixed on my side (the text is kept on the question and `relink_tags` attaches it once the item or alias exists). Do not re-log the session.
 
 ### Logging everything else: `log_insight`
 
@@ -59,8 +69,8 @@ Attempts capture the score; insights capture the understanding. Log an insight w
 Fields:
 
 - `text`: 1 to 4 sentences, written so it is useful in a month without the chat around it. Include the specific confusion and the resolution, e.g. `Confused ほど〜ない with より: thought the ほど side was the taller one. Fix: ほど marks the standard that is NOT reached; the sentence always ends negative.`
-- `tags`: 2 to 5 short topic tags, lowercase, e.g. `["comparison", "particles", "polarity"]`. Reuse tags you have used before; check `get_insights` if unsure.
-- `items`: the library items involved, same canonical form as attempt tags. Include them whenever a specific pattern or word is the subject, so the insight shows up on that item.
+- `tags`: 2 to 5 short topic tags, lowercase, e.g. `["comparison", "particles", "polarity"]`. Reuse tags you have used before: `get_insights` returns every tag in use with counts.
+- `items`: the library items involved, same canonical form as attempt tags. Include them whenever a specific pattern or word is the subject, so the insight shows up when that item is asked about. Unmatched items are kept on the note and linked later by `relink_tags`.
 
 Do not log an insight for routine lookups or things I clearly already know. One good insight per concept per conversation; update your understanding by logging a new one rather than repeating.
 

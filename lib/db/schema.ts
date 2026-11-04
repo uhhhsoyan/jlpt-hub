@@ -26,6 +26,7 @@ import type {
   PracticeSurface,
   QuestionTag,
   InsightSource,
+  SessionMode,
 } from "@/lib/types";
 
 // One saved study sentence at one level (N5 or N4). A single workshop generation can
@@ -82,6 +83,9 @@ export const items = pgTable(
     romaji: text("romaji"),
     meaning: text("meaning").notNull(),
     detail: jsonb("detail").$type<ItemDetail>(),
+    // Alternate spellings a logging surface might use for this item ("ほど〜ない", "のほう",
+    // "いちばん"); lib/resolve-items.ts matches tags against these after the headword.
+    aliases: jsonb("aliases").$type<string[]>(),
     createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
   },
   (t) => [
@@ -123,7 +127,7 @@ export const observations = pgTable(
       .references(() => items.id, { onDelete: "cascade" }),
     source: text("source").$type<ObservationSource>().notNull(),
     kind: text("kind").$type<ObservationKind>().notNull(),
-    correct: boolean("correct"), // answer only
+    correct: boolean("correct"), // answer, and exposure when the open-book answer was graded
     srsStage: integer("srs_stage"), // srs_state only (WaniKani stages 0–9)
     meta: jsonb("meta").$type<Record<string, unknown>>(),
     occurredAt: timestamp("occurred_at", { withTimezone: true }).notNull(),
@@ -147,6 +151,8 @@ export const practiceSessions = pgTable("practice_sessions", {
   status: text("status").$type<PracticeSessionStatus>().notNull().default("review"),
   // Which surface wrote the session: the Hub photo flow, an MCP client, or the CSV import.
   surface: text("surface").$type<PracticeSurface>().notNull().default("hub"),
+  // practice (closed book: counts toward accuracy) or lesson (open book: exposure only).
+  mode: text("mode").$type<SessionMode>().notNull().default("practice"),
   // Whether the page was done under exam timing; null when unknown (older sessions).
   timed: boolean("timed"),
   imagePaths: jsonb("image_paths").$type<string[]>().notNull(),
@@ -297,6 +303,9 @@ export const insights = pgTable(
     tags: jsonb("tags").$type<string[]>().notNull().default([]),
     // Optional links into the item graph, when the note is about specific items.
     itemIds: jsonb("item_ids").$type<string[]>().notNull().default([]),
+    // The raw item tags as logged, with itemId null where nothing matched, so a later
+    // relink (new items, new aliases) can attach them without the note being re-logged.
+    items: jsonb("items").$type<QuestionTag[]>().notNull().default([]),
     source: text("source").$type<InsightSource>().notNull(),
     createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
   },

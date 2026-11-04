@@ -1,0 +1,13 @@
+{
+  "note": "Hand-curated vocab the scraped N5/N4 lists lack (scripts/scrape-lists.py regenerates vocab-n5/n4.json, so additions live here). level is the lowest level the word is needed at.",
+  "words": [
+    {
+      "headword": "紅茶",
+      "reading": "こうちゃ",
+      "romaji": "koucha",
+      "meaning": "black tea",
+      "pos": null,
+      "level": "N5"
+    }
+  ]
+}

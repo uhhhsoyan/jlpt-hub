@@ -96,13 +96,17 @@ npx vercel            # link + deploy; set env vars in the Vercel dashboard
 The Hub exposes its study ledger as an MCP server at `/mcp` (Streamable HTTP, stateless,
 JSON responses) so Claude can log reviewed practice pages from anywhere — the claude.ai
 project, Claude Code, the mobile app — instead of appending to a CSV. Tools:
-`log_attempts`, `log_insight`, `get_insights`, `get_weakness_report`, `get_readiness`,
-`list_sessions`, `sync_status`. Source: `app/mcp/route.ts`, write path in `lib/ledger.ts`.
+`log_attempts` (with `mode` practice|lesson), `log_insight`, `get_insights`, `find_items`,
+`relink_tags`, `get_weakness_report`, `get_readiness`, `list_sessions`, `sync_status`.
+Source: `app/mcp/route.ts`, write path in `lib/ledger.ts`, tag matching in `lib/item-match.ts`.
 
 1. **Token.** `npm run env:set -- MCP_TOKEN=$(openssl rand -hex 32)` then `npm run env:pull`.
    The endpoint refuses everything while the var is unset.
-2. **Schema.** `npm run db:push` adds `practice_sessions.surface/timed`,
-   `practice_questions.level/root_cause/note`, and the `insights` table.
+2. **Schema.** `npm run db:push` adds `practice_sessions.surface/timed/mode`,
+   `practice_questions.level/root_cause/note/meta`, `items.aliases`, and the `insights`
+   table. Then `npm run db:seed` (aliases and hand-curated items live in
+   `data/seed/grammar.json` / `vocab-extra.json`) and `npm run db:relink` to attach any
+   tags that were logged before their item or alias existed.
 3. **claude.ai** (web, desktop, mobile share one connector): Settings → Connectors → Add
    custom connector → URL `https://<host>/mcp`. Authentication: choose **No sign-in** (the
    form may say it "detected" sign-in; ignore that). Add one request header: name
@@ -120,8 +124,13 @@ project, Claude Code, the mobile app — instead of appending to a CSV. Tools:
    ```
 
 Sessions logged through MCP land as `confirmed` (the review happened in the conversation
-that logged them). Every miss should carry a `root_cause` from `lib/types.ts` —
-`ROOT_CAUSES` — because the "Why you miss" panel on `/progress` groups on it.
+that logged them). `mode=lesson` marks open-book work (textbook examples, れんしゅう right
+after the explanation): it is stored as `exposure` evidence and excluded from accuracy, the
+weak list and the root-cause panel, so only closed-book `practice` moves those. Every
+practice miss should carry a `root_cause` (`ROOT_CAUSES` in `lib/types.ts` is the preferred
+list; any kebab-case label is kept) because the "Why you miss" panel on `/progress` groups
+on it. Tags that match no item are kept with the question; add the item or an alias to the
+seed data, re-seed, and run `npm run db:relink` (or the `relink_tags` tool).
 
 **Importing the old CSV ledger.** Download `jlpt_500_ledger.csv` from the claude.ai project
 files into `data/import/` (gitignored) and run `npm run db:import-ledger`. It creates one

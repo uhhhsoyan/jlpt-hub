@@ -50,6 +50,18 @@ Reconciled against the repo on 2026-10-27 and built the same day. Exam: JLPT N4,
   "custom" row in the report so new categories can emerge before being promoted. Unknown
   section words fall back to `other` with the raw word in `practice_questions.meta`, a
   JSON sink for any structured fact without a column. The free-text `note` is always kept.
+- Practice vs lesson (2026-11-03, after the first real claude.ai session). Open-book work
+  (textbook examples, れんしゅう right after the explanation) was feeding mastery like a
+  test and masking real gaps. `practice_sessions.mode` separates them: lesson attempts are
+  stored as `exposure` observations (unseen → learning) and excluded from accuracy, the
+  weak list and the root-cause report. A "studied this, no score" record is a lesson
+  session with `correct` null, so no separate log_study tool.
+- Unresolved tags are kept and relinked, not re-logged (2026-11-03). Matching tries the
+  tag's own kind, then every kind (どちら logged as grammar still finds the vocab item),
+  with `items.aliases` for loose spellings (ほど / ほど〜ない / 〜ほど〜ない). Misses come
+  back with suggestions; `find_items` looks up canonical forms; `relink_tags` attaches
+  evidence once the item exists. Windowed reports say how many practice sessions the
+  window holds so an empty result is never mistaken for missing data.
 - Cut before the freeze: Hindsight sidecar, GCS bucket, embedded Hub chat, weekly Batches
   readiness job, Anki sync, app rename, OAuth on the endpoint.
 

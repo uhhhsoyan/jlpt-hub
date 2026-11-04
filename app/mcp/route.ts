@@ -6,15 +6,18 @@ import { getDb } from "@/lib/db";
 import { bpSnapshot, wkSnapshot } from "@/lib/db/schema";
 import {
   getInsights,
+  getInsightTagCounts,
   listSessions,
   logAttempts,
   logInsight,
   normalizeSection,
+  relinkUnresolved,
   type AttemptInput,
 } from "@/lib/ledger";
 import { getReadiness } from "@/lib/readiness";
-import { getAccuracyBySection, getMissesByRootCause, getWeakItems } from "@/lib/weakness";
-import { normalizeRootCause, ROOT_CAUSES } from "@/lib/types";
+import { findItems } from "@/lib/resolve-items";
+import { getAccuracyBySection, getMissesByRootCause, getPracticeWindow, getWeakItems } from "@/lib/weakness";
+import { normalizeRootCause, ROOT_CAUSES, SESSION_MODES } from "@/lib/types";
 
 /**
  * The study ledger's MCP endpoint (Streamable HTTP, stateless). One long random bearer
@@ -28,7 +31,7 @@ import { normalizeRootCause, ROOT_CAUSES } from "@/lib/types";
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
 
-const SERVER_INFO = { name: "jlpt-hub-study-ledger", version: "1.0.0" };
+const SERVER_INFO = { name: "jlpt-hub-study-ledger", version: "1.1.0" };
 
 /**
  * The token is accepted two ways: `Authorization: Bearer <token>` (Claude Code's .mcp.json,
@@ -69,7 +72,9 @@ const tagSchema = z.object({
   kind: z.enum(["vocab", "kanji", "grammar"]),
   text: z
     .string()
-    .describe("Canonical form: dictionary form of a verb, a single bare kanji, or a grammar pattern like 〜ておく"),
+    .describe(
+      "Canonical form: dictionary form of a verb, a single bare kanji, or a grammar pattern like 〜ておく. Aliases and kana readings also resolve, and a tag filed under the wrong kind still matches if exactly one item fits; use find_items when unsure.",
+    ),
 });
 
 const attemptSchema = z.object({
@@ -103,12 +108,16 @@ function buildServer(): McpServer {
     {
       title: "Log practice attempts",
       description:
-        "Record one reviewed page/set of practice questions as a confirmed session. Each attempt carries right/wrong, the item(s) it tests, a free-text note, and for misses a root_cause (preferred list given on the field; any label accepted). Nothing is rejected for not fitting a category: unknown sections land in 'other' with the raw word kept, and 'meta' takes anything else. Returns the session id and any tags that matched no library item (no evidence is written for those; fix the tag text and re-log just those if it matters).",
+        "Record one reviewed page/set of questions as a confirmed session. mode=practice (default) is closed-book work: answers count toward accuracy, the weak list and root-cause reports. mode=lesson is open-book work done right after reading the explanation (textbook example sentences, れんしゅう with the notes in view): it is recorded as exposure, moves items from unseen to learning, and is excluded from every accuracy figure. Each attempt carries right/wrong, the item(s) it tests, a free-text note, and for misses a root_cause (preferred list given on the field; any label accepted). Nothing is rejected for not fitting a category: unknown sections land in 'other' with the raw word kept, and 'meta' takes anything else. Returns the session id and any tags that matched no library item, each with the closest items; the tag text is kept, so relink_tags can attach it later once the item or alias exists.",
       inputSchema: {
-        label: z.string().describe("e.g. '500問 Week 3 Day 2' or 'Mock test 1 文法'"),
+        label: z.string().describe("e.g. '500問 Week 3 Day 2', 'Mock test 1 文法', 'SKM N4 L1 れんしゅう1'"),
         source_name: z.string().optional().describe("e.g. 'Shin Nihongo 500 Mon N4-N5'"),
         taken_at: z.string().describe("ISO date or datetime the page was done, e.g. 2026-10-27"),
         surface: z.enum(["claude-ai", "claude-code", "hub"]).default("claude-ai"),
+        mode: z
+          .enum(SESSION_MODES)
+          .default("practice")
+          .describe("practice = closed book (counts); lesson = open book / just learned (exposure only)"),
         timed: z.boolean().optional().describe("Done under exam timing?"),
         image_refs: z.array(z.string()).optional().describe("Photo URLs or a text pointer to where they live"),
         attempts: z.array(attemptSchema).min(1),
@@ -144,6 +153,7 @@ function buildServer(): McpServer {
           sourceName: args.source_name ?? null,
           takenAt,
           surface: args.surface,
+          mode: args.mode,
           timed: args.timed ?? null,
           imageRefs: args.image_refs,
           attempts,
@@ -160,7 +170,7 @@ function buildServer(): McpServer {
     {
       title: "Log a study insight",
       description:
-        "Save a narrative note about a recurring pattern or belief, e.g. 'confuses どっち/どう under time pressure'. Tag it so it can be recalled by topic later.",
+        "Save a narrative note about a recurring pattern or belief, e.g. 'confuses どっち/どう under time pressure'. Tag it so it can be recalled by topic later, and name the library items it is about so get_insights finds it by item. Unmatched items are kept and attached later by relink_tags.",
       inputSchema: {
         text: z.string().min(1),
         tags: z.array(z.string()).default([]).describe("Short topic tags, e.g. ['particles', 'time-pressure']"),
@@ -181,7 +191,8 @@ function buildServer(): McpServer {
     "get_insights",
     {
       title: "Recall study insights",
-      description: "Newest-first notes, optionally filtered by a topic word (matches text or an exact tag).",
+      description:
+        "Newest-first notes, optionally filtered by topic: matches the text, an exact tag, or a linked library item (headword, alias, reading or pattern, e.g. 'ほど'). Also returns every tag in use with counts, so tag vocabulary can be reused.",
       inputSchema: {
         topic: z.string().optional(),
         limit: z.number().int().min(1).max(100).default(20),
@@ -190,7 +201,8 @@ function buildServer(): McpServer {
     },
     async (args) => {
       try {
-        return ok(await getInsights(args));
+        const [list, tags] = await Promise.all([getInsights(args), getInsightTagCounts()]);
+        return ok({ insights: list, tags });
       } catch (e) {
         return fail(e);
       }
@@ -202,7 +214,7 @@ function buildServer(): McpServer {
     {
       title: "Weakness report",
       description:
-        "What is going wrong. by=root_cause: misses grouped by cause over the window. by=section: accuracy per exam section over the window. by=item: the weakest library items by recency-decayed accuracy (window ignored; 30-day half-life).",
+        "What is going wrong, from closed-book practice only (lesson sessions never count). by=root_cause: misses grouped by cause over the window. by=section: accuracy per exam section over the window. by=item: the weakest library items by recency-decayed accuracy (window ignored; 30-day half-life). Windowed reports include a 'practice' block saying how many sessions fell in the window; if it is zero, widen window_days rather than concluding there is no data.",
       inputSchema: {
         by: z.enum(["root_cause", "section", "item"]).default("root_cause"),
         window_days: z.number().int().min(1).max(365).default(30),
@@ -215,12 +227,14 @@ function buildServer(): McpServer {
         if (args.by === "item") {
           return ok({ by: "item", items: await getWeakItems({ limit: args.limit }) });
         }
+        const practice = await getPracticeWindow(args.window_days);
         if (args.by === "section") {
-          return ok({ by: "section", windowDays: args.window_days, sections: await getAccuracyBySection(args.window_days) });
+          return ok({ by: "section", windowDays: args.window_days, practice, sections: await getAccuracyBySection(args.window_days) });
         }
         return ok({
           by: "root_cause",
           windowDays: args.window_days,
+          practice,
           causes: await getMissesByRootCause(args.window_days),
         });
       } catch (e) {
@@ -234,7 +248,7 @@ function buildServer(): McpServer {
     {
       title: "N4 readiness",
       description:
-        "Days to the exam, inventory coverage per kind and level (unseen/learning/solid/mastered), and the last 30 days of practice accuracy by section and misses by root cause.",
+        "Days to the exam, inventory coverage per kind and level (unseen/learning/solid/mastered), and the trailing window of closed-book practice: accuracy by section and misses by root cause, with a 'practice' block saying how many sessions the window holds (widen window_days if zero).",
       inputSchema: { window_days: z.number().int().min(1).max(365).default(30) },
       annotations: { readOnlyHint: true },
     },
@@ -248,10 +262,50 @@ function buildServer(): McpServer {
   );
 
   server.registerTool(
+    "find_items",
+    {
+      title: "Find library items",
+      description:
+        "Look up library items by headword, alias, kana reading, grammar pattern or English meaning, ranked by closeness. Use it before tagging when unsure of the canonical form, and to check whether an item exists at all.",
+      inputSchema: {
+        query: z.string().min(1).describe("e.g. 'ほど', 'いちばん', 'black tea', '〜と〜とどちら'"),
+        kind: z.enum(["vocab", "kanji", "grammar"]).optional().describe("Prefer this kind in the ranking"),
+        limit: z.number().int().min(1).max(25).default(8),
+      },
+      annotations: { readOnlyHint: true },
+    },
+    async (args) => {
+      try {
+        return ok({ query: args.query, items: await findItems(args.query, { kind: args.kind ?? null, limit: args.limit }) });
+      } catch (e) {
+        return fail(e);
+      }
+    },
+  );
+
+  server.registerTool(
+    "relink_tags",
+    {
+      title: "Relink unresolved tags",
+      description:
+        "Re-run item resolution over every stored attempt tag and insight item that matched nothing when logged, and attach the missing evidence. Idempotent and safe to run any time; run it after an item or alias is added to the library. Returns what was linked and what still matches nothing, with suggestions.",
+      inputSchema: {},
+      annotations: { idempotentHint: true },
+    },
+    async () => {
+      try {
+        return ok(await relinkUnresolved());
+      } catch (e) {
+        return fail(e);
+      }
+    },
+  );
+
+  server.registerTool(
     "list_sessions",
     {
       title: "Recent sessions",
-      description: "The most recently logged practice sessions with their scores, to check what is already in the ledger.",
+      description: "The most recently logged sessions (practice and lesson) with their scores, to check what is already in the ledger.",
       inputSchema: { limit: z.number().int().min(1).max(100).default(10) },
       annotations: { readOnlyHint: true },
     },

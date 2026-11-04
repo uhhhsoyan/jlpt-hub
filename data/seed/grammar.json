@@ -1229,7 +1229,10 @@
     "meaning": "comparison: more than ~",
     "example": "電車はバスより速いです。",
     "exampleReading": "でんしゃは ばすより はやいです。",
-    "exampleEnglish": "The train is faster than the bus."
+    "exampleEnglish": "The train is faster than the bus.",
+    "aliases": [
+      "より"
+    ]
   },
   {
     "pattern": "〜のほうが",
@@ -1237,7 +1240,13 @@
     "meaning": "comparison: ~ is more/prefer this one",
     "example": "紅茶よりコーヒーのほうが好きです。",
     "exampleReading": "こうちゃより こーひーの ほうが すきです。",
-    "exampleEnglish": "I like coffee more than tea."
+    "exampleEnglish": "I like coffee more than tea.",
+    "aliases": [
+      "のほう",
+      "のほうを",
+      "〜のほうを",
+      "Aより Bのほうが"
+    ]
   },
   {
     "pattern": "〜が一番",
@@ -1245,7 +1254,14 @@
     "meaning": "superlative: ~ is the most/best",
     "example": "果物の中でりんごが一番好きです。",
     "exampleReading": "くだものの なかで りんごが いちばん すきです。",
-    "exampleEnglish": "Among fruits, I like apples the most."
+    "exampleEnglish": "Among fruits, I like apples the most.",
+    "aliases": [
+      "一番",
+      "いちばん",
+      "がいちばん",
+      "〜がいちばん",
+      "の中で〜が一番"
+    ]
   },
   {
     "pattern": "〜だけ",
@@ -1502,5 +1518,44 @@
     "example": "眠いから、早く寝ます。",
     "exampleReading": "ねむいから、はやく ねます。",
     "exampleEnglish": "Because I'm sleepy, I'll sleep early."
+  },
+  {
+    "pattern": "〜ほど〜ない",
+    "level": "N5",
+    "meaning": "not as ~ as (the thing after ほど is the higher standard; the predicate is always negative)",
+    "example": "むかしは今ほどにぎやかではありませんでした。",
+    "exampleReading": "むかしは いまほど にぎやかでは ありませんでした。",
+    "exampleEnglish": "Back then it was not as lively as it is now.",
+    "aliases": [
+      "ほど",
+      "ほど〜ない",
+      "〜ほど"
+    ]
+  },
+  {
+    "pattern": "〜と〜とどちら",
+    "level": "N5",
+    "meaning": "which of A and B (two-way question; answered with 〜のほうが or どちらも)",
+    "example": "コーヒーと紅茶とどちらがいいですか。",
+    "exampleReading": "こーひーと こうちゃと どちらが いいですか。",
+    "exampleEnglish": "Which would you like, coffee or black tea?",
+    "aliases": [
+      "とどちら",
+      "どちらが",
+      "〜と〜とどちらが",
+      "AとBとどちら"
+    ]
+  },
+  {
+    "pattern": "どちらも",
+    "level": "N5",
+    "meaning": "both (with a positive predicate) / neither (with a negative one)",
+    "example": "どちらもあまり見ません。",
+    "exampleReading": "どちらも あまり みません。",
+    "exampleEnglish": "I don't really watch either.",
+    "aliases": [
+      "どちらも〜ない",
+      "どっちも"
+    ]
   }
 ]
