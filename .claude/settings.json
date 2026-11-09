@@ -1,0 +1,26 @@
+{
+  "permissions": {
+    "deny": [
+      "mcp__hindsight__cancel_operation",
+      "mcp__hindsight__clear_memories",
+      "mcp__hindsight__clear_mental_model",
+      "mcp__hindsight__create_directive",
+      "mcp__hindsight__create_knowledge_folder",
+      "mcp__hindsight__create_knowledge_page",
+      "mcp__hindsight__create_mental_model",
+      "mcp__hindsight__delete_bank",
+      "mcp__hindsight__delete_directive",
+      "mcp__hindsight__delete_document",
+      "mcp__hindsight__delete_knowledge_node",
+      "mcp__hindsight__delete_mental_model",
+      "mcp__hindsight__invalidate_memory",
+      "mcp__hindsight__refresh_mental_model",
+      "mcp__hindsight__retain",
+      "mcp__hindsight__sync_retain",
+      "mcp__hindsight__update_bank",
+      "mcp__hindsight__update_knowledge_node",
+      "mcp__hindsight__update_memory",
+      "mcp__hindsight__update_mental_model"
+    ]
+  }
+}

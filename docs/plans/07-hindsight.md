@@ -80,9 +80,10 @@ Only `/health` is unauthenticated.
 - **API:** http://localhost:8888 (`/health`, `/v1/default/banks/jlpt-study/...`).
 - **MCP for Claude Code:** `.mcp.json` entry `hindsight` → `http://localhost:8888/mcp/jlpt-study/`
   (Streamable HTTP, bank-pinned so tools need no `bank_id`). Tools include `recall`, `reflect`,
-  `list_memories`, and also write tools (`retain`, `clear_memories`, `delete_bank`). Treat
-  the write tools as off-limits in normal use: the mirror is the only thing that should
-  retain, otherwise the bank drifts from the ledger (a `--reset` rebuild fixes drift).
+  `list_memories`, and also write tools (`retain`, `clear_memories`, `delete_bank`, …).
+  `.claude/settings.json` denies every write tool (`permissions.deny`, 20 entries) so Claude
+  Code can only read the bank; the mirror is the only writer, otherwise the bank drifts from
+  the ledger (a `--reset` rebuild fixes drift).
 
 ## Bank and provider config
 
