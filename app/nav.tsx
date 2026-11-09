@@ -12,6 +12,7 @@ const TABS = [
   { href: "/sprint", label: "Sprint" },
   { href: "/mine", label: "Mine" },
   { href: "/sources", label: "Sources" },
+  { href: "/queue", label: "Queue" },
   { href: "/progress", label: "Progress" },
 ];
 

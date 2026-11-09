@@ -248,3 +248,32 @@ export const STUDY_ACTIVITY_LABEL: Record<StudyActivity, string> = {
   drill: "Drill",
   other: "Other",
 };
+
+/**
+ * Vocab queue: words the learner did not know or had to look up, wherever they came up
+ * (graded questions, lessons, reading, chat). Reviewed by hand at /queue and exported to
+ * Anki. `known` = already in a deck or genuinely known; `skipped` = not worth a card.
+ */
+export const VOCAB_QUEUE_STATUSES = ["queued", "carded", "skipped", "known"] as const;
+export type VocabQueueStatus = (typeof VOCAB_QUEUE_STATUSES)[number];
+export const VOCAB_QUEUE_STATUS_LABEL: Record<VocabQueueStatus, string> = {
+  queued: "Queued",
+  carded: "Carded",
+  skipped: "Skipped",
+  known: "Known",
+};
+export function isVocabQueueStatus(v: string): v is VocabQueueStatus {
+  return (VOCAB_QUEUE_STATUSES as readonly string[]).includes(v);
+}
+
+/** One time a queued word was met; kept on the row so repeats accumulate instead of duplicating. */
+export interface VocabSighting {
+  /** ISO date/time of the session or sighting. */
+  at: string;
+  /** The phrase or sentence it stalled in, or the note on the question. */
+  context: string | null;
+  sessionId: string | null;
+  questionId: string | null;
+  /** Session label or free text ("SKM N4 L6 れんしゅう1", "Satori Reader"). */
+  label: string | null;
+}

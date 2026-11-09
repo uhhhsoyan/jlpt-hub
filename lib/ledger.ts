@@ -11,6 +11,7 @@ import {
 import { matchTag, matchText, suggestItems, type ItemIndex, type ItemSuggestion } from "@/lib/item-match";
 import { loadItemIndex, resolveTags } from "@/lib/resolve-items";
 import { loadStudySources, resolveSource } from "@/lib/study-sources-db";
+import { queueVocab, type VocabGapEntry, type VocabGapInput } from "@/lib/vocab-queue";
 import type {
   ExtractedTag,
   InsightSource,
@@ -86,6 +87,8 @@ export interface AttemptInput {
   tags: ExtractedTag[];
   /** Anything structured that has no field of its own; stored as-is on the question. */
   meta?: Record<string, unknown> | null;
+  /** Words the learner did not know while doing this question, right or wrong; each goes on the vocab queue. */
+  vocabGaps?: VocabGapInput[];
 }
 
 export interface LogAttemptsInput {
@@ -124,6 +127,8 @@ export interface LogAttemptsResult {
   correct: number;
   /** Evidence rows written: graded answers for practice, exposures for a lesson. */
   observations: number;
+  /** Vocab-queue rows created or bumped from the attempts' vocab_gaps. */
+  vocabQueued: number;
   /**
    * Tags that matched no library item. The tag text is kept on the question, so once the
    * item exists (or gains an alias) `relink_tags` attaches the evidence retroactively.
@@ -187,6 +192,7 @@ export async function logAttempts(input: LogAttemptsInput): Promise<LogAttemptsR
   const itemRows: { questionId: string; itemId: string; role: "tested" }[] = [];
   const obsRows: (typeof observations.$inferInsert)[] = [];
   const unresolvedTags: UnresolvedTag[] = [];
+  const gapEntries: VocabGapEntry[] = [];
   let graded = 0;
   let correct = 0;
 
@@ -210,6 +216,10 @@ export async function logAttempts(input: LogAttemptsInput): Promise<LogAttemptsR
         meta: a.meta && Object.keys(a.meta).length > 0 ? a.meta : null,
       })
       .returning({ id: practiceQuestions.id });
+
+    for (const g of a.vocabGaps ?? []) {
+      gapEntries.push({ ...g, context: g.context ?? a.note ?? a.stem ?? null, questionId: row.id });
+    }
 
     if (a.correct !== null) {
       graded += 1;
@@ -238,6 +248,10 @@ export async function logAttempts(input: LogAttemptsInput): Promise<LogAttemptsR
 
   if (itemRows.length > 0) await db.insert(questionItems).values(itemRows);
   if (obsRows.length > 0) await db.insert(observations).values(obsRows);
+  const vq =
+    gapEntries.length > 0
+      ? await queueVocab(gapEntries, { at: input.takenAt, surface: input.surface, sessionId, label: input.label }, index)
+      : null;
 
   return {
     sessionId,
@@ -246,6 +260,7 @@ export async function logAttempts(input: LogAttemptsInput): Promise<LogAttemptsR
     graded,
     correct,
     observations: obsRows.length,
+    vocabQueued: vq ? vq.queued + vq.bumped : 0,
     unresolvedTags,
     source: source ? { slug: source.slug, name: source.name } : null,
     ...(sourceUnresolved ? { sourceUnresolved } : {}),
