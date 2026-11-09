@@ -93,9 +93,10 @@ Only `/health` is unauthenticated.
   root cause, lesson exposures), and the instruction to keep grammar points and root-cause
   labels verbatim as entities. Rerunning the mirror refreshes the missions.
 - LLM: `HINDSIGHT_API_LLM_PROVIDER=anthropic`, `HINDSIGHT_API_LLM_API_KEY` from
-  `ANTHROPIC_API_KEY` in `.env.local`, `HINDSIGHT_API_LLM_MODEL=claude-opus-5-5` (override
-  with `HS_LLM_MODEL=claude-haiku-5-5 npm run hindsight:up` on a fresh container for the cheap
-  option). Hindsight also documents a `claude-code` provider that uses a Claude Pro/Max
+  `ANTHROPIC_API_KEY` in `.env.local`, `HINDSIGHT_API_LLM_MODEL=claude-haiku-5-5` (default
+  since 2026-11-09; the first mirrors ran on `claude-opus-5-5`; override with
+  `HS_LLM_MODEL=claude-sonnet-5-5 bash scripts/hindsight.sh recreate` for better reflect
+  answers). Only retain and reflect use the LLM; recall is local. Hindsight also documents a `claude-code` provider that uses a Claude Pro/Max
   subscription via `claude auth login` instead of an API key (`HS_LLM_PROVIDER=claude-code`);
   not used here because the API key was present.
 - Embeddings and reranker: the image defaults (`local` provider, `BAAI/bge-small-en-v1.5`
@@ -133,8 +134,9 @@ Only `retain` and `reflect` call the LLM (`recall` is local: embeddings, BM25, r
 in the container). Retain runs one or a few extraction calls per memory, plus observation
 consolidation in the background; reflect runs a small agent loop. On Opus 5.5 the first full
 mirror of the ledger (16 insights + 11 sessions, ~155 questions) and a handful of reflects is
-on the order of a dollar or two; incremental mirrors are a few cents per new session. Switch
-`HS_LLM_MODEL` to `claude-haiku-5-5` if that matters. There is no cost while idle.
+on the order of a dollar or two; incremental mirrors are a few cents per new session. Since
+2026-11-09 the default is `claude-haiku-5-5` (roughly a tenth of that); switch `HS_LLM_MODEL`
+back up if reflect answers get too thin. There is no cost while idle.
 
 ## Wipe and rebuild
 

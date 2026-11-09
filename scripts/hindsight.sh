@@ -23,7 +23,7 @@ HS_API_PORT="${HS_API_PORT:-8888}"                # REST + MCP
 HS_UI_PORT="${HS_UI_PORT:-9999}"                  # Control Plane (web UI)
 HS_BANK="${HS_BANK:-jlpt-study}"                  # bank id used by mirror/ask and .mcp.json
 HS_LLM_PROVIDER="${HS_LLM_PROVIDER:-anthropic}"   # anthropic | claude-code | openai | ...
-HS_LLM_MODEL="${HS_LLM_MODEL:-claude-opus-5-5}"   # claude-haiku-5-5 is the cheap option
+HS_LLM_MODEL="${HS_LLM_MODEL:-claude-haiku-5-5}"  # cheap default; claude-sonnet-5-5 / claude-opus-5-5 for better reflect answers
 HS_ENV_FILE="${HS_ENV_FILE:-.env.local}"          # ANTHROPIC_API_KEY, HINDSIGHT_API_KEY, HINDSIGHT_UI_ACCESS_KEY
 # -------------------------------------------------------------------------------------
 
