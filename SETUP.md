@@ -147,6 +147,13 @@ an entry to correct a link, delete it to re-map, or pass `--no-claude` to use th
 Deployment Protection must stay **off** for `/mcp` (claude.ai cannot pass a Vercel
 password); the bearer token is the gate. Production currently has it off.
 
+## Vocab queue
+
+Words the learner did not know, wherever they came up, for Anki later: `/queue` in the Hub
+(review, export TSV, mark carded / known / skipped). Fed by `vocab_gaps` on logged attempts and
+the `queue_vocab` MCP tool. Table `vocab_queue` (`npm run db:push`); the pre-queue "→ Anki"
+insights are imported once with `npm run db:backfill-queue`. See `docs/plans/09-vocab-queue.md`.
+
 ## Hindsight (optional, local, with remote access)
 
 A local [Hindsight](https://hindsight.vectorize.io) memory bank mirrored from the ledger, for

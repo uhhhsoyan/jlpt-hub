@@ -53,6 +53,7 @@ One entry in `attempts` per question, including the ones I got right (correct an
   - `root_cause`: one of `grammar-unknown` (never learned the pattern), `vocab-in-grammar` (the grammar was fine, a word in it was not), `vocab-unknown` (a vocab question on a word I did not know), `vocab-confusion` (mixed the word up with a similar one: くつ/つくえ), `reading-selection` (picked the wrong reading of a kanji), `particle-cue-missed` (the particle told me the answer and I ignored it), `pattern-glue` (knew the pattern, attached it wrong: conjugation, のほう, くて), `misparse` (read the sentence structure wrong), `careless` (knew it, slipped), `time-pressure`, `context-cue-missed` (the sentence's context said which form fit and I ignored it), `distractor-bias` (picked the option that merely looked like the lesson's pattern), `kanji-lookalike` (待/持), `katakana-decoding` (stalled on reading a katakana word). If none fits, use a short kebab-case label of your own; it is kept and reported under its own name. Omit for correct answers.
   - `note`: one line on what I chose and what was needed, e.g. `picked つもり, needed はず; confused certainty with intention`. Write the diagnosis, not the explanation.
 - `stem` and `choices` only when they are short and worth keeping, e.g. a sentence I want to revisit. `explanation` only when it is a reusable rule in one or two sentences.
+- `vocab_gaps`: every word I say I did not know or had to look up while doing the question, right or wrong: `{text, reading, meaning, context}` with dictionary form for verbs and adjectives. This is separate from `tags` (what the question tests) and from `root_cause`; a question I got right can still have two words in `vocab_gaps`.
 - `meta`: any structured fact with no field of its own (e.g. `{"attempt": 2}` on a retry). Lesson conventions already in use, keep them: example sentences are numbered pattern × sentence (11–14, 21–23, 31–34), and `meta` carries `part` (`examples`, `れんしゅう1`), `pattern`, `sentence`, `sub` (A/B), `blank`, `choice`, `answer`, `wrote`, and `task: "translate"` for a translation pass. For れんしゅう worth revisiting, keep `stem` and `choices`.
 
 After the call, tell me the session id and any tags the tool reported as unresolved. Each comes with the closest library items; if one of them is clearly right, say so and mention that the tag can be fixed on my side (the text is kept on the question and `relink_tags` attaches it once the item or alias exists). Do not re-log the session. If a session went in with the wrong `mode`, `label` or `taken_at`, fix it with `update_session` (find the id with `list_sessions`); it rewrites the evidence rows for you.
@@ -73,6 +74,16 @@ Two tools, by what the sitting produced:
 - Time with no graded questions → `log_study`: `{ source, activity, minutes, taken_at, note }`. `activity` is `reading` (Satori Reader, a textbook passage), `listening`, `review` (a WaniKani or Bunpro review session), `lesson` (read a grammar explanation without doing its exercises), `drill`, or `other`. One call per sitting, after the fact; put what was read or reviewed in `note`. Never log individual WaniKani/Bunpro answers: their syncs do that.
 
 If a source is missing from the catalog, say so and log with `source_name` carrying the full name; I add it in the Hub and the session is linked afterwards. A session linked to the wrong source is fixed with `update_session` (`source`, or `none` to unlink).
+
+### Vocab I did not know
+
+Any time I say I did not know a word, or had to look it up, it goes on the vocab queue; I review the queue in the Hub and make Anki cards from it, so nothing may stay only in chat.
+
+- On a graded question: the attempt's `vocab_gaps` (above).
+- Anywhere else (reading, a lesson explanation, listening, something that came up in conversation): `queue_vocab { words: [{text, reading, meaning, context}], taken_at, label }`, once per sitting, after the fact.
+- `get_vocab_queue` answers "what is on the queue" or "is X already queued"; `update_vocab_queue` only when I explicitly say a word is carded, known or not worth a card.
+
+Do not log vocab gaps as insights. An insight is for a confusion or rule worth re-reading; a word I did not know is inventory and belongs on the queue.
 
 ### Logging everything else: `log_insight`
 

@@ -19,8 +19,9 @@ import { memoryRecall, memoryReflect, readHindsightConfig } from "@/lib/hindsigh
 import { getReadiness } from "@/lib/readiness";
 import { findItems } from "@/lib/resolve-items";
 import { listStudySources, logStudy } from "@/lib/study-sources-db";
+import { countVocabQueue, listVocabQueue, queueVocab, setVocabQueueStatus } from "@/lib/vocab-queue";
 import { getAccuracyBySection, getMissesByRootCause, getPracticeWindow, getWeakItems } from "@/lib/weakness";
-import { normalizeRootCause, ROOT_CAUSES, SESSION_MODES, STUDY_ACTIVITIES } from "@/lib/types";
+import { normalizeRootCause, ROOT_CAUSES, SESSION_MODES, STUDY_ACTIVITIES, VOCAB_QUEUE_STATUSES } from "@/lib/types";
 
 /**
  * The study ledger's MCP endpoint (Streamable HTTP, stateless). One long random bearer
@@ -34,7 +35,7 @@ import { normalizeRootCause, ROOT_CAUSES, SESSION_MODES, STUDY_ACTIVITIES } from
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
 
-const SERVER_INFO = { name: "jlpt-hub-study-ledger", version: "1.4.0" };
+const SERVER_INFO = { name: "jlpt-hub-study-ledger", version: "1.5.0" };
 
 /** For sync_status: whether the Hindsight bridge is configured in this deployment (lib/hindsight.ts). */
 function memoryStatus() {
@@ -88,6 +89,13 @@ const tagSchema = z.object({
     ),
 });
 
+const vocabGapSchema = z.object({
+  text: z.string().min(1).describe("The word as met, dictionary form for verbs/adjectives: 続き, 間に合う, 丈夫"),
+  reading: z.string().optional().describe("Kana reading, e.g. つづき"),
+  meaning: z.string().optional().describe("Short English gloss"),
+  context: z.string().optional().describe("The phrase or sentence it stalled in; defaults to the attempt's note or stem"),
+});
+
 const attemptSchema = z.object({
   number: z.number().int().positive().optional().describe("Printed question number; defaults to position"),
   section: z.string().describe(SECTION_HINT),
@@ -105,6 +113,12 @@ const attemptSchema = z.object({
   choices: z.array(z.string()).optional(),
   explanation: z.string().optional(),
   tags: z.array(tagSchema).default([]).describe("1-3 items the question really tests; these become evidence"),
+  vocab_gaps: z
+    .array(vocabGapSchema)
+    .optional()
+    .describe(
+      "Words I did not know or had to look up while doing this question, whether or not the answer was right. Each lands on the vocab queue (Hub /queue, exported to Anki). Not for the item the question tests when it was missed for grammar reasons; for words that actually stalled.",
+    ),
   meta: z
     .record(z.string(), z.unknown())
     .optional()
@@ -119,7 +133,7 @@ function buildServer(): McpServer {
     {
       title: "Log practice attempts",
       description:
-        "Record one reviewed page/set of questions as a confirmed session. mode=practice (default) is closed-book work: answers count toward accuracy, the weak list and root-cause reports. mode=lesson is open-book work done right after reading the explanation (textbook example sentences, れんしゅう with the notes in view): it is recorded as exposure, moves items from unseen to learning, and is excluded from every accuracy figure. Each attempt carries right/wrong, the item(s) it tests, a free-text note, and for misses a root_cause (preferred list given on the field; any label accepted). Nothing is rejected for not fitting a category: unknown sections land in 'other' with the raw word kept, and 'meta' takes anything else. Name the book or app in 'source' (a catalog slug from list_sources, or its name/alias) and put the lesson/page in 'source_name'; when 'source' is absent, source_name is matched against the catalog too. Result: sessionId, mode, questions, graded (attempts with correct true/false), correct, observations (evidence rows written: one per resolved tag per graded attempt in practice, one per resolved tag per attempt in lesson; tags that matched nothing write none until relink_tags), unresolvedTags (tags that matched no library item, each with the closest items and a match label; 'prefix-only' means a shorter, different item, not the one meant), source (the catalog entry linked, or null) and sourceUnresolved (the source text when it matched no catalog entry; the text is still kept on the session). The tag text is kept, so relink_tags can attach it later once the item or alias exists. A session logged with the wrong mode, label, date or source is fixed with update_session, not re-logged. For study time that produced no graded answers (reading, app reviews, listening), use log_study instead.",
+        "Record one reviewed page/set of questions as a confirmed session. mode=practice (default) is closed-book work: answers count toward accuracy, the weak list and root-cause reports. mode=lesson is open-book work done right after reading the explanation (textbook example sentences, れんしゅう with the notes in view): it is recorded as exposure, moves items from unseen to learning, and is excluded from every accuracy figure. Each attempt carries right/wrong, the item(s) it tests, a free-text note, and for misses a root_cause (preferred list given on the field; any label accepted). Nothing is rejected for not fitting a category: unknown sections land in 'other' with the raw word kept, and 'meta' takes anything else. Name the book or app in 'source' (a catalog slug from list_sources, or its name/alias) and put the lesson/page in 'source_name'; when 'source' is absent, source_name is matched against the catalog too. Result: sessionId, mode, questions, graded (attempts with correct true/false), correct, observations (evidence rows written: one per resolved tag per graded attempt in practice, one per resolved tag per attempt in lesson; tags that matched nothing write none until relink_tags), unresolvedTags (tags that matched no library item, each with the closest items and a match label; 'prefix-only' means a shorter, different item, not the one meant), source (the catalog entry linked, or null) and sourceUnresolved (the source text when it matched no catalog entry; the text is still kept on the session). The tag text is kept, so relink_tags can attach it later once the item or alias exists. A session logged with the wrong mode, label, date or source is fixed with update_session, not re-logged. For study time that produced no graded answers (reading, app reviews, listening), use log_study instead. Words the learner did not know while doing a question go in that attempt's vocab_gaps (right or wrong); each lands on the vocab queue (Hub /queue, Anki export) and vocabQueued in the result counts them. Words that stall outside a graded set go through queue_vocab.",
       inputSchema: {
         label: z.string().describe("e.g. '500問 Week 3 Day 2', 'Mock test 1 文法', 'SKM N4 L1 れんしゅう1'"),
         source: z
@@ -163,6 +177,7 @@ function buildServer(): McpServer {
             explanation: a.explanation ?? null,
             tags: a.tags,
             meta,
+            vocabGaps: a.vocab_gaps,
           };
         });
 
@@ -481,6 +496,93 @@ function buildServer(): McpServer {
             itemsMapped: bp[0]?.itemsMapped ?? null,
           },
         });
+      } catch (e) {
+        return fail(e);
+      }
+    },
+  );
+
+  // ---- Vocab queue (lib/vocab-queue.ts): words the learner did not know, for Anki later.
+  server.registerTool(
+    "queue_vocab",
+    {
+      title: "Queue unknown vocab",
+      description:
+        "Put words I did not know (or had to look up) on the vocab queue, for words met outside a graded set: reading, a lesson explanation, listening, a chat exchange. For words that stalled on a logged question, use the attempt's vocab_gaps in log_attempts instead. One row per word; a repeat bumps its count and keeps the new context. Result: {queued, bumped, words:[{text,status,seenCount,itemId}]}. The queue is reviewed by hand in the Hub (/queue) and exported to Anki; never mark anything carded or known from here unless I say so.",
+      inputSchema: {
+        words: z.array(vocabGapSchema).min(1),
+        taken_at: z.string().optional().describe("ISO date the words came up; default now"),
+        label: z.string().optional().describe("Where: 'Satori Reader: ...', 'SKM N4 L6 explanation', 'chat'"),
+      },
+    },
+    async (args) => {
+      try {
+        const at = args.taken_at ? new Date(args.taken_at) : new Date();
+        if (Number.isNaN(at.getTime())) throw new Error(`Invalid taken_at: ${args.taken_at}`);
+        return ok(await queueVocab(args.words, { at, surface: "claude-ai", label: args.label ?? null }));
+      } catch (e) {
+        return fail(e);
+      }
+    },
+  );
+
+  server.registerTool(
+    "get_vocab_queue",
+    {
+      title: "Read the vocab queue",
+      description:
+        "Words on the vocab queue with their status (queued = waiting for a card decision, carded, skipped, known), reading, meaning, how often each has stalled and the latest context. Default: the queued ones, newest first. Use it when I ask what is on the queue or whether a word is already there.",
+      inputSchema: {
+        status: z.enum([...VOCAB_QUEUE_STATUSES, "all"]).optional().describe("Default queued"),
+        limit: z.number().int().min(1).max(200).optional().describe("Default 50"),
+      },
+      annotations: { readOnlyHint: true },
+    },
+    async (args) => {
+      try {
+        const [rows, counts] = await Promise.all([
+          listVocabQueue({ status: args.status ?? "queued", limit: args.limit ?? 50 }),
+          countVocabQueue(),
+        ]);
+        return ok({
+          counts,
+          words: rows.map((r) => {
+            const latest = r.sightings[r.sightings.length - 1];
+            return {
+              id: r.id,
+              text: r.text,
+              reading: r.reading,
+              meaning: r.meaning,
+              status: r.status,
+              seenCount: r.seenCount,
+              lastSeenAt: r.lastSeenAt.toISOString().slice(0, 10),
+              itemId: r.itemId,
+              lastContext: latest?.context ?? null,
+              lastLabel: latest?.label ?? null,
+            };
+          }),
+        });
+      } catch (e) {
+        return fail(e);
+      }
+    },
+  );
+
+  server.registerTool(
+    "update_vocab_queue",
+    {
+      title: "Set vocab queue status",
+      description:
+        "Move queue rows to carded (a card exists), known (already in my decks or genuinely known), skipped (not worth a card) or back to queued. Only when I say so; the Hub's /queue page is the usual place for this. Result: {updated}.",
+      inputSchema: {
+        ids: z.array(z.string().uuid()).min(1).describe("Row ids from get_vocab_queue"),
+        status: z.enum(VOCAB_QUEUE_STATUSES),
+      },
+      annotations: { idempotentHint: true },
+    },
+    async (args) => {
+      try {
+        return ok({ updated: await setVocabQueueStatus(args.ids, args.status) });
       } catch (e) {
         return fail(e);
       }

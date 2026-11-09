@@ -11,6 +11,8 @@ import {
   integer,
 } from "drizzle-orm/pg-core";
 import type {
+  VocabQueueStatus,
+  VocabSighting,
   VocabItem,
   GrammarItem,
   JlptLevel,
@@ -370,3 +372,30 @@ export const studyLog = pgTable(
 );
 
 export type StudyLogRow = typeof studyLog.$inferSelect;
+
+// Words the learner did not know, wherever they came up (a `vocab_gaps` entry on a logged
+// attempt, the `queue_vocab` tool, the Hub). One row per NFKC-normalised word; repeats bump
+// seen_count and append a sighting. Reviewed by hand at /queue and exported to Anki; status
+// is the learner's decision (carded / skipped / known), never inferred. See lib/vocab-queue.ts.
+export const vocabQueue = pgTable(
+  "vocab_queue",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    norm: text("norm").notNull().unique(),
+    text: text("text").notNull(),
+    reading: text("reading"),
+    meaning: text("meaning"),
+    itemId: uuid("item_id").references(() => items.id, { onDelete: "set null" }),
+    status: text("status").$type<VocabQueueStatus>().notNull().default("queued"),
+    seenCount: integer("seen_count").notNull().default(1),
+    firstSeenAt: timestamp("first_seen_at", { withTimezone: true }).notNull(),
+    lastSeenAt: timestamp("last_seen_at", { withTimezone: true }).notNull(),
+    sightings: jsonb("sightings").$type<VocabSighting[]>().notNull().default([]),
+    surface: text("surface").$type<PracticeSurface>().notNull().default("claude-ai"),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
+  },
+  (t) => [index("vocab_queue_status").on(t.status, t.lastSeenAt)],
+);
+
+export type VocabQueueRow = typeof vocabQueue.$inferSelect;

@@ -30,7 +30,8 @@
     "hindsight:ask": "node --env-file=.env.local --import tsx scripts/hindsight-ask.mts",
     "hindsight:schedule": "bash scripts/hindsight-launchd.sh install",
     "hindsight:unschedule": "bash scripts/hindsight-launchd.sh uninstall",
-    "hindsight:schedule-status": "bash scripts/hindsight-launchd.sh status"
+    "hindsight:schedule-status": "bash scripts/hindsight-launchd.sh status",
+    "db:backfill-queue": "node --env-file=.env.local --import tsx scripts/backfill-vocab-queue.mts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.111.0",
