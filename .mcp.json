@@ -9,7 +9,10 @@
     },
     "hindsight": {
       "type": "http",
-      "url": "http://localhost:8888/mcp/jlpt-study/"
+      "url": "http://127.0.0.1:8888/mcp/jlpt-study/",
+      "headers": {
+        "Authorization": "Bearer ${HINDSIGHT_API_KEY}"
+      }
     }
   }
 }

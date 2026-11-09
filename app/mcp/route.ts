@@ -15,6 +15,7 @@ import {
   updateSession,
   type AttemptInput,
 } from "@/lib/ledger";
+import { memoryRecall, memoryReflect, readHindsightConfig } from "@/lib/hindsight";
 import { getReadiness } from "@/lib/readiness";
 import { findItems } from "@/lib/resolve-items";
 import { listStudySources, logStudy } from "@/lib/study-sources-db";
@@ -33,7 +34,15 @@ import { normalizeRootCause, ROOT_CAUSES, SESSION_MODES, STUDY_ACTIVITIES } from
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
 
-const SERVER_INFO = { name: "jlpt-hub-study-ledger", version: "1.3.0" };
+const SERVER_INFO = { name: "jlpt-hub-study-ledger", version: "1.4.0" };
+
+/** For sync_status: whether the Hindsight bridge is configured in this deployment (lib/hindsight.ts). */
+function memoryStatus() {
+  const cfg = readHindsightConfig();
+  return cfg
+    ? { configured: true, bank: cfg.bank, accessToken: !!(cfg.accessClientId && cfg.accessClientSecret), apiKey: !!cfg.apiKey }
+    : { configured: false };
+}
 
 /**
  * The token is accepted two ways: `Authorization: Bearer <token>` (Claude Code's .mcp.json,
@@ -457,6 +466,7 @@ function buildServer(): McpServer {
         const db = getDb();
         const [wk, bp] = await Promise.all([db.select().from(wkSnapshot), db.select().from(bpSnapshot)]);
         return ok({
+          memory: memoryStatus(),
           wanikani: {
             configured: !!process.env.WANIKANI_TOKEN,
             syncedAt: wk[0]?.syncedAt.toISOString() ?? null,
@@ -475,6 +485,50 @@ function buildServer(): McpServer {
         return fail(e);
       }
     },
+  );
+
+  // ---- Hindsight memory (docs/plans/07-hindsight.md, Phase B). Read-only; the bank is a
+  // mirror of this ledger, refreshed by `npm run hindsight:mirror` on the home machine, so
+  // it can lag the ledger by a session or two. Both tools degrade to a status instead of
+  // failing when the add-on is unconfigured or the tunnel is down.
+  server.registerTool(
+    "memory_recall",
+    {
+      title: "Recall from the memory graph",
+      description:
+        "Search the Hindsight memory bank built from this ledger's insights and sessions. Each hit is an extracted fact " +
+        "(type world), a consolidated cross-session pattern (observation) or an experience, with the date it is about and a " +
+        "documentId (insight:<id> / session:<id>) pointing back at the ledger row. Use it next to get_insights when the question " +
+        "is about patterns over time (\"what keeps going wrong with comparisons?\") rather than a single item. " +
+        "Result: {status:'ok', hits:[{text,type,when,documentId,entities}], count} or {status:'offline'|'unconfigured'|'rejected', ...}; " +
+        "on anything but ok, say the memory graph is unavailable and continue with the ledger tools. The bank lags the ledger " +
+        "until the next mirror run, so the newest session may be missing.",
+      inputSchema: {
+        query: z.string().min(1).describe("Natural-language or Japanese query, e.g. 'ほど misses' or 'what did I confuse with より'"),
+        budget: z.enum(["low", "mid", "high"]).optional().describe("Retrieval effort; default mid"),
+        limit: z.number().int().min(1).max(25).optional().describe("Max hits; default 10"),
+      },
+      annotations: { readOnlyHint: true },
+    },
+    async (args) => ok(await memoryRecall(args.query, { budget: args.budget, limit: args.limit })),
+  );
+
+  server.registerTool(
+    "memory_reflect",
+    {
+      title: "Ask the memory graph",
+      description:
+        "Have Hindsight answer a question from the memory bank with a grounded, synthesised reply (it runs a small agent over " +
+        "the graph; 30-60 s, so call it once per question and only for synthesis the ledger reports cannot give: 'what " +
+        "patterns show up across my grammar misses and what should I drill?'). Result: {status:'ok', text, basedOn:<memories used>} " +
+        "or a non-ok status as in memory_recall; a timeout is reported as offline, do not retry in the same turn.",
+      inputSchema: {
+        question: z.string().min(1),
+        budget: z.enum(["low", "mid"]).optional().describe("Reasoning effort; default low (mid often exceeds the time limit)"),
+      },
+      annotations: { readOnlyHint: true },
+    },
+    async (args) => ok(await memoryReflect(args.question, { budget: args.budget })),
   );
 
   return server;

@@ -92,6 +92,15 @@ Fields:
 
 Do not log an insight for routine lookups or things I clearly already know. One good insight per concept per conversation; update your understanding by logging a new one rather than repeating.
 
+### Memory graph (Hindsight)
+
+Besides the ledger there is a memory bank built from the same insights and sessions (mirrored by hand after I study, so it can lag by a session). Two read-only tools:
+
+- `memory_recall { query, budget?, limit? }`: facts and cross-session observations about a topic, each with its date and a `documentId` (`insight:<id>` / `session:<id>`). Use it next to `get_insights` when the question is about a pattern over time ("what keeps going wrong with comparisons?"), not for a single lookup.
+- `memory_reflect { question, budget? }`: a synthesised answer grounded in the bank (30–60 s). Once per question, only for synthesis the reports cannot give ("what should I drill this week and why?"); leave `budget` at `low`.
+
+Both return `status`. Anything other than `ok` (`offline`, `unconfigured`, `rejected`) means the memory graph is unavailable: say so in one line and continue with the ledger tools; do not retry in the same turn. When you use a memory result, say that it came from the memory graph and give the date of the memory, since it may predate the latest sessions.
+
 ### Hygiene
 
 - Log in the same conversation where the review happened; do not batch days together.

@@ -5,7 +5,8 @@
 //        npm run hindsight:mirror -- --reset   # delete the bank + state, then mirror everything
 //        npm run hindsight:mirror -- --dry-run # print the memories that would be retained
 //
-// Env (optional): HINDSIGHT_URL (default http://localhost:8888), HINDSIGHT_BANK (jlpt-study).
+// Env (optional): HINDSIGHT_URL (default http://localhost:8888), HINDSIGHT_BANK (jlpt-study),
+// HINDSIGHT_API_KEY (bearer token when the container runs with auth; see scripts/hindsight.sh).
 // See docs/plans/07-hindsight.md.
 import { mkdirSync, readFileSync, writeFileSync, existsSync, unlinkSync } from "node:fs";
 import { inArray } from "drizzle-orm";
@@ -146,7 +147,7 @@ function sessionMemory(
 
 // ---- main ---------------------------------------------------------------------------
 
-const client = new HindsightClient({ baseUrl: BASE_URL });
+const client = new HindsightClient({ baseUrl: BASE_URL, apiKey: process.env.HINDSIGHT_API_KEY });
 const db = getDb();
 
 if (!dryRun) {
