@@ -80,9 +80,10 @@ Only `/health` is unauthenticated.
 - **API:** http://localhost:8888 (`/health`, `/v1/default/banks/jlpt-study/...`).
 - **MCP for Claude Code:** `.mcp.json` entry `hindsight` → `http://localhost:8888/mcp/jlpt-study/`
   (Streamable HTTP, bank-pinned so tools need no `bank_id`). Tools include `recall`, `reflect`,
-  `list_memories`, and also write tools (`retain`, `clear_memories`, `delete_bank`). Treat
-  the write tools as off-limits in normal use: the mirror is the only thing that should
-  retain, otherwise the bank drifts from the ledger (a `--reset` rebuild fixes drift).
+  `list_memories`, and also write tools (`retain`, `clear_memories`, `delete_bank`, …).
+  `.claude/settings.json` denies every write tool (`permissions.deny`, 20 entries) so Claude
+  Code can only read the bank; the mirror is the only writer, otherwise the bank drifts from
+  the ledger (a `--reset` rebuild fixes drift).
 
 ## Bank and provider config
 
@@ -290,8 +291,14 @@ this link when `HINDSIGHT_UI_URL` is set.
 
 ### Operations
 
-- The mirror is still manual: `npm run hindsight:mirror` on the M2 after study sessions. The
-  bank lags the ledger until then; the tool descriptions say so.
+- The mirror runs on a schedule (since 2026-11-09): `npm run hindsight:schedule` installs a
+  per-user LaunchAgent `com.jlpt-hub.hindsight-mirror` (`scripts/hindsight-launchd.sh`) that
+  runs `scripts/hindsight-mirror-job.sh` at 02:15, 08:15, 14:15 and 20:15 local. The job
+  skips when the container is down, never overlaps itself, and appends one line per run to
+  `.hindsight/mirror.log` (`npm run hindsight:schedule-status` shows the last ones). A run
+  with nothing new only queries Postgres, so it costs nothing. `npm run hindsight:mirror`
+  still works by hand for an immediate refresh; the bank lags the ledger by at most six
+  hours otherwise, and the tool descriptions say so.
 - Cloudflare's free tier limits one request to 100 s at the origin; reflect at budget `mid`
   (observed up to 300 s) will not fit, so the Hub only offers `low` and `mid`, defaults to
   `low`, and reports a timeout as `offline`.

@@ -160,7 +160,8 @@ tools notice (they answer `offline`). Design, auth and the Cloudflare setup:
 # HINDSIGHT_UI_ACCESS_KEY (openssl rand -hex 32 each) so the container starts with auth.
 npm run hindsight:up                 # docker container "hindsight": API 127.0.0.1:8888, UI 127.0.0.1:9999
 bash scripts/hindsight.sh recreate   # after changing keys/ports (keeps the data volume)
-npm run hindsight:mirror             # read-only against Neon; retains new insights/sessions (manual, after study)
+npm run hindsight:mirror             # read-only against Neon; retains new insights/sessions (immediate)
+npm run hindsight:schedule           # launchd agent: mirror 4x daily; also unschedule | schedule-status
 npm run hindsight:ask -- recall ほど
 npm run hindsight:ask -- reflect "What should I drill this week?"
 npm run hindsight:down

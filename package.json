@@ -27,7 +27,10 @@
     "hindsight:up": "bash scripts/hindsight.sh up",
     "hindsight:down": "bash scripts/hindsight.sh down",
     "hindsight:mirror": "node --env-file=.env.local --import tsx scripts/hindsight-mirror.mts",
-    "hindsight:ask": "node --env-file=.env.local --import tsx scripts/hindsight-ask.mts"
+    "hindsight:ask": "node --env-file=.env.local --import tsx scripts/hindsight-ask.mts",
+    "hindsight:schedule": "bash scripts/hindsight-launchd.sh install",
+    "hindsight:unschedule": "bash scripts/hindsight-launchd.sh uninstall",
+    "hindsight:schedule-status": "bash scripts/hindsight-launchd.sh status"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.111.0",
