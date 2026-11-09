@@ -1,6 +1,8 @@
 # 07 — Hindsight memory add-on (Phase A: local)
 
-Status: Phase A built 2026-11-04 (local only). Phase B (claude.ai access) not built.
+Status: Phase A built 2026-11-04 (local only). Phase B (remote access through Cloudflare, memory
+tools in the Hub) code built 2026-11-05; the Cloudflare side is a one-time manual setup (checklist
+below).
 
 ## What it is
 
@@ -35,10 +37,11 @@ Neon Postgres (ledger)  ──read-only──▶  scripts/hindsight-mirror.mts  
 - **Recall/reflect are read-only consumers.** `hindsight-ask.mts` and the Claude Code MCP
   entry query the bank. Nothing in `app/` or `lib/` imports or calls Hindsight; if the
   container is down, only the two scripts notice.
-- **Phase B (not built):** expose the bank to claude.ai web by tunnelling the local API (or
-  hosting it) and adding `memory_recall` / `memory_reflect` proxy tools to the Hub's `/mcp`
-  route, which would forward to Hindsight and degrade to a "memory offline" result. Retain
-  would still only happen through the mirror.
+- **Phase B (built, see below):** the local API and UI are published through a Cloudflare
+  Tunnel behind Cloudflare Access, and the Hub's `/mcp` route gained `memory_recall` /
+  `memory_reflect` proxy tools (`lib/hindsight.ts`) that forward to Hindsight and degrade to a
+  status (`offline` / `unconfigured` / `rejected`) instead of failing. Retain still only
+  happens through the mirror.
 
 ## Running it
 
@@ -46,7 +49,7 @@ Prerequisites: Docker Desktop (Apple Silicon is supported; the full image is ~3.
 arm64), `ANTHROPIC_API_KEY` and `DATABASE_URL` in `.env.local`.
 
 ```bash
-npm run hindsight:up         # = bash scripts/hindsight.sh up   (also: down | logs | status)
+npm run hindsight:up         # = bash scripts/hindsight.sh up   (also: down | recreate | logs | status)
 npm run hindsight:mirror     # retain new insights/sessions; --reset wipes the bank + state; --dry-run prints the prose
 npm run hindsight:ask -- recall ほど
 npm run hindsight:ask -- reflect "What patterns show up across my grammar misses, and what should I drill?"
@@ -54,11 +57,21 @@ npm run hindsight:ask -- reflect --facts "..."   # also lists the memories the a
 npm run hindsight:down
 ```
 
-`scripts/hindsight.sh` holds the config at the top (ports 8888/9999, container `hindsight`,
-named volume `hindsight-data` mounted at `/home/hindsight/.pg0`, bank `jlpt-study`, provider
-and model). It runs the official all-in-one image `ghcr.io/vectorize-io/hindsight:latest`
-with the flags from the installation docs (`--shm-size=1g --stop-timeout 75 --restart
-unless-stopped`) and waits on `GET /health`.
+`scripts/hindsight.sh` holds the config at the top (ports 8888/9999 bound to **127.0.0.1
+only**, container `hindsight`, named volume `hindsight-data` mounted at `/home/hindsight/.pg0`,
+bank `jlpt-study`, provider and model). It runs the official all-in-one image
+`ghcr.io/vectorize-io/hindsight:latest` with the flags from the installation docs
+(`--shm-size=1g --stop-timeout 75 --restart unless-stopped`) and waits on `GET /health`.
+
+Auth (since 2026-11-05): with `HINDSIGHT_API_KEY` in `.env.local` the container starts with
+Hindsight's built-in single-tenant API-key extension
+(`HINDSIGHT_API_TENANT_EXTENSION=…:ApiKeyTenantExtension`), so REST and MCP require
+`Authorization: Bearer <key>`; the UI's server side gets the same key
+(`HINDSIGHT_CP_DATAPLANE_API_KEY`). `HINDSIGHT_UI_ACCESS_KEY` sets the UI login
+(`HINDSIGHT_CP_ACCESS_KEY`); without it the UI has no login. The mirror, `hindsight:ask` and
+`.mcp.json` all send `HINDSIGHT_API_KEY`. Docker only applies env/port changes to a new
+container: `bash scripts/hindsight.sh recreate` drops the container and keeps the volume.
+Only `/health` is unauthenticated.
 
 - **UI:** http://localhost:9999 → bank `jlpt-study` (http://localhost:9999/banks/jlpt-study).
   The Memories view has a table / timeline / **constellation** toggle (the graph of memories
@@ -108,6 +121,11 @@ unless-stopped`) and waits on `GET /health`.
 - Memories are retained synchronously (`async: false`) one at a time so a failure marks only
   that row as not done. `--dry-run` prints exactly what would be sent, without touching
   Hindsight.
+- The watermark lives in the checkout that ran the mirror (`.hindsight/` is gitignored). A
+  mirror from a fresh checkout or worktree re-retains everything; Hindsight replaces memories
+  by `document_id`, so the bank does not duplicate, but it costs a full extraction pass
+  (observed 2026-11-05: 71 memories re-retained from the main checkout after the Phase A
+  worktree, where the state file was, had been removed).
 
 ## Cost
 
@@ -166,3 +184,116 @@ entities. A rerun retained nothing and skipped 27, as intended.
   for grammar points and root causes verbatim.
 - Session memories for the long 500問 imports (24 questions) are chunked by Hindsight, so
   one session shows up as several `world` facts in the graph, each carrying the date.
+
+## Phase B — remote access and Hub memory tools
+
+Goal: see the graphs from any of my machines and let claude.ai (through the Hub's `/mcp`)
+recall from the bank, without opening a port on the M2 and without the M2 becoming a way in.
+
+```
+browser (any device) ──Google/OTP login──▶ Cloudflare Access ──▶ hindsight.uhhhsoyan.com      ─┐
+                                                                                            ├─ Cloudflare Tunnel ──▶ cloudflared on M2 (outbound only) ──▶ 127.0.0.1:9999 (UI, own login)
+Vercel /mcp memory_* ──service token─────▶ Cloudflare Access ──▶ hindsight-api.uhhhsoyan.com  ─┘                                                        └──▶ 127.0.0.1:8888 (API, bearer key)
+```
+
+Layers, outermost first: Cloudflare Access (identity or service token; nothing reaches the
+tunnel without it) → cloudflared forwards only to the two loopback ports → Hindsight's own
+API key (REST, MCP) and UI access key. The M2 itself stays reachable only over Tailscale SSH.
+
+### What a breach of each layer gets
+
+- Access bypassed / service token leaked: read the bank (my study history), run reflect on
+  my Anthropic key (cost), and, through the API's write endpoints, wipe or pollute the bank.
+  The bank is rebuilt from Postgres by `hindsight:mirror -- --reset`; the ledger is untouched.
+  Mitigation: a separate Anthropic key with a spend limit for the container, rotate the
+  service token from the Zero Trust dashboard (and `npm run env:set`), rotate
+  `HINDSIGHT_API_KEY` with `recreate`.
+- cloudflared compromised: it is a user-space process forwarding to two loopback ports; it
+  has no shell, no credentials beyond the tunnel token, and the Tailscale/SSH surface is
+  unchanged.
+- Hindsight 0-day: same blast radius as the first bullet; the container has only the
+  Anthropic key and the bank.
+
+### One-time setup (Cloudflare side, dashboard)
+
+Prerequisite: a domain whose DNS is on Cloudflare (free plan is fine). Names below assume
+`hindsight.uhhhsoyan.com` for the UI and `hindsight-api.uhhhsoyan.com` for the API.
+
+1. **Tunnel.** Zero Trust → Networks → Tunnels → Create a tunnel → Cloudflared → name
+   `essoyan-m2`. The dashboard shows a macOS install command; cloudflared is already
+   installed by Homebrew (`brew install cloudflared`, 2026-11-05), so run only the service
+   line on the M2 — it contains the tunnel token:
+   `sudo cloudflared service install <token>` (LaunchDaemon, survives logout; without sudo it
+   installs a per-user LaunchAgent, fine for an always-logged-in clamshell Mac).
+   Check: `sudo launchctl list | grep cloudflare` and the tunnel shows **Healthy** in the
+   dashboard.
+2. **Public hostnames** (tunnel → Public Hostname tab → Add): `hindsight.uhhhsoyan.com` → service
+   `HTTP` `localhost:9999`; `hindsight-api.uhhhsoyan.com` → `HTTP` `localhost:8888`. Cloudflare
+   creates the DNS records. Do not add anything else.
+3. **Service token.** Zero Trust → Access → Service Auth → Service Tokens → Create
+   `jlpt-hub-vercel` (duration: 1 year or non-expiring). Copy the Client ID and Client Secret
+   now; the secret is shown once.
+4. **Access application.** Zero Trust → Access → Applications → Add → Self-hosted → name
+   `Hindsight`, add both hostnames, session duration 1 week. Policies:
+   - `owner`: action **Allow**, include **Emails** = my address. Identity: the default
+     One-time PIN is enough; add Google if preferred.
+   - `hub`: action **Service Auth**, include **Service Token** = `jlpt-hub-vercel`.
+   Leave everything else default (no bypass rules).
+5. **Vercel env** (from the repo, `vercel` CLI logged in; sets development, preview and
+   production, then `npm run env:pull` to refresh `.env.local`):
+
+   ```bash
+   npm run env:set -- HINDSIGHT_URL=https://hindsight-api.uhhhsoyan.com HINDSIGHT_UI_URL=https://hindsight.uhhhsoyan.com
+   npm run env:set -- HINDSIGHT_API_KEY HINDSIGHT_UI_ACCESS_KEY   # paste the values from .env.local (hidden prompt)
+   npm run env:set -- CF_ACCESS_CLIENT_ID CF_ACCESS_CLIENT_SECRET  # paste from step 3
+   ```
+
+   `HINDSIGHT_UI_ACCESS_KEY` is not used by the Hub; storing it keeps `npm run env:pull`
+   from dropping it out of `.env.local`. Redeploy (merge or `vercel --prod`).
+
+### Verify
+
+```bash
+# From anywhere. Without Access credentials: a 302 to the Cloudflare login (UI) / 403 (API).
+curl -sI https://hindsight-api.uhhhsoyan.com/health | head -1
+# With the service token: 200, then Hindsight's own auth.
+curl -s -H "CF-Access-Client-Id: $CF_ACCESS_CLIENT_ID" -H "CF-Access-Client-Secret: $CF_ACCESS_CLIENT_SECRET" https://hindsight-api.uhhhsoyan.com/health
+curl -s -H "CF-Access-Client-Id: ..." -H "CF-Access-Client-Secret: ..." https://hindsight-api.uhhhsoyan.com/v1/default/banks   # 401 without the bearer key, 200 with
+# From the Hub (needs the MCP_TOKEN): sync_status.memory.configured true, then a recall.
+```
+
+Browser: `https://hindsight.uhhhsoyan.com/banks/jlpt-study` → Cloudflare login → Hindsight login
+(`HINDSIGHT_UI_ACCESS_KEY`) → the bank. The Progress page shows a "Memory graph" card with
+this link when `HINDSIGHT_UI_URL` is set.
+
+### Hub side (built 2026-11-05)
+
+- `lib/hindsight.ts`: `readHindsightConfig` (null without `HINDSIGHT_URL`), `memoryRecall`,
+  `memoryReflect` via `@vectorize-io/hindsight-client` with `apiKey` plus the
+  `CF-Access-Client-Id/Secret` headers; client-side timeouts (recall 20 s, reflect 50 s under
+  the route's `maxDuration = 60`); `classifyFailure` maps 401/403 and an HTML login page to
+  `rejected` (our config is wrong), everything else (5xx incl. Cloudflare 530 "tunnel down",
+  timeouts, connection refused) to `offline`. Unit tests in `lib/hindsight.test.ts`.
+- `app/mcp/route.ts` (server version 1.4.0, 14 tools): `memory_recall {query, budget?, limit?}`
+  → `{status:'ok', hits:[{text,type,when,documentId,entities}], count}`; `memory_reflect
+  {question, budget? low|mid}` → `{status:'ok', text, basedOn}`; both return the non-ok
+  statuses as data so claude.ai carries on with the ledger tools. `sync_status` gained
+  `memory: {configured, bank, accessToken, apiKey}`.
+- `app/progress/memory-link.tsx`: the graph link card (server-rendered, hidden when
+  unconfigured).
+- Smoke 2026-11-05 against the local container through the dev server: recall `ほど` → 3
+  hits with `session:`/`insight:` ids; reflect "which two grammar points do I confuse most"
+  → grounded answer (comparisons より/ほど/のほうが with the five logged slips; 〜ながら with
+  four) in 40 s, `basedOn` 20 memories.
+
+### Operations
+
+- The mirror is still manual: `npm run hindsight:mirror` on the M2 after study sessions. The
+  bank lags the ledger until then; the tool descriptions say so.
+- Cloudflare's free tier limits one request to 100 s at the origin; reflect at budget `mid`
+  (observed up to 300 s) will not fit, so the Hub only offers `low` and `mid`, defaults to
+  `low`, and reports a timeout as `offline`.
+- SSH fallback for the UI when the tunnel is down: `ssh -L 9999:127.0.0.1:9999 essoyan-m2-max`
+  then http://localhost:9999 (the UI login still applies).
+- Cost: Cloudflare Tunnel and Access are free for this use (Zero Trust free plan, up to 50
+  users); the domain is the only fee.

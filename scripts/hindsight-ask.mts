@@ -3,7 +3,8 @@
 // Usage: npm run hindsight:ask -- recall <query>            # ranked memories
 //        npm run hindsight:ask -- reflect <question>        # LLM answer grounded in the bank
 //        npm run hindsight:ask -- reflect --facts <question>  # also list the memories it used
-// Env (optional): HINDSIGHT_URL (default http://localhost:8888), HINDSIGHT_BANK (jlpt-study).
+// Env (optional): HINDSIGHT_URL (default http://localhost:8888), HINDSIGHT_BANK (jlpt-study),
+// HINDSIGHT_API_KEY (bearer token when the container runs with auth; see scripts/hindsight.sh).
 import { HindsightClient } from "@vectorize-io/hindsight-client";
 
 const BASE_URL = process.env.HINDSIGHT_URL ?? "http://localhost:8888";
@@ -28,7 +29,7 @@ if ((mode !== "recall" && mode !== "reflect") || !query) {
   process.exit(2);
 }
 
-const client = new HindsightClient({ baseUrl: BASE_URL });
+const client = new HindsightClient({ baseUrl: BASE_URL, apiKey: process.env.HINDSIGHT_API_KEY });
 
 if (mode === "recall") {
   const res = await client.recall(BANK, query, { budget: budget ?? "mid", maxTokens: 2048 });

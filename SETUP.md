@@ -147,22 +147,31 @@ an entry to correct a link, delete it to re-map, or pass `--no-claude` to use th
 Deployment Protection must stay **off** for `/mcp` (claude.ai cannot pass a Vercel
 password); the bearer token is the gate. Production currently has it off.
 
-## Hindsight (optional, local)
+## Hindsight (optional, local, with remote access)
 
 A local [Hindsight](https://hindsight.vectorize.io) memory bank mirrored from the ledger, for
-recall/reflect over your misses and a graph view of the entities (grammar points, root
-causes) they connect. Pure add-on: Postgres stays the only source of truth, the mirror script
-is the only bridge, and nothing in the app notices if it is down. Needs Docker and
-`ANTHROPIC_API_KEY` in `.env.local` (retain/reflect call Claude). Plan and details:
+the memory/entity graphs and for `memory_recall` / `memory_reflect` in the MCP endpoint. The
+Postgres ledger stays the only source of truth; if the container is down only the memory
+tools notice (they answer `offline`). Design, auth and the Cloudflare setup:
 `docs/plans/07-hindsight.md`.
 
 ```bash
-npm run hindsight:up                 # docker container "hindsight": API :8888, UI :9999
-npm run hindsight:mirror             # read-only against Neon; retains new insights/sessions
+# .env.local: ANTHROPIC_API_KEY, DATABASE_URL, plus HINDSIGHT_API_KEY and
+# HINDSIGHT_UI_ACCESS_KEY (openssl rand -hex 32 each) so the container starts with auth.
+npm run hindsight:up                 # docker container "hindsight": API 127.0.0.1:8888, UI 127.0.0.1:9999
+bash scripts/hindsight.sh recreate   # after changing keys/ports (keeps the data volume)
+npm run hindsight:mirror             # read-only against Neon; retains new insights/sessions (manual, after study)
 npm run hindsight:ask -- recall ほど
 npm run hindsight:ask -- reflect "What should I drill this week?"
 npm run hindsight:down
 ```
 
-`.mcp.json` also lists the bank's MCP endpoint (`hindsight`) for Claude Code; it only
-answers while the container is up.
+`.mcp.json` also lists the bank's MCP endpoint (`hindsight`, bearer `HINDSIGHT_API_KEY`) for
+Claude Code; it only works while the container is up.
+
+Remote access (Phase B): cloudflared on the host (`brew install cloudflared`, then the
+`cloudflared service install <token>` line from the Zero Trust dashboard) publishes the two
+loopback ports as `hindsight.uhhhsoyan.com` / `hindsight-api.uhhhsoyan.com` behind Cloudflare Access.
+The deployed Hub needs `HINDSIGHT_URL`, `HINDSIGHT_UI_URL`, `HINDSIGHT_API_KEY`,
+`CF_ACCESS_CLIENT_ID`, `CF_ACCESS_CLIENT_SECRET` (`npm run env:set -- …`); unset, the memory
+tools answer `unconfigured` and the Progress page shows no graph link.

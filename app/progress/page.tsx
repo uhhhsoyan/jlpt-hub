@@ -14,6 +14,7 @@ import { CoverageBar, CoverageLegend } from "./coverage";
 import { WeakPoints } from "./weak-points";
 import { RootCauses, type RootCausesData } from "./root-causes";
 import { EvidenceVolume, type EvidenceWeekData } from "./evidence-volume";
+import { MemoryLink } from "./memory-link";
 
 export const dynamic = "force-dynamic";
 
@@ -262,6 +263,8 @@ export default async function ProgressPage() {
           </section>
 
           <IntegrationsPanel integrations={integrations} />
+
+          <MemoryLink />
         </>
       )}
     </div>
