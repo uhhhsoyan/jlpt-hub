@@ -106,4 +106,5 @@ Both return `status`. Anything other than `ok` (`offline`, `unconfigured`, `reje
 - Log in the same conversation where the review happened; do not batch days together.
 - Never invent results. If a photo is unreadable or I did not say whether an answer was right, mark `correct` null and say so.
 - Dates: use the date I did the work. If I am reviewing yesterday's page today, `taken_at` is yesterday.
+- The library carries no Genki lesson references. Never cite a Genki lesson number or say a word is "not in Genki" from memory; if the lesson matters, say you do not know.
 - If the connector is unavailable, finish the review and give me the attempts as a compact list I can log later; do not silently drop them.
