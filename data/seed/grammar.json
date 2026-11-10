@@ -469,7 +469,14 @@
     "meaning": "suffix showing a third person's outward desire or feeling",
     "example": "妹は新しいスマホをほしがっています。",
     "exampleReading": "いもうとは あたらしい すまほを ほしがっています。",
-    "exampleEnglish": "My younger sister wants a new smartphone."
+    "exampleEnglish": "My younger sister wants a new smartphone.",
+    "aliases": [
+      "たがる",
+      "がる",
+      "〜たがる",
+      "〜がる",
+      "たがっている"
+    ]
   },
   {
     "pattern": "お〜になる",
@@ -1429,7 +1436,11 @@
     "meaning": "probably ~, seeking confirmation: right?",
     "example": "明日は晴れるでしょう。",
     "exampleReading": "あしたは はれるでしょう。",
-    "exampleEnglish": "It will probably be sunny tomorrow."
+    "exampleEnglish": "It will probably be sunny tomorrow.",
+    "aliases": [
+      "でしょうか",
+      "〜でしょうか"
+    ]
   },
   {
     "pattern": "〜んです／〜のです",
@@ -1569,6 +1580,541 @@
       "までに",
       "〜までに〜",
       "までには"
+    ]
+  },
+  {
+    "pattern": "〜といい",
+    "level": "N4",
+    "meaning": "hope / wish: it would be good if ~ (といいね・といいですね); the speaker cannot control the outcome",
+    "example": "明日晴れるといいですね。",
+    "exampleReading": "あした はれると いいですね。",
+    "exampleEnglish": "I hope it is sunny tomorrow.",
+    "aliases": [
+      "といい",
+      "といいね",
+      "といいですね",
+      "〜といいですね",
+      "〜といいね",
+      "〜といいんですが"
+    ]
+  },
+  {
+    "pattern": "なかなか〜ない",
+    "level": "N4",
+    "meaning": "not easily / not readily ~; something expected keeps not happening",
+    "example": "バスがなかなか来ない。",
+    "exampleReading": "ばすが なかなか こない。",
+    "exampleEnglish": "The bus just will not come.",
+    "aliases": [
+      "なかなか",
+      "なかなか〜ません",
+      "なかなか～ない"
+    ]
+  },
+  {
+    "pattern": "〜のは〜だ",
+    "level": "N4",
+    "meaning": "cleft sentence: the one that ~ / what ~ is X (puts the answer at the end)",
+    "example": "私が買ったのはこの本です。",
+    "exampleReading": "わたしが かったのは この ほんです。",
+    "exampleEnglish": "What I bought is this book.",
+    "aliases": [
+      "のは",
+      "〜のは",
+      "〜のは〜です",
+      "のは〜だ"
+    ]
+  },
+  {
+    "pattern": "〜なしで",
+    "level": "N4",
+    "meaning": "without ~ (noun + なしで)",
+    "example": "砂糖なしでコーヒーを飲みます。",
+    "exampleReading": "さとうなしで こーひーを のみます。",
+    "exampleEnglish": "I drink coffee without sugar.",
+    "aliases": [
+      "なしで",
+      "なし",
+      "〜なし",
+      "なしに"
+    ]
+  },
+  {
+    "pattern": "〜だけで",
+    "level": "N4",
+    "meaning": "just by ~ / only with ~ (the action alone is enough)",
+    "example": "見るだけで分かります。",
+    "exampleReading": "みるだけで わかります。",
+    "exampleEnglish": "You can tell just by looking.",
+    "aliases": [
+      "だけで",
+      "〜だけで〜"
+    ]
+  },
+  {
+    "pattern": "〜なくて",
+    "level": "N4",
+    "meaning": "negative て-form joining clauses: not ~ and / because ~ did not",
+    "example": "時間がなくて、行けませんでした。",
+    "exampleReading": "じかんが なくて、いけませんでした。",
+    "exampleEnglish": "I had no time, so I could not go.",
+    "aliases": [
+      "なくて",
+      "〜なくて、",
+      "じゃなくて",
+      "〜じゃなくて"
+    ]
+  },
+  {
+    "pattern": "〜ごろ",
+    "level": "N4",
+    "meaning": "around (a point in time): 三時ごろ; contrast 〜ぐらい for amounts",
+    "example": "三時ごろ帰ります。",
+    "exampleReading": "さんじごろ かえります。",
+    "exampleEnglish": "I will go home around three.",
+    "aliases": [
+      "ごろ",
+      "頃",
+      "〜頃",
+      "ころ"
+    ]
+  },
+  {
+    "pattern": "〜ごとに",
+    "level": "N4",
+    "meaning": "every ~ / each ~ (interval or unit): 三日ごとに",
+    "example": "三日ごとに水をやります。",
+    "exampleReading": "みっかごとに みずを やります。",
+    "exampleEnglish": "I water it every three days.",
+    "aliases": [
+      "ごとに",
+      "毎に"
+    ]
+  },
+  {
+    "pattern": "〜など",
+    "level": "N4",
+    "meaning": "such as ~ / and so on (non-exhaustive list, often with や)",
+    "example": "果物や野菜などを買いました。",
+    "exampleReading": "くだものや やさいなどを かいました。",
+    "exampleEnglish": "I bought fruit, vegetables and so on.",
+    "aliases": [
+      "など",
+      "〜など",
+      "なんか"
+    ]
+  },
+  {
+    "pattern": "〜かな",
+    "level": "N4",
+    "meaning": "I wonder ~ (casual self-question)",
+    "example": "明日は雨かな。",
+    "exampleReading": "あしたは あめかな。",
+    "exampleEnglish": "I wonder if it will rain tomorrow.",
+    "aliases": [
+      "かな",
+      "かなあ",
+      "〜かなあ"
+    ]
+  },
+  {
+    "pattern": "〜がする",
+    "level": "N4",
+    "meaning": "a smell / sound / taste / feeling is perceived: においがする、音がする、気がする",
+    "example": "変な音がします。",
+    "exampleReading": "へんな おとが します。",
+    "exampleEnglish": "There is a strange sound.",
+    "aliases": [
+      "がする",
+      "においがする",
+      "音がする",
+      "気がする",
+      "味がする"
+    ]
+  },
+  {
+    "pattern": "〜じゃないか",
+    "level": "N4",
+    "meaning": "isn't it ~? / surely ~ (confirming or pointing something out)",
+    "example": "それは危ないじゃないか。",
+    "exampleReading": "それは あぶないじゃないか。",
+    "exampleEnglish": "Isn't that dangerous?",
+    "aliases": [
+      "じゃないか",
+      "ではないか",
+      "じゃない？",
+      "〜じゃない"
+    ]
+  },
+  {
+    "pattern": "〜以上",
+    "level": "N4",
+    "meaning": "~ or more / over ~ (includes the number); also 'since ~ (we have gone that far)'",
+    "example": "十八歳以上の人が入れます。",
+    "exampleReading": "じゅうはっさい いじょうの ひとが はいれます。",
+    "exampleEnglish": "People eighteen and over may enter.",
+    "aliases": [
+      "以上",
+      "いじょう"
+    ]
+  },
+  {
+    "pattern": "〜以下",
+    "level": "N4",
+    "meaning": "~ or less / under ~ (includes the number)",
+    "example": "五歳以下は無料です。",
+    "exampleReading": "ごさい いかは むりょうです。",
+    "exampleEnglish": "Ages five and under are free.",
+    "aliases": [
+      "以下",
+      "いか"
+    ]
+  },
+  {
+    "pattern": "〜以外",
+    "level": "N4",
+    "meaning": "except ~ / other than ~",
+    "example": "日曜日以外は開いています。",
+    "exampleReading": "にちようび いがいは あいています。",
+    "exampleEnglish": "We are open every day except Sunday.",
+    "aliases": [
+      "以外",
+      "いがい",
+      "以外は",
+      "以外に"
+    ]
+  },
+  {
+    "pattern": "〜の中で",
+    "level": "N4",
+    "meaning": "among ~ / within a group (often with 一番)",
+    "example": "果物の中でりんごが一番好きです。",
+    "exampleReading": "くだものの なかで りんごが いちばん すきです。",
+    "exampleEnglish": "Among fruits I like apples best.",
+    "aliases": [
+      "の中で",
+      "のなかで",
+      "なかで"
+    ]
+  },
+  {
+    "pattern": "少しも〜ない",
+    "level": "N4",
+    "meaning": "not even a little / not at all (stronger than あまり)",
+    "example": "少しも分かりません。",
+    "exampleReading": "すこしも わかりません。",
+    "exampleEnglish": "I do not understand at all.",
+    "aliases": [
+      "少しも",
+      "すこしも",
+      "すこしも〜ない",
+      "ちっとも〜ない",
+      "ちっとも"
+    ]
+  },
+  {
+    "pattern": "〜と言ってもいい",
+    "level": "N4",
+    "meaning": "you could say ~ / it is fair to say ~",
+    "example": "日本語が上手だと言ってもいいです。",
+    "exampleReading": "にほんごが じょうずだと いっても いいです。",
+    "exampleEnglish": "You could say his Japanese is good.",
+    "aliases": [
+      "と言ってもいい",
+      "といってもいい"
+    ]
+  },
+  {
+    "pattern": "〜てすみません",
+    "level": "N4",
+    "meaning": "sorry for ~ing (apology with the て-form)",
+    "example": "遅れてすみません。",
+    "exampleReading": "おくれて すみません。",
+    "exampleEnglish": "Sorry for being late.",
+    "aliases": [
+      "てすみません",
+      "てすみませんでした",
+      "〜てすみませんでした",
+      "てごめん"
+    ]
+  },
+  {
+    "pattern": "〜てくれてありがとう",
+    "level": "N4",
+    "meaning": "thank you for ~ing (for me)",
+    "example": "手伝ってくれてありがとう。",
+    "exampleReading": "てつだってくれて ありがとう。",
+    "exampleEnglish": "Thank you for helping me.",
+    "aliases": [
+      "てくれてありがとう",
+      "てくれてありがとうございます",
+      "〜てくださってありがとうございます"
+    ]
+  },
+  {
+    "pattern": "〜のだろうか",
+    "level": "N4",
+    "meaning": "I wonder whether ~ (written / reflective question)",
+    "example": "本当に来るのだろうか。",
+    "exampleReading": "ほんとうに くるのだろうか。",
+    "exampleEnglish": "I wonder whether he will really come.",
+    "aliases": [
+      "のだろうか",
+      "んだろうか",
+      "だろうか",
+      "〜だろうか"
+    ]
+  },
+  {
+    "pattern": "でございます",
+    "level": "N4",
+    "meaning": "very polite copula (丁寧語 for です), shop and announcement register",
+    "example": "こちらは会議室でございます。",
+    "exampleReading": "こちらは かいぎしつで ございます。",
+    "exampleEnglish": "This is the meeting room.",
+    "aliases": [
+      "ございます",
+      "〜でございます"
+    ]
+  },
+  {
+    "pattern": "〜ほかに",
+    "level": "N4",
+    "meaning": "besides ~ / in addition to ~ / any other ~",
+    "example": "ほかに質問はありますか。",
+    "exampleReading": "ほかに しつもんは ありますか。",
+    "exampleEnglish": "Are there any other questions?",
+    "aliases": [
+      "ほかに",
+      "他に",
+      "ほかにも",
+      "〜のほかに"
+    ]
+  },
+  {
+    "pattern": "〜が必要だ",
+    "level": "N4",
+    "meaning": "~ is necessary / need ~ (noun + が必要)",
+    "example": "ビザが必要です。",
+    "exampleReading": "びざが ひつようです。",
+    "exampleEnglish": "A visa is necessary.",
+    "aliases": [
+      "が必要",
+      "がひつよう",
+      "が必要です",
+      "〜が必要です"
+    ]
+  },
+  {
+    "pattern": "〜ように言う",
+    "level": "N4",
+    "meaning": "tell / ask someone to do ~ (indirect command); often passive ように言われる",
+    "example": "医者に運動するように言われました。",
+    "exampleReading": "いしゃに うんどうするように いわれました。",
+    "exampleEnglish": "The doctor told me to exercise.",
+    "aliases": [
+      "ように言う",
+      "ようにいう",
+      "ように言われる",
+      "ように言われた",
+      "ように頼む"
+    ]
+  },
+  {
+    "pattern": "〜に見える",
+    "level": "N4",
+    "meaning": "looks like ~ / appears to be ~ (noun + に見える, adjective + く／に見える)",
+    "example": "彼は学生に見えます。",
+    "exampleReading": "かれは がくせいに みえます。",
+    "exampleEnglish": "He looks like a student.",
+    "aliases": [
+      "に見える",
+      "にみえる",
+      "く見える",
+      "〜く見える",
+      "そうに見える"
+    ]
+  },
+  {
+    "pattern": "〜に気がつく",
+    "level": "N4",
+    "meaning": "notice ~ / realise ~ (noun + に気がつく; also 気づく)",
+    "example": "間違いに気がつきました。",
+    "exampleReading": "まちがいに きがつきました。",
+    "exampleEnglish": "I noticed the mistake.",
+    "aliases": [
+      "に気がつく",
+      "にきがつく",
+      "気がつく",
+      "気づく",
+      "に気づく"
+    ]
+  },
+  {
+    "pattern": "〜でも〜でも",
+    "level": "N4",
+    "meaning": "whether A or B (either is fine / neither, with a negative)",
+    "example": "肉でも魚でもいいです。",
+    "exampleReading": "にくでも さかなでも いいです。",
+    "exampleEnglish": "Meat or fish, either is fine.",
+    "aliases": [
+      "でも〜でも",
+      "〜でも〜でもいい"
+    ]
+  },
+  {
+    "pattern": "それでも",
+    "level": "N4",
+    "meaning": "even so / nevertheless (sentence connector)",
+    "example": "雨が降っていた。それでも出かけた。",
+    "exampleReading": "あめが ふっていた。それでも でかけた。",
+    "exampleEnglish": "It was raining. Even so, I went out.",
+    "aliases": [
+      "でもそれでも"
+    ]
+  },
+  {
+    "pattern": "〜と言われている",
+    "level": "N4",
+    "meaning": "it is said that ~ / ~ is said to be (general belief)",
+    "example": "日本は安全だと言われています。",
+    "exampleReading": "にほんは あんぜんだと いわれています。",
+    "exampleEnglish": "Japan is said to be safe.",
+    "aliases": [
+      "と言われている",
+      "といわれている",
+      "と言われています"
+    ]
+  },
+  {
+    "pattern": "〜のが上手／〜のが下手",
+    "level": "N5",
+    "meaning": "good at / bad at doing ~ (verb + のが上手・下手・得意・苦手)",
+    "example": "彼は歌うのが上手です。",
+    "exampleReading": "かれは うたうのが じょうずです。",
+    "exampleEnglish": "He is good at singing.",
+    "aliases": [
+      "のが上手",
+      "のがじょうず",
+      "のが下手",
+      "のがへた",
+      "のが得意",
+      "のが苦手",
+      "のがとくい",
+      "のがにがて"
+    ]
+  },
+  {
+    "pattern": "〜は〜の一つだ",
+    "level": "N4",
+    "meaning": "~ is one of (the) ~",
+    "example": "富士山は日本の有名な山の一つです。",
+    "exampleReading": "ふじさんは にほんの ゆうめいな やまの ひとつです。",
+    "exampleEnglish": "Mt Fuji is one of Japan's famous mountains.",
+    "aliases": [
+      "の一つだ",
+      "の一つです",
+      "のひとつ",
+      "〜の一つ"
+    ]
+  },
+  {
+    "pattern": "〜て（依頼）",
+    "level": "N4",
+    "meaning": "casual request with the bare て-form (ください dropped)",
+    "example": "ちょっと待って。",
+    "exampleReading": "ちょっと まって。",
+    "exampleEnglish": "Wait a second.",
+    "aliases": [
+      "て（依頼）",
+      "〜て（お願い）",
+      "て（お願い）"
+    ]
+  },
+  {
+    "pattern": "〜て（理由）",
+    "level": "N4",
+    "meaning": "て-form giving a cause: ~ and so / because ~ (result is not a request or volition)",
+    "example": "風邪をひいて、学校を休みました。",
+    "exampleReading": "かぜを ひいて、がっこうを やすみました。",
+    "exampleEnglish": "I caught a cold and missed school.",
+    "aliases": [
+      "て（理由）",
+      "て（原因）",
+      "〜て（原因）",
+      "〜くて（理由）"
+    ]
+  },
+  {
+    "pattern": "〜て（手段）",
+    "level": "N4",
+    "meaning": "て-form giving the means: by ~ing",
+    "example": "歩いて学校に行きます。",
+    "exampleReading": "あるいて がっこうに いきます。",
+    "exampleEnglish": "I walk to school.",
+    "aliases": [
+      "て（手段）",
+      "て（方法）",
+      "〜て（方法）"
+    ]
+  },
+  {
+    "pattern": "〜て（順序）",
+    "level": "N4",
+    "meaning": "て-form joining actions in sequence: ~ and then ~",
+    "example": "朝起きて、シャワーを浴びます。",
+    "exampleReading": "あさ おきて、しゃわーを あびます。",
+    "exampleEnglish": "I get up and take a shower.",
+    "aliases": [
+      "て（順序）",
+      "て（並列）",
+      "〜て、〜",
+      "て形（接続）"
+    ]
+  },
+  {
+    "pattern": "〜でできている",
+    "level": "N4",
+    "meaning": "made of ~ (material visible: で) / made from ~ (material changed: から)",
+    "example": "このかばんは革でできています。",
+    "exampleReading": "この かばんは かわで できています。",
+    "exampleEnglish": "This bag is made of leather.",
+    "aliases": [
+      "でできている",
+      "でできる",
+      "からできている",
+      "からできる"
+    ]
+  },
+  {
+    "pattern": "見える・聞こえる",
+    "level": "N4",
+    "meaning": "can be seen / can be heard spontaneously (not 見られる・聞ける, which mean one chooses to)",
+    "example": "ここから富士山が見えます。",
+    "exampleReading": "ここから ふじさんが みえます。",
+    "exampleEnglish": "You can see Mt Fuji from here.",
+    "aliases": [
+      "見える",
+      "聞こえる",
+      "みえる",
+      "きこえる",
+      "見える／聞こえる"
+    ]
+  },
+  {
+    "pattern": "〜が好きだ",
+    "level": "N5",
+    "meaning": "like / dislike ~ takes が: 〜が好き・〜が嫌い (also 上手・下手・欲しい)",
+    "example": "私は犬が好きです。",
+    "exampleReading": "わたしは いぬが すきです。",
+    "exampleEnglish": "I like dogs.",
+    "aliases": [
+      "が好き",
+      "がすき",
+      "が好きです",
+      "が嫌い",
+      "がきらい",
+      "〜が嫌いだ"
     ]
   }
 ]
