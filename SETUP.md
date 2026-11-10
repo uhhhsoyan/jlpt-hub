@@ -131,7 +131,9 @@ weak list and the root-cause panel, so only closed-book `practice` moves those. 
 practice miss should carry a `root_cause` (`ROOT_CAUSES` in `lib/types.ts` is the preferred
 list; any kebab-case label is kept) because the "Why you miss" panel on `/progress` groups
 on it. Tags that match no item are kept with the question; add the item or an alias to the
-seed data, re-seed, and run `npm run db:relink` (or the `relink_tags` tool).
+seed data (`data/seed/grammar.json` for a pattern, with its Bunpro id paired in
+`bunpro-crosswalk.json` so Bunpro reviews feed it too; `vocab-extra.json` for a word),
+re-seed, and run `npm run db:relink` (or the `relink_tags` tool).
 
 **Importing the old CSV ledger.** Download `jlpt_500_ledger.csv` from the claude.ai project
 files into `data/import/` (gitignored) and run `npm run db:import-ledger`. It creates one
