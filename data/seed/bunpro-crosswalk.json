@@ -357,6 +357,12 @@
       "method": "string"
     },
     {
+      "bunproId": 77,
+      "bunproTitle": "のがじょうず",
+      "headword": "〜のが上手／〜のが下手",
+      "method": "manual"
+    },
+    {
       "bunproId": 79,
       "bunproTitle": "たり～たりする",
       "headword": "〜たり〜たりする",
@@ -393,6 +399,12 @@
       "method": "string"
     },
     {
+      "bunproId": 85,
+      "bunproTitle": "のがへた",
+      "headword": "〜のが上手／〜のが下手",
+      "method": "manual"
+    },
+    {
       "bunproId": 86,
       "bunproTitle": "なくてはいけない",
       "headword": "〜なければならない",
@@ -409,6 +421,12 @@
       "bunproTitle": "でも",
       "headword": "でも",
       "method": "string"
+    },
+    {
+      "bunproId": 89,
+      "bunproTitle": "など",
+      "headword": "〜など",
+      "method": "manual"
     },
     {
       "bunproId": 90,
@@ -495,10 +513,22 @@
       "method": "string"
     },
     {
+      "bunproId": 104,
+      "bunproTitle": "までに",
+      "headword": "〜までに",
+      "method": "manual"
+    },
+    {
       "bunproId": 105,
       "bunproTitle": "そう ",
       "headword": "〜そうだ（様態）",
       "method": "claude"
+    },
+    {
+      "bunproId": 106,
+      "bunproTitle": "てすみません",
+      "headword": "〜てすみません",
+      "method": "manual"
     },
     {
       "bunproId": 107,
@@ -511,6 +541,12 @@
       "bunproTitle": "より",
       "headword": "〜より",
       "method": "string"
+    },
+    {
+      "bunproId": 109,
+      "bunproTitle": "だけで",
+      "headword": "〜だけで",
+      "method": "manual"
     },
     {
       "bunproId": 110,
@@ -555,6 +591,12 @@
       "method": "string"
     },
     {
+      "bunproId": 117,
+      "bunproTitle": "がする",
+      "headword": "〜がする",
+      "method": "manual"
+    },
+    {
       "bunproId": 118,
       "bunproTitle": "そうに・そうな ",
       "headword": "〜そうだ（様態）",
@@ -565,6 +607,12 @@
       "bunproTitle": "Number + も",
       "headword": "も（強調）",
       "method": "claude"
+    },
+    {
+      "bunproId": 120,
+      "bunproTitle": "かな",
+      "headword": "〜かな",
+      "method": "manual"
     },
     {
       "bunproId": 121,
@@ -591,10 +639,22 @@
       "method": "claude"
     },
     {
+      "bunproId": 125,
+      "bunproTitle": "ごろ",
+      "headword": "〜ごろ",
+      "method": "manual"
+    },
+    {
       "bunproId": 126,
       "bunproTitle": "おわる",
       "headword": "〜終わる",
       "method": "claude"
+    },
+    {
+      "bunproId": 127,
+      "bunproTitle": "がひつよう",
+      "headword": "〜が必要だ",
+      "method": "manual"
     },
     {
       "bunproId": 128,
@@ -605,8 +665,8 @@
     {
       "bunproId": 129,
       "bunproTitle": "といい",
-      "headword": "〜たほうがいい",
-      "method": "claude"
+      "headword": "〜といい",
+      "method": "manual"
     },
     {
       "bunproId": 130,
@@ -711,6 +771,12 @@
       "method": "string"
     },
     {
+      "bunproId": 147,
+      "bunproTitle": "といってもいい",
+      "headword": "〜と言ってもいい",
+      "method": "manual"
+    },
+    {
       "bunproId": 148,
       "bunproTitle": "ながら",
       "headword": "〜ながら",
@@ -733,6 +799,12 @@
       "bunproTitle": "はずだ",
       "headword": "〜はずだ",
       "method": "string"
+    },
+    {
+      "bunproId": 152,
+      "bunproTitle": "と～と、どちらが",
+      "headword": "〜と〜とどちら",
+      "method": "manual"
     },
     {
       "bunproId": 153,
@@ -813,6 +885,18 @@
       "method": "string"
     },
     {
+      "bunproId": 166,
+      "bunproTitle": "にみえる",
+      "headword": "〜に見える",
+      "method": "manual"
+    },
+    {
+      "bunproId": 167,
+      "bunproTitle": "にきがつく",
+      "headword": "〜に気がつく",
+      "method": "manual"
+    },
+    {
       "bunproId": 168,
       "bunproTitle": "ようになる",
       "headword": "〜ようになる",
@@ -841,6 +925,12 @@
       "bunproTitle": "てしまう・ちゃう",
       "headword": "〜てしまう",
       "method": "string"
+    },
+    {
+      "bunproId": 173,
+      "bunproTitle": "じゃないか",
+      "headword": "〜じゃないか",
+      "method": "manual"
     },
     {
       "bunproId": 174,
@@ -885,16 +975,40 @@
       "method": "claude"
     },
     {
+      "bunproId": 183,
+      "bunproTitle": "のなかで",
+      "headword": "〜の中で",
+      "method": "manual"
+    },
+    {
+      "bunproId": 184,
+      "bunproTitle": "といわれている",
+      "headword": "〜と言われている",
+      "method": "manual"
+    },
+    {
       "bunproId": 185,
       "bunproTitle": "ということ",
       "headword": "〜こと（名詞化）",
       "method": "claude"
     },
     {
+      "bunproId": 186,
+      "bunproTitle": "それでも",
+      "headword": "それでも",
+      "method": "manual"
+    },
+    {
       "bunproId": 187,
       "bunproTitle": "ございます",
       "headword": "尊敬語の特別な動詞",
       "method": "claude"
+    },
+    {
+      "bunproId": 188,
+      "bunproTitle": "でございます",
+      "headword": "でございます",
+      "method": "manual"
     },
     {
       "bunproId": 189,
@@ -969,10 +1083,22 @@
       "method": "claude"
     },
     {
+      "bunproId": 366,
+      "bunproTitle": "～のだろうか",
+      "headword": "〜のだろうか",
+      "method": "manual"
+    },
+    {
       "bunproId": 370,
       "bunproTitle": "だが・ですが",
       "headword": "しかし",
       "method": "claude"
+    },
+    {
+      "bunproId": 371,
+      "bunproTitle": "てくれてありがとう",
+      "headword": "〜てくれてありがとう",
+      "method": "manual"
     },
     {
       "bunproId": 372,
@@ -1005,10 +1131,58 @@
       "method": "claude"
     },
     {
+      "bunproId": 381,
+      "bunproTitle": "すこしも～ない",
+      "headword": "少しも〜ない",
+      "method": "manual"
+    },
+    {
+      "bunproId": 382,
+      "bunproTitle": "以上 ①",
+      "headword": "〜以上",
+      "method": "manual"
+    },
+    {
+      "bunproId": 383,
+      "bunproTitle": "いか",
+      "headword": "〜以下",
+      "method": "manual"
+    },
+    {
+      "bunproId": 386,
+      "bunproTitle": "ようにいう",
+      "headword": "〜ように言う",
+      "method": "manual"
+    },
+    {
+      "bunproId": 387,
+      "bunproTitle": "〜でも 〜でも",
+      "headword": "〜でも〜でも",
+      "method": "manual"
+    },
+    {
+      "bunproId": 388,
+      "bunproTitle": "ごとに",
+      "headword": "〜ごとに",
+      "method": "manual"
+    },
+    {
       "bunproId": 389,
       "bunproTitle": "それに",
       "headword": "それに",
       "method": "string"
+    },
+    {
+      "bunproId": 390,
+      "bunproTitle": "いがい",
+      "headword": "〜以外",
+      "method": "manual"
+    },
+    {
+      "bunproId": 391,
+      "bunproTitle": "～は～の一つだ",
+      "headword": "〜は〜の一つだ",
+      "method": "manual"
     },
     {
       "bunproId": 392,
@@ -1023,10 +1197,22 @@
       "method": "claude"
     },
     {
+      "bunproId": 395,
+      "bunproTitle": "ほかに(も)・ほか(に)は",
+      "headword": "〜ほかに",
+      "method": "manual"
+    },
+    {
       "bunproId": 416,
       "bunproTitle": "Verb + て",
       "headword": "〜てから",
       "method": "claude"
+    },
+    {
+      "bunproId": 618,
+      "bunproTitle": "でできる・からできる",
+      "headword": "〜でできている",
+      "method": "manual"
     },
     {
       "bunproId": 621,
@@ -1063,6 +1249,18 @@
       "bunproTitle": "てくれない・てもらえない",
       "headword": "〜てもらえますか",
       "method": "claude"
+    },
+    {
+      "bunproId": 716,
+      "bunproTitle": "好き",
+      "headword": "〜が好きだ",
+      "method": "manual"
+    },
+    {
+      "bunproId": 717,
+      "bunproTitle": "きらい",
+      "headword": "〜が好きだ",
+      "method": "manual"
     },
     {
       "bunproId": 718,
@@ -1155,6 +1353,18 @@
       "method": "claude"
     },
     {
+      "bunproId": 767,
+      "bunproTitle": "聞こえる",
+      "headword": "見える・聞こえる",
+      "method": "manual"
+    },
+    {
+      "bunproId": 768,
+      "bunproTitle": "見える",
+      "headword": "見える・聞こえる",
+      "method": "manual"
+    },
+    {
       "bunproId": 769,
       "bunproTitle": "Adjective + て・Noun + で",
       "headword": "で",
@@ -1171,6 +1381,42 @@
       "bunproTitle": "Adjective + て + B",
       "headword": "〜くて",
       "method": "claude"
+    },
+    {
+      "bunproId": 772,
+      "bunproTitle": "Verb[て] + B",
+      "headword": "〜て（理由）",
+      "method": "manual"
+    },
+    {
+      "bunproId": 773,
+      "bunproTitle": "Verb[て]・Noun[で] + B",
+      "headword": "〜て（手段）",
+      "method": "manual"
+    },
+    {
+      "bunproId": 774,
+      "bunproTitle": "なくて",
+      "headword": "〜なくて",
+      "method": "manual"
+    },
+    {
+      "bunproId": 775,
+      "bunproTitle": "なくて",
+      "headword": "〜なくて",
+      "method": "manual"
+    },
+    {
+      "bunproId": 776,
+      "bunproTitle": "Verb[て] + B",
+      "headword": "〜て（順序）",
+      "method": "manual"
+    },
+    {
+      "bunproId": 777,
+      "bunproTitle": "Verb[て]",
+      "headword": "〜て（依頼）",
+      "method": "manual"
     },
     {
       "bunproId": 873,

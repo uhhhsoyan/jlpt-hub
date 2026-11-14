@@ -68,6 +68,17 @@ Reconciled against the repo on 2026-10-27 and built the same day. Exam: JLPT N4,
   `match` label and an item that is only a prefix of the query (まで for 〜までに) ranks
   last, so a near miss is not read as a hit. Root causes promoted from use:
   context-cue-missed, distractor-bias, kanji-lookalike, katakana-decoding.
+- The library is curated, not self-extending (2026-11-09). The grammar list was a generic
+  N4/N5 pattern list, not SKM's table of contents, so SKM lessons surface patterns it lacks
+  (〜といい sat unresolved on 10 attempts). Keeping the chat out of item creation is
+  deliberate: an invented row becomes a permanent mastery item and duplicates the split
+  senses. The loop is cheap instead: add the pattern plus the spellings the chat used as
+  `aliases` to `data/seed/grammar.json`, pair its Bunpro id in `bunpro-crosswalk.json`,
+  `npm run db:seed && npm run db:relink`. 39 patterns were added in one batch from the
+  Bunpro N4/N5 points the crosswalk had left unpaired (the crosswalk had also paired
+  Bunpro's といい to 〜たほうがいい; repointed). Bare forms of split items (〜から, 〜ている)
+  stay ambiguous on purpose; the instructions tell the chat to tag the sense, and to put
+  sentence vocabulary on a grammar question in `vocab_gaps` rather than `tags`.
 - Study sources are a catalog, not free text (2026-11-04): `study_sources`,
   `practice_sessions.source_id`, `study_log` for time with no graded questions, and the
   `list_sources` / `log_study` tools. See [08 — Study sources](./08-study-sources.md).
