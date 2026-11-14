@@ -23,7 +23,8 @@ import { memoryRecall, memoryReflect, readHindsightConfig } from "@/lib/hindsigh
 import { getReadiness } from "@/lib/readiness";
 import { findItems } from "@/lib/resolve-items";
 import { listStudySources, logStudy } from "@/lib/study-sources-db";
-import { countVocabQueue, listVocabQueue, queueVocab, setVocabQueueStatus } from "@/lib/vocab-queue";
+import { countVocabQueue, effectiveAsMet, listVocabQueue, queueVocab, setVocabQueueStatus, type VocabGapInput } from "@/lib/vocab-queue";
+import { assertNoReservedMetaKeys, normalizeSlips, parseDoneOn, SLIP_KINDS } from "@/lib/attempt-meta";
 import { getAccuracyBySection, getMissesByRootCause, getPracticeWindow, getWeakItems } from "@/lib/weakness";
 import { normalizeRootCause, ROOT_CAUSES, SESSION_MODES, STUDY_ACTIVITIES, VOCAB_QUEUE_STATUSES } from "@/lib/types";
 
@@ -39,7 +40,7 @@ import { normalizeRootCause, ROOT_CAUSES, SESSION_MODES, STUDY_ACTIVITIES, VOCAB
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
 
-const SERVER_INFO = { name: "jlpt-hub-study-ledger", version: "1.6.0" };
+const SERVER_INFO = { name: "jlpt-hub-study-ledger", version: "1.7.0" };
 
 /** For sync_status: whether the Hindsight bridge is configured in this deployment (lib/hindsight.ts). */
 function memoryStatus() {
@@ -94,14 +95,70 @@ const tagSchema = z.object({
 });
 
 const vocabGapSchema = z.object({
-  text: z.string().min(1).describe("The word as met, dictionary form for verbs/adjectives: 続き, 間に合う, 丈夫"),
+  text: z
+    .string()
+    .min(1)
+    .describe("The kanji / dictionary form, so the row links to a library item (dictionary form for verbs/adjectives): 続き, 間に合う, 大勢"),
   reading: z.string().optional().describe("Kana reading, e.g. つづき"),
   meaning: z.string().optional().describe("Short English gloss"),
   context: z.string().optional().describe("The phrase or sentence it stalled in; defaults to the attempt's note or stem"),
+  as_met: z
+    .string()
+    .optional()
+    .describe(
+      "The form exactly as printed when it differs from text, e.g. おおぜい when the page printed kana for 大勢. Always fill it when the page printed kana; it goes on the front of the Anki card.",
+    ),
 });
+
+type VocabGapArg = z.infer<typeof vocabGapSchema>;
+
+/** Tool shape → lib shape (as_met → asMet). */
+const toVocabGaps = (gaps: VocabGapArg[] | undefined): VocabGapInput[] | undefined =>
+  gaps?.map(({ as_met, ...g }) => ({ ...g, asMet: as_met ?? null }));
+
+const slipSchema = z.object({
+  kind: z
+    .string()
+    .min(1)
+    .describe(`Short kebab-case label; prefer one of: ${SLIP_KINDS.join(", ")}. Any other short label is kept (normalised like a root cause).`),
+  text: z.string().min(1).describe("One line: 'read 時 as 時間', '〜ましょうか read as \"should we\", not an offer', 'gave the final verb to the listener'"),
+});
+
+const partSchema = z
+  .number()
+  .int()
+  .positive()
+  .describe("Blank of a multi-blank question: printed question 7 with blanks ① and ② is two attempts, number 7 part 1 and number 7 part 2");
+
+const doneOnSchema = z
+  .string()
+  .describe("YYYY-MM-DD this attempt was done, only when it differs from the session's taken_at (a set spanning days); dates this attempt's item evidence only");
+
+interface AttemptFieldArgs {
+  number?: number;
+  part?: number;
+  done_on?: string;
+  slips?: { kind: string; text: string }[];
+  meta?: Record<string, unknown>;
+}
+
+/** Validate log_attempts' per-attempt first-class fields and keep them out of free meta. */
+function attemptFields(a: AttemptFieldArgs, i: number): Pick<AttemptInput, "part" | "doneOn" | "slips"> {
+  assertNoReservedMetaKeys(a.meta, `attempts[${i}].meta`);
+  if (a.part !== undefined && a.number === undefined) {
+    throw new Error(`attempts[${i}] has part ${a.part} but no number; a blank needs its printed question number.`);
+  }
+  return {
+    part: a.part,
+    doneOn: a.done_on === undefined ? undefined : (parseDoneOn(a.done_on) ?? undefined),
+    slips: a.slips === undefined ? undefined : normalizeSlips(a.slips, `attempts[${i}].slips`),
+  };
+}
 
 const attemptSchema = z.object({
   number: z.number().int().positive().optional().describe("Printed question number; defaults to position"),
+  part: partSchema.optional(),
+  done_on: doneOnSchema.optional(),
   section: z.string().describe(SECTION_HINT),
   level: z.enum(["N5", "N4"]).optional(),
   correct: z.boolean().nullable().describe("null if skipped or ungradable"),
@@ -113,6 +170,12 @@ const attemptSchema = z.object({
       `Why it was missed; omit for correct answers. Prefer one of: ${ROOT_CAUSES.join(", ")}. If none fits, use a short kebab-case label of your own; it is stored verbatim and reported under its own name.`,
     ),
   note: z.string().optional().describe("One-line diagnosis, e.g. 'picked つもり, needed はず'"),
+  slips: z
+    .array(slipSchema)
+    .optional()
+    .describe(
+      "Non-pattern errors on this answer that do not decide correct: a word misread (時 as 時間), a pattern misread in passing, the subject mixed up. Stored on the attempt and tallied in reviews; never evidence, never accuracy",
+    ),
   stem: z.string().optional().describe("Question text if worth keeping"),
   choices: z.array(z.string()).optional(),
   explanation: z.string().optional(),
@@ -129,7 +192,9 @@ const attemptSchema = z.object({
   meta: z
     .record(z.string(), z.unknown())
     .optional()
-    .describe("Any other structured facts about this attempt with no field of their own; stored as-is"),
+    .describe(
+      "Any other structured facts about this attempt with no field of their own; stored as-is. Not for part, done_on or slips (use those fields; questionPart, done_on and slips keys are rejected here)",
+    ),
 });
 
 function buildServer(): McpServer {
@@ -140,7 +205,7 @@ function buildServer(): McpServer {
     {
       title: "Log practice attempts",
       description:
-        "Record one reviewed page/set of questions as a confirmed session. mode=practice (default) is closed-book work: answers count toward accuracy, the weak list and root-cause reports. mode=lesson is open-book work done right after reading the explanation (textbook example sentences, れんしゅう with the notes in view): it is recorded as exposure, moves items from unseen to learning, and is excluded from every accuracy figure. Each attempt carries right/wrong, the item(s) it tests, a free-text note, and for misses a root_cause (preferred list given on the field; any label accepted). Nothing is rejected for not fitting a category: unknown sections land in 'other' with the raw word kept, and 'meta' takes anything else. Name the book or app in 'source' (a catalog slug from list_sources, or its name/alias) and put the lesson/page in 'source_name'; when 'source' is absent, source_name is matched against the catalog too. Result: sessionId, mode, questions, graded (attempts with correct true/false), correct, observations (evidence rows written: one per resolved tag per graded attempt in practice, one per resolved tag per attempt in lesson; tags that matched nothing write none until relink_tags), unresolvedTags (one entry per distinct tag that matched no library item: {kind, text, numbers: the attempt numbers carrying it, suggestions: the closest items, each with a match label; 'prefix-only' means a shorter, different item, not the one meant}), source (the catalog entry linked, or null) and sourceUnresolved (the source text when it matched no catalog entry; the text is still kept on the session). The tag text is kept, so relink_tags can attach it later once the item or alias exists. A session logged with the wrong mode, label, date or source is fixed with update_session, not re-logged; a wrong tag, result, root cause or note on one attempt is fixed with update_attempt. For study time that produced no graded answers (reading, app reviews, listening), use log_study instead. Words the learner did not know while doing a question go in that attempt's vocab_gaps (right or wrong); each lands on the vocab queue (Hub /queue, Anki export) and vocabQueued in the result counts them. Words that stall outside a graded set go through queue_vocab.",
+        "Record one reviewed page/set of questions as a confirmed session. mode=practice (default) is closed-book work: answers count toward accuracy, the weak list and root-cause reports. mode=lesson is open-book work done right after reading the explanation (textbook example sentences, れんしゅう with the notes in view): it is recorded as exposure, moves items from unseen to learning, and is excluded from every accuracy figure. Each attempt carries right/wrong, the item(s) it tests, a free-text note, and for misses a root_cause (preferred list given on the field; any label accepted). A question with several blanks is one attempt per blank, all with the printed number and part 1, 2, ... (number + part must be unique in the call). done_on (YYYY-MM-DD) on an attempt done on a different day from taken_at dates that attempt's item evidence; the session keeps taken_at and session-window reports still use it. slips [{kind, text}] records a non-pattern error on an answer (a word misread, a pattern misread in passing, the subject mixed up) without changing correct; slips never write evidence. Nothing is rejected for not fitting a category: unknown sections land in 'other' with the raw word kept, and 'meta' takes anything else. Name the book or app in 'source' (a catalog slug from list_sources, or its name/alias) and put the lesson/page in 'source_name'; when 'source' is absent, source_name is matched against the catalog too. Result: sessionId, mode, questions, graded (attempts with correct true/false), correct, observations (evidence rows written: one per resolved tag per graded attempt in practice, one per resolved tag per attempt in lesson; tags that matched nothing write none until relink_tags), unresolvedTags (one entry per distinct tag that matched no library item: {kind, text, numbers: the attempt numbers carrying it, suggestions: the closest items, each with a match label; 'prefix-only' means a shorter, different item, not the one meant}), source (the catalog entry linked, or null) and sourceUnresolved (the source text when it matched no catalog entry; the text is still kept on the session). The tag text is kept, so relink_tags can attach it later once the item or alias exists. A session logged with the wrong mode, label, date or source is fixed with update_session, not re-logged; a wrong tag, result, root cause or note on one attempt is fixed with update_attempt. For study time that produced no graded answers (reading, app reviews, listening), use log_study instead. Words the learner did not know while doing a question go in that attempt's vocab_gaps (right or wrong): text is the kanji / dictionary form for linking, as_met the form as printed when the page printed kana; each lands on the vocab queue (Hub /queue, Anki export) and vocabQueued in the result counts them. Words that stall outside a graded set go through queue_vocab.",
       inputSchema: {
         label: z.string().describe("e.g. '500問 Week 3 Day 2', 'Mock test 1 文法', 'SKM N4 L1 れんしゅう1'"),
         source: z
@@ -167,13 +232,15 @@ function buildServer(): McpServer {
         const takenAt = new Date(args.taken_at);
         if (Number.isNaN(takenAt.getTime())) throw new Error(`Unparseable taken_at: ${args.taken_at}`);
 
-        const attempts: AttemptInput[] = args.attempts.map((a) => {
+        const attempts: AttemptInput[] = args.attempts.map((a, i) => {
+          const fields = attemptFields(a, i);
           // Never reject for an unrecognised category: fall back and keep the raw word.
           const section = normalizeSection(a.section) ?? "other";
           const meta: Record<string, unknown> = { ...(a.meta ?? {}) };
           if (section === "other" && normalizeSection(a.section) === null) meta.sectionRaw = a.section;
           return {
             number: a.number,
+            ...fields,
             section,
             level: a.level ?? null,
             correct: a.correct,
@@ -184,7 +251,7 @@ function buildServer(): McpServer {
             explanation: a.explanation ?? null,
             tags: a.tags,
             meta,
-            vocabGaps: a.vocab_gaps,
+            vocabGaps: toVocabGaps(a.vocab_gaps),
           };
         });
 
@@ -332,7 +399,7 @@ function buildServer(): McpServer {
     {
       title: "Relink unresolved tags",
       description:
-        "Re-run item resolution over every stored attempt tag and insight item that matched nothing when logged, and attach the missing evidence. Idempotent and safe to run any time; run it after an item or alias is added to the library. Returns what was linked and what still matches nothing, with suggestions.",
+        "Re-run item resolution over every stored attempt tag and insight item that matched nothing when logged, and attach the missing evidence (dated by the attempt's done_on when it has one, else the session's taken_at). Also links vocab-queue rows that have no library item yet, by text then reading, as when they were queued; an existing link is never changed. Idempotent and safe to run any time; run it after an item or alias is added to the library. Result: {questionsChecked, tagsRelinked, observations, insightsChecked, insightItemsRelinked, stillUnresolved: [{kind, text, n, suggestions}], queueLinked, queueUnlinked: [text], invalidDoneOn?: attempts skipped because their stored done_on is not a date (fix with update_attempt done_on)}.",
       inputSchema: {},
       annotations: { idempotentHint: true },
     },
@@ -406,16 +473,21 @@ function buildServer(): McpServer {
     {
       title: "Correct a logged attempt",
       description:
-        "Fix one attempt of a logged session in place, instead of re-logging the set or leaving a wrong tag for an alias to absorb. Name it by session_id (list_sessions) and its printed number. If several attempts in the session share that number (multi-blank questions logged as repeats), the call fails and lists the candidates with their position; call again with position (1-based order in the session). Pass only the fields to change. tags replaces the whole tag list (objects {kind, text}, re-resolved) and rebuilds the attempt's evidence; changing correct also rebuilds it under the session's mode. root_cause, note, stem and explanation take null to clear (a root_cause is not cleared automatically when correct turns true; pass root_cause: null as well). meta is merged shallowly: keys given overwrite, a key set to null is removed, keys not mentioned are kept. vocab_gaps adds words to the vocab queue tied to this question (same as on log_attempts); it never removes queue rows. Result: {sessionId, mode, attempt: {questionId, position, number, section, correct, rootCause, note, stem, explanation, tags: [{kind, text, itemId}], meta}, changed: the fields that actually changed, observations: {removed, written} for this attempt (null when neither tags nor correct changed), unresolvedTags (grouped as in log_attempts), vocabQueued}.",
+        "Fix one attempt of a logged session in place, instead of re-logging the set or leaving a wrong tag for an alias to absorb. Name it by session_id (list_sessions), its printed number and, for one blank of a multi-blank question, its part. If number (+ part) still matches several attempts, the call fails and lists the candidates with their part and position; call again with part or position (1-based order in the session). Pass only the fields to change. tags replaces the whole tag list (objects {kind, text}, re-resolved) and rebuilds the attempt's evidence; changing correct or done_on also rebuilds it under the session's mode. root_cause, note, stem and explanation take null to clear (a root_cause is not cleared automatically when correct turns true; pass root_cause: null as well). done_on (YYYY-MM-DD, null clears) dates this attempt's evidence. slips replaces the attempt's slips ([] clears); slips never touch evidence. new_number and new_part (null clears) renumber the attempt, e.g. to turn an old workaround (a shifted number with meta.printed/meta.blank) into number + part; two attempts may not share the same number and part. meta is merged shallowly: keys given overwrite, a key set to null is removed, keys not mentioned are kept (questionPart, done_on and slips keys are rejected: use the fields). vocab_gaps adds words to the vocab queue tied to this question (same as on log_attempts); it never removes queue rows. Result: {sessionId, mode, attempt: {questionId, position, number, part, doneOn, slips, section, correct, rootCause, note, stem, explanation, tags: [{kind, text, itemId}], meta}, changed: the fields that actually changed (tags, correct, root_cause, note, stem, explanation, number, part, done_on, slips, meta), observations: {removed, written} for this attempt (null unless tags, correct or done_on changed), unresolvedTags (grouped as in log_attempts), vocabQueued}.",
       inputSchema: {
         session_id: z.string().uuid(),
         number: z.number().int().positive().describe("Printed question number of the attempt"),
+        part: partSchema.optional().describe("Part (blank) of the attempt to fix, for a multi-blank question"),
         position: z
           .number()
           .int()
           .positive()
           .optional()
-          .describe("1-based order in the session; only needed when several attempts share the number (the error lists them)"),
+          .describe("1-based order in the session; only needed when number (+ part) still matches several attempts (the error lists them)"),
+        new_number: z.number().int().positive().optional().describe("Renumber the attempt to this printed number"),
+        new_part: partSchema.nullable().optional().describe("Set the attempt's part (blank); null clears it"),
+        done_on: doneOnSchema.nullable().optional().describe("YYYY-MM-DD the attempt was done if not the session's taken_at; null clears. Rebuilds its evidence"),
+        slips: z.array(slipSchema).optional().describe("Replaces the attempt's slips; [] clears them"),
         tags: z
           .array(tagSchema)
           .optional()
@@ -447,15 +519,27 @@ function buildServer(): McpServer {
           args.stem === undefined &&
           args.explanation === undefined &&
           args.meta === undefined &&
+          args.new_number === undefined &&
+          args.new_part === undefined &&
+          args.done_on === undefined &&
+          args.slips === undefined &&
           (args.vocab_gaps === undefined || args.vocab_gaps.length === 0);
         if (nothing) {
-          throw new Error("Nothing to change: pass tags, correct, root_cause, note, stem, explanation, meta and/or vocab_gaps.");
+          throw new Error(
+            "Nothing to change: pass tags, correct, root_cause, note, stem, explanation, done_on, slips, new_number, new_part, meta and/or vocab_gaps.",
+          );
         }
+        assertNoReservedMetaKeys(args.meta);
         return ok(
           await updateAttempt({
             sessionId: args.session_id,
             number: args.number,
+            part: args.part,
             position: args.position,
+            newNumber: args.new_number,
+            newPart: args.new_part,
+            doneOn: args.done_on === undefined ? undefined : parseDoneOn(args.done_on),
+            slips: args.slips === undefined ? undefined : normalizeSlips(args.slips),
             tags: args.tags,
             correct: args.correct,
             rootCause: args.root_cause === undefined ? undefined : normalizeRootCause(args.root_cause),
@@ -463,7 +547,7 @@ function buildServer(): McpServer {
             stem: args.stem,
             explanation: args.explanation,
             meta: args.meta,
-            vocabGaps: args.vocab_gaps,
+            vocabGaps: toVocabGaps(args.vocab_gaps),
           }),
         );
       } catch (e) {
@@ -639,41 +723,46 @@ function buildServer(): McpServer {
     {
       title: "Queue unknown vocab",
       description:
-        "Put words I did not know (or had to look up) on the vocab queue, for words met outside a graded set: reading, a lesson explanation, listening, a chat exchange. For words that stalled on a question being logged now, use the attempt's vocab_gaps in log_attempts instead. For a word noticed after its set was logged, pass session_id and number (and position if that number repeats in the session): the word is tied to that question exactly as an attempt's vocab_gap would be (the session's date and label, the question's note or stem as default context), and the result also carries attempt: {sessionId, questionId, number, position}. One row per word; a repeat bumps its count and keeps the new context. Result: {queued, bumped, words:[{text,status,seenCount,itemId}]}. The queue is reviewed by hand in the Hub (/queue) and exported to Anki; never mark anything carded or known from here unless I say so.",
+        "Put words I did not know (or had to look up) on the vocab queue, for words met outside a graded set: reading, a lesson explanation, listening, a chat exchange. For words that stalled on a question being logged now, use the attempt's vocab_gaps in log_attempts instead. For a word noticed after its set was logged, pass session_id and number (plus part for one blank of a multi-blank question, and position only if that still repeats): the word is tied to that question exactly as an attempt's vocab_gap would be (the session's date and label, the question's note or stem as default context), and the result also carries attempt: {sessionId, questionId, number, part, position}. text is the kanji / dictionary form (it links the row to a library item); as_met is the form as printed when it differs, e.g. おおぜい for 大勢: always fill it when the page printed kana. One row per word; a repeat bumps its count and keeps the new context. Result: {queued, bumped, words:[{id,text,status,seenCount,itemId,asMet,created}]}; asMet is the row's most recent as-met form. The queue is reviewed by hand in the Hub (/queue) and exported to Anki; never mark anything carded or known from here unless I say so.",
       inputSchema: {
         words: z.array(vocabGapSchema).min(1),
         taken_at: z.string().optional().describe("ISO date the words came up; default now, or the session's date when session_id is given"),
         label: z.string().optional().describe("Where: 'Satori Reader: ...', 'SKM N4 L6 explanation', 'chat'; defaults to the session's label when session_id is given"),
         session_id: z.string().uuid().optional().describe("Logged session the words belong to; pass with number"),
         number: z.number().int().positive().optional().describe("Printed number of the question in that session"),
+        part: partSchema.optional().describe("Part (blank) of that question, for a multi-blank question"),
         position: z
           .number()
           .int()
           .positive()
           .optional()
-          .describe("1-based order in the session, only when several attempts share the number"),
+          .describe("1-based order in the session, only when number (+ part) still matches several attempts"),
       },
     },
     async (args) => {
       try {
         const at = args.taken_at ? new Date(args.taken_at) : new Date();
         if (Number.isNaN(at.getTime())) throw new Error(`Invalid taken_at: ${args.taken_at}`);
-        if (args.session_id !== undefined || args.number !== undefined || args.position !== undefined) {
+        const words = toVocabGaps(args.words) ?? [];
+        if (args.session_id !== undefined || args.number !== undefined || args.part !== undefined || args.position !== undefined) {
           if (args.session_id === undefined || args.number === undefined) {
-            throw new Error("To tie words to a logged question, pass both session_id and number (position only when the number repeats).");
+            throw new Error(
+              "To tie words to a logged question, pass both session_id and number (part for one blank of a multi-blank question, position only when that still repeats).",
+            );
           }
           return ok(
             await queueVocabForAttempt({
               sessionId: args.session_id,
               number: args.number,
+              part: args.part,
               position: args.position,
-              words: args.words,
+              words,
               at: args.taken_at ? at : undefined,
               label: args.label ?? null,
             }),
           );
         }
-        return ok(await queueVocab(args.words, { at, surface: "claude-ai", label: args.label ?? null }));
+        return ok(await queueVocab(words, { at, surface: "claude-ai", label: args.label ?? null }));
       } catch (e) {
         return fail(e);
       }
@@ -685,7 +774,7 @@ function buildServer(): McpServer {
     {
       title: "Read the vocab queue",
       description:
-        "Words on the vocab queue with their status (queued = waiting for a card decision, carded, skipped, known), reading, meaning, how often each has stalled and the latest context. Default: the queued ones, newest first. Use it when I ask what is on the queue or whether a word is already there.",
+        "Words on the vocab queue with their status (queued = waiting for a card decision, carded, skipped, known), reading, meaning, asMet (the form as printed, e.g. おおぜい for 大勢, when a sighting recorded one; null otherwise), how often each has stalled and the latest context. Default: the queued ones, newest first. Use it when I ask what is on the queue or whether a word is already there.",
       inputSchema: {
         status: z.enum([...VOCAB_QUEUE_STATUSES, "all"]).optional().describe("Default queued"),
         limit: z.number().int().min(1).max(200).optional().describe("Default 50"),
@@ -705,6 +794,7 @@ function buildServer(): McpServer {
             return {
               id: r.id,
               text: r.text,
+              asMet: effectiveAsMet(r.sightings),
               reading: r.reading,
               meaning: r.meaning,
               status: r.status,

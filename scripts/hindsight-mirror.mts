@@ -15,6 +15,10 @@ import { getDb } from "../lib/db";
 import { insights, items, practiceSessions, practiceQuestions } from "../lib/db/schema";
 import type { ItemRow, PracticeQuestionRow, PracticeSessionRow } from "../lib/db/schema";
 import type { QuestionTag } from "../lib/types";
+import { attemptName, compareAttempts, readPart } from "../lib/attempt-meta";
+
+/** "Q7" or "Q7 part 2": printed numbers repeat across the blanks of one question. */
+const qName = (q: PracticeQuestionRow) => `Q${attemptName(q.number, readPart(q.meta)).slice(1)}`;
 
 const BASE_URL = process.env.HINDSIGHT_URL ?? "http://localhost:8888";
 const BANK = process.env.HINDSIGHT_BANK ?? "jlpt-study";
@@ -121,7 +125,7 @@ function sessionMemory(
       ".",
   ];
   for (const q of missed) {
-    let line = `Missed Q${q.number} (${q.section}) on ${tags(q)}`;
+    let line = `Missed ${qName(q)} (${q.section}) on ${tags(q)}`;
     line += `; root cause ${q.rootCause ?? "unclassified"}`;
     if (q.note) line += `; note: ${q.note}`;
     if (q.stem) line += `; stem: ${q.stem}`;
@@ -131,16 +135,16 @@ function sessionMemory(
     lines.push(line + ".");
   }
   if (right.length) {
-    lines.push(`Got right: ${right.map((q) => `Q${q.number} ${tags(q)}`).join("; ")}.`);
+    lines.push(`Got right: ${right.map((q) => `${qName(q)} ${tags(q)}`).join("; ")}.`);
     const noted = right.filter((q) => q.note);
     if (noted.length) {
       lines.push(
-        `Notes on correct answers: ${noted.map((q) => `Q${q.number}: ${q.note}`).join(" | ")}.`,
+        `Notes on correct answers: ${noted.map((q) => `${qName(q)}: ${q.note}`).join(" | ")}.`,
       );
     }
   }
   if (ungraded.length) {
-    lines.push(`Ungraded: ${ungraded.map((q) => `Q${q.number} ${tags(q)}`).join("; ")}.`);
+    lines.push(`Ungraded: ${ungraded.map((q) => `${qName(q)} ${tags(q)}`).join("; ")}.`);
   }
   return lines.join("\n");
 }
@@ -256,7 +260,7 @@ for (const s of allSessions) {
     done.skipped++;
     continue;
   }
-  const qs = (questionsBySession.get(s.id) ?? []).sort((a, b) => a.number - b.number);
+  const qs = (questionsBySession.get(s.id) ?? []).sort(compareAttempts);
   const ok = await retain("session", s.id, sessionMemory(s, qs, byId), s.takenAt, {
     source: "session",
     id: s.id,

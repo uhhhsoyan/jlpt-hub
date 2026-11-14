@@ -1,9 +1,11 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
+  buildAttemptMeta,
   buildEvidenceRows,
   describeAttempt,
   evidenceKind,
+  findPartClash,
   groupUnresolved,
   linkedItemIds,
   mergeMeta,
@@ -182,24 +184,24 @@ test("pickAttempt: duplicate number without position lists the candidates", () =
 
 test("pickAttempt: position disambiguates a duplicate number", () => {
   const rows = [a(1), a(4, "first"), a(4, "second")];
-  assert.equal(pickAttempt(rows, 4, 3).row.note, "second");
-  assert.equal(pickAttempt(rows, 4, 2).row.note, "first");
+  assert.equal(pickAttempt(rows, 4, { position: 3 }).row.note, "second");
+  assert.equal(pickAttempt(rows, 4, { position: 2 }).row.note, "first");
 });
 
 test("pickAttempt: position on a unique number must agree with it", () => {
   const rows = [a(1), a(2), a(3)];
-  assert.equal(pickAttempt(rows, 2, 2).position, 2);
-  assert.throws(() => pickAttempt(rows, 2, 3), /Position 3 is attempt #3, not #2\. Attempts numbered 2: position 2/);
+  assert.equal(pickAttempt(rows, 2, { position: 2 }).position, 2);
+  assert.throws(() => pickAttempt(rows, 2, { position: 3 }), /Position 3 is attempt #3, not #2\. Attempts matching #2: position 2/);
 });
 
 test("pickAttempt: position pointing at a number that does not exist anywhere", () => {
-  assert.throws(() => pickAttempt([a(1), a(2)], 9, 1), /Position 1 is attempt #1, not #9\. No attempt is numbered 9\./);
+  assert.throws(() => pickAttempt([a(1), a(2)], 9, { position: 1 }), /Position 1 is attempt #1, not #9\. No attempt is #9\./);
 });
 
 test("pickAttempt: out-of-range position", () => {
   const rows = [a(1), a(2)];
-  assert.throws(() => pickAttempt(rows, 1, 3), /out of range: the session has 2 attempts \(positions 1-2\)/);
-  assert.throws(() => pickAttempt(rows, 1, 0), /out of range/);
+  assert.throws(() => pickAttempt(rows, 1, { position: 3 }), /out of range: the session has 2 attempts \(positions 1-2\)/);
+  assert.throws(() => pickAttempt(rows, 1, { position: 0 }), /out of range/);
 });
 
 test("pickAttempt: unknown number lists the numbers present, sorted and distinct", () => {
@@ -224,6 +226,7 @@ test("describeAttempt: note, then stem, then tags, truncated", () => {
 // ---- planAttemptPatch -------------------------------------------------------------------
 
 const state = (over: Partial<AttemptState> = {}): AttemptState => ({
+  number: 4,
   isCorrect: false,
   rootCause: "vocab-confusion",
   note: "picked ないで",
@@ -322,4 +325,179 @@ test("planAttemptPatch: does not mutate the current state", () => {
   const current = state();
   planAttemptPatch(current, { tags: [], correct: true, meta: { part: null }, note: null });
   assert.deepEqual(current, state());
+});
+
+// ---- part: multi-blank questions --------------------------------------------------------
+
+const ap = (number: number, part: number | null, note: string | null = null, extra: Record<string, unknown> = {}): AttemptRef => ({
+  number,
+  note,
+  stem: "",
+  tags: [],
+  meta: part === null && Object.keys(extra).length === 0 ? null : { ...extra, ...(part === null ? {} : { questionPart: part }) },
+});
+
+test("pickAttempt: number + part names one blank", () => {
+  const rows = [ap(6, null), ap(7, 1, "blank ①"), ap(7, 2, "blank ②"), ap(8, null)];
+  const picked = pickAttempt(rows, 7, { part: 2 });
+  assert.equal(picked.row.note, "blank ②");
+  assert.equal(picked.position, 3);
+  assert.equal(pickAttempt(rows, 7, { part: 1 }).position, 2);
+});
+
+test("pickAttempt: number alone on a multi-blank question lists the parts and suggests part", () => {
+  const rows = [ap(7, 1, "blank ①"), ap(7, 2, "blank ②")];
+  assert.throws(
+    () => pickAttempt(rows, 7),
+    (e: Error) =>
+      e.message.includes("2 attempts in this session are numbered 7") &&
+      e.message.includes('position 1 (#7 part 1, "blank ①")') &&
+      e.message.includes('position 2 (#7 part 2, "blank ②")') &&
+      e.message.includes("Pass part (1, 2) or position"),
+  );
+});
+
+test("pickAttempt: legacy repeats without part still need position", () => {
+  const rows = [ap(4, null, "first"), ap(4, null, "second")];
+  assert.throws(() => pickAttempt(rows, 4), /Pass position \(1-based/);
+  assert.throws(() => pickAttempt(rows, 4, { part: 1 }), /No attempt #4 part 1 in this session\. Attempts numbered 4 have part none:/);
+});
+
+test("pickAttempt: a part that does not exist lists the parts present", () => {
+  const rows = [ap(7, 1), ap(7, 2)];
+  assert.throws(() => pickAttempt(rows, 7, { part: 3 }), /No attempt #7 part 3 in this session\. Attempts numbered 7 have part 1, 2:/);
+});
+
+test("pickAttempt: part on a number that does not exist falls back to the numbers present", () => {
+  assert.throws(() => pickAttempt([ap(1, null), ap(2, null)], 9, { part: 1 }), /No attempt numbered 9 in this session\. Numbers present: 1, 2\./);
+});
+
+test("pickAttempt: position must agree with number and part", () => {
+  const rows = [ap(7, 1), ap(7, 2)];
+  assert.equal(pickAttempt(rows, 7, { part: 2, position: 2 }).position, 2);
+  assert.throws(
+    () => pickAttempt(rows, 7, { part: 2, position: 1 }),
+    /Position 1 is attempt #7 part 1, not #7 part 2\. Attempts matching #7 part 2: position 2/,
+  );
+  // Position alone (no part) on a multi-blank number is fine: it names one row.
+  assert.equal(pickAttempt(rows, 7, { position: 1 }).row.meta?.questionPart, 1);
+});
+
+test("pickAttempt: duplicate number + part (never stored by the tools) falls back to position", () => {
+  const rows = [ap(7, 1, "a"), ap(7, 1, "b")];
+  assert.throws(() => pickAttempt(rows, 7, { part: 1 }), /2 attempts in this session are #7 part 1: .* Pass position/);
+  assert.equal(pickAttempt(rows, 7, { part: 1, position: 2 }).row.note, "b");
+});
+
+test("pickAttempt: a lesson's string meta.part is not a blank part", () => {
+  const rows = [ap(11, null, "x", { part: "examples" }), ap(12, null, "y", { part: "examples" })];
+  assert.equal(pickAttempt(rows, 11).row.note, "x");
+  assert.throws(() => pickAttempt(rows, 11, { part: 1 }), /have part none/);
+});
+
+test("describeAttempt: names the part when there is one", () => {
+  assert.equal(describeAttempt(ap(7, 2, "wrote に"), 5), 'position 5 (#7 part 2, "wrote に")');
+});
+
+test("findPartClash: same number and part clash; repeats without part do not", () => {
+  assert.equal(findPartClash([{ number: 7, part: 1 }, { number: 7, part: 2 }]), null);
+  assert.equal(findPartClash([{ number: 4, part: null }, { number: 4, part: null }]), null);
+  assert.equal(findPartClash([{ number: 7, part: 1 }, { number: 8, part: 1 }]), null);
+  assert.deepEqual(findPartClash([{ number: 6, part: null }, { number: 7, part: 2 }, { number: 7, part: 2 }]), { first: 1, second: 2 });
+  assert.equal(findPartClash([]), null);
+});
+
+// ---- buildAttemptMeta -------------------------------------------------------------------
+
+test("buildAttemptMeta: first-class fields go under their keys, free meta kept as given", () => {
+  assert.deepEqual(
+    buildAttemptMeta({ part: "れんしゅう1", wrote: null }, { part: 2, doneOn: "2026-11-11", slips: [{ kind: "particle", text: "used に for で" }] }),
+    { part: "れんしゅう1", wrote: null, questionPart: 2, done_on: "2026-11-11", slips: [{ kind: "particle", text: "used に for で" }] },
+  );
+  assert.equal(buildAttemptMeta(null, {}), null);
+  assert.equal(buildAttemptMeta({}, { slips: [] }), null);
+  assert.deepEqual(buildAttemptMeta(undefined, { part: 1 }), { questionPart: 1 });
+});
+
+// ---- done_on in evidence ----------------------------------------------------------------
+
+test("buildEvidenceRows: a link's done_on dates its evidence, others keep the session date", () => {
+  const rows = buildEvidenceRows(
+    [
+      { questionId: "q11", itemId: "a", isCorrect: true, meta: { done_on: "2026-11-11", part: "examples" }, number: 11 },
+      { questionId: "q2", itemId: "b", isCorrect: false, meta: null, number: 2 },
+      { questionId: "q3", itemId: "c", isCorrect: true },
+    ],
+    { ...ctx, mode: "practice" },
+  );
+  assert.deepEqual(rows[0].occurredAt, new Date("2026-11-11T00:00:00.000Z"));
+  assert.equal(rows[1].occurredAt, at);
+  assert.equal(rows[2].occurredAt, at);
+});
+
+test("buildEvidenceRows: an unparseable stored done_on throws, naming the attempt", () => {
+  assert.throws(
+    () =>
+      buildEvidenceRows([{ questionId: "q", itemId: "a", isCorrect: true, meta: { done_on: "11/11", questionPart: 2 }, number: 7 }], {
+        ...ctx,
+        mode: "lesson",
+      }),
+    /Attempt #7 part 2 has meta\.done_on "11\/11"/,
+  );
+});
+
+test("buildEvidenceRows: ungraded practice links never read done_on", () => {
+  assert.deepEqual(
+    buildEvidenceRows([{ questionId: "q", itemId: "a", isCorrect: null, meta: { done_on: "junk" } }], { ...ctx, mode: "practice" }),
+    [],
+  );
+});
+
+// ---- planAttemptPatch: number, part, done_on, slips -------------------------------------
+
+test("planAttemptPatch: done_on is a change of its own and makes evidence stale", () => {
+  const plan = planAttemptPatch(state(), { doneOn: "2026-11-11" });
+  assert.deepEqual(plan.changed, ["done_on"]);
+  assert.equal(plan.evidenceStale, true);
+  assert.deepEqual(plan.next.meta, { part: "examples", done_on: "2026-11-11" });
+
+  const cleared = planAttemptPatch(state({ meta: { part: "examples", done_on: "2026-11-11" } }), { doneOn: null });
+  assert.deepEqual(cleared.changed, ["done_on"]);
+  assert.equal(cleared.evidenceStale, true);
+  assert.deepEqual(cleared.next.meta, { part: "examples" });
+
+  const same = planAttemptPatch(state({ meta: { done_on: "2026-11-11" } }), { doneOn: "2026-11-11" });
+  assert.deepEqual(same.changed, []);
+  assert.equal(same.evidenceStale, false);
+});
+
+test("planAttemptPatch: part and slips are their own changes and leave evidence alone", () => {
+  const slips = [{ kind: "vocab-misread", text: "read 時 as 時間" }];
+  const plan = planAttemptPatch(state(), { part: 2, slips });
+  assert.deepEqual(plan.changed, ["part", "slips"]);
+  assert.equal(plan.evidenceStale, false);
+  assert.deepEqual(plan.next.meta, { part: "examples", questionPart: 2, slips });
+
+  const emptied = planAttemptPatch(state({ meta: { slips, questionPart: 2 } }), { slips: [], part: null });
+  assert.deepEqual(emptied.changed, ["part", "slips"]);
+  assert.equal(emptied.next.meta, null);
+});
+
+test("planAttemptPatch: free meta and first-class fields report separately", () => {
+  const plan = planAttemptPatch(state(), { meta: { printed: null, blank: 2 }, part: 1 });
+  assert.deepEqual(plan.changed, ["part", "meta"]);
+  assert.deepEqual(plan.next.meta, { part: "examples", blank: 2, questionPart: 1 });
+});
+
+test("planAttemptPatch: renumbering, e.g. undoing a shifted-number workaround", () => {
+  const plan = planAttemptPatch(state({ number: 8, meta: { printed: 7, blank: 2 } }), {
+    number: 7,
+    part: 2,
+    meta: { printed: null, blank: null },
+  });
+  assert.deepEqual(plan.changed, ["number", "part", "meta"]);
+  assert.equal(plan.next.number, 7);
+  assert.deepEqual(plan.next.meta, { questionPart: 2 });
+  assert.equal(plan.evidenceStale, false);
+  assert.deepEqual(planAttemptPatch(state(), { number: 4 }).changed, []);
 });

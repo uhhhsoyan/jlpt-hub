@@ -3,6 +3,7 @@
 import { useState, useTransition } from "react";
 import { updateQuestion } from "../actions";
 import type { PracticeQuestionRow } from "@/lib/db/schema";
+import { attemptLabel, readPart } from "@/lib/attempt-meta";
 import { rootCauseLabel, type PracticeSection } from "@/lib/types";
 
 const SECTION_LABEL: Record<PracticeSection, string> = {
@@ -44,7 +45,7 @@ export function QuestionCard({
     <div className="flex flex-col gap-3 rounded-xl border border-neutral-200 bg-white p-4 dark:border-neutral-800 dark:bg-neutral-900">
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-center gap-2">
-          <span className="text-sm font-semibold text-neutral-400">#{question.number}</span>
+          <span className="text-sm font-semibold text-neutral-400">#{attemptLabel(question.number, readPart(question.meta))}</span>
           <span className="rounded bg-neutral-100 px-1.5 py-0.5 text-[11px] font-medium uppercase tracking-wide text-neutral-500 dark:bg-neutral-800 dark:text-neutral-400">
             {SECTION_LABEL[question.section]}
           </span>

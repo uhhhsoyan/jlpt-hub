@@ -15,7 +15,7 @@ turn into Anki cards.
 - Table `vocab_queue` (lib/db/schema.ts): one row per NFKC-normalised word (`norm`, unique),
   `text`, `reading`, `meaning`, optional `item_id` into the library, `status`
   (`queued` | `carded` | `skipped` | `known`), `seen_count`, `first_seen_at`, `last_seen_at`,
-  `sightings` (jsonb: `{at, context, sessionId, questionId, label}`), `surface`.
+  `sightings` (jsonb: `{at, context, sessionId, questionId, label, asMet?}`), `surface`.
 - Upsert rules (lib/vocab-queue.ts `queueVocab`): a repeat appends a sighting (deduped by
   question, else by moment + context), bumps `seen_count`, fills reading/meaning/item the first
   sighting lacked, and moves `skipped` / `known` back to `queued` (it stalled again); `carded`
@@ -51,3 +51,17 @@ are not insights.
 - No delete. A word that should not be there is `skipped`.
 - Hindsight is unaffected; the mirror does not read this table (a later mirror could, if
   vocab stalls turn out to matter to reflect).
+- `as_met` (2026-11-14): a word printed in kana (おおぜい) is queued with `text` in its kanji /
+  dictionary form (大勢) so it links to the library, and `as_met` keeps the printed form.
+  Kana-only recognition is the learner's stated weak point, so the card has to test it: the
+  Anki export puts the effective as_met on the Front and the kanji form first on the Back
+  (columns unchanged: Front, Back, Tags). **Stored on the sighting (`sightings[].asMet`), not
+  a column**, same reason as the attempt fields in 06: no migration this close to the exam.
+  The row's effective as_met is the most recent sighting that has one (`effectiveAsMet`);
+  promoting it to a column later is a backfill of that function's result.
+- Queue rows are relinked (2026-11-14): `relink_tags` / `npm run db:relink` also fills
+  `item_id` on rows queued before their library item existed (21 at the time), with the
+  insert-time ladder shared in `matchQueueItem`: the text (headword, alias, kana reading), then
+  the stored reading, but a reading hit only when the library writes that word in kana (綺麗
+  → きれい); a reading equal to a kanji item's reading is a homophone (掃く / 履く) and stays
+  unlinked. Only nulls are filled; an existing link is never changed.

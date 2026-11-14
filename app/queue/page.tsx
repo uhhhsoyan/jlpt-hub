@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { VocabQueueRow } from "@/lib/db/schema";
-import { countVocabQueue, listVocabQueue, type QueueCounts, type QueueFilter } from "@/lib/vocab-queue";
+import { countVocabQueue, effectiveAsMet, listVocabQueue, type QueueCounts, type QueueFilter } from "@/lib/vocab-queue";
 import { isVocabQueueStatus, VOCAB_QUEUE_STATUS_LABEL, VOCAB_QUEUE_STATUSES, type VocabQueueStatus } from "@/lib/types";
 import { errChain, firstLine } from "@/app/workshop/db-error";
 import { markAllQueuedCarded, setStatus } from "./actions";
@@ -123,11 +123,17 @@ export default async function QueuePage({ searchParams }: { searchParams: Promis
             <ul className="flex flex-col divide-y divide-neutral-200 rounded-xl border border-neutral-200 bg-white dark:divide-neutral-800 dark:border-neutral-800 dark:bg-neutral-900">
               {db.rows.map((r) => {
                 const latest = r.sightings[r.sightings.length - 1];
+                const asMet = effectiveAsMet(r.sightings);
                 return (
                   <li key={r.id} className="flex flex-col gap-2 px-4 py-3 sm:flex-row sm:items-start sm:justify-between">
                     <div className="flex min-w-0 flex-col gap-0.5">
                       <div className="flex flex-wrap items-baseline gap-x-2">
                         <span className="text-lg font-semibold">{r.text}</span>
+                        {asMet ? (
+                          <span title="The form as printed where it was met; the Anki card's front" className="text-sm text-amber-700 dark:text-amber-400">
+                            met as {asMet}
+                          </span>
+                        ) : null}
                         {r.reading && r.reading !== r.text ? <span className="text-sm text-neutral-500">{r.reading}</span> : null}
                         {r.meaning ? <span className="text-sm text-neutral-600 dark:text-neutral-300">{r.meaning}</span> : null}
                         {r.itemId ? (

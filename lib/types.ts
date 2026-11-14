@@ -285,4 +285,10 @@ export interface VocabSighting {
   questionId: string | null;
   /** Session label or free text ("SKM N4 L6 れんしゅう1", "Satori Reader"). */
   label: string | null;
+  /**
+   * The form exactly as printed when it differs from the row's text (おおぜい for 大勢).
+   * Optional: sightings written before it existed lack the key. Read through
+   * effectiveAsMet (lib/vocab-queue-core.ts), never directly.
+   */
+  asMet?: string | null;
 }

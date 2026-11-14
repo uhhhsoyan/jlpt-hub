@@ -10,6 +10,7 @@ import {
   type PracticeQuestionRow,
 } from "@/lib/db/schema";
 import type { PracticeSection, PracticeSurface } from "@/lib/types";
+import { compareAttempts } from "@/lib/attempt-meta";
 import { errChain, firstLine } from "@/app/workshop/db-error";
 import { StatusBadge } from "../status-badge";
 import { QuestionCard } from "./question-card";
@@ -58,11 +59,15 @@ async function loadSession(id: string): Promise<DbState> {
     if (!row) return { status: "not_found" };
     const source: SourceRef = row.sourceSlug && row.sourceDisplayName ? { slug: row.sourceSlug, name: row.sourceDisplayName } : null;
 
-    const questions = await db
-      .select()
-      .from(practiceQuestions)
-      .where(eq(practiceQuestions.sessionId, id))
-      .orderBy(asc(practiceQuestions.number));
+    // Printed numbers repeat (one row per blank of a multi-blank question, and older repeats),
+    // so order by number, then part, then logged order, rather than by number alone.
+    const questions = (
+      await db
+        .select()
+        .from(practiceQuestions)
+        .where(eq(practiceQuestions.sessionId, id))
+        .orderBy(asc(practiceQuestions.number), asc(practiceQuestions.createdAt), asc(practiceQuestions.id))
+    ).sort(compareAttempts);
 
     return { status: "ok", session: row.session, source, questions };
   } catch (e) {

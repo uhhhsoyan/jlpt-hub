@@ -13,17 +13,30 @@ import {
 import { matchTag, matchText, suggestItems, type ItemIndex, type ItemSuggestion } from "@/lib/item-match";
 import { loadItemIndex, resolveTags } from "@/lib/resolve-items";
 import { loadStudySources, resolveSource } from "@/lib/study-sources-db";
-import { queueVocab, type QueueContext, type QueueVocabResult, type VocabGapEntry, type VocabGapInput } from "@/lib/vocab-queue";
 import {
+  queueVocab,
+  relinkVocabQueue,
+  type QueueContext,
+  type QueueVocabResult,
+  type VocabGapEntry,
+  type VocabGapInput,
+} from "@/lib/vocab-queue";
+import {
+  buildAttemptMeta,
   buildEvidenceRows,
   evidenceKind,
+  findPartClash,
   groupUnresolved,
   linkedItemIds,
   pickAttempt,
   planAttemptPatch,
   unresolvedOccurrences,
+  describeAttempt,
+  type AttemptSelector,
+  type EvidenceRow,
   type UnresolvedOccurrence,
 } from "@/lib/ledger-core";
+import { attemptName, evidenceDate, readDoneOn, readPart, readSlips, type Slip } from "@/lib/attempt-meta";
 import type {
   ExtractedTag,
   InsightSource,
@@ -77,6 +90,12 @@ export { evidenceKind };
 export interface AttemptInput {
   /** Printed question number; defaults to position in the batch. */
   number?: number;
+  /** Blank of a multi-blank question (number 7, part 1 and part 2); stored at meta.questionPart. */
+  part?: number;
+  /** Already validated (parseDoneOn): the day this attempt was done when it differs from taken_at; stored at meta.done_on. */
+  doneOn?: string;
+  /** Already normalised (normalizeSlips); stored at meta.slips. Never evidence, never accuracy. */
+  slips?: Slip[];
   section: PracticeSection;
   level?: StudyLevel | null;
   /** null when the question was skipped or ungradable. */
@@ -88,7 +107,7 @@ export interface AttemptInput {
   choices?: string[];
   explanation?: string | null;
   tags: ExtractedTag[];
-  /** Anything structured that has no field of its own; stored as-is on the question. */
+  /** Anything structured that has no field of its own; stored as-is on the question (part/done_on/slips keys not allowed). */
   meta?: Record<string, unknown> | null;
   /** Words the learner did not know while doing this question, right or wrong; each goes on the vocab queue. */
   vocabGaps?: VocabGapInput[];
@@ -156,6 +175,13 @@ function unresolvedWithSuggestions(index: ItemIndex, occurrences: UnresolvedOccu
 
 export async function logAttempts(input: LogAttemptsInput): Promise<LogAttemptsResult> {
   if (input.attempts.length === 0) throw new Error("No attempts to log.");
+  const clash = findPartClash(input.attempts.map((a, i) => ({ number: a.number ?? i + 1, part: a.part ?? null })));
+  if (clash) {
+    const a = input.attempts[clash.first];
+    throw new Error(
+      `Attempts ${clash.first + 1} and ${clash.second + 1} are both ${attemptName(a.number ?? clash.first + 1, a.part ?? null)}; each blank of a question is one entry with its own part.`,
+    );
+  }
   const db = getDb();
   const mode: SessionMode = input.mode ?? "practice";
 
@@ -166,7 +192,9 @@ export async function logAttempts(input: LogAttemptsInput): Promise<LogAttemptsR
   const attempts = input.attempts.map((a, i) => {
     const tags: QuestionTag[] = resolved.slice(cursor, cursor + a.tags.length);
     cursor += a.tags.length;
-    return { ...a, number: a.number ?? i + 1, tags };
+    const meta = buildAttemptMeta(a.meta, { part: a.part, doneOn: a.doneOn, slips: a.slips });
+    const number = a.number ?? i + 1;
+    return { ...a, number, tags, meta, occurredAt: evidenceDate(meta, input.takenAt, `Attempt ${attemptName(number, a.part ?? null)}`) };
   });
 
   // Explicit `source` first, else the free-text source name; whichever was tried and
@@ -217,7 +245,7 @@ export async function logAttempts(input: LogAttemptsInput): Promise<LogAttemptsR
         level: a.level ?? null,
         rootCause: a.rootCause ?? null,
         note: a.note || null,
-        meta: a.meta && Object.keys(a.meta).length > 0 ? a.meta : null,
+        meta: a.meta,
       })
       .returning({ id: practiceQuestions.id });
 
@@ -243,7 +271,8 @@ export async function logAttempts(input: LogAttemptsInput): Promise<LogAttemptsR
           source: "practice",
           kind,
           correct: a.correct,
-          occurredAt: input.takenAt,
+          // done_on dates this attempt's evidence; the session keeps its own taken_at.
+          occurredAt: a.occurredAt,
           meta: { sessionId, questionId: row.id, surface: input.surface, mode },
         });
       }
@@ -430,7 +459,13 @@ export interface UpdateSessionResult {
   observations: { removed: number; written: number } | null;
 }
 
-type LinkedQuestionRow = Record<string, unknown> & { question_id: string; item_id: string; is_correct: boolean | null };
+type LinkedQuestionRow = Record<string, unknown> & {
+  question_id: string;
+  item_id: string;
+  is_correct: boolean | null;
+  number: number;
+  meta: Record<string, unknown> | null;
+};
 
 /**
  * Correct a session logged with the wrong mode, label or date, instead of re-logging it.
@@ -480,18 +515,23 @@ export async function updateSession(input: UpdateSessionInput): Promise<UpdateSe
       changed.push("source");
     }
   }
+  // Evidence is planned before anything is written: a stored done_on that is not a date
+  // fails here, leaving the session untouched instead of half-updated.
+  const scope: EvidenceScope | null =
+    changed.includes("mode") || changed.includes("taken_at")
+      ? {
+          sessionId: current.id,
+          surface: current.surface,
+          mode: patch.mode ?? current.mode,
+          occurredAt: patch.takenAt ?? current.takenAt,
+          confirmed: current.status === "confirmed",
+        }
+      : null;
+  const planned = scope ? await planPracticeEvidence(scope) : null;
+
   if (changed.length > 0) await db.update(practiceSessions).set(patch).where(eq(practiceSessions.id, current.id));
 
-  let obs: UpdateSessionResult["observations"] = null;
-  if (changed.includes("mode") || changed.includes("taken_at")) {
-    obs = await rebuildPracticeEvidence({
-      sessionId: current.id,
-      surface: current.surface,
-      mode: patch.mode ?? current.mode,
-      occurredAt: patch.takenAt ?? current.takenAt,
-      confirmed: current.status === "confirmed",
-    });
-  }
+  const obs: UpdateSessionResult["observations"] = scope && planned ? await writePracticeEvidence(scope, planned) : null;
 
   const session = (await listSessions(1, current.id))[0];
   return { session, changed, observations: obs };
@@ -514,10 +554,33 @@ interface EvidenceScope {
 /**
  * Delete and rewrite the practice observations of a session (or one of its questions) from
  * its question_items links. The single mechanism behind update_session (mode / taken_at)
- * and update_attempt (tags / correct), so both leave the evidence exactly as it would have
- * been written had the corrected values been logged in the first place.
+ * and update_attempt (tags / correct / done_on), so both leave the evidence exactly as it
+ * would have been written had the corrected values been logged in the first place: each
+ * link dated by its question's done_on when set, else the session's taken_at.
  */
 async function rebuildPracticeEvidence(scope: EvidenceScope): Promise<{ removed: number; written: number }> {
+  return writePracticeEvidence(scope, await planPracticeEvidence(scope));
+}
+
+/** Read the links and build the rows (throws on a stored done_on that is not a date); writes nothing. */
+async function planPracticeEvidence(scope: EvidenceScope): Promise<EvidenceRow[]> {
+  if (!scope.confirmed) return [];
+  const oneQuestion = scope.questionId;
+  const links = await getDb().execute<LinkedQuestionRow>(sql`
+    SELECT qi.question_id, qi.item_id, q.is_correct, q.number, q.meta
+    FROM question_items qi
+    JOIN practice_questions q ON q.id = qi.question_id
+    WHERE q.session_id = ${scope.sessionId} AND qi.role = 'tested'
+      ${oneQuestion ? sql`AND q.id = ${oneQuestion}` : sql``}
+  `);
+  return buildEvidenceRows(
+    links.rows.map((l) => ({ questionId: l.question_id, itemId: l.item_id, isCorrect: l.is_correct, number: l.number, meta: l.meta })),
+    { sessionId: scope.sessionId, surface: scope.surface, mode: scope.mode, occurredAt: scope.occurredAt },
+  );
+}
+
+/** Replace the scope's practice observations with the planned rows. */
+async function writePracticeEvidence(scope: EvidenceScope, rows: EvidenceRow[]): Promise<{ removed: number; written: number }> {
   const db = getDb();
   const oneQuestion = scope.questionId;
   const removed = await db.execute(sql`
@@ -526,18 +589,6 @@ async function rebuildPracticeEvidence(scope: EvidenceScope): Promise<{ removed:
       ${oneQuestion ? sql`AND meta->>'questionId' = ${oneQuestion}` : sql``}
     RETURNING id
   `);
-  if (!scope.confirmed) return { removed: removed.rows.length, written: 0 };
-  const links = await db.execute<LinkedQuestionRow>(sql`
-    SELECT qi.question_id, qi.item_id, q.is_correct
-    FROM question_items qi
-    JOIN practice_questions q ON q.id = qi.question_id
-    WHERE q.session_id = ${scope.sessionId} AND qi.role = 'tested'
-      ${oneQuestion ? sql`AND q.id = ${oneQuestion}` : sql``}
-  `);
-  const rows = buildEvidenceRows(
-    links.rows.map((l) => ({ questionId: l.question_id, itemId: l.item_id, isCorrect: l.is_correct })),
-    { sessionId: scope.sessionId, surface: scope.surface, mode: scope.mode, occurredAt: scope.occurredAt },
-  );
   if (rows.length > 0) await db.insert(observations).values(rows);
   return { removed: removed.rows.length, written: rows.length };
 }
@@ -547,13 +598,16 @@ interface LocatedAttempt {
   question: PracticeQuestionRow;
   /** 1-based order of the attempt in its session. */
   position: number;
+  /** Every attempt of the session in logged order (for clash checks when renumbering). */
+  ordered: PracticeQuestionRow[];
 }
 
 /**
- * Find one attempt by session id and printed number (+ position when the number repeats).
- * "Logged order" is insertion order: created_at, then number, then id as tie-breaks.
+ * Find one attempt by session id and printed number (+ part for a multi-blank question,
+ * + position when that still repeats). "Logged order" is insertion order: created_at, then
+ * number, then id as tie-breaks.
  */
-async function locateAttempt(sessionId: string, number: number, position?: number): Promise<LocatedAttempt> {
+async function locateAttempt(sessionId: string, number: number, sel: AttemptSelector = {}): Promise<LocatedAttempt> {
   const db = getDb();
   const [session] = await db.select().from(practiceSessions).where(eq(practiceSessions.id, sessionId));
   if (!session) throw new Error(`No session with id ${sessionId}. Use list_sessions to find it.`);
@@ -563,8 +617,8 @@ async function locateAttempt(sessionId: string, number: number, position?: numbe
     .where(eq(practiceQuestions.sessionId, sessionId))
     .orderBy(asc(practiceQuestions.createdAt), asc(practiceQuestions.number), asc(practiceQuestions.id));
   try {
-    const picked = pickAttempt(questions, number, position);
-    return { session, question: picked.row, position: picked.position };
+    const picked = pickAttempt(questions, number, sel);
+    return { session, question: picked.row, position: picked.position, ordered: questions };
   } catch (e) {
     throw new Error(`Session "${session.label}": ${e instanceof Error ? e.message : String(e)}`);
   }
@@ -584,8 +638,18 @@ export interface UpdateAttemptInput {
   sessionId: string;
   /** Printed number of the attempt to correct. */
   number: number;
-  /** 1-based order in the session; needed only when several attempts share the number. */
+  /** Part (blank) of the attempt to correct, for a multi-blank question. */
+  part?: number;
+  /** 1-based order in the session; needed only when number (+ part) still matches several attempts. */
   position?: number;
+  /** Renumber the attempt (e.g. undoing a shifted-number workaround). */
+  newNumber?: number;
+  /** Set the attempt's part; null clears it. */
+  newPart?: number | null;
+  /** Already validated (parseDoneOn); null clears. Rebuilds the attempt's evidence. */
+  doneOn?: string | null;
+  /** Already normalised (normalizeSlips); replaces the list, empty clears. */
+  slips?: Slip[];
   /** Replaces the tag list (re-resolved; evidence rebuilt). */
   tags?: ExtractedTag[];
   correct?: boolean | null;
@@ -604,6 +668,12 @@ export interface AttemptView {
   questionId: string;
   position: number;
   number: number;
+  /** Blank of a multi-blank question, or null. */
+  part: number | null;
+  /** The day this attempt was done when it differs from the session's taken_at (YYYY-MM-DD), or null. */
+  doneOn: string | null;
+  /** Non-pattern errors noted on the answer; never evidence. */
+  slips: Slip[];
   section: PracticeSection;
   correct: boolean | null;
   rootCause: string | null;
@@ -619,9 +689,9 @@ export interface UpdateAttemptResult {
   mode: SessionMode;
   /** The attempt as it now stands. */
   attempt: AttemptView;
-  /** Fields whose value actually changed (tags, correct, root_cause, note, stem, explanation, meta). */
+  /** Fields whose value actually changed (tags, correct, root_cause, note, stem, explanation, number, part, done_on, slips, meta). */
   changed: string[];
-  /** Evidence rows rewritten for this attempt when tags or correct changed; null when neither did. */
+  /** Evidence rows rewritten for this attempt when tags, correct or done_on changed; null otherwise. */
   observations: { removed: number; written: number } | null;
   /** The attempt's tags that still match no library item, grouped as in log_attempts. */
   unresolvedTags: UnresolvedTag[];
@@ -636,7 +706,10 @@ export interface UpdateAttemptResult {
  */
 export async function updateAttempt(input: UpdateAttemptInput): Promise<UpdateAttemptResult> {
   const db = getDb();
-  const { session, question, position } = await locateAttempt(input.sessionId, input.number, input.position);
+  const { session, question, position, ordered } = await locateAttempt(input.sessionId, input.number, {
+    part: input.part,
+    position: input.position,
+  });
 
   let index: ItemIndex | null = null;
   const getIndex = async (): Promise<ItemIndex> => (index ??= await loadItemIndex());
@@ -644,6 +717,7 @@ export async function updateAttempt(input: UpdateAttemptInput): Promise<UpdateAt
   const tags = input.tags !== undefined ? await resolveTags(input.tags, await getIndex()) : undefined;
   const plan = planAttemptPatch(
     {
+      number: question.number,
       isCorrect: question.isCorrect,
       rootCause: question.rootCause,
       note: question.note,
@@ -660,14 +734,33 @@ export async function updateAttempt(input: UpdateAttemptInput): Promise<UpdateAt
       stem: input.stem,
       explanation: input.explanation,
       meta: input.meta,
+      number: input.newNumber,
+      part: input.newPart,
+      doneOn: input.doneOn,
+      slips: input.slips,
     },
   );
   const { next } = plan;
+
+  // Checks that need no write, done before any write so a refusal leaves the row as it was.
+  if (plan.changed.includes("number") || plan.changed.includes("part")) {
+    const part = readPart(next.meta);
+    const other =
+      part === null ? undefined : ordered.find((q) => q.id !== question.id && q.number === next.number && readPart(q.meta) === part);
+    if (other) {
+      throw new Error(
+        `Session "${session.label}": ${attemptName(next.number, readPart(next.meta))} already exists (${describeAttempt(other, ordered.indexOf(other) + 1)}). Give this attempt a different part, or fix the other one first.`,
+      );
+    }
+  }
+  // A stale rebuild dates by this row's done_on; refuse an unusable stored one now, not after the row is written.
+  if (plan.evidenceStale) evidenceDate(next.meta, session.takenAt, `Attempt ${attemptName(next.number, readPart(next.meta))}`);
 
   if (plan.changed.length > 0) {
     await db
       .update(practiceQuestions)
       .set({
+        number: next.number,
         isCorrect: next.isCorrect,
         rootCause: next.rootCause,
         note: next.note,
@@ -690,6 +783,7 @@ export async function updateAttempt(input: UpdateAttemptInput): Promise<UpdateAt
     }
   }
 
+  // done_on is per attempt, so the session's taken_at here is only the fallback date.
   const obs = plan.evidenceStale
     ? await rebuildPracticeEvidence({
         sessionId: session.id,
@@ -707,8 +801,9 @@ export async function updateAttempt(input: UpdateAttemptInput): Promise<UpdateAt
     vocabQueued = vq.queued + vq.bumped;
   }
 
-  const occurrences = unresolvedOccurrences([{ number: question.number, tags: next.tags }]);
+  const occurrences = unresolvedOccurrences([{ number: next.number, tags: next.tags }]);
   const unresolvedTags = occurrences.length > 0 ? unresolvedWithSuggestions(await getIndex(), occurrences) : [];
+  const doneOn = readDoneOn(next.meta);
 
   return {
     sessionId: session.id,
@@ -716,7 +811,10 @@ export async function updateAttempt(input: UpdateAttemptInput): Promise<UpdateAt
     attempt: {
       questionId: question.id,
       position,
-      number: question.number,
+      number: next.number,
+      part: readPart(next.meta),
+      doneOn: doneOn.kind === "date" ? doneOn.iso : null,
+      slips: readSlips(next.meta),
       section: question.section,
       correct: next.isCorrect,
       rootCause: next.rootCause,
@@ -736,6 +834,8 @@ export async function updateAttempt(input: UpdateAttemptInput): Promise<UpdateAt
 export interface QueueVocabForAttemptInput {
   sessionId: string;
   number: number;
+  /** Part (blank) of a multi-blank question. */
+  part?: number;
   position?: number;
   words: VocabGapInput[];
   /** Defaults to the session's taken_at, as for an attempt's vocab_gaps. */
@@ -745,7 +845,7 @@ export interface QueueVocabForAttemptInput {
 }
 
 export interface QueueVocabForAttemptResult extends QueueVocabResult {
-  attempt: { sessionId: string; questionId: string; number: number; position: number };
+  attempt: { sessionId: string; questionId: string; number: number; part: number | null; position: number };
 }
 
 /**
@@ -753,14 +853,20 @@ export interface QueueVocabForAttemptResult extends QueueVocabResult {
  * question with the same sighting an attempt-level vocab_gap gets.
  */
 export async function queueVocabForAttempt(input: QueueVocabForAttemptInput): Promise<QueueVocabForAttemptResult> {
-  const { session, question, position } = await locateAttempt(input.sessionId, input.number, input.position);
+  const { session, question, position } = await locateAttempt(input.sessionId, input.number, {
+    part: input.part,
+    position: input.position,
+  });
   const ctx = sessionSighting(session);
   const result = await queueVocab(attemptGapEntries(input.words, question.id, question), {
     ...ctx,
     at: input.at ?? ctx.at,
     label: input.label?.trim() || ctx.label,
   });
-  return { ...result, attempt: { sessionId: session.id, questionId: question.id, number: question.number, position } };
+  return {
+    ...result,
+    attempt: { sessionId: session.id, questionId: question.id, number: question.number, part: readPart(question.meta), position },
+  };
 }
 
 export interface UpdateInsightInput {
@@ -871,13 +977,25 @@ export interface RelinkResult {
   insightItemsRelinked: number;
   /** Distinct tag texts that still match nothing, with how often they occur. */
   stillUnresolved: { kind: ExtractedTag["kind"]; text: string; n: number; suggestions: ItemSuggestion[] }[];
+  /** Vocab-queue rows with no library item that got one this run. */
+  queueLinked: number;
+  /** Texts of the vocab-queue rows still without a library item. */
+  queueUnlinked: string[];
+  /**
+   * Attempts skipped because their stored meta.done_on is not a date (a hand edit): their
+   * evidence date is unknown, so nothing is linked until update_attempt fixes done_on.
+   * Present only when non-empty.
+   */
+  invalidDoneOn?: { sessionId: string; questionId: string; number: number; doneOn: unknown }[];
 }
 
 type UnresolvedQuestionRow = Record<string, unknown> & {
   id: string;
   session_id: string;
+  number: number;
   is_correct: boolean | null;
   tags: QuestionTag[];
+  meta: Record<string, unknown> | null;
   mode: SessionMode;
   surface: PracticeSurface;
   taken_at: string | Date;
@@ -888,14 +1006,15 @@ type UnresolvedQuestionRow = Record<string, unknown> & {
  * and attach the evidence that was skipped at log time. Idempotent: only tags whose
  * itemId is still null are touched, so running it twice writes nothing the second time.
  * This is what makes "capture first, classify later" true for item links: seed the
- * missing item or add an alias, then relink.
+ * missing item or add an alias, then relink. Vocab-queue rows with no item are linked the
+ * same way (relinkVocabQueue), filling only nulls.
  */
 export async function relinkUnresolved(): Promise<RelinkResult> {
   const db = getDb();
   const index = await loadItemIndex();
 
   const qRes = await db.execute<UnresolvedQuestionRow>(sql`
-    SELECT q.id, q.session_id, q.is_correct, q.tags, s.mode, s.surface, s.taken_at
+    SELECT q.id, q.session_id, q.number, q.is_correct, q.tags, q.meta, s.mode, s.surface, s.taken_at
     FROM practice_questions q
     JOIN practice_sessions s ON s.id = q.session_id
     WHERE s.status = 'confirmed'
@@ -905,9 +1024,17 @@ export async function relinkUnresolved(): Promise<RelinkResult> {
   const itemRows: { questionId: string; itemId: string; role: "tested" }[] = [];
   const obsRows: (typeof observations.$inferInsert)[] = [];
   const still = new Map<string, { kind: ExtractedTag["kind"]; text: string; n: number }>();
+  const invalidDoneOn: NonNullable<RelinkResult["invalidDoneOn"]> = [];
   let tagsRelinked = 0;
 
   for (const q of qRes.rows) {
+    // Evidence written here is dated like log_attempts dates it: the attempt's done_on, else the session.
+    const stored = readDoneOn(q.meta);
+    if (stored.kind === "invalid") {
+      invalidDoneOn.push({ sessionId: q.session_id, questionId: q.id, number: q.number, doneOn: stored.raw });
+      continue;
+    }
+    const occurredAt = stored.kind === "date" ? stored.at : new Date(q.taken_at);
     let changed = false;
     const newTags = q.tags.map((tag) => {
       if (tag.itemId) return tag;
@@ -929,7 +1056,7 @@ export async function relinkUnresolved(): Promise<RelinkResult> {
           source: "practice",
           kind,
           correct: q.is_correct,
-          occurredAt: new Date(q.taken_at),
+          occurredAt,
           meta: { sessionId: q.session_id, questionId: q.id, surface: q.surface, mode: q.mode, relinked: true },
         });
       }
@@ -969,6 +1096,8 @@ export async function relinkUnresolved(): Promise<RelinkResult> {
     }
   }
 
+  const queue = await relinkVocabQueue(index);
+
   return {
     questionsChecked: qRes.rows.length,
     tagsRelinked,
@@ -978,5 +1107,8 @@ export async function relinkUnresolved(): Promise<RelinkResult> {
     stillUnresolved: [...still.values()]
       .sort((a, b) => b.n - a.n)
       .map((u) => ({ ...u, suggestions: suggestItems(index, u.text, { kind: u.kind, limit: 3 }) })),
+    queueLinked: queue.linked,
+    queueUnlinked: queue.unlinked,
+    ...(invalidDoneOn.length > 0 ? { invalidDoneOn } : {}),
   };
 }
