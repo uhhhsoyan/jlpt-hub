@@ -97,7 +97,9 @@ The Hub exposes its study ledger as an MCP server at `/mcp` (Streamable HTTP, st
 JSON responses) so Claude can log reviewed practice pages from anywhere — the claude.ai
 project, Claude Code, the mobile app — instead of appending to a CSV. Tools:
 `log_attempts` (with `mode` practice|lesson), `log_insight`, `get_insights`, `find_items`,
-`relink_tags`, `update_session`, `get_weakness_report`, `get_readiness`, `list_sessions`, `sync_status`.
+`relink_tags`, `update_session`, `update_attempt`, `update_insight`, `delete_insight`,
+`get_weakness_report`, `get_readiness`, `list_sessions`, `sync_status`, plus the source,
+vocab-queue and memory tools.
 Source: `app/mcp/route.ts`, write path in `lib/ledger.ts`, tag matching in `lib/item-match.ts`.
 
 1. **Token.** `npm run env:set -- MCP_TOKEN=$(openssl rand -hex 32)` then `npm run env:pull`.
@@ -114,6 +116,10 @@ Source: `app/mcp/route.ts`, write path in `lib/ledger.ts`, tag matching in `lib/
    `x-api-key`, value the bare token (no "Bearer" prefix); the form reserves the
    `Authorization` header for its own OAuth flow, which is why the endpoint accepts the
    token either way. Then enable it in the Japanese Study project.
+   After a deploy that adds or changes tools, disconnect and reconnect the connector: a
+   running claude.ai chat keeps the tool list it loaded and does not see new tools until
+   then (observed after the deploy that added the vocab-queue tools). Bump
+   `SERVER_INFO.version` in `app/mcp/route.ts` (minor) whenever tools are added or changed.
 4. **Claude Code:** `.mcp.json` at the repo root already points at production and reads the
    token from `$MCP_TOKEN` in your shell (`export MCP_TOKEN=…`). Or:
    `claude mcp add --transport http study-ledger https://<host>/mcp --header "Authorization: Bearer <token>"`.

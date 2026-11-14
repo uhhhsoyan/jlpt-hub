@@ -164,6 +164,9 @@ export const ROOT_CAUSES = [
   "distractor-bias",
   "kanji-lookalike",
   "katakana-decoding",
+  "pattern-choice",
+  "pattern-confusion",
+  "polarity-cue-missed",
 ] as const;
 export type RootCause = (typeof ROOT_CAUSES)[number];
 
@@ -182,6 +185,12 @@ export const ROOT_CAUSE_LABEL: Record<RootCause, string> = {
   "distractor-bias": "Distractor bias",
   "kanji-lookalike": "Kanji lookalike",
   "katakana-decoding": "Katakana decoding",
+  // Promoted 2026-11-14: picked the wrong one of several near-synonymous known patterns
+  // (はず vs かもしれない, たら vs なら); read a pattern as a look-alike (ないと as ないで, the
+  // grammar counterpart of vocab-confusion); missed a negative-polarity trigger (あまり, 何も, だれも).
+  "pattern-choice": "Pattern choice",
+  "pattern-confusion": "Pattern confusion",
+  "polarity-cue-missed": "Polarity cue missed",
 };
 
 export function isKnownRootCause(cause: string): cause is RootCause {

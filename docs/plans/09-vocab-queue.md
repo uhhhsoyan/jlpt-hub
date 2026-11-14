@@ -23,7 +23,10 @@ turn into Anki cards.
 - Capture points:
   - `log_attempts` → each attempt's optional `vocab_gaps: [{text, reading?, meaning?, context?}]`;
     context defaults to the attempt's note or stem; result gains `vocabQueued`.
-  - MCP `queue_vocab {words, taken_at?, label?}` for words met outside a graded set.
+  - MCP `queue_vocab {words, taken_at?, label?}` for words met outside a graded set; with
+    `session_id` + `number` (+ `position`) it ties the words to a question already logged,
+    with the same sighting an attempt's `vocab_gaps` gets. `update_attempt`'s `vocab_gaps`
+    does the same while correcting the attempt.
   - (Hub form: not built; the MCP surfaces are where words come up.)
 - Read / decide: MCP `get_vocab_queue {status?, limit?}` (with per-status counts) and
   `update_vocab_queue {ids, status}`; Hub `/queue` with status tabs, per-row buttons, "Export
