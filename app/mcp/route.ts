@@ -21,7 +21,8 @@ import {
 } from "@/lib/ledger";
 import { memoryRecall, memoryReflect, readHindsightConfig } from "@/lib/hindsight";
 import { getReadiness } from "@/lib/readiness";
-import { findItems } from "@/lib/resolve-items";
+import { findItemsBatch } from "@/lib/resolve-items";
+import { getLessonReview } from "@/lib/lesson-review-db";
 import { listStudySources, logStudy } from "@/lib/study-sources-db";
 import { countVocabQueue, listVocabQueue, queueVocab, setVocabQueueStatus } from "@/lib/vocab-queue";
 import { getAccuracyBySection, getMissesByRootCause, getPracticeWindow, getWeakItems } from "@/lib/weakness";
@@ -236,17 +237,27 @@ function buildServer(): McpServer {
     {
       title: "Recall study insights",
       description:
-        "Newest-first notes, optionally filtered by topic: matches the text, an exact tag, or a linked library item (headword, alias, reading or pattern, e.g. 'ほど'). Also returns every tag in use with counts, so tag vocabulary can be reused.",
+        "Study notes, newest first. `topic` matches a linked library item (headword, alias, reading or pattern, e.g. 'ほど'), an exact tag, or the text; item and tag matches come first, text-only matches after, and each insight says which in matched: 'item' | 'tag' | 'text'. Discount 'text' hits: the topic may only appear inside another word (はず inside はずかしい). `tags` keeps only insights carrying every given tag (e.g. a pre-test review sheet: ['particles', 'polarity']). The full list of tags in use with counts (for reusing tag vocabulary when logging) comes back as `tags` only when include_tags is true, which is the default when neither topic nor tags is given. Result: {insights: [{id, text, tags, items, source, createdAt, matched?}], tags?: [{tag, n}]}.",
       inputSchema: {
         topic: z.string().optional(),
+        tags: z.array(z.string().min(1)).max(10).optional().describe("AND-filter: insights carrying all of these tags"),
+        include_tags: z
+          .boolean()
+          .optional()
+          .describe("Also return every tag in use with counts; default true with no topic/tags filter, false otherwise"),
         limit: z.number().int().min(1).max(100).default(20),
       },
       annotations: { readOnlyHint: true },
     },
     async (args) => {
       try {
-        const [list, tags] = await Promise.all([getInsights(args), getInsightTagCounts()]);
-        return ok({ insights: list, tags });
+        const filtered = !!args.topic?.trim() || (args.tags?.length ?? 0) > 0;
+        const includeTags = args.include_tags ?? !filtered;
+        const [list, tags] = await Promise.all([
+          getInsights({ topic: args.topic, tags: args.tags, limit: args.limit }),
+          includeTags ? getInsightTagCounts() : Promise.resolve(null),
+        ]);
+        return ok(tags ? { insights: list, tags } : { insights: list });
       } catch (e) {
         return fail(e);
       }
@@ -287,6 +298,65 @@ function buildServer(): McpServer {
     },
   );
 
+  // A tool of its own rather than a mode of get_weakness_report, so that report's
+  // "closed-book practice only" contract has no switch that could mix lesson scores in.
+  server.registerTool(
+    "get_lesson_review",
+    {
+      title: "Lesson review",
+      description:
+        "What I missed or stumbled on in open-book lesson sessions (mode=lesson), for review before a closed-book まとめ test. get_weakness_report deliberately ignores lessons; this is the lesson-side view. Read-only: it never changes or feeds any accuracy figure. Pick lessons with source (catalog slug, e.g. skm-n4-bunpou) plus lesson_from/lesson_to (lesson numbers read from the label, 'SKM N4 L12 れんしゅう2', or source_name, '12課'), and optionally match (substring of label or source_name, e.g. 'れんしゅう') and a date range. Result: {selection, sessions: [{sessionId, label, source, sourceName, lesson, takenAt, score: {correct, graded, questions}, review: [{number, correct, rootCause?, note?, tags: [text], unlinked?: [text], meta?}]}], summary: {sessions, questions, graded, correct, missed, slips, notAttempted, missesByRootCause: [{rootCause, known, misses}], repeatedMisses: [{text, kind, itemId, misses, where}]}, truncated?, hint?}. review lists every attempt that was wrong (correct false), not attempted (null), or right with a note (a slip worth revisiting); clean right answers are only counted in score. Empty fields are omitted; unlinked lists the tags that matched no library item. repeatedMisses are the items (or unlinked tag texts) missed more than once across the selection, with where each miss was ('<label> #<number>'). Stems, choices and explanations are left out unless include_text is set.",
+      inputSchema: {
+        source: z.string().min(1).optional().describe("Catalog source slug, name or alias, e.g. 'skm-n4-bunpou'; omit for every source"),
+        lesson_from: z.number().int().min(0).optional().describe("First lesson number, inclusive"),
+        lesson_to: z.number().int().min(0).optional().describe("Last lesson number, inclusive"),
+        match: z.string().min(1).optional().describe("Case-insensitive substring of the session label or source_name, e.g. 'れんしゅう', 'L12'"),
+        since: z.string().optional().describe("ISO date: sessions taken on or after"),
+        until: z.string().optional().describe("ISO date: sessions taken on or before (the whole day)"),
+        window_days: z.number().int().min(1).max(365).optional().describe("Instead of since: the last N days"),
+        limit: z.number().int().min(1).max(100).default(30).describe("Max sessions; the most recent are kept"),
+        include_text: z.boolean().default(false).describe("Add stored stem, choices and explanation to each reviewed attempt"),
+      },
+      annotations: { readOnlyHint: true },
+    },
+    async (args) => {
+      try {
+        if (args.since !== undefined && args.window_days !== undefined) throw new Error("Pass since or window_days, not both.");
+        if (args.lesson_from !== undefined && args.lesson_to !== undefined && args.lesson_from > args.lesson_to) {
+          throw new Error(`lesson_from (${args.lesson_from}) is after lesson_to (${args.lesson_to}).`);
+        }
+        let since: Date | null = null;
+        if (args.since !== undefined) {
+          since = new Date(args.since);
+          if (Number.isNaN(since.getTime())) throw new Error(`Unparseable since: ${args.since}`);
+        } else if (args.window_days !== undefined) {
+          since = new Date(Date.now() - args.window_days * 86_400_000);
+        }
+        let until: Date | null = null;
+        if (args.until !== undefined) {
+          until = new Date(args.until);
+          if (Number.isNaN(until.getTime())) throw new Error(`Unparseable until: ${args.until}`);
+          // A bare date means through the end of that day.
+          if (/^\d{4}-\d{2}-\d{2}$/.test(args.until.trim())) until = new Date(until.getTime() + 86_400_000);
+        }
+        const review = await getLessonReview({
+          source: args.source ?? null,
+          lessonFrom: args.lesson_from ?? null,
+          lessonTo: args.lesson_to ?? null,
+          match: args.match ?? null,
+          since,
+          until,
+          limit: args.limit,
+          includeText: args.include_text,
+        });
+        // Compact JSON: five lessons run to ~100 reviewed attempts and indentation alone nearly doubles that.
+        return { content: [{ type: "text" as const, text: JSON.stringify(review) }] };
+      } catch (e) {
+        return fail(e);
+      }
+    },
+  );
+
   server.registerTool(
     "get_readiness",
     {
@@ -310,17 +380,31 @@ function buildServer(): McpServer {
     {
       title: "Find library items",
       description:
-        "Look up library items by headword, alias, kana reading, grammar pattern or English meaning, ranked by closeness. Use it before tagging when unsure of the canonical form, and to check whether an item exists at all. Each hit carries match: exact, extends (the item is a longer form of the query), contains, meaning, or prefix-only (the item is merely a prefix of the query, e.g. まで for 〜までに: a different, shorter item, so an unresolved tag is still unresolved).",
+        "Look up library items by headword, alias, kana reading, grammar pattern or English meaning, ranked by closeness. Use it before tagging when unsure of the canonical form, and to check whether an item exists at all. Pass `queries` (up to 25) instead of `query` to check several forms in one call, e.g. every pattern of a lesson before starting it. English is matched word by word against the gloss ('must, have to', 'because, reason te-form'), and a Japanese word in a mixed query is matched against forms ('conditional と'). Each result has resolves: {id, headword} when the text, used as a tag as-is (with `kind` as the tag kind), would link to that item, or null when it would stay unresolved; and items, each hit carrying match: exact (the same form, tildes and spacing aside), exact-loose (equal only once a sense label in parentheses is dropped: the particle と for 〜と（条件）, or から（理由）/から（起点） for a bare から, so not necessarily the one meant), extends (the item is a longer form of the query), contains, meaning (by the query's words, best coverage first), or prefix-only (the item is merely a prefix of the query, e.g. まで for 〜までに: a different, shorter item, so an unresolved tag is still unresolved). Result: {query, resolves, items} for `query`, {results: [{query, resolves, items}]} for `queries`.",
       inputSchema: {
-        query: z.string().min(1).describe("e.g. 'ほど', 'いちばん', 'black tea', '〜と〜とどちら'"),
-        kind: z.enum(["vocab", "kanji", "grammar"]).optional().describe("Prefer this kind in the ranking"),
-        limit: z.number().int().min(1).max(25).default(8),
+        query: z.string().min(1).optional().describe("e.g. 'ほど', 'いちばん', 'black tea', '〜と〜とどちら', 'conditional と'"),
+        queries: z
+          .array(z.string().min(1))
+          .min(1)
+          .max(25)
+          .optional()
+          .describe("Several lookups in one call instead of `query`, e.g. ['〜ばかり', '〜たところ', '〜ようになる']"),
+        kind: z.enum(["vocab", "kanji", "grammar"]).optional().describe("Prefer this kind in the ranking, and resolve as a tag of this kind"),
+        limit: z.number().int().min(1).max(25).optional().describe("Hits per query; default 8 for `query`, 3 per query for `queries`"),
       },
       annotations: { readOnlyHint: true },
     },
     async (args) => {
       try {
-        return ok({ query: args.query, items: await findItems(args.query, { kind: args.kind ?? null, limit: args.limit }) });
+        if ((args.query === undefined) === (args.queries === undefined)) {
+          throw new Error("Pass exactly one of `query` (one lookup) or `queries` (up to 25).");
+        }
+        const kind = args.kind ?? null;
+        if (args.queries) {
+          return ok({ results: await findItemsBatch(args.queries, { kind, limit: args.limit ?? 3 }) });
+        }
+        const [result] = await findItemsBatch([args.query as string], { kind, limit: args.limit ?? 8 });
+        return ok(result);
       } catch (e) {
         return fail(e);
       }
