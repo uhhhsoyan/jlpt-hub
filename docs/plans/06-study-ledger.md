@@ -94,6 +94,16 @@ Reconciled against the repo on 2026-10-27 and built the same day. Exam: JLPT N4,
   makes a rebuild refuse before anything is written and makes relink skip that attempt
   (`invalidDoneOn`). Two older workarounds (`meta.printed` + `meta.blank` with a shifted
   number; one row with `meta.blanks: 2` and joined answers) were not migrated.
+- The connector serves its own instructions (2026-11-17, server 1.8.0). The ~140-line block
+  in `docs/claude-ai-project-instructions.md` used to be re-pasted into the claude.ai
+  project after every tool change. Now `get_instructions` (read-only, no DB) returns the
+  block below that file's first `---` with `{version, hash, chars}`, the project's custom
+  instructions hold only a stub that says to call it first in every conversation, and the
+  server's initialize result carries a short `instructions` string as a backup (not every
+  client shows it to the model). The file stays the single source of truth, reviewed in
+  PRs; it is read at request time and reaches the Vercel function through
+  `outputFileTracingIncludes` for `/mcp`. A missing or malformed file is an error result,
+  never empty text. Adding tools still needs one disconnect/reconnect of the connector.
 - The library is curated, not self-extending (2026-11-09). The grammar list was a generic
   N4/N5 pattern list, not SKM's table of contents, so SKM lessons surface patterns it lacks
   (〜といい sat unresolved on 10 attempts). Keeping the chat out of item creation is
