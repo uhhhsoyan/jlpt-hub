@@ -1,12 +1,29 @@
-import { asc, desc, eq, inArray, sql } from "drizzle-orm";
+import { and, asc, desc, eq, inArray, isNull, sql } from "drizzle-orm";
 import { getDb } from "@/lib/db";
 import { vocabQueue, type VocabQueueRow } from "@/lib/db/schema";
 import { matchTag, type ItemIndex } from "@/lib/item-match";
 import { loadItemIndex } from "@/lib/resolve-items";
 import { VOCAB_QUEUE_STATUSES, type PracticeSurface, type VocabQueueStatus, type VocabSighting } from "@/lib/types";
-import { mergeSightings, normalizeQueueText, statusOnResight } from "@/lib/vocab-queue-core";
+import {
+  decideQueueLink,
+  effectiveAsMet,
+  matchQueueItem,
+  mergeSightings,
+  normalizeQueueText,
+  sightingAsMet,
+  statusOnResight,
+  type QueueLookup,
+} from "@/lib/vocab-queue-core";
 
-export { exportFilename, mergeSightings, normalizeQueueText, statusOnResight, toAnkiTsv, type AnkiRow } from "@/lib/vocab-queue-core";
+export {
+  effectiveAsMet,
+  exportFilename,
+  mergeSightings,
+  normalizeQueueText,
+  statusOnResight,
+  toAnkiTsv,
+  type AnkiRow,
+} from "@/lib/vocab-queue-core";
 
 /**
  * The vocab queue: every word the learner says they did not know, captured where it happens
@@ -19,13 +36,15 @@ export { exportFilename, mergeSightings, normalizeQueueText, statusOnResight, to
  */
 
 export interface VocabGapInput {
-  /** The word as met; dictionary form for verbs/adjectives. */
+  /** The kanji / dictionary form, used for linking to the library; dictionary form for verbs/adjectives. */
   text: string;
   reading?: string | null;
   /** Short English gloss. */
   meaning?: string | null;
   /** The phrase or sentence it stalled in. */
   context?: string | null;
+  /** The form exactly as printed when it differs from text (おおぜい for 大勢); kept on the sighting. */
+  asMet?: string | null;
 }
 
 export interface VocabGapEntry extends VocabGapInput {
@@ -45,8 +64,19 @@ export interface QueuedWord {
   status: VocabQueueStatus;
   seenCount: number;
   itemId: string | null;
+  /** The row's effective as-met form (most recent sighting that has one), or null. */
+  asMet: string | null;
   /** true when this call created the row, false when it bumped an existing one. */
   created: boolean;
+}
+
+/** The queue's matcher over the item index: matchTag on the vocab kind, with the hit's headword. */
+function queueLookup(idx: ItemIndex): QueueLookup {
+  return (text) => {
+    const id = matchTag(idx, { kind: "vocab", text });
+    const row = id ? idx.byId.get(id) : undefined;
+    return id && row ? { id, headword: row.headword } : null;
+  };
 }
 
 export interface QueueVocabResult {
@@ -73,16 +103,18 @@ export async function queueVocab(entries: VocabGapEntry[], ctx: QueueContext, in
     if (!norm || seen.has(norm)) continue;
     seen.add(norm);
 
-    const itemId = matchTag(idx, { kind: "vocab", text });
+    const itemId = matchQueueItem(text, clean(e.reading), queueLookup(idx))?.itemId ?? null;
     const item = itemId ? idx.byId.get(itemId) : undefined;
     const reading = clean(e.reading) ?? item?.reading ?? null;
     const meaning = clean(e.meaning) ?? item?.meaning ?? null;
+    const asMet = sightingAsMet(e.asMet, text);
     const sighting: VocabSighting = {
       at: ctx.at.toISOString(),
       context: clean(e.context),
       sessionId: ctx.sessionId ?? null,
       questionId: e.questionId ?? null,
       label: clean(ctx.label),
+      ...(asMet ? { asMet } : {}),
     };
 
     const [existing] = await db.select().from(vocabQueue).where(eq(vocabQueue.norm, norm)).limit(1);
@@ -106,7 +138,7 @@ export async function queueVocab(entries: VocabGapEntry[], ctx: QueueContext, in
         .where(eq(vocabQueue.id, existing.id))
         .returning();
       if (bumped) result.bumped += 1;
-      result.words.push({ id: row.id, text: row.text, status: row.status, seenCount: row.seenCount, itemId: row.itemId, created: false });
+      result.words.push({ ...wordView(row), created: false });
       continue;
     }
 
@@ -127,9 +159,64 @@ export async function queueVocab(entries: VocabGapEntry[], ctx: QueueContext, in
       })
       .returning();
     result.queued += 1;
-    result.words.push({ id: row.id, text: row.text, status: row.status, seenCount: row.seenCount, itemId: row.itemId, created: true });
+    result.words.push({ ...wordView(row), created: true });
   }
   return result;
+}
+
+function wordView(row: VocabQueueRow): Omit<QueuedWord, "created"> {
+  return {
+    id: row.id,
+    text: row.text,
+    status: row.status,
+    seenCount: row.seenCount,
+    itemId: row.itemId,
+    asMet: effectiveAsMet(row.sightings),
+  };
+}
+
+export interface QueueRelinkResult {
+  /** Rows with no library link that were checked. */
+  checked: number;
+  /** Rows that got a link this run. */
+  linked: number;
+  /** Texts of the rows still without a link. */
+  unlinked: string[];
+}
+
+/**
+ * Link queue rows whose item_id is null to a library item added since they were queued,
+ * with the same matching insert uses (matchQueueItem). Only nulls are filled: the update is
+ * guarded on item_id IS NULL, and reading/meaning are filled from the item only where the
+ * row has none, as at insert. Part of relink_tags (lib/ledger.ts relinkUnresolved).
+ */
+export async function relinkVocabQueue(index?: ItemIndex): Promise<QueueRelinkResult> {
+  const db = getDb();
+  const idx = index ?? (await loadItemIndex());
+  const lookup = queueLookup(idx);
+  const rows = await db.select().from(vocabQueue).where(isNull(vocabQueue.itemId)).orderBy(asc(vocabQueue.firstSeenAt));
+  const unlinked: string[] = [];
+  let linked = 0;
+  for (const row of rows) {
+    const match = decideQueueLink(row, lookup);
+    if (!match) {
+      unlinked.push(row.text);
+      continue;
+    }
+    const item = idx.byId.get(match.itemId);
+    const updated = await db
+      .update(vocabQueue)
+      .set({
+        itemId: match.itemId,
+        reading: row.reading ?? item?.reading ?? null,
+        meaning: row.meaning ?? item?.meaning ?? null,
+        updatedAt: new Date(),
+      })
+      .where(and(eq(vocabQueue.id, row.id), isNull(vocabQueue.itemId)))
+      .returning({ id: vocabQueue.id });
+    if (updated.length > 0) linked += 1;
+  }
+  return { checked: rows.length, linked, unlinked };
 }
 
 export type QueueFilter = VocabQueueStatus | "all";

@@ -77,6 +77,23 @@ Reconciled against the repo on 2026-10-27 and built the same day. Exam: JLPT N4,
   `queue_vocab` takes `session_id` + `number` for a word noticed after its set was logged.
   `unresolvedTags` is grouped by tag with `numbers`. Root causes promoted from use:
   pattern-choice, pattern-confusion, polarity-cue-missed.
+- Attempts got shapes for the logging situations that had been worked around by hand
+  (2026-11-14, server 1.7.0): `part` (one row per blank of a multi-blank question: number 7
+  part 1, number 7 part 2; update_attempt and queue_vocab pick by number + part, position
+  stays the fallback; `new_number` / `new_part` renumber a row), `done_on` (a set spanning
+  days: dates that attempt's item evidence in log_attempts, the shared evidence rebuild and
+  relink; the session's taken_at and the session-window reports are unchanged), and `slips`
+  (`[{kind, text}]`, non-pattern errors on an answer, open kebab-case vocabulary like root
+  causes; never evidence, never accuracy; `tallySlips` in lib/attempt-meta.ts for the lesson
+  review). **Stored in `practice_questions.meta` for now, columns later**: no migration three
+  weeks before the exam and no test database. Keys: `questionPart` (not `part`: lesson rows
+  already use `meta.part` for `examples` / `れんしゅう1`), `done_on` (already set by hand on
+  session b91aaa65), `slips`. Every read and write goes through lib/attempt-meta.ts, and free
+  `meta` rejects those keys, so promoting a field to a column is a change to that module plus
+  a backfill, not to the tool surface. An unparseable stored done_on (only possible by hand)
+  makes a rebuild refuse before anything is written and makes relink skip that attempt
+  (`invalidDoneOn`). Two older workarounds (`meta.printed` + `meta.blank` with a shifted
+  number; one row with `meta.blanks: 2` and joined answers) were not migrated.
 - The library is curated, not self-extending (2026-11-09). The grammar list was a generic
   N4/N5 pattern list, not SKM's table of contents, so SKM lessons surface patterns it lacks
   (〜といい sat unresolved on 10 attempts). Keeping the chat out of item creation is
