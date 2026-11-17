@@ -250,6 +250,121 @@
       "aliases": [
         "のこす"
       ]
+    },
+    {
+      "headword": "会議",
+      "reading": "かいぎ",
+      "romaji": "kaigi",
+      "meaning": "meeting, conference",
+      "pos": "noun",
+      "level": "N4",
+      "aliases": [
+        "かいぎ"
+      ]
+    },
+    {
+      "headword": "はんこ",
+      "reading": "はんこ",
+      "romaji": "hanko",
+      "meaning": "personal name seal, stamp (used in place of a signature)",
+      "pos": "noun",
+      "level": "N4",
+      "aliases": [
+        "判子",
+        "ハンコ"
+      ]
+    },
+    {
+      "headword": "結婚式",
+      "reading": "けっこんしき",
+      "romaji": "kekkonshiki",
+      "meaning": "wedding ceremony",
+      "pos": "noun",
+      "level": "N4",
+      "aliases": [
+        "けっこんしき"
+      ]
+    },
+    {
+      "headword": "祝日",
+      "reading": "しゅくじつ",
+      "romaji": "shukujitsu",
+      "meaning": "national holiday, public holiday",
+      "pos": "noun",
+      "level": "N4",
+      "aliases": [
+        "しゅくじつ"
+      ]
+    },
+    {
+      "headword": "携帯電話",
+      "reading": "けいたいでんわ",
+      "romaji": "keitaidenwa",
+      "meaning": "mobile phone, cell phone",
+      "pos": "noun",
+      "level": "N4",
+      "aliases": [
+        "けいたいでんわ",
+        "携帯"
+      ]
+    },
+    {
+      "headword": "印刷",
+      "reading": "いんさつ",
+      "romaji": "insatsu",
+      "meaning": "printing (印刷する: to print)",
+      "pos": "noun",
+      "level": "N4",
+      "aliases": [
+        "いんさつ",
+        "印刷する"
+      ]
+    },
+    {
+      "headword": "運動会",
+      "reading": "うんどうかい",
+      "romaji": "undoukai",
+      "meaning": "sports day, athletic meet",
+      "pos": "noun",
+      "level": "N4",
+      "aliases": [
+        "うんどうかい"
+      ]
+    },
+    {
+      "headword": "鳴き声",
+      "reading": "なきごえ",
+      "romaji": "nakigoe",
+      "meaning": "cry, call (of an animal), song (of a bird)",
+      "pos": "noun",
+      "level": "N4",
+      "aliases": [
+        "なきごえ"
+      ]
+    },
+    {
+      "headword": "掃く",
+      "reading": "はく",
+      "romaji": "haku",
+      "meaning": "to sweep (with a broom)",
+      "pos": "verb",
+      "level": "N4"
+    },
+    {
+      "headword": "吐く",
+      "reading": "はく",
+      "romaji": "haku",
+      "meaning": "to vomit, to throw up; to breathe out",
+      "pos": "verb",
+      "level": "N4"
+    },
+    {
+      "headword": "ほら",
+      "reading": "ほら",
+      "romaji": "hora",
+      "meaning": "look!, see!, there! (calling attention)",
+      "pos": "interjection",
+      "level": "N4"
     }
   ],
   "aliases": [
@@ -302,6 +417,30 @@
         "なおす"
       ],
       "why": "keeps kana なおす on 直す (fix) now that 治す (cure) shares the reading"
+    },
+    {
+      "headword": "利用",
+      "reading": "りよう",
+      "aliases": [
+        "利用する"
+      ],
+      "why": "the queue and tags write the verb 利用する; the scraped row is the noun 利用"
+    },
+    {
+      "headword": "困る",
+      "reading": "こまる",
+      "aliases": [
+        "困った"
+      ],
+      "why": "困った (I'm in a fix) is met as a set phrase; it is the past of 困る"
+    },
+    {
+      "headword": "履く",
+      "reading": "はく",
+      "aliases": [
+        "はく"
+      ],
+      "why": "keeps kana はく on 履く (put on shoes) now that 掃く and 吐く share the reading"
     }
   ]
 }

@@ -98,10 +98,15 @@
   {
     "pattern": "〜てもいい",
     "level": "N4",
-    "meaning": "permission: it's okay to do ~, may do ~",
+    "meaning": "permission: it's okay to do ~, may do ~ (verb て-form + もいい); with a noun, N でもいい: N is fine too, N will do",
     "example": "ここで写真を撮ってもいいです。",
     "exampleReading": "ここで しゃしんを とっても いいです。",
-    "exampleEnglish": "It's okay to take photos here."
+    "exampleEnglish": "It's okay to take photos here.",
+    "aliases": [
+      "〜でもいい",
+      "でもいい",
+      "Nでもいい"
+    ]
   },
   {
     "pattern": "〜てはいけない",
@@ -664,10 +669,24 @@
   {
     "pattern": "疑問詞＋でも",
     "level": "N4",
-    "meaning": "no matter what/who/where: whatever, whoever, wherever",
+    "meaning": "no matter what/who/where: whatever, whoever, wherever, any (何でも, 誰でも, いつでも, どこでも)",
     "example": "このアイスは誰でも好きです。",
     "exampleReading": "この あいすは だれでも すきです。",
-    "exampleEnglish": "Anyone likes this ice cream."
+    "exampleEnglish": "Anyone likes this ice cream.",
+    "aliases": [
+      "何でも",
+      "なんでも",
+      "誰でも",
+      "だれでも",
+      "いつでも",
+      "どこでも",
+      "〜何でも",
+      "〜なんでも",
+      "〜誰でも",
+      "〜だれでも",
+      "〜いつでも",
+      "〜どこでも"
+    ]
   },
   {
     "pattern": "疑問詞＋も＋否定",
@@ -2174,6 +2193,22 @@
       "〜ないとだめ",
       "ないとだめ",
       "〜ないとダメ"
+    ]
+  },
+  {
+    "pattern": "〜そうもない／〜そうにない",
+    "level": "N4",
+    "meaning": "shows no sign of ~, is unlikely to ~: the negative of appearance そう for verbs (verb ます-stem + そうもない／そうにない)",
+    "example": "雨はなかなかやみそうにありません。",
+    "exampleReading": "あめは なかなか やみそうに ありません。",
+    "exampleEnglish": "The rain shows no sign of stopping.",
+    "aliases": [
+      "そうもない",
+      "そうにない",
+      "〜そうもない",
+      "〜そうにない",
+      "そうにもない",
+      "〜そうにもない"
     ]
   }
 ]
