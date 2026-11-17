@@ -47,13 +47,20 @@ export function insightMatch(row: InsightCandidate, topic: string, topicItemIds:
   return null;
 }
 
+/** Decides whether (and why) one insight matches the topic; insightMatch by default. */
+export type InsightMatcher<T extends InsightCandidate> = (row: T, topic: string, topicItemIds: string[]) => InsightMatch | null;
+
 /**
  * Keep the insights that carry every requested tag and match the topic (when given), then
  * order linked-item and exact-tag matches first and text-only matches after them, newest
- * first within each group. Text matches are never dropped, only ranked below.
+ * first within each group. Text matches are never dropped, only ranked below. No limit:
+ * the Insights page ranks the whole set; get_insights goes through rankInsights.
  */
-export function rankInsights<T extends InsightCandidate>(rows: T[], filter: InsightFilter = {}): RankedInsight<T>[] {
-  const limit = Math.min(Math.max(filter.limit ?? 20, 1), 100);
+export function matchInsights<T extends InsightCandidate>(
+  rows: T[],
+  filter: Omit<InsightFilter, "limit"> = {},
+  matcher: InsightMatcher<T> = insightMatch,
+): RankedInsight<T>[] {
   const topic = filter.topic?.trim() || null;
   const wanted = [...new Set((filter.tags ?? []).map(norm).filter(Boolean))];
 
@@ -67,10 +74,16 @@ export function rankInsights<T extends InsightCandidate>(rows: T[], filter: Insi
       kept.push({ row });
       continue;
     }
-    const matched = insightMatch(row, topic, filter.topicItemIds ?? []);
+    const matched = matcher(row, topic, filter.topicItemIds ?? []);
     if (matched) kept.push({ row, matched });
   }
   const tier = (r: RankedInsight<T>) => (r.matched === "text" ? 1 : 0);
   kept.sort((a, b) => tier(a) - tier(b) || b.row.createdAt.getTime() - a.row.createdAt.getTime());
-  return kept.slice(0, limit);
+  return kept;
+}
+
+/** matchInsights for get_insights: the same ranking, cut to `limit` (default 20, 1-100). */
+export function rankInsights<T extends InsightCandidate>(rows: T[], filter: InsightFilter = {}): RankedInsight<T>[] {
+  const limit = Math.min(Math.max(filter.limit ?? 20, 1), 100);
+  return matchInsights(rows, filter).slice(0, limit);
 }
