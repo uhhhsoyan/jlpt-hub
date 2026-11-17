@@ -39,7 +39,7 @@ export function VocabTab({ items }: { items: LibraryItem[] }) {
         <div className="flex flex-col gap-6">
           {groups.map((group) => (
             <section key={group.row} className="flex flex-col gap-2">
-              <h3 className="sticky top-14 z-10 w-fit rounded bg-neutral-50/90 px-1 text-sm font-bold text-neutral-400 backdrop-blur dark:bg-neutral-950/90 dark:text-neutral-500">
+              <h3 className="sticky top-(--app-topbar-h) z-10 w-fit rounded bg-neutral-50/90 px-1 text-sm font-bold text-neutral-400 backdrop-blur dark:bg-neutral-950/90 dark:text-neutral-500">
                 {group.row}
               </h3>
               <ul className="flex flex-col gap-1.5">
