@@ -84,6 +84,160 @@ export function decideQueueLink(row: { itemId: string | null; text: string; read
   return matchQueueItem(row.text, row.reading, lookup);
 }
 
+// ---- Per-row edits (update_vocab_queue `edits`) -------------------------------------------
+
+/** One row's edit. Absent fields are left alone; null clears as_met / reading / meaning. */
+export interface QueueEdit {
+  id: string;
+  asMet?: string | null;
+  reading?: string | null;
+  meaning?: string | null;
+  /** New kanji / dictionary form; re-runs item linking for the row. */
+  text?: string;
+}
+
+export interface QueueUpdateInput {
+  ids?: string[];
+  status?: VocabQueueStatus;
+  edits?: QueueEdit[];
+}
+
+/** Checks an update_vocab_queue call before any DB access. */
+export function validateQueueUpdate({ ids, status, edits }: QueueUpdateInput): void {
+  const hasIds = (ids?.length ?? 0) > 0;
+  const hasEdits = (edits?.length ?? 0) > 0;
+  if (status === undefined && hasIds) {
+    throw new Error("ids were given without status; pass status to move those rows (per-row field changes go in edits).");
+  }
+  if (status === undefined && !hasEdits) {
+    throw new Error("Nothing to change: pass ids with status, and/or edits [{id, as_met?, reading?, meaning?, text?}].");
+  }
+  if (status !== undefined && !hasIds) throw new Error(`status ${status} needs ids: the rows to move.`);
+  const seen = new Set<string>();
+  for (const [i, e] of (edits ?? []).entries()) {
+    if (seen.has(e.id)) throw new Error(`edits[${i}]: id ${e.id} appears twice; put all changes to one row in one edit.`);
+    seen.add(e.id);
+    if (e.asMet === undefined && e.reading === undefined && e.meaning === undefined && e.text === undefined) {
+      throw new Error(`edits[${i}] (${e.id}) changes nothing: pass as_met, reading, meaning and/or text.`);
+    }
+    if (e.text !== undefined && !normalizeQueueText(e.text)) throw new Error(`edits[${i}]: text is empty.`);
+  }
+}
+
+function withoutAsMet(s: VocabSighting): VocabSighting {
+  const out: VocabSighting = { ...s };
+  delete out.asMet;
+  return out;
+}
+
+/**
+ * Sets a row's effective as_met without adding a sighting or touching seenCount. The value
+ * is written onto the most recent sighting, which is what effectiveAsMet (and so the Anki
+ * export and /queue) reads first; earlier sightings keep the form they were met in. Clearing
+ * (null, blank, or the same word as `text`) removes as_met from every sighting, since an
+ * earlier one would otherwise become the effective value again.
+ */
+export function setSightingsAsMet(sightings: VocabSighting[], asMet: string | null, text: string): VocabSighting[] {
+  const v = sightingAsMet(asMet, text);
+  if (v === null) {
+    return sightings.map((s) => (s.asMet === undefined ? s : withoutAsMet(s)));
+  }
+  if (sightings.length === 0) throw new Error("This row has no sightings to carry as_met.");
+  const last = sightings.length - 1;
+  return sightings.map((s, i) => (i === last ? { ...s, asMet: v } : s));
+}
+
+export interface QueueEditRow {
+  id: string;
+  text: string;
+  norm: string;
+  reading: string | null;
+  meaning: string | null;
+  itemId: string | null;
+  sightings: VocabSighting[];
+}
+
+export interface QueueEditPatch {
+  text?: string;
+  norm?: string;
+  reading?: string | null;
+  meaning?: string | null;
+  itemId?: string | null;
+  sightings?: VocabSighting[];
+}
+
+export interface QueueEditPlan {
+  patch: QueueEditPatch;
+  /** Fields that actually change: text, reading, meaning, as_met, item. */
+  changed: ("text" | "reading" | "meaning" | "as_met" | "item")[];
+}
+
+/** Reading and meaning of a library item, to fill a row that has none (as at insert). */
+export type QueueItemInfo = (itemId: string) => { reading: string | null; meaning: string | null } | undefined;
+
+const cleanField = (s: string | null): string | null => {
+  const t = s?.normalize("NFKC").trim();
+  return t ? t : null;
+};
+
+/**
+ * What one edit changes on a queue row. A new `text` re-runs the insert-time linking ladder
+ * (matchQueueItem) and replaces the row's link, null when nothing matches, then fills reading
+ * and meaning from the new item where the row has none and this edit did not clear them; an
+ * as_met equal to the new text is dropped (nothing to show). `as_met` is set through
+ * setSightingsAsMet. The norm changes with the text: the caller checks it is not taken.
+ */
+export function planQueueEdit(row: QueueEditRow, edit: QueueEdit, lookup: QueueLookup, itemInfo: QueueItemInfo): QueueEditPlan {
+  const patch: QueueEditPatch = {};
+  const changed: QueueEditPlan["changed"] = [];
+
+  let reading = row.reading;
+  let meaning = row.meaning;
+  if (edit.reading !== undefined) reading = cleanField(edit.reading);
+  if (edit.meaning !== undefined) meaning = cleanField(edit.meaning);
+
+  let text = row.text;
+  let itemId = row.itemId;
+  let sightings = row.sightings;
+  if (edit.text !== undefined) {
+    text = edit.text.normalize("NFKC").trim();
+    if (!normalizeQueueText(text)) throw new Error(`Edit for ${row.id}: text is empty.`);
+    if (text !== row.text) {
+      itemId = matchQueueItem(text, reading, lookup)?.itemId ?? null;
+      const item = itemId ? itemInfo(itemId) : undefined;
+      if (reading === null && edit.reading === undefined) reading = item?.reading ?? null;
+      if (meaning === null && edit.meaning === undefined) meaning = item?.meaning ?? null;
+      const norm = normalizeQueueText(text);
+      sightings = sightings.map((s) => (s.asMet && normalizeQueueText(s.asMet) === norm ? withoutAsMet(s) : s));
+    }
+  }
+  if (edit.asMet !== undefined) sightings = setSightingsAsMet(sightings, edit.asMet, text);
+
+  if (text !== row.text) {
+    patch.text = text;
+    changed.push("text");
+    const norm = normalizeQueueText(text);
+    if (norm !== row.norm) patch.norm = norm;
+  }
+  if (reading !== row.reading) {
+    patch.reading = reading;
+    changed.push("reading");
+  }
+  if (meaning !== row.meaning) {
+    patch.meaning = meaning;
+    changed.push("meaning");
+  }
+  if (itemId !== row.itemId) {
+    patch.itemId = itemId;
+    changed.push("item");
+  }
+  if (JSON.stringify(sightings) !== JSON.stringify(row.sightings)) {
+    patch.sightings = sightings;
+    if (effectiveAsMet(sightings) !== effectiveAsMet(row.sightings)) changed.push("as_met");
+  }
+  return { patch, changed };
+}
+
 /** A word that stalls again is worth a card unless one already exists. */
 export function statusOnResight(status: VocabQueueStatus): VocabQueueStatus {
   return status === "carded" ? "carded" : "queued";

@@ -7,9 +7,13 @@ import {
   matchQueueItem,
   mergeSightings,
   normalizeQueueText,
+  planQueueEdit,
+  setSightingsAsMet,
   sightingAsMet,
   statusOnResight,
   toAnkiTsv,
+  validateQueueUpdate,
+  type QueueEditRow,
 } from "./vocab-queue-core.ts";
 import type { VocabSighting } from "./types.ts";
 
@@ -149,4 +153,106 @@ test("decideQueueLink: fills a null link, never changes an existing one", () => 
 
 test("exportFilename carries status and date", () => {
   assert.equal(exportFilename("queued", new Date("2026-11-09T23:00:00Z")), "jlpt-hub-queue-queued-2026-11-09.tsv");
+});
+
+// ---- Per-row edits (update_vocab_queue `edits`) -------------------------------------------
+
+test("validateQueueUpdate: status needs ids, ids need status, edits must change something", () => {
+  const id = "00000000-0000-4000-8000-000000000001";
+  assert.throws(() => validateQueueUpdate({}), /Nothing to change/);
+  assert.throws(() => validateQueueUpdate({ ids: [id] }), /without status/);
+  assert.throws(() => validateQueueUpdate({ status: "known" }), /needs ids/);
+  assert.throws(() => validateQueueUpdate({ edits: [{ id }] }), /changes nothing/);
+  assert.throws(() => validateQueueUpdate({ edits: [{ id, text: "  " }] }), /text is empty/);
+  assert.throws(() => validateQueueUpdate({ edits: [{ id, reading: "a" }, { id, meaning: "b" }] }), /appears twice/);
+  assert.doesNotThrow(() => validateQueueUpdate({ ids: [id], status: "carded" }));
+  assert.doesNotThrow(() => validateQueueUpdate({ edits: [{ id, asMet: null }] }));
+  assert.doesNotThrow(() => validateQueueUpdate({ ids: [id], status: "known", edits: [{ id, meaning: "x" }] }));
+});
+
+test("setSightingsAsMet: written on the latest sighting, no new sighting; null clears every one", () => {
+  const sightings = [s({ context: "first", asMet: "オオゼイ" }), s({ context: "second" })];
+  const set = setSightingsAsMet(sightings, " おおぜい ", "大勢");
+  assert.equal(set.length, 2);
+  assert.equal(set[1].asMet, "おおぜい");
+  assert.equal(set[0].asMet, "オオゼイ");
+  assert.equal(effectiveAsMet(set), "おおぜい");
+  const cleared = setSightingsAsMet(set, null, "大勢");
+  assert.equal(effectiveAsMet(cleared), null);
+  assert.equal("asMet" in cleared[0], false);
+  // The same word as text means nothing to show: a clear.
+  assert.equal(effectiveAsMet(setSightingsAsMet(set, "大勢", "大勢")), null);
+  assert.throws(() => setSightingsAsMet([], "おおぜい", "大勢"), /no sightings/);
+  assert.deepEqual(setSightingsAsMet([], null, "大勢"), []);
+});
+
+test("setSightingsAsMet: the Anki export reads the edited form on the front", () => {
+  const sightings = setSightingsAsMet([s({ context: "おおぜいの人" })], "おおぜい", "大勢");
+  const line = toAnkiTsv([{ text: "大勢", reading: "おおぜい", meaning: null, sightings, lastSeenAt: new Date("2026-11-12T10:00:00Z") }])
+    .trimEnd()
+    .split("\n")[4];
+  assert.equal(line, "おおぜい\t大勢<br><b>おおぜい</b><br><i>おおぜいの人</i>\tjlpt-hub seen-2026-11");
+});
+
+const qrow = (over: Partial<QueueEditRow> = {}): QueueEditRow => ({
+  id: "row-1",
+  text: "おおぜい",
+  norm: "おおぜい",
+  reading: null,
+  meaning: null,
+  itemId: null,
+  sightings: [s({ context: "おおぜいの人", label: "500問 W3D2" })],
+  ...over,
+});
+const itemFields: Record<string, { reading: string | null; meaning: string | null }> = {
+  oozei: { reading: "おおぜい", meaning: "a crowd, many people" },
+  kirei: { reading: "きれい", meaning: "pretty, clean" },
+};
+const info = (id: string) => itemFields[id];
+
+test("planQueueEdit: as_met only touches sightings, never counts", () => {
+  const plan = planQueueEdit(qrow({ text: "大勢", norm: "大勢" }), { id: "row-1", asMet: "おおぜい" }, lookup, info);
+  assert.deepEqual(plan.changed, ["as_met"]);
+  assert.equal(plan.patch.sightings?.length, 1);
+  assert.equal(effectiveAsMet(plan.patch.sightings ?? []), "おおぜい");
+  assert.equal(plan.patch.text, undefined);
+  assert.equal("seenCount" in plan.patch, false);
+  // Same value again: no change at all.
+  const again = planQueueEdit(qrow({ text: "大勢", norm: "大勢", sightings: plan.patch.sightings }), { id: "row-1", asMet: "おおぜい" }, lookup, info);
+  assert.deepEqual(again, { patch: {}, changed: [] });
+});
+
+test("planQueueEdit: text re-links, fills reading/meaning from the item, keeps the printed form as as_met", () => {
+  const plan = planQueueEdit(qrow(), { id: "row-1", text: " 大勢 ", asMet: "おおぜい" }, lookup, info);
+  assert.deepEqual(plan.changed, ["text", "reading", "meaning", "item", "as_met"]);
+  assert.equal(plan.patch.text, "大勢");
+  assert.equal(plan.patch.norm, "大勢");
+  assert.equal(plan.patch.itemId, "oozei");
+  assert.equal(plan.patch.reading, "おおぜい");
+  assert.equal(plan.patch.meaning, "a crowd, many people");
+  assert.equal(effectiveAsMet(plan.patch.sightings ?? []), "おおぜい");
+});
+
+test("planQueueEdit: a new text with no match drops the old link; explicit null is not refilled", () => {
+  const linked = qrow({ text: "大勢", norm: "大勢", itemId: "oozei", reading: "おおぜい", meaning: "crowd" });
+  const plan = planQueueEdit(linked, { id: "row-1", text: "入社試験" }, lookup, info);
+  assert.equal(plan.patch.itemId, null);
+  assert.ok(plan.changed.includes("item"));
+  // Reading/meaning the row already had are kept.
+  assert.equal(plan.patch.reading, undefined);
+  const cleared = planQueueEdit(qrow({ text: "綺麗", norm: "綺麗" }), { id: "row-1", text: "きれい", reading: null }, lookup, info);
+  assert.equal(cleared.patch.itemId, "kirei");
+  assert.equal(cleared.patch.reading, undefined); // was null and explicitly kept null
+  assert.equal(cleared.patch.meaning, "pretty, clean");
+});
+
+test("planQueueEdit: an as_met equal to the new text is dropped; reading/meaning set and cleared", () => {
+  const row = qrow({ text: "大勢", norm: "大勢", sightings: [s({ asMet: "おおぜい" })], reading: "たいせい", meaning: "general situation" });
+  const plan = planQueueEdit(row, { id: "row-1", text: "おおぜい" }, lookup, info);
+  assert.equal(effectiveAsMet(plan.patch.sightings ?? []), null);
+  assert.ok(plan.changed.includes("as_met"));
+  const fields = planQueueEdit(row, { id: "row-1", reading: " おおぜい ", meaning: null }, lookup, info);
+  assert.deepEqual(fields, { patch: { reading: "おおぜい", meaning: null }, changed: ["reading", "meaning"] });
+  // A reading change alone does not re-link.
+  assert.equal(fields.patch.itemId, undefined);
 });

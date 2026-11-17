@@ -104,6 +104,23 @@ Reconciled against the repo on 2026-10-27 and built the same day. Exam: JLPT N4,
   PRs; it is read at request time and reaches the Vercel function through
   `outputFileTracingIncludes` for `/mcp`. A missing or malformed file is an error result,
   never empty text. Adding tools still needs one disconnect/reconnect of the connector.
+- Feedback handoffs go to a private inbox table, not GitHub issues (2026-11-17, server
+  1.9.0). Each claude.ai study conversation ended with a long handoff (sessions logged, fixes
+  wanted, library gaps, connector behaviour, instruction gaps) that was copied by hand into a
+  Claude Code session. Now the chat files it with `send_feedback` into `session_feedback`
+  (title, markdown body, status open | in_progress | done | dismissed, the study dates and
+  session ids it covers, server version, resolution), and Claude Code reads it with
+  `get_feedback` or `npm run feedback` and closes it with a resolution (PR numbers). GitHub
+  issues were the obvious tracker but the repo is public and the handoffs are personal study
+  data, so they stay in the Hub's own database. The handoff format is fixed in the
+  instructions doc so handoffs are comparable. The table is additive and created by an
+  idempotent SQL file (`npm run db:feedback-table`) rather than `db:push`, so creating it
+  cannot touch anything else. One row per conversation; later additions are appended
+  (`update_feedback append`), never a second row. Same release: `update_vocab_queue` takes
+  per-row `edits` (as_met written onto the row's latest sighting, so it becomes the effective
+  as_met without a new sighting or count; `text` re-links the row), and `grammar-forgotten`
+  joins the root causes (learned, then faded; distinct from grammar-unknown and
+  pattern-confusion).
 - The library is curated, not self-extending (2026-11-09). The grammar list was a generic
   N4/N5 pattern list, not SKM's table of contents, so SKM lessons surface patterns it lacks
   (〜といい sat unresolved on 10 attempts). Keeping the chat out of item creation is

@@ -9,6 +9,7 @@ import {
   uniqueIndex,
   index,
   integer,
+  date,
 } from "drizzle-orm/pg-core";
 import type {
   VocabQueueStatus,
@@ -31,6 +32,7 @@ import type {
   SessionMode,
   StudySourceKind,
   StudyActivity,
+  FeedbackStatus,
 } from "@/lib/types";
 
 // One saved study sentence at one level (N5 or N4). A single workshop generation can
@@ -399,3 +401,30 @@ export const vocabQueue = pgTable(
 );
 
 export type VocabQueueRow = typeof vocabQueue.$inferSelect;
+
+// The feedback inbox: the end-of-conversation handoff the claude.ai chat files with the MCP
+// send_feedback tool (sessions logged, fixes wanted, library gaps, instruction gaps), read
+// later by a Claude Code session through get_feedback or `npm run feedback`. Kept in this
+// database, not GitHub issues, because the repo is public and this is personal study data.
+// Purely additive; created by `npm run db:feedback-table` (scripts/sql/session-feedback.sql).
+export const sessionFeedback = pgTable(
+  "session_feedback",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+    title: text("title").notNull(),
+    body: text("body").notNull(), // markdown, in the format the instructions doc defines
+    status: text("status").$type<FeedbackStatus>().notNull().default("open"),
+    // The study dates the feedback covers (not when it was filed).
+    periodFrom: date("period_from", { mode: "string" }),
+    periodTo: date("period_to", { mode: "string" }),
+    sessionIds: jsonb("session_ids").$type<string[]>().notNull().default([]),
+    surface: text("surface").$type<PracticeSurface>().notNull().default("claude-ai"),
+    serverVersion: text("server_version").notNull(), // SERVER_INFO.version at filing time
+    resolution: text("resolution"), // what was done about it, e.g. PR numbers
+    updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
+  },
+  (t) => [index("session_feedback_status").on(t.status, t.createdAt)],
+);
+
+export type SessionFeedbackRow = typeof sessionFeedback.$inferSelect;

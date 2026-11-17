@@ -1,4 +1,4 @@
-import { and, asc, desc, eq, inArray, isNull, sql } from "drizzle-orm";
+import { and, asc, desc, eq, inArray, isNull, ne, sql } from "drizzle-orm";
 import { getDb } from "@/lib/db";
 import { vocabQueue, type VocabQueueRow } from "@/lib/db/schema";
 import { matchTag, type ItemIndex } from "@/lib/item-match";
@@ -10,8 +10,11 @@ import {
   matchQueueItem,
   mergeSightings,
   normalizeQueueText,
+  planQueueEdit,
   sightingAsMet,
   statusOnResight,
+  type QueueEdit,
+  type QueueEditPlan,
   type QueueLookup,
 } from "@/lib/vocab-queue-core";
 
@@ -22,7 +25,9 @@ export {
   normalizeQueueText,
   statusOnResight,
   toAnkiTsv,
+  validateQueueUpdate,
   type AnkiRow,
+  type QueueEdit,
 } from "@/lib/vocab-queue-core";
 
 /**
@@ -250,6 +255,94 @@ export async function setVocabQueueStatus(ids: string[], status: VocabQueueStatu
     .where(inArray(vocabQueue.id, ids))
     .returning({ id: vocabQueue.id });
   return rows.length;
+}
+
+export interface EditedQueueWord {
+  id: string;
+  text: string;
+  reading: string | null;
+  meaning: string | null;
+  asMet: string | null;
+  itemId: string | null;
+  status: VocabQueueStatus;
+  seenCount: number;
+  /** Fields that actually changed: text, reading, meaning, as_met, item. */
+  changed: QueueEditPlan["changed"];
+}
+
+/**
+ * Per-row field edits (update_vocab_queue `edits`): as_met, reading, meaning, text. Never
+ * adds a sighting or bumps seenCount (planQueueEdit in lib/vocab-queue-core.ts). Every row is
+ * loaded and every edit planned before the first write, so a missing id, or a new text that
+ * is already another row's word, fails the whole call with nothing changed.
+ */
+export async function editVocabQueueRows(edits: QueueEdit[], index?: ItemIndex): Promise<EditedQueueWord[]> {
+  if (edits.length === 0) return [];
+  const db = getDb();
+  const ids = edits.map((e) => e.id);
+  const rows = await db.select().from(vocabQueue).where(inArray(vocabQueue.id, ids));
+  const byId = new Map(rows.map((r) => [r.id, r]));
+  const missing = ids.filter((id) => !byId.has(id));
+  if (missing.length > 0) throw new Error(`No queue row with id ${missing.join(", ")}; ids come from get_vocab_queue.`);
+
+  // The item index is only needed when a text changes (re-linking).
+  const idx = edits.some((e) => e.text !== undefined) ? (index ?? (await loadItemIndex())) : null;
+  const lookup: QueueLookup = idx ? queueLookup(idx) : () => null;
+  const itemInfo = (itemId: string) => {
+    const item = idx?.byId.get(itemId);
+    return item ? { reading: item.reading || null, meaning: item.meaning || null } : undefined;
+  };
+
+  const plans: { row: VocabQueueRow; plan: QueueEditPlan }[] = [];
+  for (const e of edits) {
+    const row = byId.get(e.id);
+    if (row) plans.push({ row, plan: planQueueEdit(row, e, lookup, itemInfo) });
+  }
+
+  // A new text changes the row's norm, which is unique: refuse a rename onto another row's word.
+  const renamedTo = new Map<string, string>();
+  for (const { row, plan } of plans) {
+    const norm = plan.patch.norm;
+    if (norm === undefined) continue;
+    const other = renamedTo.get(norm);
+    if (other) throw new Error(`Two edits rename rows to the same word (${plan.patch.text}): ${other} and ${row.id}.`);
+    renamedTo.set(norm, row.id);
+    const [taken] = await db
+      .select({ id: vocabQueue.id, text: vocabQueue.text })
+      .from(vocabQueue)
+      .where(and(eq(vocabQueue.norm, norm), ne(vocabQueue.id, row.id)))
+      .limit(1);
+    if (taken) {
+      throw new Error(
+        `Cannot rename ${row.text} to ${plan.patch.text}: row ${taken.id} (${taken.text}) is already that word. ` +
+          "Mark one of the two skipped instead.",
+      );
+    }
+  }
+
+  const out: EditedQueueWord[] = [];
+  for (const { row, plan } of plans) {
+    let next = row;
+    if (Object.keys(plan.patch).length > 0) {
+      [next] = await db
+        .update(vocabQueue)
+        .set({ ...plan.patch, updatedAt: new Date() })
+        .where(eq(vocabQueue.id, row.id))
+        .returning();
+    }
+    out.push({
+      id: next.id,
+      text: next.text,
+      reading: next.reading,
+      meaning: next.meaning,
+      asMet: effectiveAsMet(next.sightings),
+      itemId: next.itemId,
+      status: next.status,
+      seenCount: next.seenCount,
+      changed: plan.changed,
+    });
+  }
+  return out;
 }
 
 /** Every row in one status to another (used by "mark all queued as carded" after an export). */
