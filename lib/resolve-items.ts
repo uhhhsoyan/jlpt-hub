@@ -1,9 +1,9 @@
 import { getDb } from "@/lib/db";
 import { items } from "@/lib/db/schema";
 import type { ExtractedTag, ItemKind, QuestionTag } from "@/lib/types";
-import { createItemIndex, matchTag, suggestItems, type ItemIndex, type ItemSuggestion } from "@/lib/item-match";
+import { createItemIndex, findInIndex, matchTag, type FindItemsResult, type ItemIndex } from "@/lib/item-match";
 
-export { normalizeGrammar, type ItemIndex, type ItemSuggestion, type IndexRow } from "@/lib/item-match";
+export { normalizeGrammar, type FindItemsResult, type ItemIndex, type ItemSuggestion, type IndexRow } from "@/lib/item-match";
 
 export async function loadItemIndex(): Promise<ItemIndex> {
   const rows = await getDb()
@@ -30,8 +30,11 @@ export async function resolveTags(tags: ExtractedTag[], index?: ItemIndex): Prom
   return tags.map((tag) => ({ kind: tag.kind, text: tag.text, itemId: matchTag(idx, tag) }));
 }
 
-/** Free-text library lookup for the MCP `find_items` tool. */
-export async function findItems(query: string, opts: { kind?: ItemKind | null; limit?: number } = {}): Promise<ItemSuggestion[]> {
+/**
+ * Free-text library lookups for the MCP `find_items` tool, one or many over a single index
+ * load (a lesson's patterns confirmed in one call).
+ */
+export async function findItemsBatch(queries: string[], opts: { kind?: ItemKind | null; limit?: number } = {}): Promise<FindItemsResult[]> {
   const index = await loadItemIndex();
-  return suggestItems(index, query, { kind: opts.kind ?? null, limit: opts.limit ?? 8 });
+  return queries.map((q) => findInIndex(index, q, { kind: opts.kind ?? null, limit: opts.limit ?? 8 }));
 }

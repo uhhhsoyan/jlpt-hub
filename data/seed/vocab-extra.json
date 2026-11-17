@@ -1,5 +1,5 @@
 {
-  "note": "Hand-curated vocab the scraped N5/N4 lists lack (scripts/scrape-lists.py regenerates vocab-n5/n4.json, so additions live here). level is the lowest level the word is needed at.",
+  "note": "Hand-curated vocab the scraped N5/N4 lists lack (scripts/scrape-lists.py regenerates vocab-n5/n4.json, so additions live here). level is the lowest level the word is needed at. `aliases` adds spellings to a scraped row (matched by headword + reading), e.g. to split a duplicate headword like 一日; seed-items fails if the row is gone.",
   "words": [
     {
       "headword": "紅茶",
@@ -44,6 +44,264 @@
       "meaning": "famous",
       "pos": "na-adjective",
       "level": "N5"
+    },
+    {
+      "headword": "一人で",
+      "reading": "ひとりで",
+      "romaji": "hitoride",
+      "meaning": "by oneself, alone",
+      "pos": "adverb",
+      "level": "N5",
+      "aliases": [
+        "ひとりで",
+        "独りで"
+      ]
+    },
+    {
+      "headword": "入社試験",
+      "reading": "にゅうしゃしけん",
+      "romaji": "nyuushashiken",
+      "meaning": "company entrance exam",
+      "pos": "noun",
+      "level": "N4",
+      "aliases": [
+        "にゅうしゃしけん"
+      ]
+    },
+    {
+      "headword": "続き",
+      "reading": "つづき",
+      "romaji": "tsuzuki",
+      "meaning": "continuation, the rest (of something)",
+      "pos": "noun",
+      "level": "N4",
+      "aliases": [
+        "つづき"
+      ]
+    },
+    {
+      "headword": "何も",
+      "reading": "なにも",
+      "romaji": "nanimo",
+      "meaning": "nothing (with a negative), not anything",
+      "pos": "adverb",
+      "level": "N5",
+      "aliases": [
+        "なにも"
+      ]
+    },
+    {
+      "headword": "持っていく",
+      "reading": "もっていく",
+      "romaji": "motteiku",
+      "meaning": "to take (something) along",
+      "pos": "verb",
+      "level": "N5",
+      "aliases": [
+        "持って行く",
+        "もっていく"
+      ]
+    },
+    {
+      "headword": "気をつける",
+      "reading": "きをつける",
+      "romaji": "kiwotsukeru",
+      "meaning": "to be careful, to watch out",
+      "pos": "verb",
+      "level": "N4",
+      "aliases": [
+        "気を付ける",
+        "きをつける"
+      ]
+    },
+    {
+      "headword": "下ろす",
+      "reading": "おろす",
+      "romaji": "orosu",
+      "meaning": "to withdraw (money), to take down, to lower",
+      "pos": "verb",
+      "level": "N4",
+      "aliases": [
+        "おろす"
+      ]
+    },
+    {
+      "headword": "驚く",
+      "reading": "おどろく",
+      "romaji": "odoroku",
+      "meaning": "to be surprised, to be astonished",
+      "pos": "verb",
+      "level": "N4",
+      "aliases": [
+        "おどろく"
+      ]
+    },
+    {
+      "headword": "しまった",
+      "reading": "しまった",
+      "romaji": "shimatta",
+      "meaning": "dang, oops (interjection; frozen past of しまう)",
+      "pos": "interjection",
+      "level": "N4"
+    },
+    {
+      "headword": "遅れる",
+      "reading": "おくれる",
+      "romaji": "okureru",
+      "meaning": "to be late, to be delayed",
+      "pos": "verb",
+      "level": "N4",
+      "aliases": [
+        "おくれる"
+      ]
+    },
+    {
+      "headword": "急ぐ",
+      "reading": "いそぐ",
+      "romaji": "isogu",
+      "meaning": "to hurry",
+      "pos": "verb",
+      "level": "N4",
+      "aliases": [
+        "いそぐ"
+      ]
+    },
+    {
+      "headword": "廊下",
+      "reading": "ろうか",
+      "romaji": "rouka",
+      "meaning": "corridor, hallway",
+      "pos": "noun",
+      "level": "N5",
+      "aliases": [
+        "ろうか"
+      ]
+    },
+    {
+      "headword": "鍋",
+      "reading": "なべ",
+      "romaji": "nabe",
+      "meaning": "pot, pan; hot pot (dish)",
+      "pos": "noun",
+      "level": "N4",
+      "aliases": [
+        "なべ"
+      ]
+    },
+    {
+      "headword": "一杯",
+      "reading": "いっぱい",
+      "romaji": "ippai",
+      "meaning": "one glassful, one cupful; full",
+      "pos": "noun",
+      "level": "N5",
+      "aliases": [
+        "いっぱい"
+      ]
+    },
+    {
+      "headword": "治す",
+      "reading": "なおす",
+      "romaji": "naosu",
+      "meaning": "to cure, to heal (an illness or injury)",
+      "pos": "verb",
+      "level": "N4"
+    },
+    {
+      "headword": "必ず",
+      "reading": "かならず",
+      "romaji": "kanarazu",
+      "meaning": "certainly, without fail",
+      "pos": "adverb",
+      "level": "N4",
+      "aliases": [
+        "かならず"
+      ]
+    },
+    {
+      "headword": "勝つ",
+      "reading": "かつ",
+      "romaji": "katsu",
+      "meaning": "to win",
+      "pos": "verb",
+      "level": "N4",
+      "aliases": [
+        "かつ"
+      ]
+    },
+    {
+      "headword": "うるさい",
+      "reading": "うるさい",
+      "romaji": "urusai",
+      "meaning": "noisy, loud; annoying",
+      "pos": "i-adjective",
+      "level": "N4",
+      "aliases": [
+        "煩い"
+      ]
+    },
+    {
+      "headword": "残す",
+      "reading": "のこす",
+      "romaji": "nokosu",
+      "meaning": "to leave (behind), to leave over (transitive, 〜を残す)",
+      "pos": "verb",
+      "level": "N4",
+      "aliases": [
+        "のこす"
+      ]
+    }
+  ],
+  "aliases": [
+    {
+      "headword": "一日",
+      "reading": "いちにち",
+      "aliases": [
+        "一日"
+      ],
+      "why": "一日 is two items (いちにち, ついたち); the bare kanji means 'one day'"
+    },
+    {
+      "headword": "一日",
+      "reading": "ついたち",
+      "aliases": [
+        "1日",
+        "１日"
+      ],
+      "why": "a distinct spelling for 'the 1st of the month'"
+    },
+    {
+      "headword": "いや",
+      "reading": "いや",
+      "aliases": [
+        "嫌",
+        "嫌だ"
+      ],
+      "why": "the scraped list spells 嫌 (unpleasant) in kana only"
+    },
+    {
+      "headword": "おおぜい",
+      "reading": "おおぜい",
+      "aliases": [
+        "大勢"
+      ],
+      "why": "the scraped list spells 大勢 in kana only"
+    },
+    {
+      "headword": "空く",
+      "reading": "あく",
+      "aliases": [
+        "空く"
+      ],
+      "why": "空く is two items (あく, すく); the bare kanji means 'to be vacant, free'"
+    },
+    {
+      "headword": "直す",
+      "reading": "なおす",
+      "aliases": [
+        "なおす"
+      ],
+      "why": "keeps kana なおす on 直す (fix) now that 治す (cure) shares the reading"
     }
   ]
 }

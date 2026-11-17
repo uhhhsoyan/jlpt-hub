@@ -114,10 +114,19 @@
   {
     "pattern": "〜なければならない",
     "level": "N4",
-    "meaning": "obligation: must do ~",
+    "meaning": "obligation: must do ~ (also なければいけない, なくてはいけない, なくてはならない)",
     "example": "明日までにレポートを出さなければなりません。",
     "exampleReading": "あしたまでに れぽーとを ださなければ なりません。",
-    "exampleEnglish": "I must submit the report by tomorrow."
+    "exampleEnglish": "I must submit the report by tomorrow.",
+    "aliases": [
+      "なければならない",
+      "〜なければいけない",
+      "なければいけない",
+      "〜なくてはいけない",
+      "なくてはいけない",
+      "〜なくてはならない",
+      "なくてはならない"
+    ]
   },
   {
     "pattern": "〜なくてもいい",
@@ -365,7 +374,15 @@
     "meaning": "purpose: in order to ~",
     "example": "日本語が上手になるために、毎日練習しています。",
     "exampleReading": "にほんごが じょうずに なる ために、まいにち れんしゅう しています。",
-    "exampleEnglish": "In order to become good at Japanese, I practice every day."
+    "exampleEnglish": "In order to become good at Japanese, I practice every day.",
+    "aliases": [
+      "〜ために",
+      "ために",
+      "〜ために（目的）",
+      "ために（目的）",
+      "〜ため（目的）",
+      "ため（目的）"
+    ]
   },
   {
     "pattern": "〜ため（に）［理由］",
@@ -373,7 +390,13 @@
     "meaning": "reason/cause: because of ~",
     "example": "台風のため、電車が止まっています。",
     "exampleReading": "たいふうの ため、でんしゃが とまっています。",
-    "exampleEnglish": "Because of the typhoon, the trains have stopped."
+    "exampleEnglish": "Because of the typhoon, the trains have stopped.",
+    "aliases": [
+      "〜ために（理由）",
+      "ために（理由）",
+      "〜ため（理由）",
+      "ため（理由）"
+    ]
   },
   {
     "pattern": "〜し",
@@ -780,7 +803,10 @@
     "meaning": "glad that ~ happened, relief",
     "example": "天気がよくてよかったです。",
     "exampleReading": "てんきが よくて よかったです。",
-    "exampleEnglish": "I'm glad the weather was good."
+    "exampleEnglish": "I'm glad the weather was good.",
+    "aliases": [
+      "よかった"
+    ]
   },
   {
     "pattern": "そんなに〜ない",
@@ -2042,7 +2068,9 @@
       "て（理由）",
       "て（原因）",
       "〜て（原因）",
-      "〜くて（理由）"
+      "〜くて（理由）",
+      "〜て（原因・理由）",
+      "て（原因・理由）"
     ]
   },
   {
@@ -2115,6 +2143,37 @@
       "が嫌い",
       "がきらい",
       "〜が嫌いだ"
+    ]
+  },
+  {
+    "pattern": "〜ので",
+    "level": "N4",
+    "meaning": "because, since: gives a reason, softer and more objective than から (plain form; a noun or な-adjective takes な in the non-past: 学生なので, 静かなので)",
+    "example": "雨が降っているので、今日は出かけません。",
+    "exampleReading": "あめが ふっているので、きょうは でかけません。",
+    "exampleEnglish": "Because it's raining, I'm not going out today.",
+    "aliases": [
+      "ので",
+      "〜なので",
+      "なので",
+      "〜ので（理由）",
+      "ので（理由）"
+    ]
+  },
+  {
+    "pattern": "〜ないと",
+    "level": "N4",
+    "meaning": "colloquial obligation: have to ~ (ない-form + と, short for 〜ないといけない／〜ないとだめ)",
+    "example": "明日は早いから、もう寝ないと。",
+    "exampleReading": "あしたは はやいから、もう ねないと。",
+    "exampleEnglish": "I have an early start tomorrow, so I have to go to bed now.",
+    "aliases": [
+      "ないと",
+      "〜ないといけない",
+      "ないといけない",
+      "〜ないとだめ",
+      "ないとだめ",
+      "〜ないとダメ"
     ]
   }
 ]

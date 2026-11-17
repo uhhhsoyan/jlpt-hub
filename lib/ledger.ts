@@ -10,7 +10,8 @@ import {
   type PracticeQuestionRow,
   type PracticeSessionRow,
 } from "@/lib/db/schema";
-import { matchTag, matchText, suggestItems, type ItemIndex, type ItemSuggestion } from "@/lib/item-match";
+import { matchTag, suggestItems, topicItemIds, type ItemIndex, type ItemSuggestion } from "@/lib/item-match";
+import { rankInsights, type InsightMatch } from "@/lib/insight-match";
 import { loadItemIndex, resolveTags } from "@/lib/resolve-items";
 import { loadStudySources, resolveSource } from "@/lib/study-sources-db";
 import {
@@ -350,37 +351,51 @@ export interface InsightSummary {
   items: string[];
   source: InsightSource;
   createdAt: string;
+  /** Why it matched the topic (see InsightMatch); absent when no topic was given. */
+  matched?: InsightMatch;
+}
+
+/** Case-insensitive "this jsonb tag array holds this tag". */
+function hasTag(tag: string) {
+  return sql`EXISTS (SELECT 1 FROM jsonb_array_elements_text(${insights.tags}) AS t WHERE lower(t) = ${tag.toLowerCase()})`;
 }
 
 /**
- * Newest first. `topic` matches the text (case-insensitive substring), an exact tag, or a
- * library item (headword, alias, reading or loosened pattern) the insight is linked to.
+ * `topic` matches a library item the insight is linked to (see topicItemIds: the same form,
+ * or a grammar pattern built on it, はず -> 〜はずだ), an exact tag (case-insensitive), or the
+ * text (substring). Item and tag matches rank first, then text-only matches, newest first
+ * within each; each result says which in `matched`. `tags` keeps only insights carrying all
+ * of the given tags. Without a topic, newest first. The SQL narrows the candidates;
+ * rankInsights decides.
  */
-export async function getInsights(opts: { topic?: string; limit?: number } = {}): Promise<InsightSummary[]> {
+export async function getInsights(opts: { topic?: string; tags?: string[]; limit?: number } = {}): Promise<InsightSummary[]> {
   const limit = Math.min(Math.max(opts.limit ?? 20, 1), 100);
   const topic = opts.topic?.trim();
+  const tags = (opts.tags ?? []).map((t) => t.trim()).filter(Boolean);
   const db = getDb();
   const index = await loadItemIndex();
-  const topicItemId = topic ? matchText(index, topic) : null;
+  const topicItems = topic ? topicItemIds(index, topic) : [];
+  const conds = tags.map(hasTag);
+  if (topic) {
+    const linked = topicItems.map((id) => sql` OR ${insights.itemIds} @> ${JSON.stringify([id])}::jsonb`);
+    conds.push(sql`(${insights.text} ILIKE ${"%" + topic + "%"} OR ${hasTag(topic)}${sql.join(linked, sql``)})`);
+  }
   const rows = await db
     .select()
     .from(insights)
-    .where(
-      topic
-        ? sql`(${insights.text} ILIKE ${"%" + topic + "%"} OR ${insights.tags} @> ${JSON.stringify([topic])}::jsonb${
-            topicItemId ? sql` OR ${insights.itemIds} @> ${JSON.stringify([topicItemId])}::jsonb` : sql``
-          })`
-        : undefined,
-    )
+    .where(conds.length > 0 ? sql`${sql.join(conds, sql` AND `)}` : undefined)
     .orderBy(desc(insights.createdAt))
-    .limit(limit);
-  return rows.map((r) => ({
+    // Without a topic the order is plain recency, so the limit can go to SQL; with one, every
+    // candidate is ranked first (a text hit must not crowd out an older item hit).
+    .limit(topic ? 1000 : limit);
+  return rankInsights(rows, { topic, topicItemIds: topicItems, tags, limit }).map(({ row: r, matched }) => ({
     id: r.id,
     text: r.text,
     tags: r.tags,
     items: r.itemIds.map((id) => index.byId.get(id)?.headword ?? id),
     source: r.source,
     createdAt: r.createdAt.toISOString(),
+    ...(matched ? { matched } : {}),
   }));
 }
 
