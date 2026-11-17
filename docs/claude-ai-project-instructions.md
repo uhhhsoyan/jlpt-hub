@@ -1,8 +1,24 @@
 # Study ledger instructions for the "Japanese Study" claude.ai project
 
-Paste the block below into the project's custom instructions. It tells Claude when and how
-to use the jlpt-hub connector (the `/mcp` endpoint, tools in `app/mcp/route.ts`). Keep this
-file in sync with the tool schemas when they change.
+The block below the `---` line is served by the jlpt-hub connector's `get_instructions` tool
+(`app/mcp/route.ts`, extraction in `lib/served-instructions.ts`). Each deployment serves the
+copy of this file it was built from, so changing the instructions is an edit here plus a merge;
+nothing is re-pasted into claude.ai. Keep it in sync with the tool schemas when they change.
+Everything above the `---` line (this header) is for humans and is never served.
+
+The claude.ai project's custom instructions hold only this stub. Paste it once, replacing the
+old long block; it does not change when the instructions do:
+
+```text
+Study instructions for this project are served by the jlpt-hub connector.
+At the start of every conversation, before replying about study and before calling any other jlpt-hub tool, call the jlpt-hub connector's get_instructions tool and follow what it returns for the rest of the conversation, exactly as if it were written here.
+If that call fails or get_instructions is not in your tool list, say so in one line and tell me the connector may need to be disconnected and reconnected (Settings > Connectors > jlpt-hub). Until it works, do not log anything based on older instructions you remember; you can still review with me and give me the attempts as a list to log later.
+Do not paraphrase the returned instructions or carry a copy over from another conversation: call get_instructions fresh in each conversation.
+```
+
+After a deploy that adds or renames tools, disconnect and reconnect the connector once
+(Settings → Connectors → jlpt-hub): a running chat keeps the tool list it loaded. An edit
+to the text below needs nothing; the next conversation gets it.
 
 ---
 
@@ -146,4 +162,4 @@ Both return `status`. Anything other than `ok` (`offline`, `unconfigured`, `reje
 - Dates: use the date I did the work. If I am reviewing yesterday's page today, `taken_at` is yesterday.
 - The library carries no Genki lesson references. Never cite a Genki lesson number or say a word is "not in Genki" from memory; if the lesson matters, say you do not know.
 - If the connector is unavailable, finish the review and give me the attempts as a compact list I can log later; do not silently drop them.
-- If a tool these instructions name is missing from your tool list, it was deployed after the connector last loaded its tools: a running chat only sees new tools once the connector has been disconnected and reconnected. Tell me to do that (Settings → Connectors → jlpt-hub), and meanwhile never work around a missing correction tool by re-logging a set.
+- These instructions come live from the connector, so they can name a tool deployed after the connector last loaded its tool list. If a tool named here is missing from your tool list, a running chat only sees new tools once the connector has been disconnected and reconnected. Tell me to do that (Settings → Connectors → jlpt-hub), and meanwhile never work around a missing correction tool by re-logging a set.

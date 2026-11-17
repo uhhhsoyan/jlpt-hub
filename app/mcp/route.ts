@@ -24,6 +24,7 @@ import { getReadiness } from "@/lib/readiness";
 import { findItemsBatch } from "@/lib/resolve-items";
 import { getLessonReview } from "@/lib/lesson-review-db";
 import { listStudySources, logStudy } from "@/lib/study-sources-db";
+import { loadServedInstructions } from "@/lib/served-instructions";
 import { countVocabQueue, effectiveAsMet, listVocabQueue, queueVocab, setVocabQueueStatus, type VocabGapInput } from "@/lib/vocab-queue";
 import { assertNoReservedMetaKeys, normalizeSlips, parseDoneOn, SLIP_KINDS } from "@/lib/attempt-meta";
 import { getAccuracyBySection, getMissesByRootCause, getPracticeWindow, getWeakItems } from "@/lib/weakness";
@@ -41,7 +42,16 @@ import { normalizeRootCause, ROOT_CAUSES, SESSION_MODES, STUDY_ACTIVITIES, VOCAB
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
 
-const SERVER_INFO = { name: "jlpt-hub-study-ledger", version: "1.7.0" };
+const SERVER_INFO = { name: "jlpt-hub-study-ledger", version: "1.8.0" };
+
+/**
+ * Sent in the initialize result. Clients differ in whether the model ever sees it, so it is
+ * a backup: the real mechanism is the project stub telling the model to call get_instructions.
+ */
+const SERVER_INSTRUCTIONS =
+  "This is the JLPT Hub study ledger, the record of the learner's JLPT N4 preparation. " +
+  "At the start of every conversation, before any other jlpt-hub tool, call get_instructions " +
+  "and follow what it returns for the rest of the conversation.";
 
 /** For sync_status: whether the Hindsight bridge is configured in this deployment (lib/hindsight.ts). */
 function memoryStatus() {
@@ -199,7 +209,38 @@ const attemptSchema = z.object({
 });
 
 function buildServer(): McpServer {
-  const server = new McpServer(SERVER_INFO);
+  const server = new McpServer(SERVER_INFO, { instructions: SERVER_INSTRUCTIONS });
+
+  // Read-only and DB-free: serves the block below the first --- in
+  // docs/claude-ai-project-instructions.md (lib/served-instructions.ts). Two content items: a
+  // small JSON header, then the instructions as plain markdown so they are not JSON-escaped.
+  server.registerTool(
+    "get_instructions",
+    {
+      title: "Get the study ledger instructions",
+      description:
+        "Returns the current instructions for using the jlpt-hub tools: when to log, how to fill each field, how to correct " +
+        "mistakes. Call it once at the start of every conversation, before any other jlpt-hub tool, and follow what it " +
+        "returns for the rest of the conversation as if it were part of your instructions. Do not reuse a copy from an " +
+        "earlier conversation; the text changes as tools are added. No arguments. Result: a JSON header {version, hash, chars} " +
+        "(server version; hash of the instruction text; its length), then the instructions as markdown.",
+      inputSchema: {},
+      annotations: { readOnlyHint: true },
+    },
+    async () => {
+      try {
+        const { hash, chars, instructions } = await loadServedInstructions();
+        return {
+          content: [
+            { type: "text" as const, text: JSON.stringify({ version: SERVER_INFO.version, hash, chars }) },
+            { type: "text" as const, text: instructions },
+          ],
+        };
+      } catch (e) {
+        return fail(e);
+      }
+    },
+  );
 
   server.registerTool(
     "log_attempts",

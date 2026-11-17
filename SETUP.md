@@ -96,11 +96,16 @@ npx vercel            # link + deploy; set env vars in the Vercel dashboard
 The Hub exposes its study ledger as an MCP server at `/mcp` (Streamable HTTP, stateless,
 JSON responses) so Claude can log reviewed practice pages from anywhere — the claude.ai
 project, Claude Code, the mobile app — instead of appending to a CSV. Tools:
-`log_attempts` (with `mode` practice|lesson), `log_insight`, `get_insights`, `find_items`,
-`relink_tags`, `update_session`, `update_attempt`, `update_insight`, `delete_insight`,
-`get_weakness_report`, `get_readiness`, `list_sessions`, `sync_status`, plus the source,
-vocab-queue and memory tools.
+`get_instructions`, `log_attempts` (with `mode` practice|lesson), `log_insight`,
+`get_insights`, `find_items`, `relink_tags`, `update_session`, `update_attempt`,
+`update_insight`, `delete_insight`, `get_weakness_report`, `get_readiness`,
+`get_lesson_review`, `list_sessions`, `sync_status`, plus the source, vocab-queue and memory
+tools.
 Source: `app/mcp/route.ts`, write path in `lib/ledger.ts`, tag matching in `lib/item-match.ts`.
+`get_instructions` serves the claude.ai-side instructions from
+`docs/claude-ai-project-instructions.md` (the block below its first `---`; traced into the
+`/mcp` function by `outputFileTracingIncludes` in `next.config.ts`), so the project itself
+holds only a short stub.
 
 1. **Token.** `npm run env:set -- MCP_TOKEN=$(openssl rand -hex 32)` then `npm run env:pull`.
    The endpoint refuses everything while the var is unset.
@@ -116,6 +121,10 @@ Source: `app/mcp/route.ts`, write path in `lib/ledger.ts`, tag matching in `lib/
    `x-api-key`, value the bare token (no "Bearer" prefix); the form reserves the
    `Authorization` header for its own OAuth flow, which is why the endpoint accepts the
    token either way. Then enable it in the Japanese Study project.
+   Project instructions: paste the stub from the header of
+   `docs/claude-ai-project-instructions.md` into the project's custom instructions, once.
+   It tells Claude to call `get_instructions` at the start of every conversation, so an
+   edit to the instructions ships with the deploy and nothing is re-pasted.
    After a deploy that adds or changes tools, disconnect and reconnect the connector: a
    running claude.ai chat keeps the tool list it loaded and does not see new tools until
    then (observed after the deploy that added the vocab-queue tools). Bump
@@ -129,6 +138,9 @@ Source: `app/mcp/route.ts`, write path in `lib/ledger.ts`, tag matching in `lib/
      -H 'accept: application/json, text/event-stream' -H "Authorization: Bearer $MCP_TOKEN" \
      -d '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"sync_status","arguments":{}}}'
    ```
+   `get_instructions` in place of `sync_status` checks that the instructions file made it
+   into the deployed function (its header carries `hash` and `chars`; a missing file is an
+   error result, never empty text).
 
 Sessions logged through MCP land as `confirmed` (the review happened in the conversation
 that logged them). `mode=lesson` marks open-book work (textbook examples, れんしゅう right
