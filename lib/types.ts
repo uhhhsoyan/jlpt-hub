@@ -167,6 +167,7 @@ export const ROOT_CAUSES = [
   "pattern-choice",
   "pattern-confusion",
   "polarity-cue-missed",
+  "grammar-forgotten",
 ] as const;
 export type RootCause = (typeof ROOT_CAUSES)[number];
 
@@ -191,6 +192,10 @@ export const ROOT_CAUSE_LABEL: Record<RootCause, string> = {
   "pattern-choice": "Pattern choice",
   "pattern-confusion": "Pattern confusion",
   "polarity-cue-missed": "Polarity cue missed",
+  // Added 2026-11-17: a pattern that was learned (often logged in a lesson) and has faded by
+  // the closed-book test; distinct from grammar-unknown (never learned) and pattern-confusion
+  // (read as a look-alike).
+  "grammar-forgotten": "Grammar forgotten",
 };
 
 export function isKnownRootCause(cause: string): cause is RootCause {
@@ -274,6 +279,15 @@ export const VOCAB_QUEUE_STATUS_LABEL: Record<VocabQueueStatus, string> = {
 export function isVocabQueueStatus(v: string): v is VocabQueueStatus {
   return (VOCAB_QUEUE_STATUSES as readonly string[]).includes(v);
 }
+
+/**
+ * Feedback inbox (session_feedback): the end-of-conversation handoff the claude.ai chat files
+ * with send_feedback, picked up later by a Claude Code session. `open` = not looked at yet,
+ * `in_progress` = being worked on, `done` = acted on (resolution says how), `dismissed` = no
+ * action (resolution says why).
+ */
+export const FEEDBACK_STATUSES = ["open", "in_progress", "done", "dismissed"] as const;
+export type FeedbackStatus = (typeof FEEDBACK_STATUSES)[number];
 
 /** One time a queued word was met; kept on the row so repeats accumulate instead of duplicating. */
 export interface VocabSighting {

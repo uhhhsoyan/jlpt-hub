@@ -113,9 +113,12 @@ function parseResult(s) {
   return null;
 }
 
+// Mirror of lib/types.ts ROOT_CAUSES (this script is plain .mjs and cannot import it).
 const ROOT_CAUSES = new Set([
-  "grammar-unknown", "vocab-in-grammar", "reading-selection", "particle-cue-missed",
-  "pattern-glue", "misparse", "careless", "time-pressure",
+  "grammar-unknown", "vocab-in-grammar", "vocab-unknown", "vocab-confusion", "reading-selection",
+  "particle-cue-missed", "pattern-glue", "misparse", "careless", "time-pressure",
+  "context-cue-missed", "distractor-bias", "kanji-lookalike", "katakana-decoding",
+  "pattern-choice", "pattern-confusion", "polarity-cue-missed", "grammar-forgotten",
 ]);
 
 // Conservative keyword inference from the note; first match wins, ambiguity stays null.
