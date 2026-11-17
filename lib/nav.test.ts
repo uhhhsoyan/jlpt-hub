@@ -19,6 +19,18 @@ test("a destination matches itself and its nested routes", () => {
   assert.equal(activeLabel("/sprint/3"), "Sprint");
   assert.equal(activeLabel("/queue"), "Vocab queue");
   assert.equal(activeLabel("/schedule"), "Schedule");
+  assert.equal(activeLabel("/insights"), "Insights");
+});
+
+test("Insights sits right after the Journal in the Daily group", () => {
+  const daily = NAV_SECTIONS.find((s) => s.label === "Daily");
+  assert.deepEqual(
+    daily?.items.slice(0, 2).map((i) => i.href),
+    ["/", "/insights"],
+  );
+  // The journal at "/" never claims it, and a shared prefix is not Insights.
+  assert.equal(isNavHrefActive("/insights", "/"), false);
+  assert.equal(isNavHrefActive("/insightsx", "/insights"), false);
 });
 
 test("a trailing slash still matches", () => {

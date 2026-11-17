@@ -164,23 +164,36 @@ function MissRow({ miss }: { miss: FeedMiss }) {
   );
 }
 
-export function TagChips({ tags }: { tags: FeedTag[] }) {
+const tagChipClass = (linked: boolean) =>
+  `rounded-full px-2 py-0.5 text-xs font-medium ${
+    linked ? "bg-sky-100 text-sky-800 dark:bg-sky-950 dark:text-sky-300" : "bg-neutral-100 text-neutral-500 dark:bg-neutral-800 dark:text-neutral-400"
+  }`;
+
+/**
+ * Item chips: sky when linked to a library item, muted when not. With `href`, each chip is a
+ * link (the insight entries link to the Insights page filtered to that item).
+ */
+export function TagChips<T extends FeedTag>({ tags, href }: { tags: T[]; href?: (tag: T) => string }) {
   return (
     <div className="flex flex-wrap gap-1.5">
-      {tags.map((t) => (
-        <span
-          key={t.text}
-          lang="ja"
-          title={t.linked ? "Linked to the library" : "Not matched to a library item"}
-          className={`rounded-full px-2 py-0.5 text-xs font-medium ${
-            t.linked
-              ? "bg-sky-100 text-sky-800 dark:bg-sky-950 dark:text-sky-300"
-              : "bg-neutral-100 text-neutral-500 dark:bg-neutral-800 dark:text-neutral-400"
-          }`}
-        >
-          {t.text}
-        </span>
-      ))}
+      {tags.map((t) => {
+        const title = t.linked ? "Linked to the library" : "Not matched to a library item";
+        return href ? (
+          <Link
+            key={t.text}
+            href={href(t)}
+            lang="ja"
+            title={`${title}: see every insight about it`}
+            className={`${tagChipClass(t.linked)} transition hover:ring-1 hover:ring-current`}
+          >
+            {t.text}
+          </Link>
+        ) : (
+          <span key={t.text} lang="ja" title={title} className={tagChipClass(t.linked)}>
+            {t.text}
+          </span>
+        );
+      })}
     </div>
   );
 }
