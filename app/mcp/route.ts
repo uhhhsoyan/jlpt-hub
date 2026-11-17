@@ -5,13 +5,17 @@ import { z } from "zod";
 import { getDb } from "@/lib/db";
 import { bpSnapshot, wkSnapshot } from "@/lib/db/schema";
 import {
+  deleteInsight,
   getInsights,
   getInsightTagCounts,
   listSessions,
   logAttempts,
   logInsight,
   normalizeSection,
+  queueVocabForAttempt,
   relinkUnresolved,
+  updateAttempt,
+  updateInsight,
   updateSession,
   type AttemptInput,
 } from "@/lib/ledger";
@@ -36,7 +40,7 @@ import { normalizeRootCause, ROOT_CAUSES, SESSION_MODES, STUDY_ACTIVITIES, VOCAB
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
 
-const SERVER_INFO = { name: "jlpt-hub-study-ledger", version: "1.5.0" };
+const SERVER_INFO = { name: "jlpt-hub-study-ledger", version: "1.6.0" };
 
 /** For sync_status: whether the Hindsight bridge is configured in this deployment (lib/hindsight.ts). */
 function memoryStatus() {
@@ -113,7 +117,10 @@ const attemptSchema = z.object({
   stem: z.string().optional().describe("Question text if worth keeping"),
   choices: z.array(z.string()).optional(),
   explanation: z.string().optional(),
-  tags: z.array(tagSchema).default([]).describe("1-3 items the question really tests; these become evidence"),
+  tags: z
+    .array(tagSchema)
+    .default([])
+    .describe('1-3 items the question really tests; these become evidence. Each is an object {kind, text}, not a string: [{"kind":"grammar","text":"〜ほど〜ない"}]'),
   vocab_gaps: z
     .array(vocabGapSchema)
     .optional()
@@ -134,7 +141,7 @@ function buildServer(): McpServer {
     {
       title: "Log practice attempts",
       description:
-        "Record one reviewed page/set of questions as a confirmed session. mode=practice (default) is closed-book work: answers count toward accuracy, the weak list and root-cause reports. mode=lesson is open-book work done right after reading the explanation (textbook example sentences, れんしゅう with the notes in view): it is recorded as exposure, moves items from unseen to learning, and is excluded from every accuracy figure. Each attempt carries right/wrong, the item(s) it tests, a free-text note, and for misses a root_cause (preferred list given on the field; any label accepted). Nothing is rejected for not fitting a category: unknown sections land in 'other' with the raw word kept, and 'meta' takes anything else. Name the book or app in 'source' (a catalog slug from list_sources, or its name/alias) and put the lesson/page in 'source_name'; when 'source' is absent, source_name is matched against the catalog too. Result: sessionId, mode, questions, graded (attempts with correct true/false), correct, observations (evidence rows written: one per resolved tag per graded attempt in practice, one per resolved tag per attempt in lesson; tags that matched nothing write none until relink_tags), unresolvedTags (tags that matched no library item, each with the closest items and a match label; 'prefix-only' means a shorter, different item, not the one meant), source (the catalog entry linked, or null) and sourceUnresolved (the source text when it matched no catalog entry; the text is still kept on the session). The tag text is kept, so relink_tags can attach it later once the item or alias exists. A session logged with the wrong mode, label, date or source is fixed with update_session, not re-logged. For study time that produced no graded answers (reading, app reviews, listening), use log_study instead. Words the learner did not know while doing a question go in that attempt's vocab_gaps (right or wrong); each lands on the vocab queue (Hub /queue, Anki export) and vocabQueued in the result counts them. Words that stall outside a graded set go through queue_vocab.",
+        "Record one reviewed page/set of questions as a confirmed session. mode=practice (default) is closed-book work: answers count toward accuracy, the weak list and root-cause reports. mode=lesson is open-book work done right after reading the explanation (textbook example sentences, れんしゅう with the notes in view): it is recorded as exposure, moves items from unseen to learning, and is excluded from every accuracy figure. Each attempt carries right/wrong, the item(s) it tests, a free-text note, and for misses a root_cause (preferred list given on the field; any label accepted). Nothing is rejected for not fitting a category: unknown sections land in 'other' with the raw word kept, and 'meta' takes anything else. Name the book or app in 'source' (a catalog slug from list_sources, or its name/alias) and put the lesson/page in 'source_name'; when 'source' is absent, source_name is matched against the catalog too. Result: sessionId, mode, questions, graded (attempts with correct true/false), correct, observations (evidence rows written: one per resolved tag per graded attempt in practice, one per resolved tag per attempt in lesson; tags that matched nothing write none until relink_tags), unresolvedTags (one entry per distinct tag that matched no library item: {kind, text, numbers: the attempt numbers carrying it, suggestions: the closest items, each with a match label; 'prefix-only' means a shorter, different item, not the one meant}), source (the catalog entry linked, or null) and sourceUnresolved (the source text when it matched no catalog entry; the text is still kept on the session). The tag text is kept, so relink_tags can attach it later once the item or alias exists. A session logged with the wrong mode, label, date or source is fixed with update_session, not re-logged; a wrong tag, result, root cause or note on one attempt is fixed with update_attempt. For study time that produced no graded answers (reading, app reviews, listening), use log_study instead. Words the learner did not know while doing a question go in that attempt's vocab_gaps (right or wrong); each lands on the vocab queue (Hub /queue, Anki export) and vocabQueued in the result counts them. Words that stall outside a graded set go through queue_vocab.",
       inputSchema: {
         label: z.string().describe("e.g. '500問 Week 3 Day 2', 'Mock test 1 文法', 'SKM N4 L1 れんしゅう1'"),
         source: z
@@ -209,7 +216,10 @@ function buildServer(): McpServer {
       inputSchema: {
         text: z.string().min(1),
         tags: z.array(z.string()).default([]).describe("Short topic tags, e.g. ['particles', 'time-pressure']"),
-        items: z.array(tagSchema).optional().describe("Library items the note is about, if any"),
+        items: z
+          .array(tagSchema)
+          .optional()
+          .describe('Library items the note is about, if any. Each is an object {kind, text}, not a string: [{"kind":"grammar","text":"〜ほど〜ない"}]'),
         source: z.enum(["claude-ai", "claude-code", "hub"]).default("claude-ai"),
       },
     },
@@ -474,6 +484,127 @@ function buildServer(): McpServer {
     },
   );
 
+  // ---- Corrections to logged rows (lib/ledger.ts updateAttempt / updateInsight / deleteInsight).
+  server.registerTool(
+    "update_attempt",
+    {
+      title: "Correct a logged attempt",
+      description:
+        "Fix one attempt of a logged session in place, instead of re-logging the set or leaving a wrong tag for an alias to absorb. Name it by session_id (list_sessions) and its printed number. If several attempts in the session share that number (multi-blank questions logged as repeats), the call fails and lists the candidates with their position; call again with position (1-based order in the session). Pass only the fields to change. tags replaces the whole tag list (objects {kind, text}, re-resolved) and rebuilds the attempt's evidence; changing correct also rebuilds it under the session's mode. root_cause, note, stem and explanation take null to clear (a root_cause is not cleared automatically when correct turns true; pass root_cause: null as well). meta is merged shallowly: keys given overwrite, a key set to null is removed, keys not mentioned are kept. vocab_gaps adds words to the vocab queue tied to this question (same as on log_attempts); it never removes queue rows. Result: {sessionId, mode, attempt: {questionId, position, number, section, correct, rootCause, note, stem, explanation, tags: [{kind, text, itemId}], meta}, changed: the fields that actually changed, observations: {removed, written} for this attempt (null when neither tags nor correct changed), unresolvedTags (grouped as in log_attempts), vocabQueued}.",
+      inputSchema: {
+        session_id: z.string().uuid(),
+        number: z.number().int().positive().describe("Printed question number of the attempt"),
+        position: z
+          .number()
+          .int()
+          .positive()
+          .optional()
+          .describe("1-based order in the session; only needed when several attempts share the number (the error lists them)"),
+        tags: z
+          .array(tagSchema)
+          .optional()
+          .describe('Replaces the tag list. Objects {kind, text}, not strings: [{"kind":"grammar","text":"〜ないで"}]'),
+        correct: z.boolean().nullable().optional().describe("null if skipped or ungradable"),
+        root_cause: z
+          .string()
+          .nullable()
+          .optional()
+          .describe(`null clears it. Prefer one of: ${ROOT_CAUSES.join(", ")}; any short kebab-case label is kept.`),
+        note: z.string().nullable().optional().describe("Replaces the note; null clears it"),
+        stem: z.string().nullable().optional().describe("Replaces the stem; null clears it"),
+        explanation: z.string().nullable().optional().describe("Replaces the explanation; null clears it"),
+        meta: z
+          .record(z.string(), z.unknown())
+          .optional()
+          .describe("Merged shallowly into the attempt's meta; a key set to null is removed"),
+        vocab_gaps: z.array(vocabGapSchema).optional().describe("Words to add to the vocab queue, tied to this question"),
+      },
+      annotations: { idempotentHint: true },
+    },
+    async (args) => {
+      try {
+        const nothing =
+          args.tags === undefined &&
+          args.correct === undefined &&
+          args.root_cause === undefined &&
+          args.note === undefined &&
+          args.stem === undefined &&
+          args.explanation === undefined &&
+          args.meta === undefined &&
+          (args.vocab_gaps === undefined || args.vocab_gaps.length === 0);
+        if (nothing) {
+          throw new Error("Nothing to change: pass tags, correct, root_cause, note, stem, explanation, meta and/or vocab_gaps.");
+        }
+        return ok(
+          await updateAttempt({
+            sessionId: args.session_id,
+            number: args.number,
+            position: args.position,
+            tags: args.tags,
+            correct: args.correct,
+            rootCause: args.root_cause === undefined ? undefined : normalizeRootCause(args.root_cause),
+            note: args.note,
+            stem: args.stem,
+            explanation: args.explanation,
+            meta: args.meta,
+            vocabGaps: args.vocab_gaps,
+          }),
+        );
+      } catch (e) {
+        return fail(e);
+      }
+    },
+  );
+
+  server.registerTool(
+    "update_insight",
+    {
+      title: "Correct a logged insight",
+      description:
+        "Fix an insight in place instead of logging a near-duplicate (find the id with get_insights). Pass only the fields to change: text replaces the text, tags replaces the topic tags, items replaces the item references (objects {kind, text}, re-resolved; unmatched ones are kept and linked later by relink_tags, as in log_insight). The memory graph (memory_recall) keeps the version it already mirrored. Result: {id, text, tags, items: [{kind, text, itemId}], changed: the fields that actually changed, linkedItems, unresolvedItems (each with suggestions)}.",
+      inputSchema: {
+        insight_id: z.string().uuid(),
+        text: z.string().min(1).optional(),
+        tags: z.array(z.string()).optional().describe("Replaces the topic tags"),
+        items: z
+          .array(tagSchema)
+          .optional()
+          .describe('Replaces the item references. Objects {kind, text}, not strings: [{"kind":"grammar","text":"〜はず"}]'),
+      },
+      annotations: { idempotentHint: true },
+    },
+    async (args) => {
+      try {
+        if (args.text === undefined && args.tags === undefined && args.items === undefined) {
+          throw new Error("Nothing to change: pass text, tags and/or items.");
+        }
+        return ok(await updateInsight({ id: args.insight_id, text: args.text, tags: args.tags, items: args.items }));
+      } catch (e) {
+        return fail(e);
+      }
+    },
+  );
+
+  server.registerTool(
+    "delete_insight",
+    {
+      title: "Delete an insight",
+      description:
+        "Permanently delete an insight and its item links. Use it only when I ask for an insight to be removed; to fix a wrong or incomplete one, use update_insight. The memory graph (memory_recall) keeps its mirrored copy. Result: {deleted: {id, text, tags, items, createdAt}}; repeat the text back so I can see what went.",
+      inputSchema: {
+        insight_id: z.string().uuid(),
+      },
+      annotations: { destructiveHint: true },
+    },
+    async (args) => {
+      try {
+        return ok(await deleteInsight(args.insight_id));
+      } catch (e) {
+        return fail(e);
+      }
+    },
+  );
+
   server.registerTool(
     "list_sources",
     {
@@ -592,17 +723,40 @@ function buildServer(): McpServer {
     {
       title: "Queue unknown vocab",
       description:
-        "Put words I did not know (or had to look up) on the vocab queue, for words met outside a graded set: reading, a lesson explanation, listening, a chat exchange. For words that stalled on a logged question, use the attempt's vocab_gaps in log_attempts instead. One row per word; a repeat bumps its count and keeps the new context. Result: {queued, bumped, words:[{text,status,seenCount,itemId}]}. The queue is reviewed by hand in the Hub (/queue) and exported to Anki; never mark anything carded or known from here unless I say so.",
+        "Put words I did not know (or had to look up) on the vocab queue, for words met outside a graded set: reading, a lesson explanation, listening, a chat exchange. For words that stalled on a question being logged now, use the attempt's vocab_gaps in log_attempts instead. For a word noticed after its set was logged, pass session_id and number (and position if that number repeats in the session): the word is tied to that question exactly as an attempt's vocab_gap would be (the session's date and label, the question's note or stem as default context), and the result also carries attempt: {sessionId, questionId, number, position}. One row per word; a repeat bumps its count and keeps the new context. Result: {queued, bumped, words:[{text,status,seenCount,itemId}]}. The queue is reviewed by hand in the Hub (/queue) and exported to Anki; never mark anything carded or known from here unless I say so.",
       inputSchema: {
         words: z.array(vocabGapSchema).min(1),
-        taken_at: z.string().optional().describe("ISO date the words came up; default now"),
-        label: z.string().optional().describe("Where: 'Satori Reader: ...', 'SKM N4 L6 explanation', 'chat'"),
+        taken_at: z.string().optional().describe("ISO date the words came up; default now, or the session's date when session_id is given"),
+        label: z.string().optional().describe("Where: 'Satori Reader: ...', 'SKM N4 L6 explanation', 'chat'; defaults to the session's label when session_id is given"),
+        session_id: z.string().uuid().optional().describe("Logged session the words belong to; pass with number"),
+        number: z.number().int().positive().optional().describe("Printed number of the question in that session"),
+        position: z
+          .number()
+          .int()
+          .positive()
+          .optional()
+          .describe("1-based order in the session, only when several attempts share the number"),
       },
     },
     async (args) => {
       try {
         const at = args.taken_at ? new Date(args.taken_at) : new Date();
         if (Number.isNaN(at.getTime())) throw new Error(`Invalid taken_at: ${args.taken_at}`);
+        if (args.session_id !== undefined || args.number !== undefined || args.position !== undefined) {
+          if (args.session_id === undefined || args.number === undefined) {
+            throw new Error("To tie words to a logged question, pass both session_id and number (position only when the number repeats).");
+          }
+          return ok(
+            await queueVocabForAttempt({
+              sessionId: args.session_id,
+              number: args.number,
+              position: args.position,
+              words: args.words,
+              at: args.taken_at ? at : undefined,
+              label: args.label ?? null,
+            }),
+          );
+        }
         return ok(await queueVocab(args.words, { at, surface: "claude-ai", label: args.label ?? null }));
       } catch (e) {
         return fail(e);

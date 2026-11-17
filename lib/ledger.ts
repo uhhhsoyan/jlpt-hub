@@ -1,4 +1,4 @@
-import { desc, eq, sql } from "drizzle-orm";
+import { and, asc, desc, eq, sql } from "drizzle-orm";
 import { getDb } from "@/lib/db";
 import {
   insights,
@@ -7,16 +7,27 @@ import {
   practiceSessions,
   questionItems,
   studySources,
+  type PracticeQuestionRow,
+  type PracticeSessionRow,
 } from "@/lib/db/schema";
 import { matchTag, suggestItems, topicItemIds, type ItemIndex, type ItemSuggestion } from "@/lib/item-match";
 import { rankInsights, type InsightMatch } from "@/lib/insight-match";
 import { loadItemIndex, resolveTags } from "@/lib/resolve-items";
 import { loadStudySources, resolveSource } from "@/lib/study-sources-db";
-import { queueVocab, type VocabGapEntry, type VocabGapInput } from "@/lib/vocab-queue";
+import { queueVocab, type QueueContext, type QueueVocabResult, type VocabGapEntry, type VocabGapInput } from "@/lib/vocab-queue";
+import {
+  buildEvidenceRows,
+  evidenceKind,
+  groupUnresolved,
+  linkedItemIds,
+  pickAttempt,
+  planAttemptPatch,
+  unresolvedOccurrences,
+  type UnresolvedOccurrence,
+} from "@/lib/ledger-core";
 import type {
   ExtractedTag,
   InsightSource,
-  ObservationKind,
   PracticeSection,
   PracticeSurface,
   QuestionTag,
@@ -61,16 +72,8 @@ export function normalizeSection(raw: string): PracticeSection | null {
   return SECTION_ALIASES[raw.trim().toLowerCase()] ?? SECTION_ALIASES[raw.trim()] ?? null;
 }
 
-/**
- * What kind of evidence an attempt produces. Closed-book practice answers are graded
- * evidence (and only when actually graded); open-book lesson work is exposure, written
- * even when ungraded, so "studied this" moves an item from unseen to learning without
- * touching accuracy anywhere.
- */
-export function evidenceKind(mode: SessionMode, correct: boolean | null): ObservationKind | null {
-  if (mode === "lesson") return "exposure";
-  return correct === null ? null : "answer";
-}
+/** Pure, so it lives in lib/ledger-core.ts (unit-tested there); re-exported for existing callers. */
+export { evidenceKind };
 
 export interface AttemptInput {
   /** Printed question number; defaults to position in the batch. */
@@ -112,10 +115,12 @@ export interface LogAttemptsInput {
   attempts: AttemptInput[];
 }
 
+/** One distinct tag text that matched no library item, with every attempt number it was on. */
 export interface UnresolvedTag {
-  number: number;
   kind: ExtractedTag["kind"];
   text: string;
+  /** Printed numbers of the attempts carrying this tag (several when a lesson repeats a missing pattern). */
+  numbers: number[];
   /** Closest library items, so the caller can re-tag without a separate lookup. */
   suggestions: ItemSuggestion[];
 }
@@ -142,13 +147,12 @@ export interface LogAttemptsResult {
   sourceUnresolved?: string;
 }
 
-function unresolvedWithSuggestions(index: ItemIndex, number: number, tag: QuestionTag): UnresolvedTag {
-  return {
-    number,
-    kind: tag.kind,
-    text: tag.text,
-    suggestions: suggestItems(index, tag.text, { kind: tag.kind, limit: 3 }),
-  };
+/** Group unresolved tag occurrences by {kind, text} and attach one suggestions block per group. */
+function unresolvedWithSuggestions(index: ItemIndex, occurrences: UnresolvedOccurrence[]): UnresolvedTag[] {
+  return groupUnresolved(occurrences).map((g) => ({
+    ...g,
+    suggestions: suggestItems(index, g.text, { kind: g.kind, limit: 3 }),
+  }));
 }
 
 export async function logAttempts(input: LogAttemptsInput): Promise<LogAttemptsResult> {
@@ -192,7 +196,7 @@ export async function logAttempts(input: LogAttemptsInput): Promise<LogAttemptsR
   // (same reasoning as app/practice/actions.ts createSession).
   const itemRows: { questionId: string; itemId: string; role: "tested" }[] = [];
   const obsRows: (typeof observations.$inferInsert)[] = [];
-  const unresolvedTags: UnresolvedTag[] = [];
+  const unresolved: UnresolvedOccurrence[] = [];
   const gapEntries: VocabGapEntry[] = [];
   let graded = 0;
   let correct = 0;
@@ -230,7 +234,7 @@ export async function logAttempts(input: LogAttemptsInput): Promise<LogAttemptsR
     const kind = evidenceKind(mode, a.correct);
     for (const tag of a.tags) {
       if (!tag.itemId) {
-        unresolvedTags.push(unresolvedWithSuggestions(index, a.number, tag));
+        unresolved.push({ number: a.number, kind: tag.kind, text: tag.text });
         continue;
       }
       itemRows.push({ questionId: row.id, itemId: tag.itemId, role: "tested" });
@@ -262,7 +266,7 @@ export async function logAttempts(input: LogAttemptsInput): Promise<LogAttemptsR
     correct,
     observations: obsRows.length,
     vocabQueued: vq ? vq.queued + vq.bumped : 0,
-    unresolvedTags,
+    unresolvedTags: unresolvedWithSuggestions(index, unresolved),
     source: source ? { slug: source.slug, name: source.name } : null,
     ...(sourceUnresolved ? { sourceUnresolved } : {}),
   };
@@ -495,36 +499,383 @@ export async function updateSession(input: UpdateSessionInput): Promise<UpdateSe
 
   let obs: UpdateSessionResult["observations"] = null;
   if (changed.includes("mode") || changed.includes("taken_at")) {
-    const mode = patch.mode ?? current.mode;
-    const occurredAt = patch.takenAt ?? current.takenAt;
-    const removed = await db.execute(sql`
-      DELETE FROM observations WHERE source = 'practice' AND meta->>'sessionId' = ${current.id} RETURNING id
-    `);
-    const links = await db.execute<LinkedQuestionRow>(sql`
-      SELECT qi.question_id, qi.item_id, q.is_correct
-      FROM question_items qi
-      JOIN practice_questions q ON q.id = qi.question_id
-      WHERE q.session_id = ${current.id} AND qi.role = 'tested'
-    `);
-    const obsRows: (typeof observations.$inferInsert)[] = [];
-    for (const l of links.rows) {
-      const kind = evidenceKind(mode, l.is_correct);
-      if (!kind) continue;
-      obsRows.push({
-        itemId: l.item_id,
-        source: "practice",
-        kind,
-        correct: l.is_correct,
-        occurredAt,
-        meta: { sessionId: current.id, questionId: l.question_id, surface: current.surface, mode, rebuilt: true },
-      });
-    }
-    if (obsRows.length > 0) await db.insert(observations).values(obsRows);
-    obs = { removed: removed.rows.length, written: obsRows.length };
+    obs = await rebuildPracticeEvidence({
+      sessionId: current.id,
+      surface: current.surface,
+      mode: patch.mode ?? current.mode,
+      occurredAt: patch.takenAt ?? current.takenAt,
+      confirmed: current.status === "confirmed",
+    });
   }
 
   const session = (await listSessions(1, current.id))[0];
   return { session, changed, observations: obs };
+}
+
+// ---- Corrections: one attempt, one insight (update_attempt, update_insight, delete_insight).
+// Same rule as update_session: a logged row is fixed in place, never re-logged.
+
+interface EvidenceScope {
+  sessionId: string;
+  surface: PracticeSurface;
+  mode: SessionMode;
+  occurredAt: Date;
+  /** Evidence exists only for confirmed sessions; one still in review gets its old rows removed and none written. */
+  confirmed: boolean;
+  /** Limit the rebuild to one question; omitted = the whole session. */
+  questionId?: string;
+}
+
+/**
+ * Delete and rewrite the practice observations of a session (or one of its questions) from
+ * its question_items links. The single mechanism behind update_session (mode / taken_at)
+ * and update_attempt (tags / correct), so both leave the evidence exactly as it would have
+ * been written had the corrected values been logged in the first place.
+ */
+async function rebuildPracticeEvidence(scope: EvidenceScope): Promise<{ removed: number; written: number }> {
+  const db = getDb();
+  const oneQuestion = scope.questionId;
+  const removed = await db.execute(sql`
+    DELETE FROM observations
+    WHERE source = 'practice' AND meta->>'sessionId' = ${scope.sessionId}
+      ${oneQuestion ? sql`AND meta->>'questionId' = ${oneQuestion}` : sql``}
+    RETURNING id
+  `);
+  if (!scope.confirmed) return { removed: removed.rows.length, written: 0 };
+  const links = await db.execute<LinkedQuestionRow>(sql`
+    SELECT qi.question_id, qi.item_id, q.is_correct
+    FROM question_items qi
+    JOIN practice_questions q ON q.id = qi.question_id
+    WHERE q.session_id = ${scope.sessionId} AND qi.role = 'tested'
+      ${oneQuestion ? sql`AND q.id = ${oneQuestion}` : sql``}
+  `);
+  const rows = buildEvidenceRows(
+    links.rows.map((l) => ({ questionId: l.question_id, itemId: l.item_id, isCorrect: l.is_correct })),
+    { sessionId: scope.sessionId, surface: scope.surface, mode: scope.mode, occurredAt: scope.occurredAt },
+  );
+  if (rows.length > 0) await db.insert(observations).values(rows);
+  return { removed: removed.rows.length, written: rows.length };
+}
+
+interface LocatedAttempt {
+  session: PracticeSessionRow;
+  question: PracticeQuestionRow;
+  /** 1-based order of the attempt in its session. */
+  position: number;
+}
+
+/**
+ * Find one attempt by session id and printed number (+ position when the number repeats).
+ * "Logged order" is insertion order: created_at, then number, then id as tie-breaks.
+ */
+async function locateAttempt(sessionId: string, number: number, position?: number): Promise<LocatedAttempt> {
+  const db = getDb();
+  const [session] = await db.select().from(practiceSessions).where(eq(practiceSessions.id, sessionId));
+  if (!session) throw new Error(`No session with id ${sessionId}. Use list_sessions to find it.`);
+  const questions = await db
+    .select()
+    .from(practiceQuestions)
+    .where(eq(practiceQuestions.sessionId, sessionId))
+    .orderBy(asc(practiceQuestions.createdAt), asc(practiceQuestions.number), asc(practiceQuestions.id));
+  try {
+    const picked = pickAttempt(questions, number, position);
+    return { session, question: picked.row, position: picked.position };
+  } catch (e) {
+    throw new Error(`Session "${session.label}": ${e instanceof Error ? e.message : String(e)}`);
+  }
+}
+
+/** Vocab-queue entries for words that stalled on one attempt: tied to the question, context defaulting to its note or stem. */
+function attemptGapEntries(gaps: VocabGapInput[], questionId: string, attempt: { note: string | null; stem: string }): VocabGapEntry[] {
+  return gaps.map((g) => ({ ...g, context: g.context ?? attempt.note ?? (attempt.stem || null), questionId }));
+}
+
+/** The sighting context log_attempts gives an attempt's vocab_gaps: the session's date, surface, id and label. */
+function sessionSighting(session: PracticeSessionRow): QueueContext {
+  return { at: session.takenAt, surface: session.surface, sessionId: session.id, label: session.label };
+}
+
+export interface UpdateAttemptInput {
+  sessionId: string;
+  /** Printed number of the attempt to correct. */
+  number: number;
+  /** 1-based order in the session; needed only when several attempts share the number. */
+  position?: number;
+  /** Replaces the tag list (re-resolved; evidence rebuilt). */
+  tags?: ExtractedTag[];
+  correct?: boolean | null;
+  /** Already normalised; null clears. */
+  rootCause?: string | null;
+  note?: string | null;
+  stem?: string | null;
+  explanation?: string | null;
+  /** Shallow merge; a key set to null is removed. */
+  meta?: Record<string, unknown>;
+  /** Added to the vocab queue linked to this attempt; existing queue rows are never removed. */
+  vocabGaps?: VocabGapInput[];
+}
+
+export interface AttemptView {
+  questionId: string;
+  position: number;
+  number: number;
+  section: PracticeSection;
+  correct: boolean | null;
+  rootCause: string | null;
+  note: string | null;
+  stem: string | null;
+  explanation: string | null;
+  tags: QuestionTag[];
+  meta: Record<string, unknown> | null;
+}
+
+export interface UpdateAttemptResult {
+  sessionId: string;
+  mode: SessionMode;
+  /** The attempt as it now stands. */
+  attempt: AttemptView;
+  /** Fields whose value actually changed (tags, correct, root_cause, note, stem, explanation, meta). */
+  changed: string[];
+  /** Evidence rows rewritten for this attempt when tags or correct changed; null when neither did. */
+  observations: { removed: number; written: number } | null;
+  /** The attempt's tags that still match no library item, grouped as in log_attempts. */
+  unresolvedTags: UnresolvedTag[];
+  /** Vocab-queue rows created or bumped from vocab_gaps. */
+  vocabQueued: number;
+}
+
+/**
+ * Correct one logged attempt in place. Tags are replaced and re-resolved, and a change to
+ * tags or correct rebuilds that attempt's question_items and observations under the
+ * session's mode, so every report stays consistent with the corrected row.
+ */
+export async function updateAttempt(input: UpdateAttemptInput): Promise<UpdateAttemptResult> {
+  const db = getDb();
+  const { session, question, position } = await locateAttempt(input.sessionId, input.number, input.position);
+
+  let index: ItemIndex | null = null;
+  const getIndex = async (): Promise<ItemIndex> => (index ??= await loadItemIndex());
+
+  const tags = input.tags !== undefined ? await resolveTags(input.tags, await getIndex()) : undefined;
+  const plan = planAttemptPatch(
+    {
+      isCorrect: question.isCorrect,
+      rootCause: question.rootCause,
+      note: question.note,
+      stem: question.stem,
+      explanation: question.explanation,
+      meta: question.meta,
+      tags: question.tags,
+    },
+    {
+      tags,
+      correct: input.correct,
+      rootCause: input.rootCause,
+      note: input.note,
+      stem: input.stem,
+      explanation: input.explanation,
+      meta: input.meta,
+    },
+  );
+  const { next } = plan;
+
+  if (plan.changed.length > 0) {
+    await db
+      .update(practiceQuestions)
+      .set({
+        isCorrect: next.isCorrect,
+        rootCause: next.rootCause,
+        note: next.note,
+        stem: next.stem,
+        explanation: next.explanation,
+        meta: next.meta,
+        tags: next.tags,
+      })
+      .where(eq(practiceQuestions.id, question.id));
+  }
+
+  if (plan.changed.includes("tags")) {
+    await db.delete(questionItems).where(and(eq(questionItems.questionId, question.id), eq(questionItems.role, "tested")));
+    const itemIds = linkedItemIds(next.tags);
+    if (itemIds.length > 0) {
+      await db
+        .insert(questionItems)
+        .values(itemIds.map((itemId) => ({ questionId: question.id, itemId, role: "tested" as const })))
+        .onConflictDoNothing();
+    }
+  }
+
+  const obs = plan.evidenceStale
+    ? await rebuildPracticeEvidence({
+        sessionId: session.id,
+        surface: session.surface,
+        mode: session.mode,
+        occurredAt: session.takenAt,
+        confirmed: session.status === "confirmed",
+        questionId: question.id,
+      })
+    : null;
+
+  let vocabQueued = 0;
+  if (input.vocabGaps && input.vocabGaps.length > 0) {
+    const vq = await queueVocab(attemptGapEntries(input.vocabGaps, question.id, next), sessionSighting(session), await getIndex());
+    vocabQueued = vq.queued + vq.bumped;
+  }
+
+  const occurrences = unresolvedOccurrences([{ number: question.number, tags: next.tags }]);
+  const unresolvedTags = occurrences.length > 0 ? unresolvedWithSuggestions(await getIndex(), occurrences) : [];
+
+  return {
+    sessionId: session.id,
+    mode: session.mode,
+    attempt: {
+      questionId: question.id,
+      position,
+      number: question.number,
+      section: question.section,
+      correct: next.isCorrect,
+      rootCause: next.rootCause,
+      note: next.note,
+      stem: next.stem || null,
+      explanation: next.explanation,
+      tags: next.tags,
+      meta: next.meta,
+    },
+    changed: plan.changed,
+    observations: obs,
+    unresolvedTags,
+    vocabQueued,
+  };
+}
+
+export interface QueueVocabForAttemptInput {
+  sessionId: string;
+  number: number;
+  position?: number;
+  words: VocabGapInput[];
+  /** Defaults to the session's taken_at, as for an attempt's vocab_gaps. */
+  at?: Date;
+  /** Defaults to the session's label. */
+  label?: string | null;
+}
+
+export interface QueueVocabForAttemptResult extends QueueVocabResult {
+  attempt: { sessionId: string; questionId: string; number: number; position: number };
+}
+
+/**
+ * queue_vocab with a session link: words noticed after the set was logged, tied to their
+ * question with the same sighting an attempt-level vocab_gap gets.
+ */
+export async function queueVocabForAttempt(input: QueueVocabForAttemptInput): Promise<QueueVocabForAttemptResult> {
+  const { session, question, position } = await locateAttempt(input.sessionId, input.number, input.position);
+  const ctx = sessionSighting(session);
+  const result = await queueVocab(attemptGapEntries(input.words, question.id, question), {
+    ...ctx,
+    at: input.at ?? ctx.at,
+    label: input.label?.trim() || ctx.label,
+  });
+  return { ...result, attempt: { sessionId: session.id, questionId: question.id, number: question.number, position } };
+}
+
+export interface UpdateInsightInput {
+  id: string;
+  text?: string;
+  /** Replaces the topic tags. */
+  tags?: string[];
+  /** Replaces the item references; re-resolved, unmatched ones kept for relink_tags. */
+  items?: ExtractedTag[];
+}
+
+export interface UpdateInsightResult {
+  id: string;
+  text: string;
+  tags: string[];
+  items: QuestionTag[];
+  /** Fields whose value actually changed (text, tags, items). */
+  changed: string[];
+  linkedItems: number;
+  /** Kept on the insight; `relink_tags` attaches them once the library has a match. */
+  unresolvedItems: UnresolvedItem[];
+}
+
+const sameQuestionTags = (a: QuestionTag[], b: QuestionTag[]) =>
+  a.length === b.length && a.every((t, i) => t.kind === b[i].kind && t.text === b[i].text && t.itemId === b[i].itemId);
+
+/** Correct an insight's text, tags or items in place (replace semantics for the lists). */
+export async function updateInsight(input: UpdateInsightInput): Promise<UpdateInsightResult> {
+  const db = getDb();
+  const [current] = await db.select().from(insights).where(eq(insights.id, input.id));
+  if (!current) throw new Error(`No insight with id ${input.id}. get_insights lists ids.`);
+
+  const patch: Partial<typeof insights.$inferInsert> = {};
+  const changed: string[] = [];
+  let index: ItemIndex | null = null;
+
+  if (input.text !== undefined) {
+    const text = input.text.trim();
+    if (!text) throw new Error("Insight text is empty.");
+    if (text !== current.text) {
+      patch.text = text;
+      changed.push("text");
+    }
+  }
+  if (input.tags !== undefined) {
+    const tags = input.tags.map((t) => t.trim()).filter(Boolean);
+    if (JSON.stringify(tags) !== JSON.stringify(current.tags)) {
+      patch.tags = tags;
+      changed.push("tags");
+    }
+  }
+  if (input.items !== undefined) {
+    index = await loadItemIndex();
+    const resolved = await resolveTags(input.items, index);
+    if (!sameQuestionTags(resolved, current.items)) {
+      patch.items = resolved;
+      patch.itemIds = linkedItemIds(resolved);
+      changed.push("items");
+    }
+  }
+  if (changed.length > 0) await db.update(insights).set(patch).where(eq(insights.id, current.id));
+
+  const items = patch.items ?? current.items;
+  const itemIds = patch.itemIds ?? current.itemIds;
+  const unresolved = items.filter((t) => !t.itemId);
+  const idx = unresolved.length > 0 ? (index ?? (await loadItemIndex())) : null;
+  return {
+    id: current.id,
+    text: patch.text ?? current.text,
+    tags: patch.tags ?? current.tags,
+    items,
+    changed,
+    linkedItems: itemIds.length,
+    unresolvedItems: idx
+      ? unresolved.map(({ kind, text }) => ({ kind, text, suggestions: suggestItems(idx, text, { kind, limit: 3 }) }))
+      : [],
+  };
+}
+
+export interface DeleteInsightResult {
+  /** What was removed, so it can be shown back (and re-logged if the delete was a mistake). */
+  deleted: { id: string; text: string; tags: string[]; items: string[]; createdAt: string };
+}
+
+/**
+ * Remove an insight. Its item links live on the row (items / item_ids), so nothing else
+ * references it, and insights write no observations.
+ */
+export async function deleteInsight(id: string): Promise<DeleteInsightResult> {
+  const [row] = await getDb().delete(insights).where(eq(insights.id, id)).returning();
+  if (!row) throw new Error(`No insight with id ${id}. get_insights lists ids.`);
+  return {
+    deleted: {
+      id: row.id,
+      text: row.text,
+      tags: row.tags,
+      items: row.items.map((t) => t.text),
+      createdAt: row.createdAt.toISOString(),
+    },
+  };
 }
 
 export interface RelinkResult {

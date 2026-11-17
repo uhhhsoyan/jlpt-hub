@@ -68,6 +68,15 @@ Reconciled against the repo on 2026-10-27 and built the same day. Exam: JLPT N4,
   `match` label and an item that is only a prefix of the query (まで for 〜までに) ranks
   last, so a near miss is not read as a hit. Root causes promoted from use:
   context-cue-missed, distractor-bias, kanji-lookalike, katakana-decoding.
+- Attempts and insights are corrected too (2026-11-14, after the claude.ai side asked three
+  times). `update_attempt` patches one attempt (found by printed number, with `position`
+  when multi-blank questions repeat a number) and, when tags or correct change, rebuilds
+  that question's links and observations through the same `rebuildPracticeEvidence` that
+  `update_session` uses. `update_insight` / `delete_insight` fix or remove a note (the
+  Hindsight mirror keeps the version it already retained: it skips ids it has mirrored).
+  `queue_vocab` takes `session_id` + `number` for a word noticed after its set was logged.
+  `unresolvedTags` is grouped by tag with `numbers`. Root causes promoted from use:
+  pattern-choice, pattern-confusion, polarity-cue-missed.
 - The library is curated, not self-extending (2026-11-09). The grammar list was a generic
   N4/N5 pattern list, not SKM's table of contents, so SKM lessons surface patterns it lacks
   (〜といい sat unresolved on 10 attempts). Keeping the chat out of item creation is
