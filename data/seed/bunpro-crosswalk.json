@@ -275,8 +275,8 @@
     {
       "bunproId": 62,
       "bunproTitle": "ので",
-      "headword": "から（理由）",
-      "method": "claude"
+      "headword": "〜ので",
+      "method": "manual"
     },
     {
       "bunproId": 63,
@@ -1349,8 +1349,8 @@
     {
       "bunproId": 766,
       "bunproTitle": "ないと",
-      "headword": "〜なきゃ（いけない）",
-      "method": "claude"
+      "headword": "〜ないと",
+      "method": "manual"
     },
     {
       "bunproId": 767,

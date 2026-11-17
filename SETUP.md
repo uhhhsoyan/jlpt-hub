@@ -132,8 +132,12 @@ practice miss should carry a `root_cause` (`ROOT_CAUSES` in `lib/types.ts` is th
 list; any kebab-case label is kept) because the "Why you miss" panel on `/progress` groups
 on it. Tags that match no item are kept with the question; add the item or an alias to the
 seed data (`data/seed/grammar.json` for a pattern, with its Bunpro id paired in
-`bunpro-crosswalk.json` so Bunpro reviews feed it too; `vocab-extra.json` for a word),
-re-seed, and run `npm run db:relink` (or the `relink_tags` tool).
+`bunpro-crosswalk.json` so Bunpro reviews feed it too; `vocab-extra.json` for a word, or
+its `aliases` list for an extra spelling on a scraped word, since the scraper rewrites
+`vocab-n5/n4.json`), re-seed, and run `npm run db:relink` (or the `relink_tags` tool).
+Two items sharing a headword (一日 いちにち／ついたち, 空く あく／すく) leave the bare spelling
+unresolved; an alias of that spelling on one of them picks the default sense, because the
+alias step runs after the headword step finds no unique hit.
 
 **Importing the old CSV ledger.** Download `jlpt_500_ledger.csv` from the claude.ai project
 files into `data/import/` (gitignored) and run `npm run db:import-ledger`. It creates one
