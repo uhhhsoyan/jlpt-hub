@@ -18,6 +18,9 @@ body {
       transparent
     ),
     var(--decor, none);
+  /* The wash paints once at the top of the page; only the pattern tiles. Without this the
+     wash repeated every viewport height, showing a seam when a long page scrolled. */
+  background-repeat: no-repeat, repeat;
 }
 
 header {
