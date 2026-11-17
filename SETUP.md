@@ -99,8 +99,10 @@ project, Claude Code, the mobile app — instead of appending to a CSV. Tools:
 `get_instructions`, `log_attempts` (with `mode` practice|lesson), `log_insight`,
 `get_insights`, `find_items`, `relink_tags`, `update_session`, `update_attempt`,
 `update_insight`, `delete_insight`, `get_weakness_report`, `get_readiness`,
-`get_lesson_review`, `list_sessions`, `sync_status`, plus the source, vocab-queue and memory
-tools.
+`get_lesson_review`, `list_sessions`, `sync_status`, `list_sources`, `log_study`,
+`queue_vocab`, `get_vocab_queue`, `update_vocab_queue` (status, or per-row `edits`),
+`send_feedback`, `get_feedback`, `update_feedback` (the feedback inbox, below), and the memory
+tools `memory_recall` / `memory_reflect`.
 Source: `app/mcp/route.ts`, write path in `lib/ledger.ts`, tag matching in `lib/item-match.ts`.
 `get_instructions` serves the claude.ai-side instructions from
 `docs/claude-ai-project-instructions.md` (the block below its first `---`; traced into the
@@ -177,6 +179,30 @@ Words the learner did not know, wherever they came up, for Anki later: `/queue` 
 (review, export TSV, mark carded / known / skipped). Fed by `vocab_gaps` on logged attempts and
 the `queue_vocab` MCP tool. Table `vocab_queue` (`npm run db:push`); the pre-queue "→ Anki"
 insights are imported once with `npm run db:backfill-queue`. See `docs/plans/09-vocab-queue.md`.
+
+## Feedback inbox
+
+At the end of a study conversation the claude.ai chat compiles a feedback handoff (sessions
+logged, fixes wanted, library gaps, connector behaviour, instruction gaps; the format is in
+the "Feedback handoff" section of `docs/claude-ai-project-instructions.md`) and files it with
+the `send_feedback` tool when asked ("send feedback"). It is stored in the Hub's own database,
+table `session_feedback`, not in GitHub issues: the repo is public and this is personal study
+data. Logic in `lib/feedback.ts`, pure rules in `lib/feedback-core.ts`.
+
+- **Create the table once:** `npm run db:feedback-table` runs `scripts/sql/session-feedback.sql`
+  (`CREATE TABLE IF NOT EXISTS` plus one index; additive, touches nothing else). Until then
+  `send_feedback` fails with "not set up" and the chat gives the handoff as text instead.
+- **Pick it up from Claude Code:** the `get_feedback` tool through the connector
+  (`status` open by default, `id` for one item with its body), or from a terminal:
+  ```bash
+  npm run feedback -- list                       # open items; --status all|done|…  --limit N
+  npm run feedback -- show <id>                  # the markdown body, raw
+  npm run feedback -- start <id>                 # in_progress
+  npm run feedback -- done <id> --resolution "PR #45, #46"
+  npm run feedback -- dismiss <id> --resolution "why nothing is needed"
+  ```
+  Closing an item (`done`, `dismissed`) needs a resolution; `update_feedback` does the same
+  through the connector.
 
 ## Hindsight (optional, local, with remote access)
 
