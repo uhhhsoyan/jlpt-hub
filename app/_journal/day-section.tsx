@@ -28,8 +28,8 @@ export function DaySection({ day, today }: { day: FeedDay; today: string }) {
   const rel = relative(day.day, today);
   return (
     <section aria-labelledby={`day-${day.day}`} className="flex flex-col gap-2.5">
-      {/* Sticks under the nav (h-14) so a long day keeps its date in view on a phone. */}
-      <div className="sticky top-14 z-[5] -mx-5 border-b border-neutral-200 bg-neutral-50/90 px-5 py-2 backdrop-blur dark:border-neutral-800 dark:bg-neutral-950/90">
+      {/* Sticks under the mobile top bar (top of the viewport on desktop) so a long day keeps its date in view. */}
+      <div className="sticky top-(--app-topbar-h) z-[5] -mx-5 border-b border-neutral-200 bg-neutral-50/90 px-5 py-2 backdrop-blur dark:border-neutral-800 dark:bg-neutral-950/90">
         <h2 id={`day-${day.day}`} className="flex flex-wrap items-baseline gap-x-2 text-base font-bold tracking-tight">
           <span>{weekday}</span>
           <span className="font-semibold text-neutral-500 dark:text-neutral-400">{date}</span>

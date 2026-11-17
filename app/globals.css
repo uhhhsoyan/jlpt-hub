@@ -25,3 +25,14 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* Height of the mobile top bar (app/_shell/app-shell.tsx, h-14); 0 from md up, where the
+   sidebar replaces it. Sticky page elements use top-(--app-topbar-h) to stick just below it. */
+:root {
+  --app-topbar-h: 3.5rem;
+}
+@media (width >= 48rem) {
+  :root {
+    --app-topbar-h: 0px;
+  }
+}

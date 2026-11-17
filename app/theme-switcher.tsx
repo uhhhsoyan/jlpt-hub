@@ -67,7 +67,12 @@ function ThemeOption({
   );
 }
 
-export function ThemeSwitcher() {
+/**
+ * Theme picker for the sidebar footer: a full-width row that opens the list upward, or, when
+ * the desktop sidebar is collapsed to its icon rail, the emoji alone with the list opening to
+ * the right of the rail.
+ */
+export function ThemeSwitcher({ collapsed = false }: { collapsed?: boolean }) {
   // Lazy initializer keeps React state in agreement with the inline theme
   // script in the root layout — both read the same localStorage key.
   const [preference, setPreference] = useState(() =>
@@ -97,8 +102,13 @@ export function ThemeSwitcher() {
     const onPointerDown = (e: PointerEvent) => {
       if (!containerRef.current?.contains(e.target as Node)) setOpen(false);
     };
+    // preventDefault marks this Escape as handled, so the mobile drawer around the picker
+    // stays open (it ignores a defaultPrevented Escape).
     const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setOpen(false);
+      if (e.key === "Escape") {
+        e.preventDefault();
+        setOpen(false);
+      }
     };
     document.addEventListener("pointerdown", onPointerDown);
     document.addEventListener("keydown", onKeyDown);
@@ -119,29 +129,38 @@ export function ThemeSwitcher() {
     applyPreference(next);
   }
 
-  const currentEmoji = mounted
-    ? (THEMES.find((t) => t.id === preference)?.emoji ?? SYSTEM_EMOJI)
-    : SYSTEM_EMOJI;
+  const currentTheme = mounted ? THEMES.find((t) => t.id === preference) : undefined;
+  const currentEmoji = currentTheme?.emoji ?? SYSTEM_EMOJI;
+  const currentLabel = mounted ? (currentTheme?.label ?? "Auto") : "";
 
   return (
-    <div ref={containerRef} className="relative ml-auto">
+    <div ref={containerRef} className="relative">
       <button
         type="button"
         aria-haspopup="listbox"
         aria-expanded={open}
+        aria-label={currentLabel ? `Theme: ${currentLabel}` : "Theme"}
+        title={collapsed ? "Theme" : undefined}
         onClick={() => setOpen((v) => !v)}
-        className="flex items-center gap-1.5 rounded-lg border border-border bg-surface px-2 py-1 text-xs font-semibold text-muted transition hover:text-foreground"
+        className={`flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm text-neutral-600 transition-colors hover:bg-neutral-200/50 hover:text-neutral-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent dark:text-neutral-400 dark:hover:bg-neutral-800/60 dark:hover:text-neutral-100 ${
+          collapsed ? "md:justify-center md:px-0" : ""
+        } ${open ? "bg-neutral-200/50 dark:bg-neutral-800/60" : ""}`}
       >
-        Theme <span aria-hidden>{currentEmoji}</span>
-        <span aria-hidden className="text-[0.6rem]">
-          ▾
+        <span aria-hidden className="flex size-[18px] shrink-0 items-center justify-center text-[15px] leading-none">
+          {currentEmoji}
+        </span>
+        <span className={collapsed ? "md:sr-only" : ""}>Theme</span>
+        <span aria-hidden className={`ml-auto truncate text-xs text-neutral-400 dark:text-neutral-500 ${collapsed ? "md:hidden" : ""}`}>
+          {currentLabel}
         </span>
       </button>
       {open && (
         <div
           role="listbox"
           aria-label="Theme"
-          className="absolute right-0 top-full z-20 mt-2 flex w-60 flex-col gap-1 rounded-xl border border-border bg-surface p-1.5 shadow-lg"
+          className={`absolute z-20 flex flex-col gap-1 rounded-xl border border-border bg-surface p-1.5 shadow-lg ${
+            collapsed ? "inset-x-0 bottom-full mb-1.5 md:inset-x-auto md:bottom-0 md:left-full md:mb-0 md:ml-3 md:w-60" : "inset-x-0 bottom-full mb-1.5"
+          }`}
         >
           <button
             type="button"
