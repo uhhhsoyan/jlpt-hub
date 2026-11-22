@@ -25,7 +25,27 @@ import { findItemsBatch } from "@/lib/resolve-items";
 import { getLessonReview } from "@/lib/lesson-review-db";
 import { listStudySources, logStudy } from "@/lib/study-sources-db";
 import { loadServedInstructions } from "@/lib/served-instructions";
-import { countVocabQueue, effectiveAsMet, listVocabQueue, queueVocab, setVocabQueueStatus, type VocabGapInput } from "@/lib/vocab-queue";
+import {
+  countVocabQueue,
+  editVocabQueueRows,
+  effectiveAsMet,
+  listVocabQueue,
+  queueVocab,
+  setVocabQueueStatus,
+  validateQueueUpdate,
+  type VocabGapInput,
+} from "@/lib/vocab-queue";
+import {
+  countFeedback,
+  feedbackView,
+  FEEDBACK_STATUSES,
+  getFeedbackById,
+  listFeedback,
+  prepareFeedback,
+  sendFeedback,
+  updateFeedback,
+  validateFeedbackUpdate,
+} from "@/lib/feedback";
 import { assertNoReservedMetaKeys, normalizeSlips, parseDoneOn, SLIP_KINDS } from "@/lib/attempt-meta";
 import { getAccuracyBySection, getMissesByRootCause, getPracticeWindow, getWeakItems } from "@/lib/weakness";
 import { normalizeRootCause, ROOT_CAUSES, SESSION_MODES, STUDY_ACTIVITIES, VOCAB_QUEUE_STATUSES } from "@/lib/types";
@@ -42,7 +62,7 @@ import { normalizeRootCause, ROOT_CAUSES, SESSION_MODES, STUDY_ACTIVITIES, VOCAB
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
 
-const SERVER_INFO = { name: "jlpt-hub-study-ledger", version: "1.8.0" };
+const SERVER_INFO = { name: "jlpt-hub-study-ledger", version: "1.9.0" };
 
 /**
  * Sent in the initialize result. Clients differ in whether the model ever sees it, so it is
@@ -940,18 +960,127 @@ function buildServer(): McpServer {
   server.registerTool(
     "update_vocab_queue",
     {
-      title: "Set vocab queue status",
+      title: "Update vocab queue rows",
       description:
-        "Move queue rows to carded (a card exists), known (already in my decks or genuinely known), skipped (not worth a card) or back to queued. Only when I say so; the Hub's /queue page is the usual place for this. Result: {updated}.",
+        "Move queue rows (ids + status) to carded (a card exists), known (already in my decks or genuinely known), skipped (not worth a card) or back to queued: only when I say so; the Hub's /queue page is the usual place for this. And/or fix fields on single rows with edits: [{id, as_met?, reading?, meaning?, text?}], e.g. an as_met that was left out when the page printed kana, or a word queued in the wrong form. as_met sets the row's as-met form (the Anki front) without adding a sighting or a count; reading and meaning replace the stored ones; null clears as_met, reading or meaning. text replaces the kanji / dictionary form and re-links the row to the library (it fails if another row already has that word). Pass status with ids, edits, or both. Result: {updated: rows whose status was set, edited: [{id, text, reading, meaning, asMet, itemId, status, seenCount, changed}]}.",
       inputSchema: {
-        ids: z.array(z.string().uuid()).min(1).describe("Row ids from get_vocab_queue"),
-        status: z.enum(VOCAB_QUEUE_STATUSES),
+        ids: z.array(z.string().uuid()).min(1).optional().describe("Row ids from get_vocab_queue whose status to set; pass with status"),
+        status: z.enum(VOCAB_QUEUE_STATUSES).optional().describe("New status for the rows in ids"),
+        edits: z
+          .array(
+            z.object({
+              id: z.string().uuid().describe("Row id from get_vocab_queue"),
+              as_met: z.string().nullable().optional().describe("The form as printed, e.g. おおぜい for 大勢; null clears it"),
+              reading: z.string().nullable().optional().describe("Kana reading; null clears it"),
+              meaning: z.string().nullable().optional().describe("Short English gloss; null clears it"),
+              text: z.string().min(1).optional().describe("Corrected kanji / dictionary form; re-links the row to the library"),
+            }),
+          )
+          .min(1)
+          .max(50)
+          .optional()
+          .describe("Per-row field changes; status is optional when edits are given"),
       },
       annotations: { idempotentHint: true },
     },
     async (args) => {
       try {
-        return ok({ updated: await setVocabQueueStatus(args.ids, args.status) });
+        const edits = args.edits?.map(({ as_met, ...e }) => ({ ...e, asMet: as_met }));
+        validateQueueUpdate({ ids: args.ids, status: args.status, edits });
+        const edited = edits ? await editVocabQueueRows(edits) : [];
+        const updated = args.status !== undefined && args.ids ? await setVocabQueueStatus(args.ids, args.status) : 0;
+        return ok(edits ? { updated, edited } : { updated });
+      } catch (e) {
+        return fail(e);
+      }
+    },
+  );
+
+  // ---- Feedback inbox (lib/feedback.ts): the end-of-conversation handoff, kept in the Hub's
+  // database (not GitHub issues: the repo is public). Filed from claude.ai, read and closed
+  // from Claude Code (here or `npm run feedback`). Validation runs before any DB access.
+  server.registerTool(
+    "send_feedback",
+    {
+      title: "File the feedback handoff",
+      description:
+        "File this conversation's feedback handoff in the Hub's private feedback inbox, where a Claude Code session picks it up later. Call it when I ask to send, file or hand off feedback (and offer it once when a study conversation is clearly wrapping up). body is the full handoff in markdown, in the format the instructions define (title line, What happened, Most urgent, Sessions logged, then the numbered sections that are non-empty); title is 'JLPT Hub: feedback from the <dates> study session'. One call per conversation: if more comes up later in the same conversation, call update_feedback with this id and append, never file a second row. period_from / period_to are the study dates covered (YYYY-MM-DD); session_ids the ledger session ids logged in this conversation. A body under 200 characters is rejected. If the inbox is not set up the call fails saying so: then give me the handoff as text in the chat so nothing is lost. Result: {id, status, createdAt, chars}; tell me the id in one line.",
+      inputSchema: {
+        title: z.string().describe("'JLPT Hub: feedback from the 2026-11-15 to 2026-11-17 study session'"),
+        body: z.string().describe("The full handoff, markdown, in the format the instructions define"),
+        period_from: z.string().optional().describe("First study date the feedback covers, YYYY-MM-DD"),
+        period_to: z.string().optional().describe("Last study date the feedback covers, YYYY-MM-DD"),
+        session_ids: z.array(z.string().uuid()).max(100).optional().describe("Ledger session ids logged in this conversation"),
+        surface: z.enum(["claude-ai", "claude-code", "hub"]).default("claude-ai"),
+      },
+    },
+    async (args) => {
+      try {
+        const input = {
+          title: args.title,
+          body: args.body,
+          periodFrom: args.period_from ?? null,
+          periodTo: args.period_to ?? null,
+          sessionIds: args.session_ids,
+          surface: args.surface,
+          serverVersion: SERVER_INFO.version,
+        };
+        prepareFeedback(input); // validate before the DB is touched
+        return ok(await sendFeedback(input));
+      } catch (e) {
+        return fail(e);
+      }
+    },
+  );
+
+  server.registerTool(
+    "get_feedback",
+    {
+      title: "Read the feedback inbox",
+      description:
+        "Feedback handoffs filed with send_feedback, newest first. With id: that item with its full markdown body. Otherwise a list filtered by status (default open; all for every status), each with title, status, dates (createdAt, updatedAt, periodFrom, periodTo), sessionIds, surface, serverVersion, resolution, chars and the first ~300 characters as preview; include_body returns full bodies instead. Counts per status come with every list. Used from Claude Code to pick up the next handoff; close it with update_feedback. Result: {feedback: item} for id, {counts, feedback: [items]} for a list.",
+      inputSchema: {
+        id: z.string().uuid().optional().describe("One item, with its body"),
+        status: z.enum([...FEEDBACK_STATUSES, "all"]).optional().describe("Default open"),
+        limit: z.number().int().min(1).max(100).optional().describe("Default 20"),
+        include_body: z.boolean().optional().describe("Full bodies in a list instead of previews; default false"),
+      },
+      annotations: { readOnlyHint: true },
+    },
+    async (args) => {
+      try {
+        if (args.id !== undefined) return ok({ feedback: feedbackView(await getFeedbackById(args.id), true) });
+        const [rows, counts] = await Promise.all([
+          listFeedback({ status: args.status ?? "open", limit: args.limit ?? 20 }),
+          countFeedback(),
+        ]);
+        return ok({ counts, feedback: rows.map((r) => feedbackView(r, args.include_body ?? false)) });
+      } catch (e) {
+        return fail(e);
+      }
+    },
+  );
+
+  server.registerTool(
+    "update_feedback",
+    {
+      title: "Update a feedback item",
+      description:
+        "Change a feedback item filed with send_feedback. From a study conversation: only append, to add what came up after this conversation's own handoff was filed (append adds the text under a dated rule; body replaces the whole handoff). From Claude Code: status open | in_progress | done | dismissed and resolution (what was done about it, e.g. 'PR #45, #46', or why nothing is needed; null clears it). done and dismissed need a resolution, given now or already stored. Pass body or append, not both. Repeating a status, resolution or body change changes nothing; an append is added again each time it is sent. Result: {id, status, resolution, chars, updatedAt, changed: the fields that changed}.",
+      inputSchema: {
+        id: z.string().uuid(),
+        status: z.enum(FEEDBACK_STATUSES).optional(),
+        resolution: z.string().nullable().optional().describe("What was done about it (PR numbers), or why nothing; null clears"),
+        body: z.string().optional().describe("Replaces the whole handoff"),
+        append: z.string().optional().describe("Text added to the end of the handoff, under a dated rule"),
+      },
+      annotations: { idempotentHint: true },
+    },
+    async (args) => {
+      try {
+        const input = { status: args.status, resolution: args.resolution, body: args.body, append: args.append };
+        validateFeedbackUpdate(input);
+        return ok(await updateFeedback(args.id, input));
       } catch (e) {
         return fail(e);
       }

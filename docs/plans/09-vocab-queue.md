@@ -59,6 +59,13 @@ are not insights.
   a column**, same reason as the attempt fields in 06: no migration this close to the exam.
   The row's effective as_met is the most recent sighting that has one (`effectiveAsMet`);
   promoting it to a column later is a backfill of that function's result.
+- Rows are edited in place (2026-11-17): `update_vocab_queue` takes `edits: [{id, as_met?,
+  reading?, meaning?, text?}]` beside `ids` + `status`. as_met is written onto the row's
+  latest sighting, which makes it the effective as_met (export and /queue unchanged) without
+  a new sighting or a seen_count bump; null removes it from every sighting so an older one
+  cannot resurface. A new `text` re-runs `matchQueueItem` and replaces the link (null when
+  nothing matches; the only path that changes an existing link), and fails if another row
+  already has that word (`norm` is unique). Pure part: `planQueueEdit` in vocab-queue-core.
 - Queue rows are relinked (2026-11-14): `relink_tags` / `npm run db:relink` also fills
   `item_id` on rows queued before their library item existed (21 at the time), with the
   insert-time ladder shared in `matchQueueItem`: the text (headword, alias, kana reading), then

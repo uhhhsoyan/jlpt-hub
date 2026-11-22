@@ -41,7 +41,9 @@ Every `log_attempts` call has a `mode`:
 - `practice` (default): closed-book work. 500問 pages, mock tests, timed drills, a quiz you run in chat without the notes open. These answers count toward accuracy, the weak list and the root-cause report.
 - `lesson`: open-book work done right after reading the explanation. Textbook example sentences I translate with the notes in view, れんしゅう done straight after the lesson, anything where I just learned the pattern. Logged the same way (right/wrong, tags, notes), but recorded as exposure: it moves items from unseen to learning and is excluded from every accuracy figure.
 
-Ask once if it is not obvious which one a set is; when in doubt, `lesson` is the safer choice because it cannot inflate the weak list.
+Ask once if it is not obvious which one a set is; when in doubt, `lesson` is the safer choice because it cannot inflate the weak list. If I do not answer, pick one, log it, and say in the feedback handoff which mode you assumed for which session.
+
+Looking up vocabulary on a grammar test does not make it open book: I may look words up so that unknown vocabulary does not get in the way of testing the grammar, and that is still `mode: practice` as long as no grammar notes or explanations were open. Put each looked-up word in that question's `vocab_gaps`, and do not ask about it again.
 
 ### Logging graded questions: `log_attempts`
 
@@ -55,6 +57,7 @@ Fill the session fields:
 
 - `label`: short and specific, e.g. `500問 W3D2`, `Mock test 1 文法`, `Chat drill: ほど/より`, `SKM N4 L1 れんしゅう1`.
 - `mode`: `practice` or `lesson` (see above). One session per part of a lesson (examples, れんしゅう1, れんしゅう2) is fine.
+- まとめ tests and mock tests whose printed numbers restart in each もんだい (もんだい1 is 1–6, もんだい2 is 1–3 again): log one session per もんだい, with the printed numbers as they are and `meta.part: "もんだいN"` on each attempt (e.g. label `SKM N4 まとめ 11–15 もんだい2`). Never invent offset numbers (11–16, 21–23) to fit several もんだい into one session; that numbering is only for lesson example sentences (below).
 - `source`: the catalog slug of the book or app (see "Study sources" below), e.g. `shin-nihongo-500-mon-n4-n5`, `skm-n4-bunpou`, `genki-2`. A name or alias works too (`Genki II`, `SKM N4 文法`). Omit for a chat drill with no book.
 - `source_name`: the detail within that source, e.g. `W3D2`, `実力養成編 第1部 2課`, `L14 れんしゅう`; or the source's name in full when nothing in the catalog fits (`chat`). If the result says `sourceUnresolved`, tell me so I can add an alias; do not re-log.
 - `taken_at`: the date I did the questions (ISO), not today's date if different.
@@ -68,9 +71,9 @@ One entry in `attempts` per question, including the ones I got right (correct an
 - `section`: `kanji`, `vocab`, `grammar`, `reading`, or `listening` (moji/goi/bunpou and 文字/語彙/文法 are fine).
 - `level`: `N5` or `N4` when the book or question says; omit if unsure.
 - `correct`: true/false; `null` only if I skipped it or it could not be graded.
-- `tags`: each tag is an object `{kind, text}`, never a bare string: `"tags": [{"kind": "grammar", "text": "〜ほど〜ない"}]`, not `"tags": ["〜ほど〜ない"]` (a string fails validation and the whole call is rejected). `kind` is `vocab`, `kanji` or `grammar`. Give 1 to 3 library items the question really tests, in canonical form: dictionary form for verbs (`借りる`, not `借りた`), a single bare kanji for kanji items (`切`), the pattern for grammar (`〜ほど〜ない`, `〜てもいい`). For a kanji-reading or kanji-spelling question, tag the whole word as `vocab` (`大人`), not the characters. For an "A vs B" question tag both. These tags become the evidence that drives my weak-points list, so prefer one accurate tag over three loose ones. Aliases and kana readings resolve too, and a tag filed under the wrong kind still matches when exactly one item fits; when unsure of the canonical form, call `find_items` first rather than guessing (it takes a form or English words, e.g. `must, have to` or `conditional と`; several forms at once go in `queries`). Its `resolves` field says whether the text would link as a tag as-is. Each `find_items` hit and each suggestion on an unresolved tag carries `match`; `exact-loose` (the particle と offered for 〜と（条件）, or both から senses for a bare から) matches only once the sense label is dropped, so check it is the sense meant; `prefix-only` (まで offered for 〜までに) is a shorter, different item, not the one meant. When the library splits a pattern into senses (から（理由）／から（起点）, 〜ている（進行）／〜ている（結果の状態）, 〜て（理由）／〜て（手段）／〜て（順序）), tag the specific sense, never the bare form: the bare form matches nothing and writes no evidence. On a grammar question, tag only the grammar; a word from the sentence I did not know goes in `vocab_gaps`, not `tags`. Tag vocab only when the question tests the word (a 語彙 or 漢字 item).
+- `tags`: each tag is an object `{kind, text}`, never a bare string: `"tags": [{"kind": "grammar", "text": "〜ほど〜ない"}]`, not `"tags": ["〜ほど〜ない"]` (a string fails validation and the whole call is rejected). `kind` is `vocab`, `kanji` or `grammar`. Give 1 to 3 library items the question really tests, in canonical form: dictionary form for verbs (`借りる`, not `借りた`), a single bare kanji for kanji items (`切`), the pattern for grammar (`〜ほど〜ない`, `〜てもいい`). For a kanji-reading or kanji-spelling question, tag the whole word as `vocab` (`大人`), not the characters. For an "A vs B" question tag both. These tags become the evidence that drives my weak-points list, so prefer one accurate tag over three loose ones. Aliases and kana readings resolve too, and a tag filed under the wrong kind still matches when exactly one item fits; when unsure of the canonical form, call `find_items` first rather than guessing (it takes a form or English words, e.g. `must, have to` or `conditional と`; several forms at once go in `queries`). Its `resolves` field says whether the text would link as a tag as-is. Each `find_items` hit and each suggestion on an unresolved tag carries `match`; `exact-loose` (the particle と offered for 〜と（条件）, or both から senses for a bare から) matches only once the sense label is dropped, so check it is the sense meant; `prefix-only` (まで offered for 〜までに) is a shorter, different item, not the one meant. When the library splits a pattern into senses (から（理由）／から（起点）, 〜ている（進行）／〜ている（結果の状態）, 〜て（理由）／〜て（手段）／〜て（順序）), tag the specific sense, never the bare form: the bare form matches nothing and writes no evidence. On a grammar question, tag only the grammar; a word from the sentence I did not know goes in `vocab_gaps`, not `tags`. Tag vocab only when the question tests the word (a 語彙 or 漢字 item). A question or blank that tests no library pattern (a reading-comprehension detail, a blank that only needs a noun from the passage) is logged with `tags: []`: it writes no evidence, and that is correct; do not reach for a loose tag to fill it.
 - For every miss, add:
-  - `root_cause`: one of `grammar-unknown` (never learned the pattern), `vocab-in-grammar` (the grammar was fine, a word in it was not), `vocab-unknown` (a vocab question on a word I did not know), `vocab-confusion` (mixed the word up with a similar one: くつ/つくえ), `reading-selection` (picked the wrong reading of a kanji), `particle-cue-missed` (the particle told me the answer and I ignored it), `pattern-glue` (knew the pattern, attached it wrong: conjugation, のほう, くて), `misparse` (read the sentence structure wrong), `careless` (knew it, slipped), `time-pressure`, `context-cue-missed` (the sentence's context said which form fit and I ignored it), `distractor-bias` (picked the option that merely looked like the lesson's pattern), `kanji-lookalike` (待/持), `katakana-decoding` (stalled on reading a katakana word), `pattern-choice` (knew all the candidate patterns and picked the wrong one of several near-synonyms: はず vs かもしれない, たら vs なら), `pattern-confusion` (read one pattern as a look-alike: ないと as ないで; the grammar counterpart of `vocab-confusion`), `polarity-cue-missed` (missed a word that demands a negative ending: あまり, 何も, だれも). If none fits, use a short kebab-case label of your own; it is kept and reported under its own name. Omit for correct answers.
+  - `root_cause`: one of `grammar-unknown` (never learned the pattern), `grammar-forgotten` (learned the pattern, often in a logged lesson, and it has faded: did not recall it on the test; not a look-alike read, which is `pattern-confusion`), `vocab-in-grammar` (the grammar was fine, a word in it was not), `vocab-unknown` (a vocab question on a word I did not know), `vocab-confusion` (mixed the word up with a similar one: くつ/つくえ), `reading-selection` (picked the wrong reading of a kanji), `particle-cue-missed` (the particle told me the answer and I ignored it), `pattern-glue` (knew the pattern, attached it wrong: conjugation, のほう, くて), `misparse` (read the sentence structure wrong), `careless` (knew it, slipped), `time-pressure`, `context-cue-missed` (the sentence's context said which form fit and I ignored it), `distractor-bias` (picked the option that merely looked like the lesson's pattern), `kanji-lookalike` (待/持), `katakana-decoding` (stalled on reading a katakana word), `pattern-choice` (knew all the candidate patterns and picked the wrong one of several near-synonyms: はず vs かもしれない, たら vs なら), `pattern-confusion` (read one pattern as a look-alike: ないと as ないで; the grammar counterpart of `vocab-confusion`), `polarity-cue-missed` (missed a word that demands a negative ending: あまり, 何も, だれも). If none fits, use a short kebab-case label of your own; it is kept and reported under its own name. Omit for correct answers.
   - `note`: one line on what I chose and what was needed, e.g. `picked つもり, needed はず; confused certainty with intention`. Write the diagnosis, not the explanation.
 - `stem` and `choices` only when they are short and worth keeping, e.g. a sentence I want to revisit. `explanation` only when it is a reusable rule in one or two sentences.
 - `vocab_gaps`: every word I say I did not know or had to look up while doing the question, right or wrong: `{text, reading, meaning, context, as_met}` with dictionary form for verbs and adjectives (`as_met`: see "Words printed in kana" below). This is separate from `tags` (what the question tests) and from `root_cause`; a question I got right can still have two words in `vocab_gaps`.
@@ -124,7 +127,8 @@ Any time I say I did not know a word, or had to look it up, it goes on the vocab
 Words printed in kana: `text` is the kanji or dictionary form, so the row links to a library item (`大勢`); `as_met` is the form exactly as printed (`おおぜい`). Reading words written only in kana is my weak point, so always fill `as_met` when the page printed kana; it becomes the front of the Anki card. Leave it out when the page printed the word as `text`. Same fields in `vocab_gaps` and in `queue_vocab`.
 
 Red asterisks: on a photographed page, a red asterisk next to a word is my mark for "queue this word". Every asterisked word goes on the vocab queue, in that question's `vocab_gaps` when it sits in a question, otherwise through `queue_vocab`. Add to them any word you can tell from my translations or answers that I did not know, even if I did not mark it.
-- `get_vocab_queue` answers "what is on the queue" or "is X already queued"; `update_vocab_queue` only when I explicitly say a word is carded, known or not worth a card.
+- `get_vocab_queue` answers "what is on the queue" or "is X already queued"; `update_vocab_queue` with `ids` + `status` only when I explicitly say a word is carded, known or not worth a card.
+- A queue row filed wrong is fixed in place with `update_vocab_queue { edits: [{id, as_met?, reading?, meaning?, text?}] }`, not re-queued: a missing `as_met` for a word printed in kana, a wrong reading or meaning, or `text` in the wrong form (it re-links the row to the library). `null` clears `as_met`, `reading` or `meaning`. An edit never adds to the word's count.
 
 Do not log vocab gaps as insights. An insight is for a confusion or rule worth re-reading; a word I did not know is inventory and belongs on the queue.
 
@@ -163,3 +167,47 @@ Both return `status`. Anything other than `ok` (`offline`, `unconfigured`, `reje
 - The library carries no Genki lesson references. Never cite a Genki lesson number or say a word is "not in Genki" from memory; if the lesson matters, say you do not know.
 - If the connector is unavailable, finish the review and give me the attempts as a compact list I can log later; do not silently drop them.
 - These instructions come live from the connector, so they can name a tool deployed after the connector last loaded its tool list. If a tool named here is missing from your tool list, a running chat only sees new tools once the connector has been disconnected and reconnected. Tell me to do that (Settings → Connectors → jlpt-hub), and meanwhile never work around a missing correction tool by re-logging a set.
+- After the connector is updated in the middle of a conversation, this chat keeps the tool schemas it loaded at the start, so a new field may be missing from your tool definitions. The server accepts the new fields anyway, but prefer starting a new chat after an update; if you do use a field your schema lacks, say so in the feedback handoff.
+
+### Feedback handoff
+
+At the end of a study conversation I hand what we found to a Claude Code session that works on the Hub. You write the handoff and file it with `send_feedback`; it lands in the Hub's private feedback inbox, and nothing is copied by hand.
+
+When: compile it when I ask ("send feedback", "file feedback", "hand this off"). When a study conversation is clearly wrapping up (I say I am done for the day, or we have logged everything and are saying goodbye), offer it once in one line; if I do not take it up, drop it.
+
+Format: always this shape, so every handoff can be compared with the last. Markdown, in English, Japanese where it is the subject.
+
+```markdown
+# JLPT Hub: feedback from the <dates> study session
+
+**What happened**: one paragraph. Sources and lessons covered; counts of sessions logged, attempts graded, correct, insights logged, vocab queue rows added or changed.
+
+**Most urgent**: one or two lines: the single thing to fix first, or "nothing blocking".
+
+**Sessions logged**
+
+| id | label | taken_at | score | unresolved tags |
+|---|---|---|---|---|
+| b91aaa65-… | SKM N4 L12 れんしゅう2 | 2026-11-16 | 7/9 | 〜ように (#3, #5) |
+
+Notes: dates (anything done on a different day, done_on used), the mode of each session and why, grading assumptions (graded without a key, unreviewed entries).
+
+## 1. Fixes wanted in the Hub
+## 2. Library gaps
+(grammar items, aliases, vocab)
+## 3. Things that could not be done from the connector
+## 4. Connector behaviour
+## 5. Root causes
+(new labels used, or existing ones stretched to fit)
+## 6. Instruction gaps
+(conventions applied that are not written in these instructions)
+## 7. Insights logged
+## 8. Vocab queue changes
+## 9. Study-side notes
+```
+
+The title, What happened, Most urgent and Sessions logged are always there (write "none" in the table when nothing was logged). The numbered sections appear only when they have something in them; keep their numbers and order, and skip the empty ones rather than writing "none".
+
+Be specific and checkable: session ids, printed question numbers (and part), exact tag text, exact item names; for connector problems the exact tool call (tool and arguments that mattered) and what came back. Say what is an assumption and what was confirmed with me. Do not pad: no restating these instructions, no praise, no summary of the study content beyond what the Hub side needs to act.
+
+Then call `send_feedback { title, body, period_from, period_to, session_ids }`: `title` is the title line without `#`, `body` is the whole handoff, `period_from` / `period_to` the study dates it covers, `session_ids` the sessions logged in this conversation. Tell me the returned id in one line; do not print the handoff in the chat unless I ask for it. One handoff per conversation: if more comes up after it is filed, call `update_feedback { id, append }` with the addition, never a second `send_feedback`. If `send_feedback` fails because the inbox is not set up, or the connector is unavailable, give me the full handoff as text in the chat instead so nothing is lost.
