@@ -6,6 +6,7 @@
 
 export type NavIconName =
   | "journal"
+  | "insights"
   | "practice"
   | "queue"
   | "progress"
@@ -37,6 +38,7 @@ export const NAV_SECTIONS: readonly NavSection[] = [
     label: "Daily",
     items: [
       { href: "/", label: "Journal", icon: "journal" },
+      { href: "/insights", label: "Insights", icon: "insights" },
       { href: "/practice", label: "Practice", icon: "practice" },
       { href: "/queue", label: "Vocab queue", icon: "queue" },
       { href: "/progress", label: "Progress", icon: "progress" },

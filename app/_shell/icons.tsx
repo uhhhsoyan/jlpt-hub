@@ -31,6 +31,12 @@ const NAV_PATHS: Record<NavIconName, ReactNode> = {
       <path d="M9 3v18M12.5 8H16M12.5 12H16" />
     </>
   ),
+  insights: (
+    <>
+      <path d="M9 18h6M10 21h4" />
+      <path d="M12 3a6 6 0 0 0-3.6 10.8c.6.5 1.1 1.3 1.1 2.2h5c0-.9.5-1.7 1.1-2.2A6 6 0 0 0 12 3Z" />
+    </>
+  ),
   practice: (
     <>
       <rect x="4" y="4" width="16" height="16" rx="3" />
