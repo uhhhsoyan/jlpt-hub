@@ -695,8 +695,8 @@
     {
       "bunproId": 134,
       "bunproTitle": "ていただけませんか",
-      "headword": "〜ていただけますか",
-      "method": "claude"
+      "headword": "〜ていただけませんか",
+      "method": "manual"
     },
     {
       "bunproId": 135,
@@ -1319,14 +1319,14 @@
     {
       "bunproId": 727,
       "bunproTitle": "Question-phrase + か",
-      "headword": "疑問詞＋か",
-      "method": "claude"
+      "headword": "疑問詞〜か",
+      "method": "manual"
     },
     {
       "bunproId": 728,
       "bunproTitle": "～にする・～くする",
-      "headword": "〜にする",
-      "method": "string"
+      "headword": "〜くする／〜にする",
+      "method": "manual"
     },
     {
       "bunproId": 729,

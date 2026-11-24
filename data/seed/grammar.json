@@ -1454,10 +1454,14 @@
   {
     "pattern": "〜になる",
     "level": "N5",
-    "meaning": "change of state: become ~ (na-adjective/noun)",
+    "meaning": "change of state: become ~ (na-adjective/noun); with a noun for a plan or choice, be decided as N (会議は月曜日になりました)",
     "example": "弟は医者になりました。",
     "exampleReading": "おとうとは いしゃに なりました。",
-    "exampleEnglish": "My younger brother became a doctor."
+    "exampleEnglish": "My younger brother became a doctor.",
+    "aliases": [
+      "〜になる（決定）",
+      "になる（決定）"
+    ]
   },
   {
     "pattern": "あまり〜ない",
@@ -1562,7 +1566,7 @@
   {
     "pattern": "〜にする",
     "level": "N5",
-    "meaning": "decide on, choose ~",
+    "meaning": "decide on, choose ~ (コーヒーにします); for make something ~ (半分にする), see 〜くする／〜にする",
     "example": "飲み物はコーヒーにします。",
     "exampleReading": "のみものは こーひーに します。",
     "exampleEnglish": "For a drink, I'll have coffee."
@@ -2209,6 +2213,129 @@
       "〜そうにない",
       "そうにもない",
       "〜そうにもない"
+    ]
+  },
+  {
+    "pattern": "〜くする／〜にする",
+    "level": "N4",
+    "meaning": "make something ~: a deliberate change someone causes (い-adjective 〜く／な-adjective or noun 〜に + する); 〜くなる／〜になる is the change happening by itself",
+    "example": "テレビの音を小さくしてください。",
+    "exampleReading": "てれびの おとを ちいさく してください。",
+    "exampleEnglish": "Please turn the TV down.",
+    "aliases": [
+      "〜くする",
+      "くする",
+      "〜くする・〜にする",
+      "〜にする・〜くする"
+    ]
+  },
+  {
+    "pattern": "疑問詞〜か",
+    "level": "N4",
+    "meaning": "embedded question: a question-word clause + か inside a sentence (what/when/where ~), before 知っている, わかる, 教えてください; for a yes/no question use 〜かどうか",
+    "example": "会議が何時に始まるか知っていますか。",
+    "exampleReading": "かいぎが なんじに はじまるか しっていますか。",
+    "exampleEnglish": "Do you know what time the meeting starts?",
+    "aliases": [
+      "疑問詞…か",
+      "埋め込み疑問",
+      "埋め込み疑問文"
+    ]
+  },
+  {
+    "pattern": "〜なくなる",
+    "level": "N4",
+    "meaning": "no longer ~, stop ~ing: a change into not doing (ない-form minus い + くなる); the negative of 〜ようになる",
+    "example": "最近、あまりテレビを見なくなりました。",
+    "exampleReading": "さいきん、あまり てれびを みなく なりました。",
+    "exampleEnglish": "Lately I've stopped watching much TV.",
+    "aliases": [
+      "〜なくなった",
+      "〜なくなりました"
+    ]
+  },
+  {
+    "pattern": "〜ていただけませんか",
+    "level": "N4",
+    "meaning": "very polite request for the listener to do ~ for me: would you be so kind as to ~? From casual to most polite: 〜てくれませんか, 〜てもらえませんか, 〜てくださいませんか, 〜ていただけませんか",
+    "example": "すみません、駅までの道を教えていただけませんか。",
+    "exampleReading": "すみません、えきまでの みちを おしえて いただけませんか。",
+    "exampleEnglish": "Excuse me, would you be so kind as to tell me the way to the station?",
+    "aliases": [
+      "ていただけませんか",
+      "〜ていただけないでしょうか",
+      "〜てくれませんか",
+      "てくれませんか",
+      "〜てもらえませんか",
+      "てもらえませんか",
+      "〜てくださいませんか",
+      "てくださいませんか"
+    ]
+  },
+  {
+    "pattern": "〜させてくれる",
+    "level": "N4",
+    "meaning": "someone lets me (or my in-group) do ~, as a favor; 〜させてくれませんか asks for that permission",
+    "example": "父は私に車を運転させてくれました。",
+    "exampleReading": "ちちは わたしに くるまを うんてん させてくれました。",
+    "exampleEnglish": "My father let me drive his car.",
+    "aliases": [
+      "〜させてくれませんか",
+      "させてくれませんか"
+    ]
+  },
+  {
+    "pattern": "〜と言っていました",
+    "level": "N4",
+    "meaning": "relaying what someone said: (person) said that ~ (plain form + と言っていました), passing on a message",
+    "example": "田中さんは明日のパーティーに来られないと言っていました。",
+    "exampleReading": "たなかさんは あしたの ぱーてぃーに こられないと いっていました。",
+    "exampleEnglish": "Mr. Tanaka said he can't come to tomorrow's party.",
+    "aliases": [
+      "と言っていました",
+      "〜と言っていた",
+      "と言っていた",
+      "〜といっていました",
+      "といっていました"
+    ]
+  },
+  {
+    "pattern": "〜によると",
+    "level": "N4",
+    "meaning": "according to ~: names the source of hearsay, usually ending in 〜そうだ; 〜の話では: according to what ~ said",
+    "example": "ニュースによると、駅の近くで火事があったそうです。",
+    "exampleReading": "にゅーすに よると、えきの ちかくで かじが あったそうです。",
+    "exampleEnglish": "According to the news, there was a fire near the station.",
+    "aliases": [
+      "によると",
+      "〜の話では",
+      "の話では",
+      "〜によれば",
+      "によれば"
+    ]
+  },
+  {
+    "pattern": "〜なくても",
+    "level": "N4",
+    "meaning": "even if (one) does not ~ (ない-form minus い + くても); 〜なくてもいい is the set phrase 'don't have to'",
+    "example": "薬を飲まなくても、よく寝れば治りますよ。",
+    "exampleReading": "くすりを のまなくても、よく ねれば なおりますよ。",
+    "exampleEnglish": "Even if you don't take medicine, you'll get better if you sleep well.",
+    "aliases": [
+      "なくても"
+    ]
+  },
+  {
+    "pattern": "いくら〜ても／どんなに〜ても",
+    "level": "N4",
+    "meaning": "no matter how (much) ~: the result does not change (いくら／どんなに + て-form + も)",
+    "example": "いくら練習しても、上手になりません。",
+    "exampleReading": "いくら れんしゅう しても、じょうずに なりません。",
+    "exampleEnglish": "No matter how much I practise, I don't get any better.",
+    "aliases": [
+      "いくら〜ても",
+      "どんなに〜ても",
+      "どんなに〜でも"
     ]
   }
 ]

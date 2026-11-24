@@ -365,6 +365,230 @@
       "meaning": "look!, see!, there! (calling attention)",
       "pos": "interjection",
       "level": "N4"
+    },
+    {
+      "headword": "いただく",
+      "reading": "いただく",
+      "romaji": "itadaku",
+      "meaning": "to receive (humble, from a superior); to eat, to drink (humble: いただきます)",
+      "pos": "verb",
+      "level": "N4",
+      "aliases": [
+        "頂く"
+      ]
+    },
+    {
+      "headword": "猿",
+      "reading": "さる",
+      "romaji": "saru",
+      "meaning": "monkey",
+      "pos": "noun",
+      "level": "N4",
+      "aliases": [
+        "さる",
+        "サル"
+      ]
+    },
+    {
+      "headword": "噂",
+      "reading": "うわさ",
+      "romaji": "uwasa",
+      "meaning": "rumour, gossip",
+      "pos": "noun",
+      "level": "N4",
+      "aliases": [
+        "うわさ"
+      ]
+    },
+    {
+      "headword": "お願い",
+      "reading": "おねがい",
+      "romaji": "onegai",
+      "meaning": "request, favour (お願いします: please)",
+      "pos": "noun",
+      "level": "N5",
+      "aliases": [
+        "おねがい"
+      ]
+    },
+    {
+      "headword": "売れる",
+      "reading": "うれる",
+      "romaji": "ureru",
+      "meaning": "to sell (well), to be sold",
+      "pos": "verb",
+      "level": "N4",
+      "aliases": [
+        "うれる"
+      ]
+    },
+    {
+      "headword": "もう少し",
+      "reading": "もうすこし",
+      "romaji": "mousukoshi",
+      "meaning": "a little more, a bit longer; almost",
+      "pos": "adverb",
+      "level": "N4",
+      "aliases": [
+        "もうすこし",
+        "もうちょっと"
+      ]
+    },
+    {
+      "headword": "後輩",
+      "reading": "こうはい",
+      "romaji": "kouhai",
+      "meaning": "junior (at school or work)",
+      "pos": "noun",
+      "level": "N4",
+      "aliases": [
+        "こうはい"
+      ]
+    },
+    {
+      "headword": "幸せ",
+      "reading": "しあわせ",
+      "romaji": "shiawase",
+      "meaning": "happiness; happy",
+      "pos": "na-adjective",
+      "level": "N4",
+      "aliases": [
+        "しあわせ"
+      ]
+    },
+    {
+      "headword": "自己紹介",
+      "reading": "じこしょうかい",
+      "romaji": "jikoshoukai",
+      "meaning": "self-introduction (自己紹介する: to introduce oneself)",
+      "pos": "noun",
+      "level": "N4",
+      "aliases": [
+        "じこしょうかい",
+        "自己紹介する"
+      ]
+    },
+    {
+      "headword": "得意",
+      "reading": "とくい",
+      "romaji": "tokui",
+      "meaning": "good at, one's strong point (〜が得意)",
+      "pos": "na-adjective",
+      "level": "N4",
+      "aliases": [
+        "とくい"
+      ]
+    },
+    {
+      "headword": "受ける",
+      "reading": "うける",
+      "romaji": "ukeru",
+      "meaning": "to take (an exam, a lesson); to receive",
+      "pos": "verb",
+      "level": "N4",
+      "aliases": [
+        "うける"
+      ]
+    },
+    {
+      "headword": "意見",
+      "reading": "いけん",
+      "romaji": "iken",
+      "meaning": "opinion, view",
+      "pos": "noun",
+      "level": "N4",
+      "aliases": [
+        "いけん"
+      ]
+    },
+    {
+      "headword": "変える",
+      "reading": "かえる",
+      "romaji": "kaeru",
+      "meaning": "to change (something), to alter",
+      "pos": "verb",
+      "level": "N4"
+    },
+    {
+      "headword": "無くす",
+      "reading": "なくす",
+      "romaji": "nakusu",
+      "meaning": "to lose (something), to get rid of",
+      "pos": "verb",
+      "level": "N4",
+      "aliases": [
+        "なくす",
+        "失くす"
+      ]
+    },
+    {
+      "headword": "間違う",
+      "reading": "まちがう",
+      "romaji": "machigau",
+      "meaning": "to be wrong, to be mistaken (間違える: to make a mistake)",
+      "pos": "verb",
+      "level": "N4",
+      "aliases": [
+        "まちがう"
+      ]
+    },
+    {
+      "headword": "量",
+      "reading": "りょう",
+      "romaji": "ryou",
+      "meaning": "amount, quantity",
+      "pos": "noun",
+      "level": "N4"
+    },
+    {
+      "headword": "メモ",
+      "reading": "メモ",
+      "romaji": "memo",
+      "meaning": "memo, note",
+      "pos": "noun",
+      "level": "N4"
+    },
+    {
+      "headword": "おじいちゃん",
+      "reading": "おじいちゃん",
+      "romaji": "ojiichan",
+      "meaning": "grandpa (familiar)",
+      "pos": "noun",
+      "level": "N4"
+    },
+    {
+      "headword": "会館",
+      "reading": "かいかん",
+      "romaji": "kaikan",
+      "meaning": "hall, assembly hall",
+      "pos": "noun",
+      "level": "N4",
+      "aliases": [
+        "かいかん"
+      ]
+    },
+    {
+      "headword": "はさみ",
+      "reading": "はさみ",
+      "romaji": "hasami",
+      "meaning": "scissors",
+      "pos": "noun",
+      "level": "N4",
+      "aliases": [
+        "鋏",
+        "ハサミ"
+      ]
+    },
+    {
+      "headword": "悲しい",
+      "reading": "かなしい",
+      "romaji": "kanashii",
+      "meaning": "sad",
+      "pos": "i-adjective",
+      "level": "N4",
+      "aliases": [
+        "かなしい"
+      ]
     }
   ],
   "aliases": [
@@ -441,6 +665,30 @@
         "はく"
       ],
       "why": "keeps kana はく on 履く (put on shoes) now that 掃く and 吐く share the reading"
+    },
+    {
+      "headword": "吃驚",
+      "reading": "びっくり",
+      "aliases": [
+        "びっくりする"
+      ],
+      "why": "the queue and tags write the verb びっくりする; the scraped row is 吃驚 (びっくり)"
+    },
+    {
+      "headword": "帰る",
+      "reading": "かえる",
+      "aliases": [
+        "かえる"
+      ],
+      "why": "keeps kana かえる on 帰る (go home) now that 変える (change) shares the reading"
+    },
+    {
+      "headword": "無くなる",
+      "reading": "なくなる",
+      "aliases": [
+        "なくなる"
+      ],
+      "why": "keeps a vocab tag in kana なくなる on 無くなる (be lost, run out) rather than falling through to the grammar item 〜なくなる; 亡くなる shares the reading"
     }
   ]
 }
