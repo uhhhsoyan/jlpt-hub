@@ -15,8 +15,11 @@ import { rankInsights, type InsightMatch } from "@/lib/insight-match";
 import { loadItemIndex, resolveTags } from "@/lib/resolve-items";
 import { loadStudySources, resolveSource } from "@/lib/study-sources-db";
 import {
+  attemptVocabResult,
+  mergeQueueResults,
   queueVocab,
   relinkVocabQueue,
+  type AttemptVocabResult,
   type QueueContext,
   type QueueVocabResult,
   type VocabGapEntry,
@@ -144,7 +147,11 @@ export interface UnresolvedTag {
   suggestions: ItemSuggestion[];
 }
 
-export interface LogAttemptsResult {
+/**
+ * vocabQueued: vocab-queue rows created or bumped from the attempts' vocab_gaps; vocab: the
+ * same {queued, bumped, words} detail queue_vocab returns (lib/vocab-queue-core.ts).
+ */
+export interface LogAttemptsResult extends AttemptVocabResult {
   sessionId: string;
   mode: SessionMode;
   questions: number;
@@ -152,8 +159,6 @@ export interface LogAttemptsResult {
   correct: number;
   /** Evidence rows written: graded answers for practice, exposures for a lesson. */
   observations: number;
-  /** Vocab-queue rows created or bumped from the attempts' vocab_gaps. */
-  vocabQueued: number;
   /**
    * Tags that matched no library item. The tag text is kept on the question, so once the
    * item exists (or gains an alias) `relink_tags` attaches the evidence retroactively.
@@ -294,7 +299,7 @@ export async function logAttempts(input: LogAttemptsInput): Promise<LogAttemptsR
     graded,
     correct,
     observations: obsRows.length,
-    vocabQueued: vq ? vq.queued + vq.bumped : 0,
+    ...attemptVocabResult(vq),
     unresolvedTags: unresolvedWithSuggestions(index, unresolved),
     source: source ? { slug: source.slug, name: source.name } : null,
     ...(sourceUnresolved ? { sourceUnresolved } : {}),
@@ -623,17 +628,31 @@ interface LocatedAttempt {
  * number, then id as tie-breaks.
  */
 async function locateAttempt(sessionId: string, number: number, sel: AttemptSelector = {}): Promise<LocatedAttempt> {
+  return pickInSession(await loadSessionAttempts(sessionId), number, sel);
+}
+
+interface SessionAttempts {
+  session: PracticeSessionRow;
+  /** Every attempt of the session in logged order. */
+  ordered: PracticeQuestionRow[];
+}
+
+async function loadSessionAttempts(sessionId: string): Promise<SessionAttempts> {
   const db = getDb();
   const [session] = await db.select().from(practiceSessions).where(eq(practiceSessions.id, sessionId));
   if (!session) throw new Error(`No session with id ${sessionId}. Use list_sessions to find it.`);
-  const questions = await db
+  const ordered = await db
     .select()
     .from(practiceQuestions)
     .where(eq(practiceQuestions.sessionId, sessionId))
     .orderBy(asc(practiceQuestions.createdAt), asc(practiceQuestions.number), asc(practiceQuestions.id));
+  return { session, ordered };
+}
+
+function pickInSession({ session, ordered }: SessionAttempts, number: number, sel: AttemptSelector = {}): LocatedAttempt {
   try {
-    const picked = pickAttempt(questions, number, sel);
-    return { session, question: picked.row, position: picked.position, ordered: questions };
+    const picked = pickAttempt(ordered, number, sel);
+    return { session, question: picked.row, position: picked.position, ordered };
   } catch (e) {
     throw new Error(`Session "${session.label}": ${e instanceof Error ? e.message : String(e)}`);
   }
@@ -699,7 +718,8 @@ export interface AttemptView {
   meta: Record<string, unknown> | null;
 }
 
-export interface UpdateAttemptResult {
+/** vocabQueued and vocab ({queued, bumped, words}) cover the vocab_gaps of this call only. */
+export interface UpdateAttemptResult extends AttemptVocabResult {
   sessionId: string;
   mode: SessionMode;
   /** The attempt as it now stands. */
@@ -710,8 +730,6 @@ export interface UpdateAttemptResult {
   observations: { removed: number; written: number } | null;
   /** The attempt's tags that still match no library item, grouped as in log_attempts. */
   unresolvedTags: UnresolvedTag[];
-  /** Vocab-queue rows created or bumped from vocab_gaps. */
-  vocabQueued: number;
 }
 
 /**
@@ -810,11 +828,10 @@ export async function updateAttempt(input: UpdateAttemptInput): Promise<UpdateAt
       })
     : null;
 
-  let vocabQueued = 0;
-  if (input.vocabGaps && input.vocabGaps.length > 0) {
-    const vq = await queueVocab(attemptGapEntries(input.vocabGaps, question.id, next), sessionSighting(session), await getIndex());
-    vocabQueued = vq.queued + vq.bumped;
-  }
+  const vq =
+    input.vocabGaps && input.vocabGaps.length > 0
+      ? await queueVocab(attemptGapEntries(input.vocabGaps, question.id, next), sessionSighting(session), await getIndex())
+      : null;
 
   const occurrences = unresolvedOccurrences([{ number: next.number, tags: next.tags }]);
   const unresolvedTags = occurrences.length > 0 ? unresolvedWithSuggestions(await getIndex(), occurrences) : [];
@@ -842,46 +859,73 @@ export async function updateAttempt(input: UpdateAttemptInput): Promise<UpdateAt
     changed: plan.changed,
     observations: obs,
     unresolvedTags,
-    vocabQueued,
+    ...attemptVocabResult(vq),
   };
 }
 
-export interface QueueVocabForAttemptInput {
+export interface QueueVocabForAttemptsInput {
   sessionId: string;
-  number: number;
-  /** Part (blank) of a multi-blank question. */
-  part?: number;
-  position?: number;
-  words: VocabGapInput[];
+  /** One entry per question (planQueueTargets in lib/vocab-queue-core.ts). */
+  groups: {
+    number: number;
+    /** Part (blank) of a multi-blank question. */
+    part?: number;
+    position?: number;
+    words: VocabGapInput[];
+  }[];
   /** Defaults to the session's taken_at, as for an attempt's vocab_gaps. */
   at?: Date;
   /** Defaults to the session's label. */
   label?: string | null;
 }
 
-export interface QueueVocabForAttemptResult extends QueueVocabResult {
-  attempt: { sessionId: string; questionId: string; number: number; part: number | null; position: number };
+export interface QueuedAttemptRef {
+  sessionId: string;
+  questionId: string;
+  number: number;
+  part: number | null;
+  position: number;
+}
+
+export interface QueueVocabForAttemptsResult extends QueueVocabResult {
+  /** The question, when every word went to one (the shape queue_vocab has always had). */
+  attempt?: QueuedAttemptRef;
+  /** One per question with the texts of the words tied to it, when the words went to several. */
+  attempts?: (QueuedAttemptRef & { words: string[] })[];
 }
 
 /**
  * queue_vocab with a session link: words noticed after the set was logged, tied to their
- * question with the same sighting an attempt-level vocab_gap gets.
+ * question(s) with the same sighting an attempt-level vocab_gap gets. Every question is
+ * located before the first word is written, so a wrong number queues nothing.
  */
-export async function queueVocabForAttempt(input: QueueVocabForAttemptInput): Promise<QueueVocabForAttemptResult> {
-  const { session, question, position } = await locateAttempt(input.sessionId, input.number, {
-    part: input.part,
-    position: input.position,
-  });
-  const ctx = sessionSighting(session);
-  const result = await queueVocab(attemptGapEntries(input.words, question.id, question), {
-    ...ctx,
-    at: input.at ?? ctx.at,
-    label: input.label?.trim() || ctx.label,
-  });
-  return {
-    ...result,
-    attempt: { sessionId: session.id, questionId: question.id, number: question.number, part: readPart(question.meta), position },
-  };
+export async function queueVocabForAttempts(input: QueueVocabForAttemptsInput): Promise<QueueVocabForAttemptsResult> {
+  if (input.groups.length === 0) throw new Error("No words to queue.");
+  const loaded = await loadSessionAttempts(input.sessionId);
+  const located = input.groups.map((g) => ({ ...pickInSession(loaded, g.number, { part: g.part, position: g.position }), words: g.words }));
+
+  const ctx = sessionSighting(loaded.session);
+  const sighting: QueueContext = { ...ctx, at: input.at ?? ctx.at, label: input.label?.trim() || ctx.label };
+  const index = await loadItemIndex();
+  const refs: (QueuedAttemptRef & { words: string[] })[] = [];
+  const results: QueueVocabResult[] = [];
+  for (const { session, question, position, words } of located) {
+    const r = await queueVocab(attemptGapEntries(words, question.id, question), sighting, index);
+    results.push(r);
+    const ref = { sessionId: session.id, questionId: question.id, number: question.number, part: readPart(question.meta), position };
+    const same = refs.find((x) => x.questionId === ref.questionId);
+    if (same) same.words.push(...r.words.map((w) => w.text));
+    else refs.push({ ...ref, words: r.words.map((w) => w.text) });
+  }
+  const merged = mergeQueueResults(results);
+  if (refs.length === 1) {
+    const [only] = refs;
+    return {
+      ...merged,
+      attempt: { sessionId: only.sessionId, questionId: only.questionId, number: only.number, part: only.part, position: only.position },
+    };
+  }
+  return { ...merged, attempts: refs };
 }
 
 export interface UpdateInsightInput {

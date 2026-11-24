@@ -75,12 +75,14 @@ test("selectLessonSessions: inclusive range, open ends, label/detail substring",
   assert.deepEqual(ids({ lessonFrom: 20 }), []);
 });
 
-test("isReviewWorthy: misses, not-attempted and noted right answers; clean right answers are not", () => {
+test("isReviewWorthy: misses, not-attempted, noted and slipped right answers; clean right answers are not", () => {
   assert.equal(isReviewWorthy({ isCorrect: false, note: null }), true);
   assert.equal(isReviewWorthy({ isCorrect: null, note: null }), true);
   assert.equal(isReviewWorthy({ isCorrect: true, note: "slow" }), true);
   assert.equal(isReviewWorthy({ isCorrect: true, note: "   " }), false);
   assert.equal(isReviewWorthy({ isCorrect: true, note: null }), false);
+  assert.equal(isReviewWorthy({ isCorrect: true, note: null, meta: { slips: [{ kind: "tense", text: "read as past" }] } }), true);
+  assert.equal(isReviewWorthy({ isCorrect: true, note: null, meta: { slips: [] } }), false);
 });
 
 test("buildLessonReview groups by session in lesson order and keeps the payload lean", () => {
@@ -112,7 +114,19 @@ test("buildLessonReview rolls up misses by root cause and items missed more than
   const { summary } = buildLessonReview(selected, questions, { headwords: new Map([["tara", "〜たら（条件）"]]) });
   assert.deepEqual(
     { ...summary, missesByRootCause: undefined, repeatedMisses: undefined },
-    { sessions: 4, questions: 9, graded: 8, correct: 4, missed: 4, slips: 1, notAttempted: 1, missesByRootCause: undefined, repeatedMisses: undefined },
+    {
+      sessions: 4,
+      questions: 9,
+      graded: 8,
+      correct: 4,
+      correctWithNote: 1,
+      missed: 4,
+      notAttempted: 1,
+      slips: 0,
+      slipsByKind: [],
+      missesByRootCause: undefined,
+      repeatedMisses: undefined,
+    },
   );
   assert.deepEqual(summary.missesByRootCause, [
     { rootCause: "context-cue-missed", known: true, misses: 2 },
@@ -145,6 +159,86 @@ test("buildLessonReview: include_text adds stored stem/choices/explanation; limi
   );
   assert.equal(limited.truncated, 2);
   assert.equal(limited.summary.sessions, 2);
+});
+
+test("buildLessonReview: slips come from the structured slips field, not from notes; by kind", () => {
+  // One session: one attempt with a slips array, four right answers with only a note, one miss with a note.
+  const l20: LessonSessionRow = { id: "l20", label: "SKM N4 L20 examples", sourceSlug: "skm-n4-bunpou", sourceName: null, takenAt: at(18) };
+  const slips = [
+    { kind: "tense", text: "read 行きます as past" },
+    { kind: "Kana Misread", text: "read はし as 橋" },
+    { kind: "tense", text: "read 見ます as past" },
+  ];
+  const rows: LessonQuestionRow[] = [
+    q("l20", 11, true, { note: "hesitated", meta: { part: "examples", slips } }),
+    q("l20", 12, true, { note: "slow on く" }),
+    q("l20", 13, true, { note: "asked for a gloss" }),
+    q("l20", 14, true, { note: "unsure of に" }),
+    q("l20", 15, true, { note: "guessed" }),
+    q("l20", 16, false, { note: "wrote 静かくする", rootCause: "pattern-glue" }),
+    q("l20", 17, true),
+  ];
+  const { summary, sessions: [s] } = buildLessonReview(selectLessonSessions([l20], {}), rows);
+  assert.equal(summary.correctWithNote, 5);
+  assert.equal(summary.slips, 3);
+  // Kinds are re-normalised ("Kana Misread" groups as kana-misread); most frequent first.
+  assert.deepEqual(summary.slipsByKind, [
+    { kind: "tense", n: 2 },
+    { kind: "kana-misread", n: 1 },
+  ]);
+  assert.equal(summary.missed, 1);
+  // Clean #17 is only counted in the score.
+  assert.deepEqual(s.review.map((a) => a.number), [11, 12, 13, 14, 15, 16]);
+});
+
+test("buildLessonReview: slips on a right answer with no note are reviewed and counted; wrong answers' slips count too", () => {
+  const l21: LessonSessionRow = { id: "l21", label: "SKM N4 L21 れんしゅう2", sourceSlug: "skm-n4-bunpou", sourceName: null, takenAt: at(22) };
+  const rows: LessonQuestionRow[] = [
+    q("l21", 3, true, { meta: { slips: [{ kind: "subject-confusion", text: "gave the verb to the listener" }] } }),
+    q("l21", 4, false, { rootCause: "misparse", meta: { slips: [{ kind: "vocab-misread", text: "read 時 as 時間" }] } }),
+  ];
+  const { summary, sessions: [s] } = buildLessonReview(selectLessonSessions([l21], {}), rows);
+  assert.equal(summary.correctWithNote, 0);
+  assert.equal(summary.slips, 2);
+  assert.deepEqual(summary.slipsByKind, [
+    { kind: "subject-confusion", n: 1 },
+    { kind: "vocab-misread", n: 1 },
+  ]);
+  assert.deepEqual(s.review.map((a) => a.number), [3, 4]);
+});
+
+test("buildLessonReview: subject-misassigned is a known root cause; an unlisted label is not", () => {
+  const l23: LessonSessionRow = { id: "l23", label: "SKM N4 L23 れんしゅう2", sourceSlug: "skm-n4-bunpou", sourceName: null, takenAt: at(23) };
+  const rows: LessonQuestionRow[] = [
+    q("l23", 3, false, { rootCause: "subject-misassigned" }),
+    q("l23", 5, false, { rootCause: "pattern-dropped" }),
+  ];
+  const { summary } = buildLessonReview(selectLessonSessions([l23], {}), rows);
+  assert.deepEqual(summary.missesByRootCause, [
+    { rootCause: "pattern-dropped", known: false, misses: 1 },
+    { rootCause: "subject-misassigned", known: true, misses: 1 },
+  ]);
+});
+
+test("buildLessonReview orders attempts by printed number, then part", () => {
+  const l22: LessonSessionRow = { id: "l22", label: "SKM N4 L22 れんしゅう1", sourceSlug: "skm-n4-bunpou", sourceName: null, takenAt: at(23) };
+  // Stored out of order, as a later update_attempt or a re-ordered call can leave them.
+  const rows: LessonQuestionRow[] = [
+    q("l22", 8, false, { meta: { questionPart: 2 } }),
+    q("l22", 9, false),
+    q("l22", 8, false, { meta: { questionPart: 1 } }),
+    q("l22", 3, false),
+  ];
+  const { sessions: [s] } = buildLessonReview(selectLessonSessions([l22], {}), rows);
+  assert.deepEqual(
+    s.review.map((a) => [a.number, a.meta?.questionPart ?? null]),
+    [
+      [3, null],
+      [8, 1],
+      [8, 2],
+      [9, null],
+    ],
+  );
 });
 
 test("buildLessonReview: an empty selection is an empty review, not an error", () => {

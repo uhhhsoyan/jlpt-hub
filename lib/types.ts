@@ -168,6 +168,7 @@ export const ROOT_CAUSES = [
   "pattern-confusion",
   "polarity-cue-missed",
   "grammar-forgotten",
+  "subject-misassigned",
 ] as const;
 export type RootCause = (typeof ROOT_CAUSES)[number];
 
@@ -196,6 +197,9 @@ export const ROOT_CAUSE_LABEL: Record<RootCause, string> = {
   // the closed-book test; distinct from grammar-unknown (never learned) and pattern-confusion
   // (read as a look-alike).
   "grammar-forgotten": "Grammar forgotten",
+  // Added 2026-11-24: gave the action to the wrong person (an unstated subject read as
+  // someone else, or the に-person in the wrong role); narrower than misparse.
+  "subject-misassigned": "Subject misassigned",
 };
 
 export function isKnownRootCause(cause: string): cause is RootCause {
