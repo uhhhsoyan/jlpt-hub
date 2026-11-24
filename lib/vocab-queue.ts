@@ -7,27 +7,36 @@ import { VOCAB_QUEUE_STATUSES, type PracticeSurface, type VocabQueueStatus, type
 import {
   decideQueueLink,
   effectiveAsMet,
+  emptyQueueResult,
   matchQueueItem,
-  mergeSightings,
   normalizeQueueText,
   planQueueEdit,
+  planResight,
+  recordQueuedWord,
   sightingAsMet,
-  statusOnResight,
+  type QueuedWord,
   type QueueEdit,
   type QueueEditPlan,
   type QueueLookup,
+  type QueueVocabResult,
 } from "@/lib/vocab-queue-core";
 
 export {
+  attemptVocabResult,
   effectiveAsMet,
   exportFilename,
+  mergeQueueResults,
   mergeSightings,
   normalizeQueueText,
+  planQueueTargets,
   statusOnResight,
   toAnkiTsv,
   validateQueueUpdate,
   type AnkiRow,
+  type AttemptVocabResult,
+  type QueuedWord,
   type QueueEdit,
+  type QueueVocabResult,
 } from "@/lib/vocab-queue-core";
 
 /**
@@ -63,18 +72,6 @@ export interface QueueContext {
   label?: string | null;
 }
 
-export interface QueuedWord {
-  id: string;
-  text: string;
-  status: VocabQueueStatus;
-  seenCount: number;
-  itemId: string | null;
-  /** The row's effective as-met form (most recent sighting that has one), or null. */
-  asMet: string | null;
-  /** true when this call created the row, false when it bumped an existing one. */
-  created: boolean;
-}
-
 /** The queue's matcher over the item index: matchTag on the vocab kind, with the hit's headword. */
 function queueLookup(idx: ItemIndex): QueueLookup {
   return (text) => {
@@ -82,12 +79,6 @@ function queueLookup(idx: ItemIndex): QueueLookup {
     const row = id ? idx.byId.get(id) : undefined;
     return id && row ? { id, headword: row.headword } : null;
   };
-}
-
-export interface QueueVocabResult {
-  queued: number;
-  bumped: number;
-  words: QueuedWord[];
 }
 
 const clean = (s: string | null | undefined): string | null => {
@@ -99,7 +90,7 @@ const clean = (s: string | null | undefined): string | null => {
 export async function queueVocab(entries: VocabGapEntry[], ctx: QueueContext, index?: ItemIndex): Promise<QueueVocabResult> {
   const db = getDb();
   const idx = index ?? (await loadItemIndex());
-  const result: QueueVocabResult = { queued: 0, bumped: 0, words: [] };
+  const result = emptyQueueResult();
   const seen = new Set<string>();
 
   for (const e of entries) {
@@ -124,26 +115,23 @@ export async function queueVocab(entries: VocabGapEntry[], ctx: QueueContext, in
 
     const [existing] = await db.select().from(vocabQueue).where(eq(vocabQueue.norm, norm)).limit(1);
     if (existing) {
-      const sightings = mergeSightings(existing.sightings, sighting);
-      const bumped = sightings.length !== existing.sightings.length;
-      const status = bumped ? statusOnResight(existing.status) : existing.status;
+      const next = planResight(existing, sighting);
       const [row] = await db
         .update(vocabQueue)
         .set({
           reading: existing.reading ?? reading,
           meaning: existing.meaning ?? meaning,
           itemId: existing.itemId ?? itemId,
-          status,
-          seenCount: bumped ? existing.seenCount + 1 : existing.seenCount,
+          status: next.status,
+          seenCount: next.seenCount,
           lastSeenAt: ctx.at > existing.lastSeenAt ? ctx.at : existing.lastSeenAt,
           firstSeenAt: ctx.at < existing.firstSeenAt ? ctx.at : existing.firstSeenAt,
-          sightings,
+          sightings: next.sightings,
           updatedAt: new Date(),
         })
         .where(eq(vocabQueue.id, existing.id))
         .returning();
-      if (bumped) result.bumped += 1;
-      result.words.push({ ...wordView(row), created: false });
+      recordQueuedWord(result, wordView(row), next.bumped ? "bumped" : "unchanged");
       continue;
     }
 
@@ -163,8 +151,7 @@ export async function queueVocab(entries: VocabGapEntry[], ctx: QueueContext, in
         surface: ctx.surface,
       })
       .returning();
-    result.queued += 1;
-    result.words.push({ ...wordView(row), created: true });
+    recordQueuedWord(result, wordView(row), "created");
   }
   return result;
 }

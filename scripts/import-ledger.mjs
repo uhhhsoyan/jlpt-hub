@@ -119,6 +119,7 @@ const ROOT_CAUSES = new Set([
   "particle-cue-missed", "pattern-glue", "misparse", "careless", "time-pressure",
   "context-cue-missed", "distractor-bias", "kanji-lookalike", "katakana-decoding",
   "pattern-choice", "pattern-confusion", "polarity-cue-missed", "grammar-forgotten",
+  "subject-misassigned",
 ]);
 
 // Conservative keyword inference from the note; first match wins, ambiguity stays null.

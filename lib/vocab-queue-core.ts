@@ -243,6 +243,153 @@ export function statusOnResight(status: VocabQueueStatus): VocabQueueStatus {
   return status === "carded" ? "carded" : "queued";
 }
 
+// ---- Queue results (queue_vocab, and the vocab detail on log_attempts / update_attempt) ---
+
+export interface QueuedWord {
+  id: string;
+  text: string;
+  status: VocabQueueStatus;
+  seenCount: number;
+  itemId: string | null;
+  /** The row's effective as-met form (most recent sighting that has one), or null. */
+  asMet: string | null;
+  /** true when this call created the row, false when it bumped (or re-saw) an existing one. */
+  created: boolean;
+}
+
+export interface QueueVocabResult {
+  /** Rows created. */
+  queued: number;
+  /** Existing rows that gained a sighting (seenCount + 1). */
+  bumped: number;
+  words: QueuedWord[];
+}
+
+/**
+ * What a word does to its existing queue row: a sighting from a new question (or a new
+ * moment) bumps seenCount and puts a skipped/known word back to queued; the same question
+ * seen again changes neither (mergeSightings may still fill in a missing as_met).
+ */
+export function planResight(
+  existing: { sightings: VocabSighting[]; seenCount: number; status: VocabQueueStatus },
+  sighting: VocabSighting,
+): { sightings: VocabSighting[]; bumped: boolean; seenCount: number; status: VocabQueueStatus } {
+  const sightings = mergeSightings(existing.sightings, sighting);
+  const bumped = sightings.length !== existing.sightings.length;
+  return {
+    sightings,
+    bumped,
+    seenCount: bumped ? existing.seenCount + 1 : existing.seenCount,
+    status: bumped ? statusOnResight(existing.status) : existing.status,
+  };
+}
+
+export const emptyQueueResult = (): QueueVocabResult => ({ queued: 0, bumped: 0, words: [] });
+
+/** Add one word's outcome to a result: created counts as queued, a real bump as bumped, a re-seen row as neither. */
+export function recordQueuedWord(result: QueueVocabResult, word: Omit<QueuedWord, "created">, outcome: "created" | "bumped" | "unchanged"): void {
+  if (outcome === "created") result.queued += 1;
+  if (outcome === "bumped") result.bumped += 1;
+  result.words.push({ ...word, created: outcome === "created" });
+}
+
+/** Several queue calls (one per question) as one result, words in call order. */
+export function mergeQueueResults(results: QueueVocabResult[]): QueueVocabResult {
+  const out = emptyQueueResult();
+  for (const r of results) {
+    out.queued += r.queued;
+    out.bumped += r.bumped;
+    out.words.push(...r.words);
+  }
+  return out;
+}
+
+/** The vocab fields of a log_attempts / update_attempt result. */
+export interface AttemptVocabResult {
+  /** Rows created or bumped; kept for older callers (vocab.queued + vocab.bumped). */
+  vocabQueued: number;
+  /** The same detail queue_vocab returns; all zero and no words when the call had no vocab_gaps. */
+  vocab: QueueVocabResult;
+}
+
+export function attemptVocabResult(vq: QueueVocabResult | null): AttemptVocabResult {
+  const vocab = vq ?? emptyQueueResult();
+  return { vocabQueued: vocab.queued + vocab.bumped, vocab };
+}
+
+// ---- queue_vocab tied to logged questions (one call, words for several questions) --------
+
+/** The call-level question fields of queue_vocab. */
+export interface QueueCallTarget {
+  sessionId?: string;
+  number?: number;
+  part?: number;
+  position?: number;
+}
+
+/** Words that go to one logged question. */
+export interface QueueTargetGroup<W> {
+  number: number;
+  part?: number;
+  position?: number;
+  words: W[];
+}
+
+export type QueueTargetPlan<W> = { kind: "free"; words: W[] } | { kind: "attempts"; sessionId: string; groups: QueueTargetGroup<W>[] };
+
+const isPositiveInt = (v: unknown): v is number => typeof v === "number" && Number.isInteger(v) && v > 0;
+
+/**
+ * Where each queue_vocab word goes. No session, number, part or position anywhere: free
+ * words (reading, chat). Otherwise every word needs the session and a question number: its
+ * own `number` when it has one (then its own `part`, and the call-level part and position do
+ * not apply, since they name a different question), else the call's number, part and
+ * position. Words are grouped per question in first-seen order. Throws before anything is
+ * written, naming the word at fault.
+ */
+export function planQueueTargets<W extends { number?: number; part?: number }>(
+  words: W[],
+  call: QueueCallTarget,
+): QueueTargetPlan<Omit<W, "number" | "part">> {
+  const strip = (w: W): Omit<W, "number" | "part"> => {
+    const rest: Record<string, unknown> = { ...w };
+    delete rest.number;
+    delete rest.part;
+    return rest as Omit<W, "number" | "part">;
+  };
+  const perWord = words.some((w) => w.number !== undefined || w.part !== undefined);
+  const callLevel = call.sessionId !== undefined || call.number !== undefined || call.part !== undefined || call.position !== undefined;
+  if (!perWord && !callLevel) return { kind: "free", words: words.map(strip) };
+
+  if (call.sessionId === undefined) {
+    throw new Error(
+      "To tie words to a logged question, pass session_id with number (on the call, or on each word for several questions); part for one blank of a multi-blank question, position only when that still repeats.",
+    );
+  }
+  for (const [key, v] of [["number", call.number], ["part", call.part], ["position", call.position]] as const) {
+    if (v !== undefined && !isPositiveInt(v)) throw new Error(`${key} must be a positive integer, got ${v}.`);
+  }
+
+  const groups = new Map<string, QueueTargetGroup<Omit<W, "number" | "part">>>();
+  for (const [i, w] of words.entries()) {
+    for (const [key, v] of [["number", w.number], ["part", w.part]] as const) {
+      if (v !== undefined && !isPositiveInt(v)) throw new Error(`words[${i}].${key} must be a positive integer, got ${v}.`);
+    }
+    const own = w.number !== undefined;
+    const number = own ? w.number : call.number;
+    if (number === undefined) {
+      throw new Error(`words[${i}] has no question number: pass number on the word, or on the call for every word without one.`);
+    }
+    const part = own ? w.part : (w.part ?? call.part);
+    const position = own ? undefined : call.position;
+    const key = `${number}:${part ?? ""}:${position ?? ""}`;
+    const group = groups.get(key) ?? { number, ...(part !== undefined ? { part } : {}), ...(position !== undefined ? { position } : {}), words: [] };
+    group.words.push(strip(w));
+    groups.set(key, group);
+  }
+  return { kind: "attempts", sessionId: call.sessionId, groups: [...groups.values()] };
+}
+
 /**
  * Anki import file (tab separated, with the `#` header lines Anki 2.1.55+ reads): columns
  * Front, Back, Tags, unchanged since the queue shipped. Front is the word as it was met:

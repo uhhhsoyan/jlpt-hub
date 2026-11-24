@@ -1,3 +1,4 @@
+import { compareAttempts, readSlips, tallySlips } from "./attempt-meta.ts";
 import { isKnownRootCause, type ItemKind, type QuestionTag } from "./types.ts";
 
 /**
@@ -75,7 +76,7 @@ export function selectLessonSessions<T extends LessonSessionRow>(sessions: T[], 
 /** Lean on purpose (a five-lesson review runs to a hundred attempts): empty fields are omitted. */
 export interface ReviewAttempt {
   number: number;
-  /** false = missed, null = not attempted, true = right but carries a note (a slip worth a look). */
+  /** false = missed, null = not attempted, true = right but carries a note or slips (worth a look). */
   correct: boolean | null;
   rootCause?: string;
   note?: string;
@@ -118,9 +119,13 @@ export interface LessonReviewSummary {
   graded: number;
   correct: number;
   missed: number;
-  /** Right answers that carry a note. */
-  slips: number;
+  /** Right answers that carry a note (any note, slips or not). */
+  correctWithNote: number;
   notAttempted: number;
+  /** Entries in the attempts' structured `slips` field, on right and wrong answers alike. */
+  slips: number;
+  /** Those slips by kind, most frequent first. */
+  slipsByKind: { kind: string; n: number }[];
   /** Missed attempts by root cause; "unclassified" when none was recorded. */
   missesByRootCause: { rootCause: string; known: boolean; misses: number }[];
   /** Items (or unlinked tag texts) missed more than once across the selection. */
@@ -143,9 +148,9 @@ export interface BuildLessonReviewOptions {
   headwords?: Map<string, string>;
 }
 
-/** Worth reviewing: wrong, not attempted, or right with a note. */
-export function isReviewWorthy(q: Pick<LessonQuestionRow, "isCorrect" | "note">): boolean {
-  return q.isCorrect !== true || !!q.note?.trim();
+/** Worth reviewing: wrong, not attempted, or right with a note or slips. */
+export function isReviewWorthy(q: Pick<LessonQuestionRow, "isCorrect" | "note"> & { meta?: LessonQuestionRow["meta"] }): boolean {
+  return q.isCorrect !== true || !!q.note?.trim() || readSlips(q.meta).length > 0;
 }
 
 function toAttempt(q: LessonQuestionRow, includeText: boolean): ReviewAttempt {
@@ -200,23 +205,28 @@ export function buildLessonReview(
     graded: 0,
     correct: 0,
     missed: 0,
-    slips: 0,
+    correctWithNote: 0,
     notAttempted: 0,
+    slips: 0,
+    slipsByKind: [],
     missesByRootCause: [],
     repeatedMisses: [],
   };
   const causes = new Map<string, number>();
   const repeated = new Map<string, RepeatedMiss>();
+  const selectedQuestions: LessonQuestionRow[] = [];
 
   const out: ReviewSession[] = kept.map((s) => {
-    const qs = [...(bySession.get(s.id) ?? [])].sort((a, b) => a.number - b.number);
+    // Printed number, then part (blank): 7, 7 part 1, 7 part 2, 8.
+    const qs = [...(bySession.get(s.id) ?? [])].sort(compareAttempts);
+    selectedQuestions.push(...qs);
     let graded = 0;
     let correct = 0;
     for (const q of qs) {
       if (q.isCorrect !== null) graded += 1;
       if (q.isCorrect === true) {
         correct += 1;
-        if (q.note?.trim()) summary.slips += 1;
+        if (q.note?.trim()) summary.correctWithNote += 1;
       } else if (q.isCorrect === null) summary.notAttempted += 1;
       else {
         summary.missed += 1;
@@ -255,6 +265,9 @@ export function buildLessonReview(
     };
   });
 
+  const slipTally = tallySlips(selectedQuestions);
+  summary.slips = slipTally.total;
+  summary.slipsByKind = slipTally.byKind.map(({ kind, n }) => ({ kind, n }));
   summary.missesByRootCause = [...causes.entries()]
     .map(([rootCause, misses]) => ({ rootCause, known: isKnownRootCause(rootCause), misses }))
     .sort((a, b) => b.misses - a.misses || a.rootCause.localeCompare(b.rootCause));

@@ -1,18 +1,25 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
+  attemptVocabResult,
   decideQueueLink,
   effectiveAsMet,
+  emptyQueueResult,
   exportFilename,
   matchQueueItem,
+  mergeQueueResults,
   mergeSightings,
   normalizeQueueText,
   planQueueEdit,
+  planQueueTargets,
+  planResight,
+  recordQueuedWord,
   setSightingsAsMet,
   sightingAsMet,
   statusOnResight,
   toAnkiTsv,
   validateQueueUpdate,
+  type QueuedWord,
   type QueueEditRow,
 } from "./vocab-queue-core.ts";
 import type { VocabSighting } from "./types.ts";
@@ -255,4 +262,120 @@ test("planQueueEdit: an as_met equal to the new text is dropped; reading/meaning
   assert.deepEqual(fields, { patch: { reading: "おおぜい", meaning: null }, changed: ["reading", "meaning"] });
   // A reading change alone does not re-link.
   assert.equal(fields.patch.itemId, undefined);
+});
+
+// ---- log_attempts / update_attempt vocab detail -------------------------------------------
+
+const word = (over: Partial<QueuedWord>) => ({ id: "w", text: "続き", status: "queued" as const, seenCount: 1, itemId: null, asMet: null, ...over });
+
+test("planResight: a new question bumps the count and requeues; the same question changes nothing", () => {
+  const existing = { sightings: [s({ questionId: "q1" })], seenCount: 1, status: "known" as const };
+  const bumped = planResight(existing, s({ questionId: "q2" }));
+  assert.equal(bumped.bumped, true);
+  assert.equal(bumped.seenCount, 2);
+  assert.equal(bumped.status, "queued");
+  assert.equal(bumped.sightings.length, 2);
+  const same = planResight(existing, s({ questionId: "q1" }));
+  assert.deepEqual(same, { sightings: existing.sightings, bumped: false, seenCount: 1, status: "known" });
+  // A carded word that stalls again stays carded.
+  assert.equal(planResight({ ...existing, status: "carded" }, s({ questionId: "q3" })).status, "carded");
+});
+
+test("attemptVocabResult: a new word and a bumped word are told apart, and vocabQueued still counts both", () => {
+  const vq = emptyQueueResult();
+  recordQueuedWord(vq, word({ id: "a", text: "続き", itemId: "item-tsuzuki" }), "created");
+  recordQueuedWord(vq, word({ id: "b", text: "大勢", seenCount: 2, itemId: "item-oozei" }), "bumped");
+  const out = attemptVocabResult(vq);
+  assert.equal(out.vocabQueued, 2);
+  assert.equal(out.vocab.queued, 1);
+  assert.equal(out.vocab.bumped, 1);
+  assert.deepEqual(
+    out.vocab.words.map((w) => [w.text, w.created, w.seenCount, w.itemId]),
+    [
+      ["続き", true, 1, "item-tsuzuki"],
+      ["大勢", false, 2, "item-oozei"],
+    ],
+  );
+});
+
+test("attemptVocabResult: a word re-seen on the same question is listed but counted neither queued nor bumped", () => {
+  const vq = emptyQueueResult();
+  recordQueuedWord(vq, word({ text: "続き", seenCount: 3 }), "unchanged");
+  const out = attemptVocabResult(vq);
+  assert.equal(out.vocabQueued, 0);
+  assert.deepEqual([out.vocab.queued, out.vocab.bumped], [0, 0]);
+  assert.equal(out.vocab.words[0].created, false);
+});
+
+test("attemptVocabResult: no vocab_gaps gives zeros and an empty word list, never undefined", () => {
+  assert.deepEqual(attemptVocabResult(null), { vocabQueued: 0, vocab: { queued: 0, bumped: 0, words: [] } });
+});
+
+test("mergeQueueResults: sums the counts and keeps the words in call order", () => {
+  const a = emptyQueueResult();
+  recordQueuedWord(a, word({ text: "猫" }), "created");
+  const b = emptyQueueResult();
+  recordQueuedWord(b, word({ text: "犬", seenCount: 4 }), "bumped");
+  recordQueuedWord(b, word({ text: "鳥" }), "created");
+  const m = mergeQueueResults([a, b]);
+  assert.deepEqual([m.queued, m.bumped], [2, 1]);
+  assert.deepEqual(m.words.map((w) => w.text), ["猫", "犬", "鳥"]);
+});
+
+// ---- queue_vocab per-word number --------------------------------------------------------
+
+const SID = "6f1c2b9e-0000-4000-8000-000000000000";
+
+/** queue_vocab's word shape (route.ts queueWordSchema), trimmed to what the plan reads. */
+interface Word {
+  text: string;
+  as_met?: string;
+  number?: number;
+  part?: number;
+}
+
+test("planQueueTargets: no session, number, part or position anywhere is a free queue call", () => {
+  const plan = planQueueTargets<Word>([{ text: "続き" }, { text: "大勢", as_met: "おおぜい" }], {});
+  assert.deepEqual(plan, { kind: "free", words: [{ text: "続き" }, { text: "大勢", as_met: "おおぜい" }] });
+});
+
+test("planQueueTargets: the call-level number covers every word, as before", () => {
+  const plan = planQueueTargets<Word>([{ text: "続き" }, { text: "大勢" }], { sessionId: SID, number: 7, part: 2 });
+  assert.deepEqual(plan, { kind: "attempts", sessionId: SID, groups: [{ number: 7, part: 2, words: [{ text: "続き" }, { text: "大勢" }] }] });
+});
+
+test("planQueueTargets: a per-word number overrides the call-level one and drops its part and position", () => {
+  const plan = planQueueTargets(
+    [{ text: "猫" }, { text: "犬", number: 31 }, { text: "鳥", number: 33, part: 1 }, { text: "魚", number: 31 }, { text: "馬" }],
+    { sessionId: SID, number: 32, part: 2, position: 5 },
+  );
+  assert.deepEqual(plan, {
+    kind: "attempts",
+    sessionId: SID,
+    groups: [
+      { number: 32, part: 2, position: 5, words: [{ text: "猫" }, { text: "馬" }] },
+      { number: 31, words: [{ text: "犬" }, { text: "魚" }] },
+      { number: 33, part: 1, words: [{ text: "鳥" }] },
+    ],
+  });
+});
+
+test("planQueueTargets: per-word numbers alone (no call-level number) group by question", () => {
+  const plan = planQueueTargets<Word>([{ text: "猫", number: 22 }, { text: "犬", number: 25 }], { sessionId: SID });
+  assert.equal(plan.kind, "attempts");
+  assert.deepEqual(plan.kind === "attempts" ? plan.groups.map((g) => [g.number, g.words.map((w) => w.text)]) : [], [
+    [22, ["猫"]],
+    [25, ["犬"]],
+  ]);
+});
+
+test("planQueueTargets: a word without any number, a number without a session, and bad numbers are refused", () => {
+  assert.throws(() => planQueueTargets<Word>([{ text: "猫", number: 3 }, { text: "犬" }], { sessionId: SID }), /words\[1\] has no question number/);
+  assert.throws(() => planQueueTargets<Word>([{ text: "猫", number: 3 }], {}), /pass session_id/);
+  assert.throws(() => planQueueTargets<Word>([{ text: "猫" }], { number: 3 }), /pass session_id/);
+  assert.throws(() => planQueueTargets<Word>([{ text: "猫" }], { sessionId: SID }), /words\[0\] has no question number/);
+  assert.throws(() => planQueueTargets<Word>([{ text: "猫", number: 0 }], { sessionId: SID }), /words\[0\]\.number must be a positive integer/);
+  assert.throws(() => planQueueTargets<Word>([{ text: "猫", number: 2.5 }], { sessionId: SID }), /words\[0\]\.number must be a positive integer/);
+  assert.throws(() => planQueueTargets<Word>([{ text: "猫", number: 2, part: -1 }], { sessionId: SID }), /words\[0\]\.part must be a positive integer/);
+  assert.throws(() => planQueueTargets<Word>([{ text: "猫" }], { sessionId: SID, number: -4 }), /number must be a positive integer/);
 });
