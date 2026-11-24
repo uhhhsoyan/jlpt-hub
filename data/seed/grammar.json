@@ -661,10 +661,16 @@
   {
     "pattern": "疑問詞＋か",
     "level": "N4",
-    "meaning": "indefinite pronoun: something/someone/somewhere (question word + か)",
+    "meaning": "question word + か: an indefinite pronoun (何か, 誰か, どこか: something, someone, somewhere), or an embedded question inside a sentence (何時に始まるか知っていますか: do you know what time it starts); for a yes/no question use 〜かどうか",
     "example": "誰か窓を閉めてください。",
     "exampleReading": "だれか まどを しめてください。",
-    "exampleEnglish": "Someone please close the window."
+    "exampleEnglish": "Someone please close the window.",
+    "aliases": [
+      "疑問詞〜か",
+      "疑問詞…か",
+      "埋め込み疑問",
+      "埋め込み疑問文"
+    ]
   },
   {
     "pattern": "疑問詞＋でも",
@@ -873,15 +879,29 @@
     "meaning": "polite request: could you do ~ for me?",
     "example": "すみません、写真を撮ってもらえますか。",
     "exampleReading": "すみません、しゃしんを とってもらえますか。",
-    "exampleEnglish": "Excuse me, could you take a photo for me?"
+    "exampleEnglish": "Excuse me, could you take a photo for me?",
+    "aliases": [
+      "〜てもらえませんか",
+      "てもらえませんか"
+    ]
   },
   {
     "pattern": "〜ていただけますか",
     "level": "N4",
-    "meaning": "more formal polite request: could you possibly do ~ for me?",
+    "meaning": "more formal polite request: could you possibly do ~ for me? The negative 〜ていただけませんか is softer still. From casual to most polite: 〜てくれませんか, 〜てもらえませんか, 〜てくださいませんか, 〜ていただけませんか",
     "example": "もう少し詳しく説明していただけますか。",
     "exampleReading": "もう すこし くわしく せつめい していただけますか。",
-    "exampleEnglish": "Could you possibly explain in a bit more detail?"
+    "exampleEnglish": "Could you possibly explain in a bit more detail?",
+    "aliases": [
+      "〜ていただけませんか",
+      "ていただけませんか",
+      "〜ていただけないでしょうか",
+      "ていただけないでしょうか",
+      "〜てくださいませんか",
+      "てくださいませんか",
+      "〜てくれませんか",
+      "てくれませんか"
+    ]
   },
   {
     "pattern": "んだ／のだ（口語）",
@@ -2230,19 +2250,6 @@
     ]
   },
   {
-    "pattern": "疑問詞〜か",
-    "level": "N4",
-    "meaning": "embedded question: a question-word clause + か inside a sentence (what/when/where ~), before 知っている, わかる, 教えてください; for a yes/no question use 〜かどうか",
-    "example": "会議が何時に始まるか知っていますか。",
-    "exampleReading": "かいぎが なんじに はじまるか しっていますか。",
-    "exampleEnglish": "Do you know what time the meeting starts?",
-    "aliases": [
-      "疑問詞…か",
-      "埋め込み疑問",
-      "埋め込み疑問文"
-    ]
-  },
-  {
     "pattern": "〜なくなる",
     "level": "N4",
     "meaning": "no longer ~, stop ~ing: a change into not doing (ない-form minus い + くなる); the negative of 〜ようになる",
@@ -2252,24 +2259,6 @@
     "aliases": [
       "〜なくなった",
       "〜なくなりました"
-    ]
-  },
-  {
-    "pattern": "〜ていただけませんか",
-    "level": "N4",
-    "meaning": "very polite request for the listener to do ~ for me: would you be so kind as to ~? From casual to most polite: 〜てくれませんか, 〜てもらえませんか, 〜てくださいませんか, 〜ていただけませんか",
-    "example": "すみません、駅までの道を教えていただけませんか。",
-    "exampleReading": "すみません、えきまでの みちを おしえて いただけませんか。",
-    "exampleEnglish": "Excuse me, would you be so kind as to tell me the way to the station?",
-    "aliases": [
-      "ていただけませんか",
-      "〜ていただけないでしょうか",
-      "〜てくれませんか",
-      "てくれませんか",
-      "〜てもらえませんか",
-      "てもらえませんか",
-      "〜てくださいませんか",
-      "てくださいませんか"
     ]
   },
   {
