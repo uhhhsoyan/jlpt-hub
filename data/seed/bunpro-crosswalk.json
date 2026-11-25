@@ -1325,8 +1325,8 @@
     {
       "bunproId": 728,
       "bunproTitle": "～にする・～くする",
-      "headword": "〜にする",
-      "method": "string"
+      "headword": "〜くする／〜にする",
+      "method": "manual"
     },
     {
       "bunproId": 729,
